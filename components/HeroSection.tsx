@@ -1,0 +1,52 @@
+export default function HeroSection() {
+  return (
+    <section className="hero-section" id="hero">
+      <div className="hero-overlay" />
+
+      <div className="hero-content">
+        <div className="hero-badge fade-in" style={{ animationDelay: '0.1s' }}>
+          <span className="hero-badge-text">THE ROYAL COLLECTION </span>
+        </div>
+
+        <div className="hero-title-block fade-in" style={{ animationDelay: '0.3s' }}>
+          <h1 className="hero-title-main">REHMANI</h1>
+          <span className="hero-title-sub">Premium Perfumery</span>
+        </div>
+
+        <div className="hero-arabic fade-in" style={{ animationDelay: '0.5s' }} dir="rtl">
+          عطر رحماني
+        </div>
+
+        <p className="hero-tagline fade-in" style={{ animationDelay: '0.7s' }}>
+          Pure Arabian attars — born from ancient rivers,<br className="hidden md:block" /> carried on the mountain breeze.
+        </p>
+
+        <div className="hero-actions fade-in" style={{ animationDelay: '0.9s' }}>
+          <a href="#collections" className="btn-primary">
+            DISCOVER COLLECTION →
+          </a>
+          <a href="#story" className="btn-ghost">
+            OUR STORY
+          </a>
+        </div>
+
+        <div className="hero-stats fade-in" style={{ animationDelay: '1.1s' }}>
+          <div className="hero-stat">
+            <span className="stat-value">25+</span>
+            <span className="stat-label">SIGNATURE ATTARS</span>
+          </div>
+          <div className="stat-divider" />
+          <div className="hero-stat">
+            <span className="stat-value">100%</span>
+            <span className="stat-label">PURE OILS</span>
+          </div>
+          <div className="stat-divider" />
+          <div className="hero-stat">
+            <span className="stat-value">SINCE 1999</span>
+            <span className="stat-label">TRUSTED HERITAGE</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
