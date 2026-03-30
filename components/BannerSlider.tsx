@@ -5,14 +5,14 @@ import { useState, useEffect, useCallback } from 'react';
 const banners = [
   {
     id: 1,
-    image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=2400&auto=format&fit=crop',
+    image: '/banner1.png',
     title: 'THE ROYAL MUSK',
     subtitle: 'Discover our signature collection',
     link: '#collections'
   },
   {
     id: 2,
-    image: 'https://images.unsplash.com/photo-1615486171430-b3e1f0ec8cc4?q=80&w=2400&auto=format&fit=crop',
+    image: '/banner2.png',
     title: 'PURE OUD EXTRACT',
     subtitle: 'Aged to perfection for true connoisseurs',
     link: '#collections'

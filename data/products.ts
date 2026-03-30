@@ -4,6 +4,7 @@ export interface Product {
   category: string;
   notes: string;
   price: number;
+  originalPrice: number;
   sizes: number[];
   images: string[];
   isNew: boolean;
@@ -19,6 +20,7 @@ export const products: Product[] = [
     category: 'oud',
     notes: 'Oud • Amber • Musk',
     price: 899,
+    originalPrice: 1299,
     sizes: [6, 12, 24],
     images: ['/assets/luxury_attar_bottle_1_1773444423078.png', MOCKUP2, '/assets/luxury_attar_bottle_3_1773444475959.png'],
     isNew: true,
@@ -30,6 +32,7 @@ export const products: Product[] = [
     category: 'musk',
     notes: 'White Musk • Vanilla • Sandalwood',
     price: 649,
+    originalPrice: 1199,
     sizes: [6, 12],
     images: ['/assets/luxury_attar_bottle_2_1773444458042.png', MOCKUP2, '/assets/luxury_attar_bottle_1_1773444423078.png'],
     isNew: false,
@@ -41,6 +44,7 @@ export const products: Product[] = [
     category: 'citrus',
     notes: 'Bergamot • Lemon • Vetiver',
     price: 549,
+    originalPrice: 779,
     sizes: [6, 12, 24],
     images: ['/assets/luxury_attar_bottle_3_1773444475959.png', MOCKUP2, '/assets/luxury_attar_bottle_1_1773444423078.png'],
     isNew: true,
@@ -52,6 +56,7 @@ export const products: Product[] = [
     category: 'floral',
     notes: 'Damask Rose • Patchouli • Jasmine',
     price: 799,
+    originalPrice: 1399,
     sizes: [6, 12],
     images: ['/assets/luxury_attar_bottle_1_1773444423078.png', MOCKUP2, '/assets/luxury_attar_bottle_3_1773444475959.png'],
     isNew: false,
@@ -63,6 +68,7 @@ export const products: Product[] = [
     category: 'oud',
     notes: 'Aged Oud • Saffron • Leather',
     price: 1299,
+    originalPrice: 1999,
     sizes: [12, 24],
     images: ['/assets/luxury_attar_bottle_2_1773444458042.png', MOCKUP2, '/assets/luxury_attar_bottle_3_1773444475959.png'],
     isNew: false,
@@ -74,6 +80,7 @@ export const products: Product[] = [
     category: 'floral',
     notes: 'Night Jasmine • Ylang Ylang • Tuberose',
     price: 599,
+    originalPrice: 899,
     sizes: [6, 12],
     images: ['/assets/luxury_attar_bottle_3_1773444475959.png', MOCKUP2, '/assets/luxury_attar_bottle_2_1773444458042.png'],
     isNew: false,
@@ -85,6 +92,7 @@ export const products: Product[] = [
     category: 'musk',
     notes: 'Dark Amber • Tonka Bean • Labdanum',
     price: 849,
+    originalPrice: 1599,
     sizes: [6, 12, 24],
     images: ['/assets/luxury_attar_bottle_1_1773444423078.png', MOCKUP2, '/assets/luxury_attar_bottle_2_1773444458042.png'],
     isNew: true,
@@ -96,6 +104,7 @@ export const products: Product[] = [
     category: 'citrus',
     notes: 'Neroli • Orange Blossom • Cedarwood',
     price: 699,
+    originalPrice: 1099,
     sizes: [6, 12],
     images: ['/assets/luxury_attar_bottle_2_1773444458042.png', MOCKUP2, '/assets/luxury_attar_bottle_1_1773444423078.png'],
     isNew: false,

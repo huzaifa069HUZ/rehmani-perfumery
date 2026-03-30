@@ -4,9 +4,9 @@ import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDbU2Y2ZqcgC-LVhmfDUW8X-7DnYOVRJg8",
-  authDomain: "rehmani-perfumery.firebaseapp.com",
-  projectId: "rehmani-perfumery",
-  storageBucket: "rehmani-perfumery.firebasestorage.app",
+  authDomain: "rahmani-perfumery.firebaseapp.com",
+  projectId: "rahmani-perfumery",
+  storageBucket: "rahmani-perfumery.firebasestorage.app",
   messagingSenderId: "483215314455",
   appId: "1:483215314455:web:3ca320c063f5abbec75652",
   measurementId: "G-9JEBNP83ER"

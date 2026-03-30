@@ -63,7 +63,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         onMouseLeave={() => { setIsHovered(false); setCurrentImg(0); }}
         onClick={() => setModalOpen(true)}
       >
-        <div 
+        <div
           className="product-img-wrap"
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
@@ -108,11 +108,13 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <div className="product-info">
-          <div className="product-info-row">
-            <h3 className="product-name">{product.name}</h3>
-            <span className="product-price">₹{product.price}</span>
-          </div>
+          <h3 className="product-name">{product.name}</h3>
           <p className="product-notes">{product.notes}</p>
+          <div className="price-block">
+            <span className="product-price">₹{product.price}</span>
+            <span className="original-price">₹{product.originalPrice}</span>
+            <span className="discount-badge">{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% off</span>
+          </div>
         </div>
       </div>
 

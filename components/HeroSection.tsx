@@ -9,7 +9,7 @@ export default function HeroSection() {
         </div>
 
         <div className="hero-title-block fade-in" style={{ animationDelay: '0.3s' }}>
-          <h1 className="hero-title-main">REHMANI</h1>
+          <h1 className="hero-title-main">rahmani</h1>
           <span className="hero-title-sub">Premium Perfumery</span>
         </div>
 

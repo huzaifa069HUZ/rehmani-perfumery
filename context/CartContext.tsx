@@ -39,7 +39,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     if (!user) {
       // Guest User: Load exactly from Local Storage
-      const localCart = localStorage.getItem('rehmani_cart');
+      const localCart = localStorage.getItem('rahmani_cart');
       if (localCart) {
         setCart(JSON.parse(localCart));
       } else {
@@ -52,7 +52,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     // Authenticated User: Bind to Live Firestore Document
     setIsSyncing(true);
     const cartRef = doc(db, 'users', user.uid);
-    
+
     const unsubscribe = onSnapshot(cartRef, async (docSnap) => {
       let cloudCart: CartItem[] = [];
       if (docSnap.exists() && docSnap.data().cart) {
@@ -60,7 +60,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
 
       // Check if a guest built a local cart immediately prior to logging in
-      const localStr = localStorage.getItem('rehmani_cart');
+      const localStr = localStorage.getItem('rahmani_cart');
       if (localStr) {
         try {
           const localCart: CartItem[] = JSON.parse(localStr);
@@ -68,12 +68,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
             // Intelligent Merge: Combine quantities for identical items, append new ones
             const merged = [...cloudCart];
             localCart.forEach(localItem => {
-               const existing = merged.find(c => c.id === localItem.id && c.size === localItem.size);
-               if (existing) {
-                  existing.quantity += localItem.quantity;
-               } else {
-                  merged.push(localItem);
-               }
+              const existing = merged.find(c => c.id === localItem.id && c.size === localItem.size);
+              if (existing) {
+                existing.quantity += localItem.quantity;
+              } else {
+                merged.push(localItem);
+              }
             });
             cloudCart = merged;
             // Push merged cart back to cloud
@@ -83,7 +83,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           console.error("Cart merge error:", e);
         }
         // Purge local storage so we do not merge it again on next snapshot update
-        localStorage.removeItem('rehmani_cart');
+        localStorage.removeItem('rahmani_cart');
       }
 
       setCart(cloudCart);
@@ -96,7 +96,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Singular gateway function to write cart mutations
   const saveCart = useCallback(async (newCart: CartItem[]) => {
     setCart(newCart); // Optimistic UI update
-    
+
     if (user) {
       try {
         const cartRef = doc(db, 'users', user.uid);
@@ -105,7 +105,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         console.error("Failed to sync cart to cloud:", err);
       }
     } else {
-      localStorage.setItem('rehmani_cart', JSON.stringify(newCart));
+      localStorage.setItem('rahmani_cart', JSON.stringify(newCart));
     }
   }, [user]);
 

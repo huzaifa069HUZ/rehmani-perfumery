@@ -54,7 +54,7 @@ function ReelCard({ reel }: { reel: typeof reels[0] }) {
       {/* Play / Pause overlay */}
       <div className={`reel-play-btn${playing ? ' hidden' : ''}`}>
         <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
-          <polygon points="5 3 19 12 5 21 5 3"/>
+          <polygon points="5 3 19 12 5 21 5 3" />
         </svg>
       </div>
 
@@ -66,14 +66,14 @@ function ReelCard({ reel }: { reel: typeof reels[0] }) {
         <span className="reel-stat">
           {/* Heart */}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="1">
-            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
           </svg>
           {reel.likes}
         </span>
         <span className="reel-stat">
           {/* Comment bubble */}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
           </svg>
           {reel.comments}
         </span>
@@ -93,16 +93,16 @@ export default function ReelsSection() {
             <p className="reels-subtitle">See what our community is loving</p>
           </div>
           <a
-            href="https://instagram.com/rehmani"
+            href="https://instagram.com/rahmani"
             target="_blank"
             rel="noopener noreferrer"
             className="follow-btn"
           >
             {/* Instagram icon */}
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
             </svg>
             Follow Us
           </a>
