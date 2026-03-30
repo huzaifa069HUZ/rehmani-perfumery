@@ -26,7 +26,7 @@ const banners = [
   },
   {
     id: 4,
-    image: 'https://images.unsplash.com/photo-1592842400244-6a8492020272?q=80&w=2400&auto=format&fit=crop',
+    image: '/assets/luxury_attar_bottle_2_1773444458042.png',
     title: 'SUMMER BREEZE',
     subtitle: 'Fresh floral attars for the season',
     link: '#collections'

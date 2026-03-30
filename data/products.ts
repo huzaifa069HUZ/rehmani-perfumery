@@ -84,7 +84,7 @@ export const products: Product[] = [
     sizes: [6, 12],
     images: ['/assets/luxury_attar_bottle_3_1773444475959.png', MOCKUP2, '/assets/luxury_attar_bottle_2_1773444458042.png'],
     isNew: false,
-    occasions: ['daily wear', 'festival'],
+    occasions: ['festival'],
   },
   {
     id: 7,
