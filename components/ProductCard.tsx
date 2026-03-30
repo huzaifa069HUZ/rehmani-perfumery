@@ -15,6 +15,35 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const { addToCart, toggleCart } = useCart();
 
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && currentImg === 0) {
+      setCurrentImg(1);
+      setIsHovered(true); // reveals quick add btn on swipe left
+    } else if (isRightSwipe && currentImg === 1) {
+      setCurrentImg(0);
+      setIsHovered(false);
+    }
+  };
+
   const handleQuickAdd = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     addToCart({
@@ -34,7 +63,12 @@ export default function ProductCard({ product }: ProductCardProps) {
         onMouseLeave={() => { setIsHovered(false); setCurrentImg(0); }}
         onClick={() => setModalOpen(true)}
       >
-        <div className="product-img-wrap">
+        <div 
+          className="product-img-wrap"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           {product.isNew && <span className="product-badge">New</span>}
 
           <div className="product-img-slider">
