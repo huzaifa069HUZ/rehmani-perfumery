@@ -4,13 +4,8 @@ export default function HeroSection() {
       <div className="hero-overlay" />
 
       <div className="hero-content">
-        <div className="hero-badge fade-in" style={{ animationDelay: '0.1s' }}>
-          <span className="hero-badge-text">THE ROYAL COLLECTION </span>
-        </div>
-
-        <div className="hero-title-block fade-in" style={{ animationDelay: '0.3s' }}>
-          <h1 className="hero-title-main">rahmani</h1>
-          <span className="hero-title-sub">Premium Perfumery</span>
+        <div className="hero-title-block fade-in" style={{ animationDelay: '0.1s' }}>
+          <h1 className="hero-title-main">REHMANI <br/> PERFUMERY</h1>
         </div>
 
         <div className="hero-arabic fade-in" style={{ animationDelay: '0.5s' }} dir="rtl">
@@ -18,7 +13,7 @@ export default function HeroSection() {
         </div>
 
         <p className="hero-tagline fade-in" style={{ animationDelay: '0.7s' }}>
-          Pure Arabian attars — born from ancient rivers,<br className="hidden md:block" /> carried on the mountain breeze.
+          Pure Attar. Pure Identity.
         </p>
 
         <div className="hero-actions fade-in" style={{ animationDelay: '0.9s' }}>

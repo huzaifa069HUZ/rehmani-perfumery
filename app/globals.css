@@ -1,5 +1,10 @@
 @import url("https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=satoshi@300,400,500,700,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
+
+/* =========================================================
+   Font Faces
+   ========================================================= */
 
 /* =========================================================
    rahmani PERFUMERY — Design System
@@ -61,10 +66,25 @@ button {
 }
 
 /* =========================================================
+   TOP BAR OVERLAY — fixed container for announce + header
+   ========================================================= */
+.top-bar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  pointer-events: none;
+}
+.top-bar-overlay > * {
+  pointer-events: auto;
+}
+
+/* =========================================================
    ANNOUNCEMENT BAR
    ========================================================= */
 .announcement-bar {
-  position: relative !important;
+  position: relative;
   z-index: 200;
   background: var(--charcoal-mid);
   color: rgba(255, 255, 255, 0.88);
@@ -82,9 +102,7 @@ button {
 /* =========================================================
    HEADER
    =========================================================
-   Strategy: sticky below announcement bar.
-   When not scrolled: transparent-gradient so hero bleeds through.
-   When scrolled: solid dark.
+   Strategy: transparent on hero, solid on scroll.
    ========================================================= */
 .main-header {
   position: relative;
@@ -93,9 +111,9 @@ button {
   height: var(--header-h);
   display: flex;
   align-items: center;
-  background: #FFF1E6;
-  transition: all 0.4s ease;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: transparent;
+  transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  border-bottom: 1px solid transparent;
 }
 
 .main-header.scrolled {
@@ -103,6 +121,7 @@ button {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.06);
 }
 
 .header-inner {
@@ -120,9 +139,14 @@ button {
   font-weight: 700;
   font-size: 1.8rem;
   letter-spacing: 0.14em;
-  color: var(--charcoal);
+  color: #fff;
   text-transform: uppercase;
   flex-shrink: 0;
+  transition: color 0.4s ease;
+}
+
+.main-header.scrolled .logo-text {
+  color: var(--charcoal);
 }
 
 .logo-gold {
@@ -143,14 +167,18 @@ button {
 }
 
 .nav-link {
-  color: rgba(17, 17, 17, 0.7);
+  color: rgba(255, 255, 255, 0.8);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   position: relative;
   padding-bottom: 3px;
-  transition: color 0.25s;
+  transition: color 0.4s ease;
+}
+
+.main-header.scrolled .nav-link {
+  color: rgba(17, 17, 17, 0.7);
 }
 
 .nav-link::after {
@@ -166,6 +194,11 @@ button {
 
 .nav-link:hover,
 .nav-link.active {
+  color: #fff;
+}
+
+.main-header.scrolled .nav-link:hover,
+.main-header.scrolled .nav-link.active {
   color: var(--charcoal);
 }
 
@@ -192,12 +225,16 @@ button {
 }
 
 .icon-btn {
-  color: rgba(17, 17, 17, 0.8);
+  color: rgba(255, 255, 255, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.25s;
+  transition: color 0.4s ease;
   position: relative;
+}
+
+.main-header.scrolled .icon-btn {
+  color: rgba(17, 17, 17, 0.8);
 }
 
 .icon-btn:hover {
@@ -232,13 +269,14 @@ button {
 
 /* =========================================================
    HERO SECTION
-   Full-width, full-height, bg image edge-to-edge.
-   Sits naturally below sticky announcement + sticky header.
+   Full-screen, bg image edge-to-edge.
+   Header overlays on top — hero occupies entire viewport.
    ========================================================= */
 .hero-section {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - var(--announce-h) - var(--header-h));
+  min-height: 100vh;
+  padding-top: calc(var(--announce-h) + var(--header-h)); /* Create space for the fixed overlay header */
   background: #000 url('/herobg.jpg') no-repeat center center / cover;
   display: flex;
   align-items: center;
@@ -248,7 +286,7 @@ button {
 @media (max-width: 768px) {
   .hero-section {
     background-position: 65% center;
-    min-height: 85vh;
+    min-height: 100vh;
   }
 }
 
@@ -293,38 +331,69 @@ button {
 }
 
 .hero-title-main {
-  font-family: var(--font-cinzel);
-  font-size: clamp(3.2rem, 9vw, 8rem);
-  font-weight: 700;
-  line-height: 0.9;
-  letter-spacing: 0.06em;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3.2rem, 8vw, 7.5rem);
+  font-weight: 600;
+  line-height: 1.1;
   text-transform: uppercase;
-  background: linear-gradient(180deg, #FFFFFF 0%, #D4AF37 55%, #8B6914 100%);
+  text-align: left;
+  margin-bottom: 0.5rem;
+  
+  /* The elegant gradient text base */
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  /* Very faint glow outline for ultra-premium definition */
+  -webkit-text-stroke: 0.5px rgba(255, 226, 177, 0.7);
+  
+  /* Light yellow and soft peach gradient with a sharp, bright diagonal light sweep */
+  background: linear-gradient(
+    110deg,
+    #FFDAB9 0%,          /* Soft peach edge */
+    #FFF4CC 35%,         /* Very light yellow */
+    #FFFFFF 50%,         /* The piercing white light reflection */
+    #FFF4CC 65%,         /* Very light yellow */
+    #FFE2B1 100%         /* Soft peach-yellow edge */
+  );
+  
+  /* Stretch the background so the light sweep can pan across it logically */
+  background-size: 200% auto;
+  
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
-  animation: glowReveal 2.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  
+  /* Initial invisible state */
+  opacity: 0;
+  letter-spacing: 0em;
+  filter: blur(8px);
+  transform: translateY(15px) scale(0.98);
+  
+  /* Entrance reveal, followed by the looping reflection */
+  animation: 
+    cinematic-reveal 3.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards,
+    cinematic-sheer 8s infinite cubic-bezier(0.4, 0, 0.2, 1) 4s;
 }
 
-@keyframes glowReveal {
+@keyframes cinematic-reveal {
   0% {
     opacity: 0;
-    filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0)) blur(12px);
-    transform: scale(0.95);
+    filter: blur(12px) drop-shadow(0 0 0 rgba(0,0,0,0));
+    transform: translateY(15px) scale(0.98);
+    letter-spacing: 0em;
+    background-position: 200% center; 
   }
-
-  40% {
-    opacity: 1;
-    filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.8)) blur(0);
-    transform: scale(1.02);
-  }
-
   100% {
     opacity: 1;
-    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 20px rgba(212, 175, 55, 0.35));
-    transform: scale(1);
+    filter: blur(0px) drop-shadow(0 8px 24px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 12px rgba(212, 175, 55, 0.3));
+    transform: translateY(0) scale(1);
+    letter-spacing: 0.08em; /* Elegantly breathes/expands outward */
+    background-position: 15% center; /* Settle slightly into the warm gold edge */
   }
+}
+
+@keyframes cinematic-sheer {
+  0% { background-position: -50% center; }
+  15% { background-position: 250% center; }  /* Swiftly panning light sweep */
+  100% { background-position: 250% center; } /* Long pause before the next gleam */
 }
 
 .hero-title-sub {
@@ -2517,7 +2586,7 @@ body {
 
   /* ── Hero Section ── */
   .hero-section {
-    min-height: 80vh;
+    min-height: 100vh;
     background-position: 60% center;
   }
 

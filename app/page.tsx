@@ -22,12 +22,13 @@ export default function Home() {
 
   return (
     <>
-      {/* Sticky top bar */}
-      <AnnouncementBar />
-      {/* Sticky header below announcement bar */}
-      <Header onMenuOpen={() => setMobileMenuOpen(true)} />
+      {/* Fixed overlay: announcement + header sit on top of hero */}
+      <div className="top-bar-overlay">
+        <AnnouncementBar />
+        <Header onMenuOpen={() => setMobileMenuOpen(true)} />
+      </div>
 
-      {/* Full-width hero - no margin top needed, natural flow */}
+      {/* Full-screen hero with header overlapping */}
       <main>
         <HeroSection />
         <FeaturesBar />
