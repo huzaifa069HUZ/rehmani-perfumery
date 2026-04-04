@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
 function Bottle3D({ progress }: { progress: React.RefObject<number> }) {
   const { scene } = useGLTF('/assets/3dbottle.glb');
   const bottleGroup = useRef<THREE.Group>(null);
-  const floatGroup  = useRef<THREE.Group>(null);
+  const floatGroup = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
     if (!bottleGroup.current || !floatGroup.current) return;
@@ -27,7 +27,7 @@ function Bottle3D({ progress }: { progress: React.RefObject<number> }) {
       bottleGroup.current.position.set(
         1.5 * (1 - eased),
         -2.5 * (1 - eased),
-        -1  * (1 - eased),
+        -1 * (1 - eased),
       );
       // Scale: 0.5 → 1
       const s = 0.5 + 0.5 * eased;
@@ -71,10 +71,10 @@ useGLTF.preload('/assets/3dbottle.glb');
 // ─── Main Section ───────────────────────────────────────────────────────────────
 export default function PerfumeJourney() {
   // The single element GSAP will PIN
-  const pinnedRef  = useRef<HTMLDivElement>(null);
-  const cardRef    = useRef<HTMLDivElement>(null);
-  const canvasRef  = useRef<HTMLDivElement>(null);
-  const blurRef    = useRef<HTMLDivElement>(null);
+  const pinnedRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const blurRef = useRef<HTMLDivElement>(null);
 
   // A mutable ref holding scroll progress 0→1 — drives the rAF loop above
   const progress = useRef<number>(0);
@@ -107,11 +107,11 @@ export default function PerfumeJourney() {
 
     tl.fromTo(cardRef.current,
       { opacity: 0, y: 40, scale: 0.95 },
-      { opacity: 1, y: 0,  scale: 1,    duration: 0.3, ease: 'power2.out' }, 0.5);
+      { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power2.out' }, 0.5);
 
     // 0.85 → 1  everything fades out (clean exit)
-    tl.to(canvasRef.current,  { opacity: 0, duration: 0.15 }, 0.85);
-    tl.to(cardRef.current,    { opacity: 0, y: -20, duration: 0.15 }, 0.85);
+    tl.to(canvasRef.current, { opacity: 0, duration: 0.15 }, 0.85);
+    tl.to(cardRef.current, { opacity: 0, y: -20, duration: 0.15 }, 0.85);
 
     return () => { ScrollTrigger.getAll().forEach(st => st.kill()); };
   }, []);
@@ -228,7 +228,7 @@ export default function PerfumeJourney() {
                     fontWeight: 500,
                     color: 'rgba(212,175,55,0.8)',
                   }}>
-                    Rehmani Perfumery &nbsp;·&nbsp; Est. 2010
+                    rahmani  Perfumery &nbsp;·&nbsp; Est. 2010
                   </span>
                 </div>
 
@@ -273,8 +273,8 @@ export default function PerfumeJourney() {
                   color: 'rgba(110,210,140,0.82)',
                   maxWidth: '38ch',
                 }}>
-                  From sunlit rose fields to ancient oud forests — every bottle 
-                  is a journey into pure sensory artistry. Worn by those who 
+                  From sunlit rose fields to ancient oud forests — every bottle
+                  is a journey into pure sensory artistry. Worn by those who
                   move through the world with intention.
                 </p>
 
@@ -338,7 +338,7 @@ export default function PerfumeJourney() {
                     }} />
                     <span>Explore Collection</span>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                      <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                   </button>
 
@@ -357,7 +357,7 @@ export default function PerfumeJourney() {
                   >
                     Our Story
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M9 18l6-6-6-6"/>
+                      <path d="M9 18l6-6-6-6" />
                     </svg>
                   </button>
 
@@ -374,9 +374,9 @@ export default function PerfumeJourney() {
           >
             <Canvas camera={{ position: [0, 0, 5], fov: 35 }} dpr={[1, 2]} className="w-full h-full">
               <ambientLight intensity={0.6} />
-              <spotLight  position={[5, 10, 5]}   intensity={6}  angle={0.4} penumbra={1} color="#ffdcb4" />
+              <spotLight position={[5, 10, 5]} intensity={6} angle={0.4} penumbra={1} color="#ffdcb4" />
               <directionalLight position={[-5, 5, -5]} intensity={1.2} color="#b0caff" />
-              <pointLight position={[0, -2, 3]}   intensity={4}  color="#ffedd5" />
+              <pointLight position={[0, -2, 3]} intensity={4} color="#ffedd5" />
               <Environment preset="studio" />
               <Sparkles count={70} scale={6} size={2.2} speed={0.18} opacity={0.25} color="#f5c97a" />
               <Suspense fallback={null}>

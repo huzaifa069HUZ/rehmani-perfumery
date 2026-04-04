@@ -269,27 +269,30 @@ button {
 
 /* =========================================================
    HERO SECTION
-   Full-screen, bg image edge-to-edge.
+   Full-screen, layered composition.
    Header overlays on top — hero occupies entire viewport.
    ========================================================= */
 .hero-section {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  padding-top: calc(var(--announce-h) + var(--header-h)); /* Create space for the fixed overlay header */
-  background: #000 url('/herobg.jpg') no-repeat center center / cover;
   display: flex;
   align-items: center;
   overflow: hidden;
+  background-color: #000; /* Fallback */
 }
 
-@media (max-width: 768px) {
-  .hero-section {
-    background-position: 65% center;
-    min-height: 100vh;
-  }
+/* Base background image */
+.hero-bg-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/canvabg.png') no-repeat center center / cover;
+  z-index: 1;
 }
 
+/* Overlay gradient for contrast, sits between bg and bottle */
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -297,6 +300,15 @@ button {
       rgba(0, 0, 0, 0.72) 0%,
       rgba(0, 0, 0, 0.35) 60%,
       rgba(0, 0, 0, 0.15) 100%);
+  z-index: 2;
+}
+
+
+
+@media (max-width: 768px) {
+  .hero-bg-layer {
+    background-position: 65% center;
+  }
 }
 
 .hero-content {
@@ -305,7 +317,7 @@ button {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 4% 8% 3%;
+  padding: calc(4% + var(--announce-h) + var(--header-h)) 8% 3%;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -331,69 +343,34 @@ button {
 }
 
 .hero-title-main {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(3.2rem, 8vw, 7.5rem);
-  font-weight: 600;
-  line-height: 1.1;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+  font-size: clamp(4rem, 10vw, 10rem);
+  font-weight: 700;
+  line-height: 1.0;
   text-transform: uppercase;
   text-align: left;
   margin-bottom: 0.5rem;
-  
-  /* The elegant gradient text base */
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  /* Very faint glow outline for ultra-premium definition */
-  -webkit-text-stroke: 0.5px rgba(255, 226, 177, 0.7);
-  
-  /* Light yellow and soft peach gradient with a sharp, bright diagonal light sweep */
-  background: linear-gradient(
-    110deg,
-    #FFDAB9 0%,          /* Soft peach edge */
-    #FFF4CC 35%,         /* Very light yellow */
-    #FFFFFF 50%,         /* The piercing white light reflection */
-    #FFF4CC 65%,         /* Very light yellow */
-    #FFE2B1 100%         /* Soft peach-yellow edge */
-  );
-  
-  /* Stretch the background so the light sweep can pan across it logically */
-  background-size: 200% auto;
-  
-  -webkit-background-clip: text;
-  background-clip: text;
-  
-  /* Initial invisible state */
+  letter-spacing: 0.04em;
+
+  /* Solid cream/ivory color matching reference image */
+  color: #F5EDD8;
+  -webkit-text-fill-color: #F5EDD8;
+  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+
+  /* Simple fade-in only */
   opacity: 0;
-  letter-spacing: 0em;
-  filter: blur(8px);
-  transform: translateY(15px) scale(0.98);
-  
-  /* Entrance reveal, followed by the looping reflection */
-  animation: 
-    cinematic-reveal 3.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards,
-    cinematic-sheer 8s infinite cubic-bezier(0.4, 0, 0.2, 1) 4s;
+  animation: hero-title-fadein 1.2s ease forwards 0.1s;
 }
 
-@keyframes cinematic-reveal {
-  0% {
+@keyframes hero-title-fadein {
+  from {
     opacity: 0;
-    filter: blur(12px) drop-shadow(0 0 0 rgba(0,0,0,0));
-    transform: translateY(15px) scale(0.98);
-    letter-spacing: 0em;
-    background-position: 200% center; 
+    transform: translateY(12px);
   }
-  100% {
+  to {
     opacity: 1;
-    filter: blur(0px) drop-shadow(0 8px 24px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 12px rgba(212, 175, 55, 0.3));
-    transform: translateY(0) scale(1);
-    letter-spacing: 0.08em; /* Elegantly breathes/expands outward */
-    background-position: 15% center; /* Settle slightly into the warm gold edge */
+    transform: translateY(0);
   }
-}
-
-@keyframes cinematic-sheer {
-  0% { background-position: -50% center; }
-  15% { background-position: 250% center; }  /* Swiftly panning light sweep */
-  100% { background-position: 250% center; } /* Long pause before the next gleam */
 }
 
 .hero-title-sub {
@@ -2955,5 +2932,358 @@ body {
 
   .logo-text {
     font-size: 0.85rem !important;
+  }
+}
+
+/* =========================================================
+   BOTTLE CAROUSEL — 3D Coverflow Slider
+   ========================================================= */
+.bottle-carousel-section {
+  position: relative;
+  background: linear-gradient(180deg, #0a0804 0%, #120e06 40%, #0a0804 100%);
+  padding: 90px 0 80px;
+  overflow: hidden;
+}
+
+.bottle-carousel-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: background 0.6s ease;
+  z-index: 0;
+}
+
+.bottle-carousel-header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.bottle-carousel-label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.bottle-carousel-title {
+  font-family: var(--font-serif), serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.bottle-carousel-subtitle {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* ── Stage ── */
+.bottle-carousel-stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 500px;
+  gap: 0;
+  perspective: 1200px;
+}
+
+/* ── Shared slot base ── */
+.bottle-slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  transition: transform 0.48s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity   0.48s cubic-bezier(0.4, 0, 0.2, 1),
+              filter    0.48s ease;
+  transform-origin: center bottom;
+  will-change: transform, opacity;
+}
+
+/* ── Far left (barely visible) ── */
+.bottle-slot--far-left {
+  width: 100px;
+  transform: translateX(20px) translateZ(-400px) rotateY(40deg) scale(0.45);
+  opacity: 0.2;
+  filter: blur(2px);
+  z-index: 1;
+}
+
+/* ── Left sibling ── */
+.bottle-slot--left {
+  width: 200px;
+  transform: translateX(30px) translateZ(-200px) rotateY(28deg) scale(0.68);
+  opacity: 0.65;
+  filter: blur(0.5px) brightness(0.7);
+  z-index: 2;
+}
+
+/* ── CENTER ── */
+.bottle-slot--center {
+  width: 280px;
+  transform: translateX(0) translateZ(0) rotateY(0deg) scale(1);
+  opacity: 1;
+  filter: none;
+  z-index: 10;
+}
+
+/* ── Right sibling ── */
+.bottle-slot--right {
+  width: 200px;
+  transform: translateX(-30px) translateZ(-200px) rotateY(-28deg) scale(0.68);
+  opacity: 0.65;
+  filter: blur(0.5px) brightness(0.7);
+  z-index: 2;
+}
+
+/* ── Far right (barely visible) ── */
+.bottle-slot--far-right {
+  width: 100px;
+  transform: translateX(-20px) translateZ(-400px) rotateY(-40deg) scale(0.45);
+  opacity: 0.2;
+  filter: blur(2px);
+  z-index: 1;
+}
+
+/* ── Slide-out animations (going left = next) ── */
+.bottle-slot--slide-to-far-left {
+  transform: translateX(20px) translateZ(-400px) rotateY(40deg) scale(0.45) !important;
+  opacity: 0.1 !important;
+  filter: blur(4px) !important;
+}
+
+.bottle-slot--slide-to-left {
+  transform: translateX(30px) translateZ(-200px) rotateY(28deg) scale(0.68) !important;
+  opacity: 0.65 !important;
+  filter: blur(0.5px) brightness(0.7) !important;
+}
+
+.bottle-slot--slide-to-center {
+  transform: translateX(0) translateZ(0) rotateY(0deg) scale(1) !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+.bottle-slot--slide-to-right {
+  transform: translateX(-30px) translateZ(-200px) rotateY(-28deg) scale(0.68) !important;
+  opacity: 0.65 !important;
+  filter: blur(0.5px) brightness(0.7) !important;
+}
+
+.bottle-slot--slide-to-far-right {
+  transform: translateX(-20px) translateZ(-400px) rotateY(-40deg) scale(0.45) !important;
+  opacity: 0.1 !important;
+  filter: blur(4px) !important;
+}
+
+.bottle-slot--entering-far-left {
+  transform: translateX(60px) translateZ(-500px) rotateY(50deg) scale(0.3) !important;
+  opacity: 0 !important;
+}
+
+.bottle-slot--entering-far-right {
+  transform: translateX(-60px) translateZ(-500px) rotateY(-50deg) scale(0.3) !important;
+  opacity: 0 !important;
+}
+
+/* ── Image wrappers ── */
+.bottle-img-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.bottle-img-wrap--center {
+  height: 380px;
+}
+
+.bottle-img-wrap--side {
+  height: 300px;
+}
+
+.bottle-img-wrap--ghost {
+  height: 200px;
+}
+
+.bottle-shadow {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 30px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.6) 0%, transparent 70%);
+  filter: blur(8px);
+  z-index: 0;
+}
+
+/* ── Side label ── */
+.bottle-side-name {
+  margin-top: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ── Center info card ── */
+.bottle-center-info {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.bottle-center-name {
+  font-family: var(--font-serif), serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  transition: color 0.4s ease;
+}
+
+.bottle-center-notes {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+}
+
+.bottle-center-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.bottle-center-price {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.bottle-center-cta {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+  padding-bottom: 2px;
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.bottle-center-cta:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+/* ── Navigation ── */
+.bottle-carousel-nav {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.bottle-nav-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s;
+  backdrop-filter: blur(8px);
+  flex-shrink: 0;
+}
+
+.bottle-nav-btn:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(212,175,55,0.1);
+  transform: scale(1.08);
+}
+
+.bottle-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.bottle-dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.bottle-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.bottle-dot--active {
+  width: 22px;
+  border-radius: 4px;
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .bottle-carousel-stage {
+    height: 380px;
+  }
+
+  .bottle-slot--far-left,
+  .bottle-slot--far-right {
+    display: none;
+  }
+
+  .bottle-slot--left {
+    width: 120px;
+    transform: translateX(18px) translateZ(-150px) rotateY(22deg) scale(0.55);
+  }
+
+  .bottle-slot--right {
+    width: 120px;
+    transform: translateX(-18px) translateZ(-150px) rotateY(-22deg) scale(0.55);
+  }
+
+  .bottle-slot--center {
+    width: 200px;
+  }
+
+  .bottle-img-wrap--center {
+    height: 280px;
+  }
+
+  .bottle-img-wrap--side {
+    height: 200px;
   }
 }

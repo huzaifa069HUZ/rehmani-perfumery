@@ -1,11 +1,23 @@
+import Image from 'next/image';
+
 export default function HeroSection() {
   return (
     <section className="hero-section" id="hero">
+      {/* Background Image — using Next.js Image for reliable rendering */}
+      <Image
+        src="/canvabg.png"
+        alt="Hero Background"
+        fill
+        priority
+        quality={90}
+        style={{ objectFit: 'cover', objectPosition: 'center', zIndex: 1 }}
+      />
+
       <div className="hero-overlay" />
 
       <div className="hero-content">
         <div className="hero-title-block fade-in" style={{ animationDelay: '0.1s' }}>
-          <h1 className="hero-title-main">REHMANI <br/> PERFUMERY</h1>
+          <h1 className="hero-title-main">rahmani  <br /> PERFUMERY</h1>
         </div>
 
         <div className="hero-arabic fade-in" style={{ animationDelay: '0.5s' }} dir="rtl">
