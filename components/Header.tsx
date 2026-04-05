@@ -1,6 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
@@ -13,6 +12,7 @@ export default function Header({ onMenuOpen }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const { toggleCart, totalItems } = useCart();
   const { user, logout } = useAuth();
+  const [logoSrc, setLogoSrc] = useState<string>('/logo-with-text.png');
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -20,13 +20,51 @@ export default function Header({ onMenuOpen }: HeaderProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Process logo to remove white background
+  useEffect(() => {
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      ctx.drawImage(img, 0, 0);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      // Replace white/near-white pixels with transparent
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        // If pixel is white or near-white (threshold 235+)
+        if (r > 235 && g > 235 && b > 235) {
+          data[i + 3] = 0; // fully transparent
+        }
+        // Smooth transition for near-white pixels (220-235)
+        else if (r > 220 && g > 220 && b > 220) {
+          const avg = (r + g + b) / 3;
+          data[i + 3] = Math.round(255 * (1 - (avg - 220) / 35));
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+      setLogoSrc(canvas.toDataURL('image/png'));
+    };
+    img.src = '/logo-with-text.png';
+  }, []);
+
   return (
     <header id="main-header" className={`main-header${scrolled ? ' scrolled' : ''}`}>
       <div className="header-inner">
         {/* Logo */}
-        <a href="#" className="logo-text" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-          <Image src="/logo.png" alt="rahmani Logo" width={42} height={63} style={{ objectFit: 'contain', height: '56px', width: 'auto' }} priority />
-          <span>rahmani <span className="logo-gold">PERFUMERY</span></span>
+        <a href="#" className="logo-link">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={logoSrc}
+            alt="Rahmani Perfumery"
+            className="header-logo-img"
+          />
         </a>
 
         {/* Desktop Nav */}
@@ -76,3 +114,4 @@ export default function Header({ onMenuOpen }: HeaderProps) {
     </header>
   );
 }
+

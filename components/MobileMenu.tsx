@@ -14,8 +14,8 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
-          <a href="#" className="logo-text mb-12 block" onClick={onClose}>
-            rahmani <span className="logo-gold">PERFUMERY</span>
+          <a href="#" className="mobile-menu-logo" onClick={onClose} style={{ display: 'block', marginBottom: '2rem' }}>
+            <img src="/logo-with-text.png" alt="Rahmani Perfumery" style={{ height: '40px', width: 'auto', objectFit: 'contain' }} />
           </a>
           <div className="mobile-nav-links">
             <a href="#" className="mobile-nav-link" onClick={onClose}>HOME</a>

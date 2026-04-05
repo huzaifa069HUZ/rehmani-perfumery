@@ -134,25 +134,42 @@ button {
   gap: 2rem;
 }
 
-.logo-text {
-  font-family: var(--font-cinzel);
-  font-weight: 700;
-  font-size: 1.8rem;
-  letter-spacing: 0.14em;
-  color: #fff;
-  text-transform: uppercase;
+.logo-link {
   flex-shrink: 0;
-  transition: color 0.4s ease;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 
-.main-header.scrolled .logo-text {
-  color: var(--charcoal);
+.header-logo-img {
+  height: 52px;
+  max-height: 52px;
+  width: auto;
+  max-width: 280px;
+  object-fit: contain;
+  display: block;
+  /* Boost the golden color for better visibility */
+  filter: saturate(1.2) brightness(1.05) drop-shadow(0 1px 6px rgba(0,0,0,0.4));
+  transition: filter 0.3s ease, transform 0.3s ease;
 }
 
-.logo-gold {
-  color: var(--gold);
-  font-weight: 500;
+.main-header.scrolled .header-logo-img {
+  filter: saturate(1.1) drop-shadow(0 1px 3px rgba(0,0,0,0.1));
 }
+
+.header-logo-img:hover {
+  transform: scale(1.03);
+}
+
+@media (max-width: 768px) {
+  .header-logo-img {
+    height: 38px;
+    max-height: 38px;
+    max-width: 200px;
+  }
+}
+
+
 
 .desktop-nav {
   display: flex;
@@ -288,18 +305,20 @@ button {
   inset: 0;
   width: 100%;
   height: 100%;
-  background: url('/canvabg.png') no-repeat center center / cover;
+  background: url('/herobg2.png') no-repeat center center / cover;
   z-index: 1;
 }
 
-/* Overlay gradient for contrast, sits between bg and bottle */
+/* Overlay gradient — transparent left, subtle darken on right for text readability */
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg,
-      rgba(0, 0, 0, 0.72) 0%,
-      rgba(0, 0, 0, 0.35) 60%,
-      rgba(0, 0, 0, 0.15) 100%);
+  background: linear-gradient(to right,
+      transparent 0%,
+      transparent 35%,
+      rgba(40, 10, 10, 0.35) 55%,
+      rgba(30, 5, 5, 0.65) 80%,
+      rgba(20, 0, 0, 0.75) 100%);
   z-index: 2;
 }
 
@@ -307,7 +326,15 @@ button {
 
 @media (max-width: 768px) {
   .hero-bg-layer {
-    background-position: 65% center;
+    background-position: 35% center;
+  }
+
+  .hero-overlay {
+    background: linear-gradient(to bottom,
+        transparent 0%,
+        transparent 20%,
+        rgba(30, 5, 5, 0.5) 50%,
+        rgba(20, 0, 0, 0.8) 100%);
   }
 }
 
@@ -317,10 +344,34 @@ button {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: calc(4% + var(--announce-h) + var(--header-h)) 8% 3%;
+  padding: calc(4% + var(--announce-h) + var(--header-h)) 4% 3%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.hero-right-block {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  max-width: 440px;
   gap: 0;
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    justify-content: center;
+    padding: calc(4% + var(--announce-h) + var(--header-h)) 6% 6%;
+    align-items: flex-end;
+  }
+
+  .hero-right-block {
+    align-items: center;
+    text-align: center;
+    max-width: 100%;
+  }
 }
 
 .hero-badge {
@@ -329,7 +380,7 @@ button {
 
 .hero-badge-text {
   font-family: var(--font-sans);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.28em;
   color: rgba(255, 255, 255, 0.8);
@@ -344,18 +395,18 @@ button {
 
 .hero-title-main {
   font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
-  font-size: clamp(4rem, 10vw, 10rem);
+  font-size: clamp(3rem, 6vw, 5.5rem);
   font-weight: 700;
   line-height: 1.0;
   text-transform: uppercase;
-  text-align: left;
+  text-align: right;
   margin-bottom: 0.5rem;
   letter-spacing: 0.04em;
 
-  /* Solid cream/ivory color matching reference image */
-  color: #F5EDD8;
-  -webkit-text-fill-color: #F5EDD8;
-  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+  /* Golden color matching brand/website theme */
+  color: var(--gold);
+  -webkit-text-fill-color: var(--gold);
+  text-shadow: 0 2px 20px rgba(212, 175, 55, 0.3), 0 4px 32px rgba(0, 0, 0, 0.4);
 
   /* Simple fade-in only */
   opacity: 0;
@@ -396,18 +447,20 @@ button {
 }
 
 .hero-tagline {
-  font-size: clamp(0.82rem, 1vw, 0.98rem);
+  font-size: clamp(0.85rem, 1vw, 1rem);
   font-weight: 300;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 480px;
-  margin-bottom: 1.2rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 420px;
+  margin-bottom: 1.5rem;
+  text-align: right;
 }
 
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  justify-content: flex-end;
   margin-bottom: 1.6rem;
 }
 
@@ -457,6 +510,7 @@ button {
   align-items: center;
   gap: 2rem;
   flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .hero-stat {
