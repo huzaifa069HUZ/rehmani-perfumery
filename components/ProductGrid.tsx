@@ -65,7 +65,6 @@ export default function ProductGrid() {
               <ProductCard
                 key={product.id}
                 product={product as any}
-                index={i}
               />
             ))
           )}
