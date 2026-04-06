@@ -468,9 +468,21 @@ export default function AddProductPage() {
           background: rgba(212,175,95,0.04);
         }
 
+        .pricing-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+
         @media (max-width: 900px) {
           .form-grid { flex-direction: column !important; }
           .form-sidebar { width: 100% !important; }
+        }
+
+        @media (max-width: 600px) {
+          .pricing-grid {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
 
@@ -675,7 +687,7 @@ export default function AddProductPage() {
                 </div>
               </div>
               <div className="card-body">
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <div className="pricing-grid">
                   <div className="field-group">
                     <label className="field-label" htmlFor="product-price">Selling Price</label>
                     <div className="price-input-wrap">

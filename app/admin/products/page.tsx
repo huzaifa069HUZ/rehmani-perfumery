@@ -319,10 +319,44 @@ export default function AdminProductsPage() {
           text-transform: uppercase;
           letter-spacing: 0.07em;
         }
+
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+          margin-bottom: 24px;
+        }
+
+        .table-container {
+          width: 100%;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .table-wrapper {
+          min-width: 650px;
+        }
+
+        @media (max-width: 768px) {
+          .stats-grid {
+            grid-template-columns: 1fr;
+          }
+          .table-header, .product-row {
+            padding: 12px 16px;
+          }
+          .page-header-flex {
+            flex-direction: column;
+            align-items: stretch !important;
+          }
+          .add-product-btn {
+            width: 100%;
+            justify-content: center;
+          }
+        }
       `}</style>
 
       {/* ─── Page Header ─── */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '28px', flexWrap: 'wrap' }}>
+      <div className="page-header-flex" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '28px', flexWrap: 'wrap' }}>
         <div style={{ animation: 'fadeInUp 0.3s ease' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
             <div style={{
@@ -348,7 +382,7 @@ export default function AdminProductsPage() {
       </div>
 
       {/* ─── Stats ─── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
+      <div className="stats-grid">
         {stats.map((s, i) => (
           <div key={i} className="stat-card" style={{ animationDelay: `${i * 0.08}s` }}>
             <div className="stat-icon" style={{ background: s.gradient }}>
@@ -446,8 +480,9 @@ export default function AdminProductsPage() {
             </div>
           ) : (
             /* ─── Product Table ─── */
-            <div>
-              {/* Table Header */}
+            <div className="table-container">
+              <div className="table-wrapper">
+                {/* Table Header */}
               <div className="table-header">
                 <span className="th">Product</span>
                 <span className="th" style={{ minWidth: '90px' }}>Category</span>
@@ -544,6 +579,7 @@ export default function AdminProductsPage() {
                   </div>
                 ))}
               </div>
+            </div>
             </div>
           )}
         </div>

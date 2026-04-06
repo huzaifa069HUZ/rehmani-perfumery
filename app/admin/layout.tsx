@@ -264,6 +264,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           .collapse-toggle-desktop {
             display: none;
           }
+          .admin-main-content {
+            margin-left: 0 !important;
+          }
+          .page-content {
+            padding: 16px !important;
+          }
         }
       `}</style>
 
@@ -398,7 +404,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* ─── MAIN CONTENT ─── */}
-      <div style={{
+      <div className="admin-main-content" style={{
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
