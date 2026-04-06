@@ -1,0 +1,108 @@
+/* View All Attars button styles */
+.view-all-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 70px;
+  padding-top: 56px;
+}
+
+.view-all-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 440px;
+}
+
+.view-all-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(212,175,55,0.5), transparent);
+}
+
+.view-all-diamond {
+  color: #D4AF37;
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.view-all-attars-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 16px 48px;
+  background: linear-gradient(135deg, #0e0e0e 0%, #1a1a1a 50%, #0e0e0e 100%);
+  color: #D4AF37;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.view-all-attars-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #D4AF37 0%, #e8cc66 50%, #D4AF37 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.view-all-attars-btn:hover::before {
+  opacity: 1;
+}
+
+.view-all-attars-btn:hover {
+  color: #0e0e0e;
+  border-color: #D4AF37;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(212, 175, 55, 0.3), 0 0 0 1px rgba(212, 175, 55, 0.2);
+}
+
+.view-all-attars-btn:hover .view-all-btn-arrow {
+  transform: translateX(5px);
+}
+
+.view-all-btn-text,
+.view-all-btn-arrow {
+  position: relative;
+  z-index: 1;
+}
+
+.view-all-btn-arrow {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.view-all-btn-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  transform: skewX(-15deg);
+  animation: btnShimmer 3.5s ease infinite;
+  z-index: 0;
+}
+
+@keyframes btnShimmer {
+  0%   { left: -100%; }
+  40%  { left: 150%; }
+  100% { left: 150%; }
+}
+
+.view-all-subtitle {
+  font-size: 0.78rem;
+  color: #666666;
+  letter-spacing: 0.08em;
+  text-align: center;
+}

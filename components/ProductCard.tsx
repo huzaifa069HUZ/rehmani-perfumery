@@ -46,12 +46,14 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   const handleQuickAdd = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
+    const images = product.images || [];
+    const sizes = product.sizes || [6, 12];
     addToCart({
       id: product.id,
       name: product.name,
-      size: product.sizes[0],
+      size: sizes[0],
       price: product.price,
-      image: product.images[0],
+      image: images[0] || '',
     });
   }, [product, addToCart]);
 
@@ -72,7 +74,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.isNew && <span className="product-badge">New</span>}
 
           <div className="product-img-slider">
-            {product.images.slice(0, 2).map((img, i) => (
+            {(product.images || []).slice(0, 2).map((img, i) => (
               <div
                 key={i}
                 className="product-img-slide"
@@ -92,7 +94,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           {/* Dot indicators */}
           <div className="img-dots">
-            {product.images.slice(0, 2).map((_, i) => (
+            {(product.images || []).slice(0, 2).map((_, i) => (
               <span key={i} className={`img-dot${currentImg === i ? ' active' : ''}`} />
             ))}
           </div>
@@ -109,11 +111,17 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         <div className="product-info">
           <h3 className="product-name">{product.name}</h3>
-          <p className="product-notes">{product.notes}</p>
+          <p className="product-notes">{product.notes || ''}</p>
           <div className="price-block">
             <span className="product-price">₹{product.price}</span>
-            <span className="original-price">₹{product.originalPrice}</span>
-            <span className="discount-badge">{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% off</span>
+            {product.originalPrice > product.price && (
+              <span className="original-price">₹{product.originalPrice}</span>
+            )}
+            {product.originalPrice > product.price && (
+              <span className="discount-badge">
+                {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% off
+              </span>
+            )}
           </div>
         </div>
       </div>

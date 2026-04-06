@@ -10,7 +10,7 @@ interface QuickViewModalProps {
 }
 
 export default function QuickViewModal({ product, onClose }: QuickViewModalProps) {
-  const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
+  const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || 6);
   const [currentImg, setCurrentImg] = useState(0);
   const { addToCart } = useCart();
 
@@ -20,7 +20,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
       name: product.name,
       size: selectedSize,
       price: product.price,
-      image: product.images[0],
+      image: product.images?.[0] || '',
     });
     onClose();
   };
@@ -38,25 +38,33 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
           {/* Image panel */}
           <div className="modal-img-panel">
             <div className="modal-img-wrap">
-              <Image
-                src={product.images[currentImg]}
-                alt={product.name}
-                fill
-                className="modal-img"
-                sizes="(max-width:768px) 100vw, 50vw"
-              />
+              {product.images?.[currentImg] ? (
+                <Image
+                  src={product.images[currentImg]}
+                  alt={product.name}
+                  fill
+                  className="modal-img"
+                  sizes="(max-width:768px) 100vw, 50vw"
+                />
+              ) : (
+                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f3f4f6' }}>
+                  No Image
+                </div>
+              )}
             </div>
-            <div className="modal-thumbs">
-              {product.images.map((img, i) => (
-                <button
-                  key={i}
-                  className={`modal-thumb${currentImg === i ? ' active' : ''}`}
-                  onClick={() => setCurrentImg(i)}
-                >
-                  <Image src={img} alt="" fill sizes="80px" className="thumb-img" />
-                </button>
-              ))}
-            </div>
+            {product.images && product.images.length > 1 && (
+              <div className="modal-thumbs">
+                {product.images.map((img, i) => (
+                  <button
+                    key={i}
+                    className={`modal-thumb${currentImg === i ? ' active' : ''}`}
+                    onClick={() => setCurrentImg(i)}
+                  >
+                    <Image src={img} alt="" fill sizes="80px" className="thumb-img" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Info panel */}
@@ -70,7 +78,7 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
 
             <div className="modal-section-label">SELECT SIZE</div>
             <div className="modal-sizes">
-              {product.sizes.map(size => (
+              {(product.sizes || [6, 12, 18]).map(size => (
                 <button
                   key={size}
                   className={`size-btn${selectedSize === size ? ' active' : ''}`}
