@@ -69,10 +69,10 @@ export default function Header({ onMenuOpen }: HeaderProps) {
 
         {/* Desktop Nav */}
         <nav className="desktop-nav">
-          <a href="#" className="nav-link active">HOME</a>
-          <a href="#attars" className="nav-link">ATTARS</a>
-          <a href="#collections" className="nav-link">COLLECTIONS</a>
-          <a href="#about" className="nav-link">ABOUT</a>
+          <a href="/#" className="nav-link active">HOME</a>
+          <Link href="/attars" className="nav-link">ATTARS</Link>
+          <Link href="/perfumes" className="nav-link">PERFUMES</Link>
+          <a href="/#about" className="nav-link">ABOUT</a>
         </nav>
 
         {/* Actions */}

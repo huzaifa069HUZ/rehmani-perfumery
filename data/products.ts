@@ -6,9 +6,11 @@ export interface Product {
   price: number;
   originalPrice: number;
   sizes: number[];
+  pricing?: Record<string, { price: number; originalPrice: number }>;
   images: string[];
   isNew: boolean;
   occasions: string[];
+  type?: 'attar' | 'perfume';
 }
 
 const MOCKUP2 = '/assets/mockup2.png';

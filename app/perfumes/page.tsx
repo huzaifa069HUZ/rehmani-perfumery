@@ -1,6 +1,6 @@
 'use client';
 
-import './attars.css';
+import '../attars/attars.css';
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -14,7 +14,7 @@ import QuickViewModal from '@/components/QuickViewModal';
 type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'name-az' | 'discount';
 
 const CATEGORIES = [
-  { id: 'all',    label: 'All Attars' },
+  { id: 'all',    label: 'All Perfumes' },
   { id: 'oud',    label: 'Oud' },
   { id: 'musk',   label: 'Musk' },
   { id: 'floral', label: 'Floral' },
@@ -106,7 +106,7 @@ function AttrListCard({ product, onOpen }: { product: Product; onOpen: (p: Produ
 }
 
 /* ── Main Page ─────────────────────────────────────── */
-export default function AttarsPage() {
+export default function PerfumesPage() {
   const router = useRouter();
   const [dbProducts, setDbProducts] = useState<Product[]>([]);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -145,7 +145,7 @@ export default function AttarsPage() {
   const range = PRICE_RANGES[priceRange];
 
   const filtered = useMemo(() => {
-    let list = dbProducts.filter(p => p.type !== 'perfume');
+    let list = dbProducts.filter(p => p.type === 'perfume');
 
     // search
     if (search.trim()) {
@@ -163,7 +163,7 @@ export default function AttarsPage() {
     if (category !== 'all') {
       list = list.filter(p => {
         const cat = (p.category || '').toLowerCase().trim();
-        return cat === category || cat === 'all attars' || cat === 'all';
+        return cat === category || cat === 'all perfumes' || cat === 'all';
       });
     }
     // When category === 'all': skip the filter entirely — show everything
@@ -209,8 +209,8 @@ export default function AttarsPage() {
         <div className="al-hero-overlay" />
         <div className="al-hero-content">
           <p className="al-hero-tag">THE COMPLETE COLLECTION</p>
-          <h1 className="al-hero-title">{category === 'all' ? 'All Attars' : CATEGORIES.find(c => c.id === category)?.label}</h1>
-          <p className="al-hero-sub">Discover our full range of handcrafted Arabian perfume oils</p>
+          <h1 className="al-hero-title">{category === 'all' ? 'All Perfumes' : CATEGORIES.find(c => c.id === category)?.label}</h1>
+          <p className="al-hero-sub">Discover our full range of handcrafted Arabian perfumes</p>
         </div>
         <div className="al-hero-scroll-hint">
           <span className="al-scroll-dot" />
@@ -229,10 +229,10 @@ export default function AttarsPage() {
             <input
               className="al-search-input"
               type="text"
-              placeholder="Search attars, notes, categories…"
+              placeholder="Search perfumes, notes, categories…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              aria-label="Search attars"
+              aria-label="Search perfumes"
             />
             {search && (
               <button className="al-search-clear" onClick={() => setSearch('')} aria-label="Clear search">
@@ -370,7 +370,7 @@ export default function AttarsPage() {
           {/* Results info */}
           <div className="al-results-bar">
             <p className="al-results-count">
-              {filtered.length === 0 ? 'No attars found' : `${filtered.length} Attar${filtered.length !== 1 ? 's' : ''}`}
+              {filtered.length === 0 ? 'No perfumes found' : `${filtered.length} Perfume${filtered.length !== 1 ? 's' : ''}`}
               {search && <span className="al-results-query"> for &ldquo;{search}&rdquo;</span>}
             </p>
             {activeFiltersCount > 0 && (
@@ -386,10 +386,10 @@ export default function AttarsPage() {
           {filtered.length === 0 ? (
             <div className="al-empty">
               <div className="al-empty-icon">✦</div>
-              <h3 className="al-empty-title">No attars found</h3>
+              <h3 className="al-empty-title">No perfumes found</h3>
               <p className="al-empty-sub">Try adjusting your search or filter criteria</p>
               <button className="al-empty-reset" onClick={() => { setSearch(''); resetFilters(); }}>
-                Browse All Attars
+                Browse All Perfumes
               </button>
             </div>
           ) : (

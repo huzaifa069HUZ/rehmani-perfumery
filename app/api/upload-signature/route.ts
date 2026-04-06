@@ -22,20 +22,25 @@ export async function GET() {
     );
   }
 
-  const timestamp = Math.round(Date.now() / 1000);
-  const folder = 'perfumery';
+  try {
+    const timestamp = Math.round(Date.now() / 1000);
+    const folder = 'perfumery';
 
-  const paramsToSign = { folder, timestamp };
-  const signature = cloudinary.utils.api_sign_request(
-    paramsToSign,
-    process.env.CLOUDINARY_API_SECRET!
-  );
+    const paramsToSign = { folder, timestamp };
+    const signature = cloudinary.utils.api_sign_request(
+      paramsToSign,
+      process.env.CLOUDINARY_API_SECRET!
+    );
 
-  return NextResponse.json({
-    signature,
-    timestamp,
-    folder,
-    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-    apiKey: process.env.CLOUDINARY_API_KEY,
-  });
+    return NextResponse.json({
+      signature,
+      timestamp,
+      folder,
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+      apiKey: process.env.CLOUDINARY_API_KEY,
+    });
+  } catch (err: any) {
+    console.error("Cloudinary sign error:", err);
+    return NextResponse.json({ error: err.message || 'Unknown error' }, { status: 500 });
+  }
 }

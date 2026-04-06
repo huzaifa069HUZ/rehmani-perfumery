@@ -43,6 +43,9 @@ export default function Testimonials() {
       } else {
         setReviews(DEFAULT_TESTIMONIALS);
       }
+    }, (err) => {
+      console.warn("Testimonials snapshot error (likely permissions). Using default testimonials.", err);
+      setReviews(DEFAULT_TESTIMONIALS);
     });
     return () => unsubscribe();
   }, []);

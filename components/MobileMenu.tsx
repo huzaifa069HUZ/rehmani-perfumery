@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
@@ -18,10 +20,10 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             <img src="/logo-with-text.png" alt="Rahmani Perfumery" style={{ height: '40px', width: 'auto', objectFit: 'contain' }} />
           </a>
           <div className="mobile-nav-links">
-            <a href="#" className="mobile-nav-link" onClick={onClose}>HOME</a>
-            <a href="#collections" className="mobile-nav-link" onClick={onClose}>COLLECTIONS</a>
-            <a href="#attars" className="mobile-nav-link" onClick={onClose}>ATTARS</a>
-            <a href="#about" className="mobile-nav-link" onClick={onClose}>ABOUT</a>
+            <a href="/#" className="mobile-nav-link" onClick={onClose}>HOME</a>
+            <Link href="/perfumes" className="mobile-nav-link" onClick={onClose}>PERFUMES</Link>
+            <Link href="/attars" className="mobile-nav-link" onClick={onClose}>ATTARS</Link>
+            <a href="/#about" className="mobile-nav-link" onClick={onClose}>ABOUT</a>
           </div>
         </div>
       </nav>

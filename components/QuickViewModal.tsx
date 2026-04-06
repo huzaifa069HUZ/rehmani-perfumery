@@ -14,12 +14,16 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
   const [currentImg, setCurrentImg] = useState(0);
   const { addToCart } = useCart();
 
+  const activePriceData = product.pricing?.[selectedSize];
+  const displayPrice = activePriceData ? activePriceData.price : product.price;
+  const displayOriginal = activePriceData ? activePriceData.originalPrice : product.originalPrice;
+
   const handleAdd = () => {
     addToCart({
       id: product.id,
       name: product.name,
       size: selectedSize,
-      price: product.price,
+      price: displayPrice,
       image: product.images?.[0] || '',
     });
     onClose();
@@ -73,7 +77,12 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
             <h2 className="modal-title">{product.name}</h2>
             <p className="modal-notes">{product.notes}</p>
             <div className="modal-price-row">
-              <span className="modal-price">₹{product.price}</span>
+              <span className="modal-price">₹{displayPrice}</span>
+              {displayOriginal && displayOriginal > displayPrice && (
+                <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '15px', fontWeight: '500' }}>
+                  ₹{displayOriginal}
+                </span>
+              )}
             </div>
 
             <div className="modal-section-label">SELECT SIZE</div>

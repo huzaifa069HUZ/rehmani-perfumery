@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
@@ -24,8 +24,11 @@ export default function AddProductPage() {
   const [saveError, setSaveError] = useState('');
 
   const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [originalPrice, setOriginalPrice] = useState('');
+  const [pricing, setPricing] = useState<Record<number, { price: string; originalPrice: string }>>({
+    6: { price: '', originalPrice: '' },
+    12: { price: '', originalPrice: '' },
+    24: { price: '', originalPrice: '' },
+  });
   const [category, setCategory] = useState(CATEGORIES[0].value);
   const [gender, setGender] = useState('Unisex');
   const [description, setDescription] = useState('');
@@ -33,7 +36,22 @@ export default function AddProductPage() {
   const [images, setImages] = useState<string[]>([]);
   const [tagsInput, setTagsInput] = useState('');
   const [isNew, setIsNew] = useState(true);
-  const [sizes, setSizes] = useState<number[]>([6, 12, 18]);
+  const [productType, setProductType] = useState<'attar' | 'perfume'>('attar');
+  const [sizes, setSizes] = useState<number[]>([6, 12, 24]);
+  const [availableSizes, setAvailableSizes] = useState<number[]>([6, 12, 24]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('type') === 'perfume') {
+      setProductType('perfume');
+      setSizes([30, 50, 100]);
+      setAvailableSizes([30, 50, 100]);
+    } else {
+      setProductType('attar');
+      setSizes([6, 12, 24]);
+      setAvailableSizes([6, 12, 24]);
+    }
+  }, []);
 
   const handleImageUploadSuccess = (url: string) => { setImages(prev => [...prev, url]); };
   const removeImage = (index: number) => { setImages(prev => prev.filter((_, i) => i !== index)); };
@@ -45,15 +63,32 @@ export default function AddProductPage() {
     setSaveError('');
 
     try {
-      const parsedPrice = parseFloat(price);
-      const parsedOriginal = parseFloat(originalPrice) || parsedPrice;
+      const sortedSizes = [...sizes].sort((a, b) => a - b);
+      if (sortedSizes.length === 0) { alert('Please select at least one bottle size.'); setLoading(false); return; }
+      
+      const parsedPricing: Record<string, { price: number; originalPrice: number }> = {};
+      for (const size of sortedSizes) {
+         const pData = pricing[size];
+         if (!pData || !pData.price || isNaN(parseFloat(pData.price))) {
+            setSaveError(`Please enter a valid selling price for the ${size}ml bottle.`);
+            setLoading(false);
+            return;
+         }
+         const p = parseFloat(pData.price);
+         const op = pData.originalPrice ? parseFloat(pData.originalPrice) : p;
+         
+         parsedPricing[size.toString()] = { price: p, originalPrice: op };
+      }
+
+      const basePrice = parsedPricing[sortedSizes[0]].price;
+      const baseOriginalPrice = parsedPricing[sortedSizes[0]].originalPrice;
       const parsedTags = tagsInput.split(',').map(t => t.trim()).filter(Boolean);
 
       // Race the Firestore save against a 15-second timeout
       const savePromise = addDoc(collection(db, 'products'), {
         name, category, gender, description, notes,
-        price: parsedPrice, originalPrice: parsedOriginal, isNew,
-        sizes: [...sizes].sort((a, b) => a - b), images, occasions: parsedTags,
+        price: basePrice, originalPrice: baseOriginalPrice, isNew,
+        sizes: sortedSizes, pricing: parsedPricing, images, occasions: parsedTags, type: productType,
         createdAt: new Date().toISOString()
       });
 
@@ -294,37 +329,49 @@ export default function AddProductPage() {
 
         .save-btn {
           width: 100%;
-          background: linear-gradient(135deg, #d4af5f 0%, #c9973a 100%);
-          color: #0d0d1f;
-          font-size: 14px;
-          font-weight: 800;
+          background: rgba(255, 255, 255, 0.4);
+          backdrop-filter: blur(20px) saturate(180%);
+          -webkit-backdrop-filter: blur(20px) saturate(180%);
+          color: #1e293b;
+          font-size: 14.5px;
+          font-weight: 600;
           padding: 14px 24px;
           border-radius: 12px;
           border: none;
           cursor: pointer;
-          transition: all 0.25s;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 9px;
-          box-shadow: 0 4px 20px rgba(212,175,95,0.4);
+          box-shadow: 0 4px 24px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(255,255,255,0.6), inset 0 0 0 1px rgba(212,175,95,0.3);
           letter-spacing: -0.01em;
           font-family: 'Inter', system-ui, sans-serif;
         }
 
+        @media (max-width: 768px) {
+          .save-btn {
+            padding: 16px 24px;
+            font-size: 16px;
+            border-radius: 16px;
+          }
+        }
+
         .save-btn:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 32px rgba(212,175,95,0.55);
-          filter: brightness(1.04);
+          transform: translateY(-2px) scale(1.02);
+          background: rgba(255, 255, 255, 0.6);
+          box-shadow: 0 12px 40px rgba(212,175,95,0.15), inset 0 0 0 1px rgba(255,255,255,0.9), inset 0 0 0 1px rgba(212,175,95,0.5);
+          color: #0f172a;
         }
 
         .save-btn:active:not(:disabled) {
-          transform: translateY(0);
+          transform: translateY(0) scale(0.98);
         }
 
         .save-btn:disabled {
           opacity: 0.75;
           cursor: not-allowed;
+          transform: none;
         }
 
         .discard-btn {
@@ -568,6 +615,43 @@ export default function AddProductPage() {
                 </div>
               </div>
               <div className="card-body">
+                {/* ─── Type Segmented Control ─── */}
+                <div className="field-group">
+                  <label className="field-label">Product Type</label>
+                  <div style={{ display: 'flex', gap: '8px', background: '#f8fafc', padding: '6px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProductType('attar');
+                        setSizes([6, 12, 24]);
+                        setAvailableSizes([6, 12, 24]);
+                      }}
+                      style={{ 
+                        flex: 1, padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
+                        background: productType === 'attar' ? '#fff' : 'transparent',
+                        color: productType === 'attar' ? '#0f172a' : '#64748b',
+                        boxShadow: productType === 'attar' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none', border: 'none', cursor: 'pointer'
+                      }}>
+                      Attar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProductType('perfume');
+                        setSizes([30, 50, 100]);
+                        setAvailableSizes([30, 50, 100]);
+                      }}
+                      style={{ 
+                        flex: 1, padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
+                        background: productType === 'perfume' ? '#fff' : 'transparent',
+                        color: productType === 'perfume' ? '#0f172a' : '#64748b',
+                        boxShadow: productType === 'perfume' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none', border: 'none', cursor: 'pointer'
+                      }}>
+                      Perfume
+                    </button>
+                  </div>
+                </div>
+
                 <div className="field-group">
                   <label className="field-label" htmlFor="product-name">Product Name</label>
                   <input
@@ -682,70 +766,19 @@ export default function AddProductPage() {
                   </svg>
                 </div>
                 <div>
-                  <h2>Pricing</h2>
-                  <p>Selling price, MRP &amp; bottle sizes</p>
+                  <h2>Bottle Sizes & Pricing</h2>
+                  <p>Configure options and their prices</p>
                 </div>
               </div>
               <div className="card-body">
-                <div className="pricing-grid">
-                  <div className="field-group">
-                    <label className="field-label" htmlFor="product-price">Selling Price</label>
-                    <div className="price-input-wrap">
-                      <span className="price-symbol">₹</span>
-                      <input
-                        id="product-price"
-                        required
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={price}
-                        onChange={e => setPrice(e.target.value)}
-                        className="premium-input"
-                        placeholder="0.00"
-                      />
-                    </div>
-                    <div className="field-hint">What customers pay</div>
-                  </div>
-                  <div className="field-group">
-                    <label className="field-label" htmlFor="product-original">Compare-at Price</label>
-                    <div className="price-input-wrap">
-                      <span className="price-symbol">₹</span>
-                      <input
-                        id="product-original"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={originalPrice}
-                        onChange={e => setOriginalPrice(e.target.value)}
-                        className="premium-input"
-                        placeholder="0.00"
-                      />
-                    </div>
-                    <div className="field-hint">MRP / strikethrough price</div>
-                  </div>
-                </div>
-                {price && originalPrice && parseFloat(originalPrice) > parseFloat(price) && (
-                  <div style={{
-                    marginTop: '12px', padding: '10px 14px',
-                    background: 'linear-gradient(135deg, #ecfdf5, #d1fae5)',
-                    border: '1px solid #a7f3d0', borderRadius: '9px',
-                    display: 'flex', alignItems: 'center', gap: '8px',
-                  }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span style={{ fontSize: '12.5px', fontWeight: '600', color: '#065f46' }}>
-                      {Math.round(((parseFloat(originalPrice) - parseFloat(price)) / parseFloat(originalPrice)) * 100)}% discount will be shown on the product
-                    </span>
-                  </div>
-                )}
-
                 {/* ─── Bottle Sizes ─── */}
-                <div className="field-group" style={{ marginTop: '20px' }}>
+                <div className="field-group">
                   <label className="field-label">
-                    Bottle Sizes
+                    Active Bottle Sizes
                     <span style={{ marginLeft: '6px', fontSize: '10px', fontWeight: '500', color: '#94a3b8', textTransform: 'none', letterSpacing: 0 }}>(select all that apply)</span>
                   </label>
                   <div style={{ display: 'flex', gap: '10px' }}>
-                    {([6, 12, 18] as number[]).map(ml => {
+                    {availableSizes.map(ml => {
                       const active = sizes.includes(ml);
                       const toggle = () => setSizes(prev =>
                         prev.includes(ml) ? prev.filter(s => s !== ml) : [...prev, ml]
@@ -813,6 +846,63 @@ export default function AddProductPage() {
                       Select at least one bottle size.
                     </div>
                   )}
+                </div>
+
+                {/* ─── Size Specific Pricing ─── */}
+                <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                  {[...sizes].sort((a,b)=>a-b).map(size => {
+                    const priceVal = pricing[size]?.price || '';
+                    const origVal = pricing[size]?.originalPrice || '';
+                    return (
+                      <div key={size} style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                           <span style={{ fontWeight: '700', color: '#0f172a', fontSize: '15px' }}>{size}ml Pricing</span>
+                        </div>
+                        <div className="pricing-grid">
+                          <div className="field-group">
+                            <label className="field-label" htmlFor={`price-${size}`}>Selling Price</label>
+                            <div className="price-input-wrap">
+                              <span className="price-symbol">₹</span>
+                              <input
+                                id={`price-${size}`}
+                                required
+                                type="number" min="0" step="0.01" 
+                                value={priceVal} 
+                                onChange={e => setPricing(p => ({ ...p, [size]: { ...p[size], price: e.target.value } }))} 
+                                className="premium-input" placeholder="0.00" 
+                              />
+                            </div>
+                          </div>
+                          <div className="field-group">
+                            <label className="field-label" htmlFor={`orig-${size}`}>Compare-at Price</label>
+                            <div className="price-input-wrap">
+                              <span className="price-symbol">₹</span>
+                              <input
+                                id={`orig-${size}`}
+                                type="number" min="0" step="0.01" 
+                                value={origVal} 
+                                onChange={e => setPricing(p => ({ ...p, [size]: { ...p[size], originalPrice: e.target.value } }))} 
+                                className="premium-input" placeholder="0.00" 
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        {priceVal && origVal && parseFloat(origVal) > parseFloat(priceVal) && (
+                          <div style={{
+                            marginTop: '12px', padding: '8px 12px',
+                            background: 'linear-gradient(135deg, #ecfdf5, #d1fae5)',
+                            border: '1px solid #a7f3d0', borderRadius: '8px',
+                            display: 'flex', alignItems: 'center', gap: '6px',
+                          }}>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
+                            <span style={{ fontSize: '11.5px', fontWeight: '600', color: '#065f46' }}>
+                              {Math.round(((parseFloat(origVal) - parseFloat(priceVal)) / parseFloat(origVal)) * 100)}% discount
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             </div>

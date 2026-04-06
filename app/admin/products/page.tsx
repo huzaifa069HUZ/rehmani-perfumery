@@ -14,6 +14,7 @@ interface DBProduct {
   originalPrice: number;
   isNew: boolean;
   images: string[];
+  type?: 'attar' | 'perfume';
 }
 
 export default function AdminProductsPage() {
@@ -21,6 +22,7 @@ export default function AdminProductsPage() {
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [search, setSearch] = useState('');
+  const [showAddTypeModal, setShowAddTypeModal] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -142,28 +144,30 @@ export default function AdminProductsPage() {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background: linear-gradient(135deg, #d4af5f 0%, #c9973a 100%);
-          color: #0d0d1f;
-          font-size: 13.5px;
-          font-weight: 700;
-          padding: 11px 22px;
-          border-radius: 10px;
+          background: rgba(255, 255, 255, 0.4);
+          backdrop-filter: blur(20px) saturate(180%);
+          -webkit-backdrop-filter: blur(20px) saturate(180%);
+          color: #1e293b;
+          font-size: 14.5px;
+          font-weight: 600;
+          padding: 12px 24px;
+          border-radius: 999px;
           text-decoration: none;
-          transition: all 0.25s;
-          box-shadow: 0 4px 16px rgba(212,175,95,0.4);
-          border: 1px solid rgba(255,255,255,0.2);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 4px 24px rgba(0,0,0,0.06), inset 0 0 0 1px rgba(255,255,255,0.6), inset 0 0 0 1px rgba(212,175,95,0.3);
           letter-spacing: -0.01em;
           white-space: nowrap;
         }
 
         .add-product-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 28px rgba(212,175,95,0.5);
-          filter: brightness(1.05);
+          transform: translateY(-2px) scale(1.02);
+          background: rgba(255, 255, 255, 0.6);
+          box-shadow: 0 12px 40px rgba(212,175,95,0.15), inset 0 0 0 1px rgba(255,255,255,0.9), inset 0 0 0 1px rgba(212,175,95,0.5);
+          color: #0f172a;
         }
 
         .add-product-btn:active {
-          transform: translateY(0);
+          transform: translateY(0) scale(0.98);
         }
 
         .search-input {
@@ -192,7 +196,7 @@ export default function AdminProductsPage() {
 
         .product-row {
           display: grid;
-          grid-template-columns: 1fr auto auto auto auto;
+          grid-template-columns: 1fr 90px 90px 80px 90px 72px;
           align-items: center;
           gap: 16px;
           padding: 16px 20px;
@@ -305,7 +309,7 @@ export default function AdminProductsPage() {
 
         .table-header {
           display: grid;
-          grid-template-columns: 1fr auto auto auto auto;
+          grid-template-columns: 1fr 90px 90px 80px 90px 72px;
           gap: 16px;
           padding: 12px 20px;
           border-bottom: 1px solid #f1f5f9;
@@ -351,6 +355,9 @@ export default function AdminProductsPage() {
           .add-product-btn {
             width: 100%;
             justify-content: center;
+            padding: 16px 24px;
+            font-size: 16px;
+            border-radius: 16px;
           }
         }
       `}</style>
@@ -373,12 +380,14 @@ export default function AdminProductsPage() {
           </p>
         </div>
 
-        <Link href="/admin/products/add" className="add-product-btn" id="add-product-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-          Add Product
-        </Link>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button onClick={() => setShowAddTypeModal(true)} className="add-product-btn" id="add-product-main-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add Product
+          </button>
+        </div>
       </div>
 
       {/* ─── Stats ─── */}
@@ -483,8 +492,9 @@ export default function AdminProductsPage() {
             <div className="table-container">
               <div className="table-wrapper">
                 {/* Table Header */}
-              <div className="table-header">
+              <div className="table-header" style={{ gridTemplateColumns: '1fr 90px 90px 80px 90px 72px' }}>
                 <span className="th">Product</span>
+                <span className="th">Type</span>
                 <span className="th" style={{ minWidth: '90px' }}>Category</span>
                 <span className="th" style={{ minWidth: '80px' }}>Status</span>
                 <span className="th" style={{ minWidth: '90px', textAlign: 'right' }}>Price</span>
@@ -527,6 +537,17 @@ export default function AdminProductsPage() {
                         </Link>
                         <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>ID: {product.id.slice(0, 8)}…</div>
                       </div>
+                    </div>
+
+                    {/* Type Badge */}
+                    <div style={{ minWidth: '90px' }}>
+                      <span style={{ 
+                        display: 'inline-flex', padding: '3px 8px', borderRadius: '6px', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em',
+                        background: product.type === 'perfume' ? 'rgba(56, 189, 248, 0.15)' : 'rgba(212,175,95,0.15)',
+                        color: product.type === 'perfume' ? '#0ea5e9' : '#d4af5f', border: `1px solid ${product.type === 'perfume' ? 'rgba(56, 189, 248, 0.3)' : 'rgba(212,175,95,0.3)'}`
+                      }}>
+                        {product.type === 'perfume' ? 'Perfume' : 'Attar'}
+                      </span>
                     </div>
 
                     {/* Category */}
@@ -611,6 +632,63 @@ export default function AdminProductsPage() {
           </div>
         )}
       </div>
+
+      {showAddTypeModal && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'rgba(15,23,42,0.4)', backdropFilter: 'blur(4px)', animation: 'fadeIn 0.2s ease-out'
+        }} onClick={() => setShowAddTypeModal(false)}>
+          <div style={{
+            background: 'white', borderRadius: '16px', width: '100%', maxWidth: '420px', padding: '24px',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.1)', animation: 'fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+          }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '700', color: '#0f172a' }}>What would you like to add?</h3>
+              <button onClick={() => setShowAddTypeModal(false)} style={{
+                background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px'
+              }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <Link href="/admin/products/add?type=attar" 
+                style={{
+                   display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', borderRadius: '12px',
+                   border: '1px solid #e2e8f0', background: '#f8fafc', textDecoration: 'none', transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.borderColor = '#d4af5f'; e.currentTarget.style.background = 'rgba(212,175,95,0.05)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#f8fafc'; }}
+              >
+                <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <span style={{ fontSize: '24px' }}>💧</span>
+                </div>
+                <div>
+                  <div style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '2px' }}>Premium Attar</div>
+                  <div style={{ fontSize: '12px', color: '#64748b' }}>6ml, 12ml, and 24ml pure oils</div>
+                </div>
+              </Link>
+
+              <Link href="/admin/products/add?type=perfume" 
+                style={{
+                   display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', borderRadius: '12px',
+                   border: '1px solid #e2e8f0', background: '#f8fafc', textDecoration: 'none', transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.borderColor = '#d4af5f'; e.currentTarget.style.background = 'rgba(212,175,95,0.05)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#f8fafc'; }}
+              >
+                <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <span style={{ fontSize: '24px' }}>✨</span>
+                </div>
+                <div>
+                  <div style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '2px' }}>Luxury Perfume</div>
+                  <div style={{ fontSize: '12px', color: '#64748b' }}>30ml, 50ml, and 100ml sprays</div>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

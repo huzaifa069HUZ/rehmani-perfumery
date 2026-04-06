@@ -88,6 +88,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       setCart(cloudCart);
       setIsSyncing(false);
+    }, (err) => {
+      console.warn("Cart snapshot listener error (likely permissions). Not syncing live cart for this user.", err);
+      setIsSyncing(false);
     });
 
     return () => unsubscribe();
