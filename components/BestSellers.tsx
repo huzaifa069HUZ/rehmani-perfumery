@@ -53,7 +53,7 @@ export default function BestSellers() {
   const handleAddToCart = (p: FBProduct, e: React.MouseEvent) => {
     e.stopPropagation();
     addToCart({
-      id: Number(p.id) || Math.random(),
+      id: p.id,
       name: p.name,
       size: p.sizes?.[0] ?? 6,
       price: p.price,

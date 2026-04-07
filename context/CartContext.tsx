@@ -5,7 +5,7 @@ import { db } from '@/lib/firebase';
 import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 
 export interface CartItem {
-  id: number;
+  id: number | string;
   name: string;
   size: number;
   price: number;
