@@ -31,7 +31,7 @@ export default function HeroSection() {
 
           <p className="hero-tagline fade-in" style={{ animationDelay: '0.7s' }}>
             Pure Attar. Pure Identity.<br />
-            Crafted with passion since 1999.
+            Crafted with passion since 2015.
           </p>
 
           <div className="hero-actions fade-in" style={{ animationDelay: '0.9s' }}>
@@ -55,7 +55,7 @@ export default function HeroSection() {
             </div>
             <div className="stat-divider" />
             <div className="hero-stat">
-              <span className="stat-value">SINCE 1999</span>
+              <span className="stat-value">SINCE 2015</span>
               <span className="stat-label">TRUSTED HERITAGE</span>
             </div>
           </div>

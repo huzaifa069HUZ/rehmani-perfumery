@@ -9,7 +9,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ─── 3D Bottle ─────────────────────────────────────────────────────────────────
+// ─── 3D Bottle — GPU-optimised ─────────────────────────────────────────────────
 function Bottle3D({ progress }: { progress: React.RefObject<number> }) {
   const { scene } = useGLTF('/assets/3dbottle.glb');
   const bottleGroup = useRef<THREE.Group>(null);
@@ -17,40 +17,31 @@ function Bottle3D({ progress }: { progress: React.RefObject<number> }) {
 
   useFrame(({ clock }) => {
     if (!bottleGroup.current || !floatGroup.current) return;
-
     const p = progress.current ?? 0;
 
-    // ── Position: enters from bottom-right ──────────────────────────
+    // Position: enter from bottom-right
     if (p < 0.25) {
       const t = p / 0.25;
-      const eased = 1 - Math.pow(1 - t, 3);
-      bottleGroup.current.position.set(
-        1.5 * (1 - eased),
-        -2.5 * (1 - eased),
-        -1 * (1 - eased),
-      );
-      // Scale: 0.5 → 1
-      const s = 0.5 + 0.5 * eased;
+      const e = 1 - Math.pow(1 - t, 3); // cubic ease-out
+      bottleGroup.current.position.set(1.5 * (1 - e), -2.5 * (1 - e), -1 * (1 - e));
+      const s = 0.5 + 0.5 * e;
       bottleGroup.current.scale.set(s, s, s);
     } else if (p < 0.6) {
-      // Settled at center
       bottleGroup.current.position.set(0, 0, 0);
       bottleGroup.current.scale.set(1, 1, 1);
     } else if (p < 0.85) {
-      // Slight zoom-in as card reveals
       const t = (p - 0.6) / 0.25;
-      const eased = t * t * (3 - 2 * t); // smoothstep
-      bottleGroup.current.position.set(0, -0.3 * eased, eased);
-      const s = 1 + 0.25 * eased;
+      const e = t * t * (3 - 2 * t);
+      bottleGroup.current.position.set(0, -0.3 * e, e);
+      const s = 1 + 0.25 * e;
       bottleGroup.current.scale.set(s, s, s);
     }
 
-    // ── Continuous Y-rotation mapped to 0→1 ──────────────────────────
     bottleGroup.current.rotation.x = Math.PI * 0.1 * (1 - Math.min(p / 0.25, 1));
     bottleGroup.current.rotation.z = Math.PI * 0.05 * (1 - Math.min(p / 0.25, 1));
     bottleGroup.current.rotation.y = -Math.PI * 0.5 + p * Math.PI * 2.5;
 
-    // ── Idle float (very subtle) ─────────────────────────────────────
+    // Subtle float bob
     floatGroup.current.position.y = Math.sin(clock.elapsedTime * 1.4) * 0.04;
   });
 
@@ -67,187 +58,173 @@ function Bottle3D({ progress }: { progress: React.RefObject<number> }) {
 
 useGLTF.preload('/assets/3dbottle.glb');
 
-
 // ─── Main Section ───────────────────────────────────────────────────────────────
 export default function PerfumeJourney() {
-  // The single element GSAP will PIN
   const pinnedRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const cardRef   = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
-  const blurRef = useRef<HTMLDivElement>(null);
-
-  // A mutable ref holding scroll progress 0→1 — drives the rAF loop above
-  const progress = useRef<number>(0);
+  const blurRef   = useRef<HTMLDivElement>(null);
+  const progress  = useRef<number>(0);
 
   useEffect(() => {
     if (!pinnedRef.current || !cardRef.current || !canvasRef.current || !blurRef.current) return;
 
-    // ── Master timeline driven by GSAP pin ──────────────────────────
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: pinnedRef.current,
-        // pin the element in place for 2.5× screen-heights of scroll
         pin: true,
         start: 'top top',
-        end: '+=250%',        // 2.5 × 100vh worth of scroll distance
+        end: '+=150%',
         scrub: 1.4,
         invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          progress.current = self.progress;
-        },
+        onUpdate: (self) => { progress.current = self.progress; },
       },
     });
 
-    // 0 → 0.2  canvas fades in
     tl.fromTo(canvasRef.current, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0);
-
-    // 0.5 → 0.8  depth blur + card reveal
-    tl.fromTo(blurRef.current,
-      { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.inOut' }, 0.5);
-
-    tl.fromTo(cardRef.current,
-      { opacity: 0, y: 40, scale: 0.95 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power2.out' }, 0.5);
-
-    // 0.85 → 1  everything fades out (clean exit)
-    tl.to(canvasRef.current, { opacity: 0, duration: 0.15 }, 0.85);
-    tl.to(cardRef.current, { opacity: 0, y: -20, duration: 0.15 }, 0.85);
+    tl.fromTo(blurRef.current,   { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.inOut' }, 0.5);
+    tl.fromTo(cardRef.current,   { opacity: 0, y: 50, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power2.out' }, 0.5);
 
     return () => { ScrollTrigger.getAll().forEach(st => st.kill()); };
   }, []);
 
   return (
-    /* The section itself is just 100vh — GSAP adds the spacer scroll distance via `pin` */
-    <section className="relative bg-neutral-950 z-[9999]">
-      {/* Film grain */}
+    <section
+      className="relative z-[9999]"
+      style={{ background: '#060402' }}
+    >
+      {/* Subtle film grain overlay */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.35] mix-blend-overlay"
+        className="absolute inset-0 pointer-events-none"
         style={{
+          opacity: 0.28,
+          mixBlendMode: 'overlay',
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
         }}
       />
 
-      {/* Pinned viewport — GSAP locks this here while user scrolls */}
+      {/* ── Pinned viewport ── */}
       <div
         ref={pinnedRef}
         className="relative h-screen w-full overflow-hidden flex items-center justify-center"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, rgba(40,20,10,0.5) 0%, #000 100%)',
+          background: 'radial-gradient(ellipse 80% 70% at 50% 55%, rgba(50,28,8,0.55) 0%, #050402 80%)',
         }}
       >
-        {/* Ambient glow orb */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[55vw] h-[55vw] max-w-xl max-h-xl bg-amber-800/25 rounded-full blur-[120px] pointer-events-none" />
+        {/* Large ambient glow */}
+        <div style={{
+          position: 'absolute', top: '43%', left: '50%',
+          transform: 'translate(-50%,-50%)',
+          width: '55vw', height: '55vw', maxWidth: 600, maxHeight: 600,
+          background: 'radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 70%)',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          willChange: 'transform', // GPU layer
+        }} />
 
-        <div className="relative w-full h-full max-w-6xl mx-auto flex items-center justify-center px-4 pointer-events-none">
+        <div className="relative w-full h-full max-w-6xl mx-auto flex items-center justify-center px-4 sm:px-8 pointer-events-none">
 
-          {/* Depth-blur plate — appears 0.5-0.85 */}
+          {/* Depth blur plate */}
           <div
             ref={blurRef}
-            className="absolute inset-0 z-10 backdrop-blur-[6px] bg-black/15 hidden md:block"
-            style={{ opacity: 0 }}
+            className="absolute inset-0 z-10 hidden md:block"
+            style={{ opacity: 0, backdropFilter: 'blur(5px)', WebkitBackdropFilter: 'blur(5px)', background: 'rgba(0,0,0,0.12)' }}
           />
 
-          {/* ── Ultra-Premium Apple-Level Glassmorphic Card ──────────────── */}
+          {/* ── Premium Info Card ─────────────────────────────────────────── */}
           <div
             ref={cardRef}
             style={{
               position: 'absolute',
               zIndex: 20,
-              width: '100%',
-              maxWidth: '520px',
+              inset: 'auto',
+              // Desktop: right-positioned. Mobile: centred bottom
+              right: 'clamp(12px, 4vw, 48px)',
+              bottom: 'clamp(40px, 8vh, 80px)',
+              width: 'min(100% - 24px, 480px)',
               opacity: 0,
-              borderRadius: '28px',
+              borderRadius: 24,
               overflow: 'hidden',
-              // Floating multi-layer shadow — depth without harshness
               boxShadow: [
-                '0 2px 0 0 rgba(255,255,255,0.06) inset',   // top glass highlight
-                '0 80px 120px -20px rgba(0,0,0,0.75)',       // deep float shadow
-                '0 0 0 0.5px rgba(255,255,255,0.08)',         // subtle frame line
-                '0 0 60px 0 rgba(212,175,55,0.06)',           // warm ambient glow
+                '0 2px 0 0 rgba(255,255,255,0.06) inset',
+                '0 60px 100px -20px rgba(0,0,0,0.8)',
+                '0 0 0 0.5px rgba(255,255,255,0.07)',
+                '0 0 50px 10px rgba(212,175,55,0.04)',
               ].join(', '),
               cursor: 'default',
               pointerEvents: 'auto',
+              transition: 'transform 0.45s cubic-bezier(0.25,1,0.5,1)',
             }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLElement).style.transform = 'scale(1.018)';
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLElement).style.transform = 'scale(1)';
-            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px) scale(1.012)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0) scale(1)'; }}
           >
             {/* Glass surface */}
             <div style={{
               position: 'relative',
-              padding: 'clamp(2rem, 5vw, 3rem)',
-              background: 'linear-gradient(145deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.04) 100%)',
-              backdropFilter: 'blur(28px)',
-              WebkitBackdropFilter: 'blur(28px)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '28px',
-              transition: 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
-              // Film grain via repeating noise
-              backgroundImage: [
-                'linear-gradient(145deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.04) 100%)',
-              ].join(', '),
+              padding: 'clamp(1.6rem, 4vw, 2.6rem)',
+              background: 'linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)',
+              backdropFilter: 'blur(32px)',
+              WebkitBackdropFilter: 'blur(32px)',
+              border: '1px solid rgba(255,255,255,0.09)',
+              borderRadius: 24,
             }}>
-
-              {/* Inner top reflection streak — glass physics */}
+              {/* Top glass highlight streak */}
               <div style={{
-                position: 'absolute',
-                top: 0, left: '10%', right: '10%',
-                height: '1px',
-                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent)',
-                borderRadius: '999px',
+                position: 'absolute', top: 0, left: '8%', right: '8%', height: 1,
+                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
+                borderRadius: 999, pointerEvents: 'none',
+              }} />
+              {/* Right edge glow */}
+              <div style={{
+                position: 'absolute', top: '25%', right: -1, width: 1, height: '40%',
+                background: 'linear-gradient(180deg, transparent, rgba(212,175,55,0.22), transparent)',
                 pointerEvents: 'none',
               }} />
 
-              {/* Soft edge glow — right side */}
-              <div style={{
-                position: 'absolute',
-                top: '20%', right: '-1px',
-                width: '1px', height: '40%',
-                background: 'linear-gradient(180deg, transparent, rgba(212,175,55,0.25), transparent)',
-                pointerEvents: 'none',
-              }} />
-
-              {/* Content stack */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.4rem' }}>
+              {/* Content */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
 
                 {/* Eyebrow */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{
+                      width: 5, height: 5, borderRadius: '50%',
+                      background: 'rgba(212,175,55,0.9)',
+                      boxShadow: '0 0 8px rgba(212,175,55,0.65)',
+                      display: 'inline-block', flexShrink: 0,
+                    }} />
+                    <span style={{
+                      fontSize: '0.58rem', letterSpacing: '0.42em',
+                      textTransform: 'uppercase', fontWeight: 500,
+                      color: 'rgba(212,175,55,0.75)',
+                    }}>
+                      Rahmani Perfumery&nbsp;·&nbsp;Est. 2010
+                    </span>
+                  </div>
+                  {/* Quality badge */}
                   <span style={{
-                    width: 5, height: 5, borderRadius: '50%', flexShrink: 0,
-                    background: 'rgba(212,175,55,0.9)',
-                    boxShadow: '0 0 8px rgba(212,175,55,0.7)',
-                    display: 'inline-block',
-                  }} />
-                  <span style={{
-                    fontSize: '0.6rem',
-                    letterSpacing: '0.45em',
-                    textTransform: 'uppercase',
-                    fontWeight: 500,
-                    color: 'rgba(212,175,55,0.8)',
+                    fontSize: '0.55rem', fontWeight: 700,
+                    letterSpacing: '0.12em', textTransform: 'uppercase',
+                    color: 'rgba(212,175,55,0.6)',
+                    border: '1px solid rgba(212,175,55,0.2)',
+                    borderRadius: 30, padding: '3px 9px',
                   }}>
-                    rahmani  Perfumery &nbsp;·&nbsp; Est. 2010
+                    Premium
                   </span>
                 </div>
 
-                {/* Heading — Playfair-style large serif */}
+                {/* Heading */}
                 <h2 style={{
                   margin: 0,
                   fontFamily: '"Playfair Display", Georgia, serif',
-                  fontSize: 'clamp(2rem, 5vw, 3rem)',
-                  fontWeight: 700,
-                  lineHeight: 1.1,
-                  letterSpacing: '-0.01em',
-                  color: '#ffffff',
+                  fontSize: 'clamp(1.8rem, 4.5vw, 2.6rem)',
+                  fontWeight: 700, lineHeight: 1.1,
+                  letterSpacing: '-0.015em', color: '#ffffff',
                 }}>
                   Crafted for{' '}
                   <span style={{
-                    display: 'inline',
-                    fontStyle: 'italic',
-                    fontWeight: 400,
-                    background: 'linear-gradient(110deg, #D4AF37 0%, #e8a838 45%, #f0c070 100%)',
+                    fontStyle: 'italic', fontWeight: 400,
+                    background: 'linear-gradient(110deg, #D4AF37 10%, #e8b84b 55%, #f0d080 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',
@@ -256,82 +233,76 @@ export default function PerfumeJourney() {
                   </span>
                 </h2>
 
-                {/* Thin divider */}
+                {/* Divider */}
                 <div style={{
-                  height: '0.5px',
-                  background: 'linear-gradient(90deg, rgba(255,255,255,0.15), rgba(255,255,255,0.04))',
-                  borderRadius: '999px',
+                  height: 0.5,
+                  background: 'linear-gradient(90deg, rgba(212,175,55,0.25), rgba(255,255,255,0.04))',
+                  borderRadius: 999,
                 }} />
 
-                {/* Description */}
+                {/* Description — fixed: warm off-white, NOT green */}
                 <p style={{
                   margin: 0,
                   fontFamily: '"Inter", "Satoshi", system-ui, sans-serif',
-                  fontSize: 'clamp(0.87rem, 1.4vw, 0.97rem)',
-                  fontWeight: 300,
-                  lineHeight: 1.8,
-                  color: 'rgba(110,210,140,0.82)',
-                  maxWidth: '38ch',
+                  fontSize: 'clamp(0.84rem, 1.3vw, 0.95rem)',
+                  fontWeight: 300, lineHeight: 1.8,
+                  color: 'rgba(230,220,200,0.72)', // warm off-white — matches brand
+                  maxWidth: '40ch',
                 }}>
                   From sunlit rose fields to ancient oud forests — every bottle
                   is a journey into pure sensory artistry. Worn by those who
                   move through the world with intention.
                 </p>
 
-                {/* Tags */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
+                {/* Feature tags */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                   {['Pure Attar', 'Handcrafted', 'Long-Lasting', 'Alcohol Free'].map(tag => (
                     <span key={tag} style={{
-                      padding: '4px 13px',
-                      borderRadius: '999px',
-                      fontSize: '0.6rem',
-                      letterSpacing: '0.06em',
+                      padding: '4px 13px', borderRadius: 999,
+                      fontSize: '0.58rem', letterSpacing: '0.07em',
                       fontWeight: 500,
-                      color: 'rgba(240,230,210,0.6)',
-                      background: 'rgba(255,255,255,0.05)',
-                      border: '0.5px solid rgba(255,255,255,0.1)',
+                      color: 'rgba(235,225,200,0.55)',
+                      background: 'rgba(255,255,255,0.04)',
+                      border: '0.5px solid rgba(255,255,255,0.09)',
                     }}>
                       {tag}
                     </span>
                   ))}
                 </div>
 
-                {/* Actions */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', paddingTop: '0.25rem' }}>
+                {/* CTA row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', paddingTop: '0.15rem' }}>
 
-                  {/* Primary — gold gradient pill */}
-                  <button
+                  {/* Primary gold button */}
+                  <a
+                    href="/attars"
                     style={{
                       position: 'relative', overflow: 'hidden',
-                      display: 'inline-flex', alignItems: 'center', gap: '9px',
-                      padding: '13px 26px',
-                      borderRadius: '999px',
-                      border: 'none',
-                      fontSize: '0.7rem',
-                      letterSpacing: '0.2em',
-                      textTransform: 'uppercase',
-                      fontWeight: 600,
-                      color: '#0d0900',
-                      background: 'linear-gradient(120deg, #D4AF37 0%, #c8901a 55%, #e8b84b 100%)',
-                      boxShadow: '0 4px 20px rgba(212,175,55,0.3), 0 1px 0 rgba(255,255,255,0.2) inset',
-                      cursor: 'pointer',
+                      display: 'inline-flex', alignItems: 'center', gap: 9,
+                      padding: '13px 26px', borderRadius: 999,
+                      fontSize: '0.68rem', letterSpacing: '0.2em',
+                      textTransform: 'uppercase', fontWeight: 700,
+                      color: '#0d0900', textDecoration: 'none',
+                      background: 'linear-gradient(120deg, #D4AF37 0%, #c88a1a 55%, #e8b84b 100%)',
+                      boxShadow: '0 4px 22px rgba(212,175,55,0.28), 0 1px 0 rgba(255,255,255,0.18) inset',
                       transition: 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease',
+                      whiteSpace: 'nowrap',
                     }}
                     onMouseEnter={e => {
                       const el = e.currentTarget as HTMLElement;
-                      el.style.transform = 'translateY(-2px) scale(1.03)';
-                      el.style.boxShadow = '0 8px 36px rgba(212,175,55,0.55), 0 1px 0 rgba(255,255,255,0.25) inset';
+                      el.style.transform = 'translateY(-2px) scale(1.04)';
+                      el.style.boxShadow = '0 10px 40px rgba(212,175,55,0.55), 0 1px 0 rgba(255,255,255,0.25) inset';
                     }}
                     onMouseLeave={e => {
                       const el = e.currentTarget as HTMLElement;
                       el.style.transform = 'translateY(0) scale(1)';
-                      el.style.boxShadow = '0 4px 20px rgba(212,175,55,0.3), 0 1px 0 rgba(255,255,255,0.2) inset';
+                      el.style.boxShadow = '0 4px 22px rgba(212,175,55,0.28), 0 1px 0 rgba(255,255,255,0.18) inset';
                     }}
                   >
-                    {/* Shimmer sweep */}
+                    {/* Shimmer sweep on hover */}
                     <span style={{
                       position: 'absolute', inset: 0,
-                      background: 'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%)',
+                      background: 'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.28) 50%, transparent 70%)',
                       transform: 'translateX(-100%)',
                       transition: 'transform 0.55s ease',
                       pointerEvents: 'none',
@@ -340,50 +311,63 @@ export default function PerfumeJourney() {
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
-                  </button>
+                  </a>
 
-                  {/* Secondary — minimal text */}
-                  <button
+                  {/* Ghost text link */}
+                  <a
+                    href="#about"
                     style={{
-                      background: 'none', border: 'none', cursor: 'pointer',
-                      display: 'inline-flex', alignItems: 'center', gap: '5px',
-                      fontSize: '0.68rem', letterSpacing: '0.12em',
+                      display: 'inline-flex', alignItems: 'center', gap: 5,
+                      fontSize: '0.65rem', letterSpacing: '0.14em',
                       textTransform: 'uppercase', fontWeight: 400,
-                      color: 'rgba(220,210,190,0.45)',
+                      color: 'rgba(215,205,180,0.4)',
+                      textDecoration: 'none',
                       transition: 'color 0.25s ease',
                     }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(212,175,55,0.85)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(220,210,190,0.45)'; }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(212,175,55,0.82)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(215,205,180,0.4)'; }}
                   >
                     Our Story
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M9 18l6-6-6-6" />
                     </svg>
-                  </button>
-
+                  </a>
                 </div>
+
               </div>
             </div>
           </div>
 
-          {/* WebGL canvas — z below card, above blur plate */}
+          {/* WebGL Canvas — GPU composited layer */}
           <div
             ref={canvasRef}
             className="absolute inset-0 z-[15] pointer-events-none"
-            style={{ opacity: 0 }}
+            style={{
+              opacity: 0,
+              willChange: 'opacity', // hint browser to keep on GPU
+            }}
           >
-            <Canvas camera={{ position: [0, 0, 5], fov: 35 }} dpr={[1, 2]} className="w-full h-full">
+            <Canvas
+              camera={{ position: [0, 0, 5], fov: 35 }}
+              // Cap pixel ratio to 2 - prevents excessive GPU load on retina screens
+              dpr={[1, 2]}
+              // Use offscreen rendering for better perf on modern browsers
+              gl={{ antialias: true, powerPreference: 'high-performance', alpha: true }}
+              className="w-full h-full"
+            >
               <ambientLight intensity={0.6} />
               <spotLight position={[5, 10, 5]} intensity={6} angle={0.4} penumbra={1} color="#ffdcb4" />
               <directionalLight position={[-5, 5, -5]} intensity={1.2} color="#b0caff" />
               <pointLight position={[0, -2, 3]} intensity={4} color="#ffedd5" />
               <Environment preset="studio" />
-              <Sparkles count={70} scale={6} size={2.2} speed={0.18} opacity={0.25} color="#f5c97a" />
+              {/* Reduced sparkle count for mobile perf */}
+              <Sparkles count={50} scale={6} size={2} speed={0.15} opacity={0.22} color="#f5c97a" />
               <Suspense fallback={null}>
                 <Bottle3D progress={progress} />
               </Suspense>
             </Canvas>
           </div>
+
         </div>
       </div>
     </section>

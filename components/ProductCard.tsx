@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react';
 import Image from 'next/image';
 import { Product } from '@/data/products';
 import { useCart } from '@/context/CartContext';
+import { useRouter } from 'next/navigation';
 import QuickViewModal from './QuickViewModal';
 
 interface ProductCardProps {
@@ -10,6 +11,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const router = useRouter();
   const [currentImg, setCurrentImg] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -63,7 +65,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         className="product-card"
         onMouseEnter={() => { setIsHovered(true); setCurrentImg(1); }}
         onMouseLeave={() => { setIsHovered(false); setCurrentImg(0); }}
-        onClick={() => setModalOpen(true)}
+        onClick={() => router.push(`/product/${product.id}`)}
       >
         <div
           className="product-img-wrap"
@@ -98,6 +100,18 @@ export default function ProductCard({ product }: ProductCardProps) {
               <span key={i} className={`img-dot${currentImg === i ? ' active' : ''}`} />
             ))}
           </div>
+
+          {/* Quick view */}
+          <button
+            className={`quick-view-btn${isHovered ? ' visible' : ''}`}
+            onClick={(e) => { e.stopPropagation(); setModalOpen(true); }}
+            aria-label="Quick View"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
 
           {/* Quick add */}
           <button

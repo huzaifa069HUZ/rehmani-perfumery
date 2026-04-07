@@ -11,6 +11,7 @@ import BentoCategories from '@/components/BentoCategories';
 import BannerSlider from '@/components/BannerSlider';
 import ShopByOccasion from '@/components/ShopByOccasion';
 import PerfumeJourney from '@/components/PerfumeJourney';
+import BestSellers from '@/components/BestSellers';
 import BottleCarousel from '@/components/BottleCarousel';
 import Testimonials from '@/components/Testimonials';
 import Newsletter from '@/components/Newsletter';
@@ -40,6 +41,7 @@ export default function Home() {
         <BannerSlider />
         <ShopByOccasion />
         <PerfumeJourney />
+        <BestSellers />
         <BottleCarousel />
         <Testimonials />
         <Newsletter />

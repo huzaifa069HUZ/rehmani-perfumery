@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc, query, orderBy, updateDoc } from 'firebase/firestore';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -13,6 +13,7 @@ interface DBProduct {
   price: number;
   originalPrice: number;
   isNew: boolean;
+  isBestSeller?: boolean;
   images: string[];
   type?: 'attar' | 'perfume';
 }
@@ -21,6 +22,7 @@ export default function AdminProductsPage() {
   const [products, setProducts] = useState<DBProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [showAddTypeModal, setShowAddTypeModal] = useState(false);
 
@@ -54,6 +56,19 @@ export default function AdminProductsPage() {
     }
   };
 
+  const handleToggleBestSeller = async (product: DBProduct) => {
+    setTogglingId(product.id);
+    const newVal = !product.isBestSeller;
+    try {
+      await updateDoc(doc(db, 'products', product.id), { isBestSeller: newVal });
+      setProducts(prev => prev.map(p => p.id === product.id ? { ...p, isBestSeller: newVal } : p));
+    } catch {
+      alert('Failed to update Best Seller status.');
+    } finally {
+      setTogglingId(null);
+    }
+  };
+
   const filtered = products.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase()) ||
     (p.category && p.category.toLowerCase().includes(search.toLowerCase()))
@@ -61,6 +76,7 @@ export default function AdminProductsPage() {
 
   const newCount = products.filter(p => p.isNew).length;
   const catCount = new Set(products.map(p => p.category)).size;
+  const bestSellerCount = products.filter(p => p.isBestSeller).length;
 
   const stats = [
     {
@@ -94,6 +110,17 @@ export default function AdminProductsPage() {
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" />
           <rect x="14" y="14" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" />
+        </svg>
+      ),
+    },
+    {
+      label: 'Best Sellers',
+      value: bestSellerCount,
+      sub: 'shown on homepage',
+      gradient: 'linear-gradient(135deg, #f472b6 0%, #C0687A 100%)',
+      icon: (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
         </svg>
       ),
     },
@@ -196,7 +223,7 @@ export default function AdminProductsPage() {
 
         .product-row {
           display: grid;
-          grid-template-columns: 1fr 90px 90px 80px 90px 72px;
+          grid-template-columns: 1fr 90px 90px 80px 110px 90px 72px;
           align-items: center;
           gap: 16px;
           padding: 16px 20px;
@@ -309,12 +336,48 @@ export default function AdminProductsPage() {
 
         .table-header {
           display: grid;
-          grid-template-columns: 1fr 90px 90px 80px 90px 72px;
+          grid-template-columns: 1fr 90px 90px 80px 110px 90px 72px;
           gap: 16px;
           padding: 12px 20px;
           border-bottom: 1px solid #f1f5f9;
           background: #fafbff;
         }
+
+        /* Best Seller Toggle */
+        .bs-toggle {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          cursor: pointer;
+        }
+        .bs-toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
+        .bs-toggle-track {
+          width: 42px; height: 24px;
+          border-radius: 999px;
+          background: #e2e8f0;
+          transition: background 0.2s;
+          position: relative;
+          flex-shrink: 0;
+        }
+        .bs-toggle input:checked + .bs-toggle-track { background: #C0687A; }
+        .bs-toggle-thumb {
+          position: absolute;
+          top: 3px; left: 3px;
+          width: 18px; height: 18px;
+          border-radius: 50%;
+          background: #fff;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+          transition: transform 0.2s;
+        }
+        .bs-toggle input:checked ~ .bs-toggle-thumb { transform: translateX(18px); }
+        .bs-label {
+          font-size: 11px;
+          font-weight: 600;
+          color: #94a3b8;
+          transition: color 0.2s;
+        }
+        .bs-toggle:has(input:checked) .bs-label { color: #C0687A; }
 
         .th {
           font-size: 11px;
@@ -341,13 +404,84 @@ export default function AdminProductsPage() {
           min-width: 650px;
         }
 
+        .prd-meta { display: contents; }
+
         @media (max-width: 768px) {
           .stats-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr;
           }
-          .table-header, .product-row {
-            padding: 12px 16px;
+          .stats-grid > div:last-child {
+            grid-column: 1 / -1;
           }
+          .table-header {
+            display: none !important;
+          }
+          .table-wrapper {
+            min-width: 100%;
+          }
+          .table-container {
+            padding: 0 16px 16px;
+          }
+          .product-row {
+            display: flex;
+            flex-direction: column;
+            padding: 18px;
+            margin-bottom: 16px;
+            border-radius: 16px;
+            background: #fff;
+            border: 1px solid #e2e8f0 !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            align-items: stretch;
+          }
+          .product-row:last-child {
+             margin-bottom: 0;
+          }
+          .prd-info {
+            width: 100%;
+            margin-bottom: 16px;
+          }
+          .prd-meta {
+            display: flex !important;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            width: 100%;
+            background: #f8fafc;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid #f1f5f9;
+          }
+          .prd-type, .prd-status { min-width: 0 !important; }
+          .prd-cat { min-width: 0 !important; flex: 1; }
+          
+          .prd-price {
+            text-align: left !important;
+            width: 100%;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 12px;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          }
+          .prd-price > div { margin: 0 !important; }
+          
+          .prd-actions {
+            width: 100%;
+            justify-content: space-between !important;
+            padding-top: 14px;
+            border-top: 1px dashed #e2e8f0;
+          }
+          .prd-actions .action-btn {
+            flex: 1;
+            height: 44px;
+            border-radius: 10px;
+            max-width: 48%;
+          }
+          .prd-actions .edit-btn { background: #e0e7ff; color: #4f46e5; }
+          .prd-actions .del-btn { background: #fee2e2; color: #ef4444; }
+
           .page-header-flex {
             flex-direction: column;
             align-items: stretch !important;
@@ -492,11 +626,12 @@ export default function AdminProductsPage() {
             <div className="table-container">
               <div className="table-wrapper">
                 {/* Table Header */}
-              <div className="table-header" style={{ gridTemplateColumns: '1fr 90px 90px 80px 90px 72px' }}>
+              <div className="table-header" style={{ gridTemplateColumns: '1fr 90px 90px 80px 110px 90px 72px' }}>
                 <span className="th">Product</span>
                 <span className="th">Type</span>
                 <span className="th" style={{ minWidth: '90px' }}>Category</span>
                 <span className="th" style={{ minWidth: '80px' }}>Status</span>
+                <span className="th" style={{ minWidth: '110px' }}>Best Seller</span>
                 <span className="th" style={{ minWidth: '90px', textAlign: 'right' }}>Price</span>
                 <span className="th" style={{ minWidth: '72px' }}></span>
               </div>
@@ -506,7 +641,7 @@ export default function AdminProductsPage() {
                 {filtered.map((product, idx) => (
                   <div key={product.id} className="product-row" style={{ animationDelay: `${idx * 0.04}s`, animation: 'fadeInUp 0.3s ease both' }}>
                     {/* Product info */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
+                    <div className="prd-info" style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0 }}>
                       <div style={{
                         width: '52px', height: '52px', borderRadius: '12px',
                         background: '#f8fafc', border: '1.5px solid #e2e8f0',
@@ -539,9 +674,11 @@ export default function AdminProductsPage() {
                       </div>
                     </div>
 
-                    {/* Type Badge */}
-                    <div style={{ minWidth: '90px' }}>
-                      <span style={{ 
+                    {/* Meta info wrapper for mobile */}
+                    <div className="prd-meta">
+                      {/* Type Badge */}
+                      <div className="prd-type" style={{ minWidth: '90px' }}>
+                        <span style={{ 
                         display: 'inline-flex', padding: '3px 8px', borderRadius: '6px', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em',
                         background: product.type === 'perfume' ? 'rgba(56, 189, 248, 0.15)' : 'rgba(212,175,95,0.15)',
                         color: product.type === 'perfume' ? '#0ea5e9' : '#d4af5f', border: `1px solid ${product.type === 'perfume' ? 'rgba(56, 189, 248, 0.3)' : 'rgba(212,175,95,0.3)'}`
@@ -551,12 +688,12 @@ export default function AdminProductsPage() {
                     </div>
 
                     {/* Category */}
-                    <span style={{ fontSize: '12.5px', fontWeight: '500', color: '#64748b', minWidth: '90px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <span className="prd-cat" style={{ fontSize: '12.5px', fontWeight: '500', color: '#64748b', minWidth: '90px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {product.category || '—'}
                     </span>
 
                     {/* Status */}
-                    <div style={{ minWidth: '80px' }}>
+                    <div className="prd-status" style={{ minWidth: '80px' }}>
                       {product.isNew ? (
                         <span className="badge-new">● Active</span>
                       ) : (
@@ -564,8 +701,26 @@ export default function AdminProductsPage() {
                       )}
                     </div>
 
+                    {/* Best Seller Toggle */}
+                    <div style={{ minWidth: '110px' }}>
+                      <label className="bs-toggle" title={product.isBestSeller ? 'Remove from Best Sellers' : 'Add to Best Sellers'}>
+                        <input
+                          type="checkbox"
+                          checked={!!product.isBestSeller}
+                          disabled={togglingId === product.id}
+                          onChange={() => handleToggleBestSeller(product)}
+                        />
+                        <div className="bs-toggle-track">
+                          <div className="bs-toggle-thumb" />
+                        </div>
+                        <span className="bs-label">
+                          {togglingId === product.id ? 'Saving…' : product.isBestSeller ? '★ Featured' : 'Off'}
+                        </span>
+                      </label>
+                    </div>
+
                     {/* Price */}
-                    <div style={{ textAlign: 'right', minWidth: '90px' }}>
+                    <div className="prd-price" style={{ textAlign: 'right', minWidth: '90px' }}>
                       <div style={{ fontSize: '14px', fontWeight: '700', color: '#1e293b' }}>₹{product.price?.toLocaleString()}</div>
                       {product.originalPrice > product.price && (
                         <div style={{ fontSize: '11.5px', color: '#94a3b8', textDecoration: 'line-through', marginTop: '1px' }}>
@@ -573,9 +728,10 @@ export default function AdminProductsPage() {
                         </div>
                       )}
                     </div>
+                    </div>
 
                     {/* Actions */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: '72px', justifyContent: 'flex-end' }}>
+                    <div className="prd-actions" style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: '72px', justifyContent: 'flex-end' }}>
                       <Link href={`/admin/products/${product.id}`} className="action-btn edit-btn" title="Edit product">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />

@@ -832,6 +832,38 @@ button {
   background: var(--gold);
 }
 
+.quick-view-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--charcoal);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.quick-view-btn.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.quick-view-btn:hover {
+  background: var(--gold);
+  color: #fff;
+  transform: scale(1.05);
+}
+
 .product-info {
   padding: 16px 18px;
   display: flex;
