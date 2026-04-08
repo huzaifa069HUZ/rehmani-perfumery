@@ -1,17 +1,68 @@
+'use client';
+
 import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
 
 export default function HeroSection() {
+  const [showVideo, setShowVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowVideo(true);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (showVideo && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, [showVideo]);
+
   return (
     <section className="hero-section" id="hero">
-      {/* Background Image */}
+      {/* ── DESKTOP background (unchanged) ── */}
       <Image
         src="/herobg2.png"
         alt="Hero Background"
         fill
         priority
         quality={95}
+        className="hero-desktop-bg"
         style={{ objectFit: 'cover', objectPosition: 'center', zIndex: 1 }}
       />
+
+      {/* ── MOBILE: static PNG shown for first 5 s ── */}
+      <div
+        className="hero-mobile-image"
+        style={{ opacity: showVideo ? 0 : 1 }}
+      >
+        <Image
+          src="/assets/mobile hero vid.png"
+          alt="Hero Mobile Background"
+          fill
+          priority
+          quality={95}
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
+        />
+      </div>
+
+      {/* ── MOBILE: video shown after 5 s ── */}
+      <div
+        className="hero-mobile-video"
+        style={{ opacity: showVideo ? 1 : 0 }}
+      >
+        <video
+          ref={videoRef}
+          src="/assets/herosection bg vid mobile.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+        />
+      </div>
 
       {/* Subtle right-side gradient only — keeps left (bottles) fully visible */}
       <div className="hero-overlay" />

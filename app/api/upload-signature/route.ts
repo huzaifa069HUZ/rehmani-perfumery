@@ -8,6 +8,8 @@ cloudinary.config({
   secure: true,
 });
 
+export const dynamic = 'force-dynamic';
+
 // Returns a short-lived Cloudinary upload signature so the browser
 // can upload directly to Cloudinary without proxying through this server.
 export async function GET() {

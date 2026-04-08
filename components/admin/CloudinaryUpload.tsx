@@ -40,8 +40,17 @@ export default function CloudinaryUpload({
 
     try {
       // Step 1 — get a signed upload token from our server (fast: <100ms, no file transfer)
-      const sigRes = await fetch('/api/upload-signature');
-      if (!sigRes.ok) throw new Error('Failed to get upload token');
+      const sigRes = await fetch('/api/upload-signature', { cache: 'no-store' });
+      if (!sigRes.ok) {
+        let errMessage = 'Failed to get upload token';
+        try {
+          const errData = await sigRes.json();
+          if (errData.error) errMessage = errData.error;
+        } catch {
+          errMessage = `Failed to get upload token (${sigRes.status})`;
+        }
+        throw new Error(errMessage);
+      }
       const { signature, timestamp, folder, cloudName, apiKey } = await sigRes.json();
 
       // Step 2 — upload DIRECTLY from browser to Cloudinary (no Next.js relay)

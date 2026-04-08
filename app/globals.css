@@ -299,6 +299,31 @@ button {
   background-color: #000; /* Fallback */
 }
 
+.hero-desktop-bg {
+  display: block;
+}
+
+.hero-mobile-image,
+.hero-mobile-video {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .hero-desktop-bg {
+    display: none !important;
+  }
+  .hero-mobile-image,
+  .hero-mobile-video {
+    display: block;
+  }
+}
+
 /* Base background image */
 .hero-bg-layer {
   position: absolute;
