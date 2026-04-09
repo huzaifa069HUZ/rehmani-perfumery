@@ -7,7 +7,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 const MOBILE_SLIDES: { type: 'image' | 'video'; src: string; alt?: string }[] = [
   { type: 'image', src: '/assets/RAHMANI (1).png', alt: 'Rahmani Perfumery' },
   { type: 'video', src: '/assets/red swa bottle vid hero.mp4', alt: 'Red Sea Bottle Video' },
-  { type: 'image', src: '/assets/SMELL THAT DEFINES YOU (1).png', alt: 'Smell That Defines You' },
+  { type: 'image', src: '/assets/SMELL THAT DEFINES YOU (4).png', alt: 'Smell That Defines You' },
   { type: 'video', src: '/assets/herosection bg vid mobile.mp4' },
 ];
 
