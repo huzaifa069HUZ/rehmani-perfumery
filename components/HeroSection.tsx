@@ -4,31 +4,25 @@ import Image from 'next/image';
 import { useEffect, useRef, useState, useCallback } from 'react';
 
 /* ── Mobile slides ──────────────────────────────────────────────────────── */
-// Slide types: 'image' or 'video'
 const MOBILE_SLIDES: { type: 'image' | 'video'; src: string; alt?: string }[] = [
-  { type: 'image', src: '/assets/mobile hero vid.png', alt: 'Rahmani Perfumery' },
+  { type: 'image', src: '/assets/RAHMANI.png', alt: 'Rahmani Perfumery' },
   { type: 'image', src: '/assets/SMELL THAT DEFINES YOU.png', alt: 'Smell That Defines You' },
   { type: 'image', src: '/assets/SMELL THAT DEFINES YOU (1).png', alt: 'Smell That Defines You' },
   { type: 'video', src: '/assets/herosection bg vid mobile.mp4' },
 ];
 
-const SLIDE_DURATION = 5000; // ms between auto-advance
+const SLIDE_DURATION = 5000;
 
 export default function HeroSection() {
-  /* ── Swiper state ── */
   const [current, setCurrent] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  /* touch tracking */
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
   const isDragging = useRef(false);
-
   const total = MOBILE_SLIDES.length;
 
-  /* ── Navigate ── */
   const goTo = useCallback((idx: number) => {
     if (isTransitioning) return;
     setIsTransitioning(true);
@@ -39,7 +33,6 @@ export default function HeroSection() {
   const next = useCallback(() => goTo(current + 1), [goTo, current]);
   const prev = useCallback(() => goTo(current - 1), [goTo, current]);
 
-  /* ── Auto-advance timer ── */
   const resetTimer = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(next, SLIDE_DURATION);
@@ -50,7 +43,6 @@ export default function HeroSection() {
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };
   }, [current, resetTimer]);
 
-  /* ── Play video when it becomes active ── */
   useEffect(() => {
     if (MOBILE_SLIDES[current].type === 'video' && videoRef.current) {
       videoRef.current.currentTime = 0;
@@ -58,7 +50,6 @@ export default function HeroSection() {
     }
   }, [current]);
 
-  /* ── Touch handlers ── */
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
@@ -71,15 +62,14 @@ export default function HeroSection() {
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     const dy = e.changedTouches[0].clientY - touchStartY.current;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-      if (dx < 0) next();
-      else prev();
+      if (dx < 0) next(); else prev();
       resetTimer();
     }
   };
 
   return (
     <section className="hero-section" id="hero">
-      {/* ── DESKTOP background (unchanged) ── */}
+      {/* ── DESKTOP background ── */}
       <Image
         src="/herobg2.png"
         alt="Hero Background"
@@ -97,17 +87,14 @@ export default function HeroSection() {
         onTouchEnd={onTouchEnd}
       >
         {MOBILE_SLIDES.map((slide, i) => (
-          <div
-            key={i}
-            className={`hero-mobile-slide ${i === current ? 'active' : ''}`}
-          >
+          <div key={i} className={`hero-mobile-slide ${i === current ? 'active' : ''}`}>
             {slide.type === 'image' ? (
               <Image
                 src={slide.src}
                 alt={slide.alt || ''}
                 fill
                 priority={i === 0}
-                quality={90}
+                quality={95}
                 style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
             ) : (
@@ -123,6 +110,16 @@ export default function HeroSection() {
           </div>
         ))}
 
+        {/* CTA buttons — mobile only */}
+        <div className="mobile-hero-cta">
+          <a href="#collections" className="mobile-btn-primary">
+            DISCOVER COLLECTION
+          </a>
+          <a href="#story" className="mobile-btn-ghost">
+            OUR STORY
+          </a>
+        </div>
+
         {/* Dot indicators */}
         <div className="swiper-dots">
           {MOBILE_SLIDES.map((_, i) => (
@@ -136,12 +133,12 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Gradient overlay */}
+      {/* Desktop overlay */}
       <div className="hero-overlay" />
 
-      <div className="hero-content">
+      {/* ── DESKTOP content only ── */}
+      <div className="hero-content hero-desktop-content">
         <div className="hero-right-block">
-
           <div className="hero-title-block fade-in" style={{ animationDelay: '0.1s' }}>
             <span className="hero-badge-text">PREMIUM ARABIAN ATTARS</span>
             <h1 className="hero-title-main">RAHMANI<br />PERFUMERY</h1>
@@ -157,12 +154,8 @@ export default function HeroSection() {
           </p>
 
           <div className="hero-actions fade-in" style={{ animationDelay: '0.9s' }}>
-            <a href="#collections" className="btn-primary">
-              DISCOVER COLLECTION →
-            </a>
-            <a href="#story" className="btn-ghost">
-              OUR STORY
-            </a>
+            <a href="#collections" className="btn-primary">DISCOVER COLLECTION →</a>
+            <a href="#story" className="btn-ghost">OUR STORY</a>
           </div>
 
           <div className="hero-stats fade-in" style={{ animationDelay: '1.1s' }}>
@@ -181,12 +174,11 @@ export default function HeroSection() {
               <span className="stat-label">TRUSTED HERITAGE</span>
             </div>
           </div>
-
         </div>
       </div>
 
       <style>{`
-        /* ── Mobile swiper container ── */
+        /* ── Mobile swiper ── */
         .hero-mobile-swiper {
           display: none;
           position: absolute;
@@ -203,14 +195,22 @@ export default function HeroSection() {
           .hero-desktop-bg {
             display: none !important;
           }
+          /* Hide overlay on mobile — let images shine bright */
+          .hero-overlay {
+            display: none !important;
+          }
+          /* Hide entire desktop text content on mobile */
+          .hero-desktop-content {
+            display: none !important;
+          }
         }
 
-        /* ── Each slide ── */
+        /* ── Slides ── */
         .hero-mobile-slide {
           position: absolute;
           inset: 0;
           opacity: 0;
-          transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1);
           pointer-events: none;
         }
         .hero-mobile-slide.active {
@@ -218,14 +218,75 @@ export default function HeroSection() {
           pointer-events: auto;
         }
 
-        /* ── Dot indicators ── */
-        .swiper-dots {
+        /* ── CTA buttons inside swiper ── */
+        .mobile-hero-cta {
           position: absolute;
-          bottom: 28px;
+          bottom: 64px;
           left: 50%;
           transform: translateX(-50%);
           display: flex;
-          gap: 8px;
+          flex-direction: row;
+          gap: 10px;
+          z-index: 10;
+          width: max-content;
+        }
+
+        .mobile-btn-primary {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 11px 22px;
+          background: rgba(255,255,255,0.92);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          color: #1a1a1a;
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          border-radius: 100px;
+          text-decoration: none;
+          white-space: nowrap;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+          transition: all 0.25s ease;
+        }
+
+        .mobile-btn-primary:active {
+          transform: scale(0.96);
+          background: #fff;
+        }
+
+        .mobile-btn-ghost {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 11px 22px;
+          background: rgba(0,0,0,0.28);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          color: #fff;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          border-radius: 100px;
+          text-decoration: none;
+          white-space: nowrap;
+          border: 1.5px solid rgba(255,255,255,0.5);
+          transition: all 0.25s ease;
+        }
+
+        .mobile-btn-ghost:active {
+          transform: scale(0.96);
+          background: rgba(255,255,255,0.15);
+        }
+
+        /* ── Dot indicators ── */
+        .swiper-dots {
+          position: absolute;
+          bottom: 36px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          gap: 6px;
           z-index: 10;
         }
 
@@ -234,17 +295,17 @@ export default function HeroSection() {
           height: 7px;
           border-radius: 50%;
           border: none;
-          background: rgba(255,255,255,0.45);
+          background: rgba(255,255,255,0.4);
           cursor: pointer;
           padding: 0;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .swiper-dot.active {
           background: #fff;
           width: 22px;
           border-radius: 4px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
       `}</style>
     </section>
