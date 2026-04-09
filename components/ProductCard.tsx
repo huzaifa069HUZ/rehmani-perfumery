@@ -5,6 +5,7 @@ import { Product } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
 import QuickViewModal from './QuickViewModal';
+import { buildProductSlug } from '@/lib/utils';
 
 interface ProductCardProps {
   product: Product;
@@ -65,7 +66,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         className="product-card"
         onMouseEnter={() => { setIsHovered(true); setCurrentImg(1); }}
         onMouseLeave={() => { setIsHovered(false); setCurrentImg(0); }}
-        onClick={() => router.push(`/product/${product.id}`)}
+        onClick={() => router.push(`/product/${buildProductSlug(product.name, String(product.id))}`)}
       >
         <div
           className="product-img-wrap"

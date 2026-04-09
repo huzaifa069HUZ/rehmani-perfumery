@@ -7,7 +7,7 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, query, limit } from 'firebase/firestore';
 import ProductCard from './ProductCard';
 
-const FILTERS = ['all', 'oud', 'musk', 'floral', 'citrus'];
+const FILTERS = ['all', 'oud', 'musk', 'fresh', 'floral', 'gourmand', 'leather', 'spicy', 'citrus', 'fruity'];
 
 export default function ProductGrid() {
   const [filter, setFilter] = useState('all');

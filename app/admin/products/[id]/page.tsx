@@ -12,8 +12,13 @@ const CATEGORIES = [
   { label: 'All Attars (shows in every category)', value: 'all attars' },
   { label: 'Oud', value: 'oud' },
   { label: 'Musk', value: 'musk' },
+  { label: 'Fresh', value: 'fresh' },
   { label: 'Floral', value: 'floral' },
+  { label: 'Gourmand', value: 'gourmand' },
+  { label: 'Leather', value: 'leather' },
+  { label: 'Spicy', value: 'spicy' },
   { label: 'Citrus', value: 'citrus' },
+  { label: 'Fruity', value: 'fruity' },
 ];
 const GENDERS = ['Unisex', 'Him', 'Her'];
 

@@ -13,6 +13,7 @@ import ShopByOccasion from '@/components/ShopByOccasion';
 import PerfumeJourney from '@/components/PerfumeJourney';
 import BestSellers from '@/components/BestSellers';
 import BottleCarousel from '@/components/BottleCarousel';
+import ContactSection from '@/components/ContactSection';
 import Testimonials from '@/components/Testimonials';
 import Newsletter from '@/components/Newsletter';
 import Footer from '@/components/Footer';
@@ -43,6 +44,7 @@ export default function Home() {
         <PerfumeJourney />
         <BestSellers />
         <BottleCarousel />
+        <ContactSection />
         <Testimonials />
         <Newsletter />
         <Footer />

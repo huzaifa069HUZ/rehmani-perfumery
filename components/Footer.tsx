@@ -44,9 +44,9 @@ export default function Footer() {
           <div className="footer-col">
             <h4 className="footer-heading">Contact</h4>
             <ul className="footer-links">
-              <li>Old City, Hyderabad</li>
+              <li>Khagaul Rd, Fiya Colony, Maulana Azad Nagar, Phulwari Sharif, Patna, Bihar 801505</li>
               <li>+91 98765 43210</li>
-              <li>hello@rahmani.com</li>
+              <li>rahmaniperfumery@gmail.com</li>
             </ul>
           </div>
         </div>

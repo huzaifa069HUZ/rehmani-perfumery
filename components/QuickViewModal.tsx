@@ -1,8 +1,10 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Product } from '@/data/products';
 import { useCart } from '@/context/CartContext';
+import { buildProductSlug } from '@/lib/utils';
 
 interface QuickViewModalProps {
   product: Product;
@@ -10,9 +12,11 @@ interface QuickViewModalProps {
 }
 
 export default function QuickViewModal({ product, onClose }: QuickViewModalProps) {
+  const router = useRouter();
   const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || 6);
   const [currentImg, setCurrentImg] = useState(0);
   const { addToCart } = useCart();
+  const slug = buildProductSlug(product.name, String(product.id));
 
   const activePriceData = product.pricing?.[selectedSize];
   const displayPrice = activePriceData ? activePriceData.price : product.price;
@@ -100,6 +104,19 @@ export default function QuickViewModal({ product, onClose }: QuickViewModalProps
 
             <button className="modal-add-btn" onClick={handleAdd}>
               ADD TO BAG
+            </button>
+
+            <button
+              onClick={() => { onClose(); router.push(`/product/${slug}`); }}
+              style={{
+                display: 'block', width: '100%', padding: '10px',
+                background: 'transparent', border: 'none', cursor: 'pointer',
+                fontSize: '0.8rem', color: 'var(--text-muted)',
+                textDecoration: 'underline', textAlign: 'center',
+                marginTop: '8px',
+              }}
+            >
+              View Full Details →
             </button>
 
             <div className="modal-trust">

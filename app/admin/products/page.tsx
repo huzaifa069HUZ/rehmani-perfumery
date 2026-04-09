@@ -5,6 +5,7 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, deleteDoc, doc, query, orderBy, updateDoc } from 'firebase/firestore';
 import Link from 'next/link';
 import Image from 'next/image';
+import { buildProductSlug } from '@/lib/utils';
 
 interface DBProduct {
   id: string;
@@ -670,7 +671,15 @@ export default function AdminProductsPage() {
                         >
                           {product.name}
                         </Link>
-                        <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>ID: {product.id.slice(0, 8)}…</div>
+                        <Link
+                          href={`/product/${buildProductSlug(product.name, product.id)}`}
+                          target="_blank"
+                          style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px', display: 'block', textDecoration: 'none' }}
+                          onMouseEnter={e => (e.currentTarget.style.color = '#d4af5f')}
+                          onMouseLeave={e => (e.currentTarget.style.color = '#94a3b8')}
+                        >
+                          /product/{buildProductSlug(product.name, product.id)}
+                        </Link>
                       </div>
                     </div>
 
@@ -732,7 +741,7 @@ export default function AdminProductsPage() {
 
                     {/* Actions */}
                     <div className="prd-actions" style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: '72px', justifyContent: 'flex-end' }}>
-                      <Link href={`/admin/products/${product.id}`} className="action-btn edit-btn" title="Edit product">
+                      <Link href={`/admin/products/${product.id}`} className="action-btn edit-btn" title="Edit product" aria-label={`Edit ${product.name}`}>
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
                         </svg>

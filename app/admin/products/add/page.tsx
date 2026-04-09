@@ -7,13 +7,19 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import CloudinaryUpload from '@/components/admin/CloudinaryUpload';
 import Image from 'next/image';
+import { slugify } from '@/lib/utils';
 
 const CATEGORIES = [
   { label: 'All Attars (shows in every category)', value: 'all attars' },
   { label: 'Oud', value: 'oud' },
   { label: 'Musk', value: 'musk' },
+  { label: 'Fresh', value: 'fresh' },
   { label: 'Floral', value: 'floral' },
+  { label: 'Gourmand', value: 'gourmand' },
+  { label: 'Leather', value: 'leather' },
+  { label: 'Spicy', value: 'spicy' },
   { label: 'Citrus', value: 'citrus' },
+  { label: 'Fruity', value: 'fruity' },
 ];
 const GENDERS = ['Unisex', 'Him', 'Her'];
 
@@ -89,7 +95,9 @@ export default function AddProductPage() {
         name, category, gender, description, notes,
         price: basePrice, originalPrice: baseOriginalPrice, isNew,
         sizes: sortedSizes, pricing: parsedPricing, images, occasions: parsedTags, type: productType,
-        createdAt: new Date().toISOString()
+        slug: slugify(name),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       });
 
       const timeoutPromise = new Promise<never>((_, reject) =>

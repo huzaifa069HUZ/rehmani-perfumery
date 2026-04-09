@@ -9,6 +9,7 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { useCart } from '@/context/CartContext';
 import QuickViewModal from '@/components/QuickViewModal';
+import { buildProductSlug } from '@/lib/utils';
 
 /* ── Types ──────────────────────────────────────────── */
 type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'name-az' | 'discount';
@@ -45,6 +46,7 @@ function discountPct(p: Product) {
 
 /* ── Product Card (inline) ─────────────────────────── */
 function AttrListCard({ product, onOpen }: { product: Product; onOpen: (p: Product) => void }) {
+  const router = useRouter();
   const [imgIdx, setImgIdx] = useState(0);
   const [hovered, setHovered] = useState(false);
   const { addToCart } = useCart();
@@ -54,12 +56,17 @@ function AttrListCard({ product, onOpen }: { product: Product; onOpen: (p: Produ
     addToCart({ id: product.id, name: product.name, size: product.sizes?.[0] || 6, price: product.price, image: product.images?.[0] || '' });
   }, [product, addToCart]);
 
+  const handleCardClick = useCallback(() => {
+    router.push(`/product/${buildProductSlug(product.name, String(product.id))}`);
+  }, [product, router]);
+
   return (
     <div
       className="al-card"
       onMouseEnter={() => { setHovered(true); if (product.images?.length > 1) setImgIdx(1); }}
       onMouseLeave={() => { setHovered(false); setImgIdx(0); }}
-      onClick={() => onOpen(product)}
+      onClick={handleCardClick}
+      style={{ cursor: 'pointer' }}
     >
       <div className="al-card-img-wrap">
         {product.isNew && <span className="al-badge al-badge-new">New</span>}
@@ -82,8 +89,8 @@ function AttrListCard({ product, onOpen }: { product: Product; onOpen: (p: Produ
         )}
         <button
           className={`al-quick-add${hovered ? ' visible' : ''}`}
-          onClick={handleAdd}
-        >ADD TO BAG</button>
+          onClick={(e) => { e.stopPropagation(); onOpen(product); }}
+        >QUICK VIEW</button>
       </div>
       <div className="al-card-body">
         <h3 className="al-card-name">{product.name}</h3>
