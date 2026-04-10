@@ -1,8 +1,13 @@
 'use client';
+import { usePathname } from 'next/navigation';
 
 export default function FloatingWhatsApp() {
+  const pathname = usePathname();
   const phoneNumber = '918340783679';
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=Hello%20Rahmani%20Perfumery,%20I%20have%20an%20inquiry%20from%20your%20website.`;
+
+  // Only show on homepage
+  if (pathname !== '/') return null;
 
   return (
     <>

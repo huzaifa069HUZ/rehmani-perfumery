@@ -19,17 +19,24 @@ import Newsletter from '@/components/Newsletter';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
 import MobileMenu from '@/components/MobileMenu';
+import GlobalSearch from '@/components/GlobalSearch';
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
     <>
       {/* Fixed overlay: announcement + header sit on top of hero */}
       <div className="top-bar-overlay">
         <AnnouncementBar />
-        <Header onMenuOpen={() => setMobileMenuOpen(true)} />
+        <Header 
+          onMenuOpen={() => setMobileMenuOpen(true)} 
+          onSearchOpen={() => setIsSearchOpen(true)}
+        />
       </div>
+
+      <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
       {/* Full-screen hero with header overlapping */}
       <main>
