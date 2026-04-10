@@ -8,6 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import GlobalSearch from '@/components/GlobalSearch';
 
 export default function ProfilePage() {
   const { user, loading: authLoading, logout } = useAuth();
@@ -15,6 +16,7 @@ export default function ProfilePage() {
 
   const [activeTab, setActiveTab] = useState<'details' | 'wishlist'>('details');
   const [profileLoading, setProfileLoading] = useState(true);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   
   // Profile Data
   const [name, setName] = useState('');
@@ -346,7 +348,8 @@ export default function ProfilePage() {
         }
       `}</style>
 
-      <Header onMenuOpen={() => {}} />
+      <Header onMenuOpen={() => {}} onSearchOpen={() => setIsSearchOpen(true)} />
+      <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
       <main className="profile-wrapper">
         <div className="profile-container">

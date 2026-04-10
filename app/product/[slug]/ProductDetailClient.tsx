@@ -12,6 +12,7 @@ import AnnouncementBar from '@/components/AnnouncementBar';
 import Header from '@/components/Header';
 import CartDrawer from '@/components/CartDrawer';
 import MobileMenu from '@/components/MobileMenu';
+import GlobalSearch from '@/components/GlobalSearch';
 import { buildProductSlug } from '@/lib/utils';
 
 interface ProductData {
@@ -45,6 +46,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
   );
   const [adding, setAdding] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [shareMsg, setShareMsg] = useState(false);
 
@@ -328,8 +330,13 @@ export default function ProductDetailClient({ product }: { product: ProductData 
 
       <div className="top-bar-overlay" style={{ position: 'fixed', width: '100%', top: 0, zIndex: 100 }}>
         <AnnouncementBar />
-        <Header onMenuOpen={() => setMobileMenuOpen(true)} />
+        <Header 
+          onMenuOpen={() => setMobileMenuOpen(true)} 
+          onSearchOpen={() => setIsSearchOpen(true)} 
+        />
       </div>
+
+      <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
       <CartDrawer />
       <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
