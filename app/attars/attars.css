@@ -54,68 +54,132 @@
 /* Hero */
 .al-hero {
   position: relative;
-  height: 360px;
-  background: linear-gradient(135deg, #F9F6F0 0%, #F4EFE6 40%, #EFE8D8 70%, #E8DFCC 100%) !important;
+  height: 420px;
+  background:
+    linear-gradient(180deg, #0A0603 0%, #140E08 35%, #1E140C 65%, #100B06 100%) !important;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
 
+/* Rich multi-layer dark texture */
 .al-hero::before {
   content: '';
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(ellipse at 30% 60%, rgba(212,175,55,0.06) 0%, transparent 55%),
-    radial-gradient(ellipse at 75% 30%, rgba(212,175,55,0.04) 0%, transparent 50%);
-  z-index: 0;
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(212,175,55,0.09) 0%, transparent 70%),
+    radial-gradient(ellipse at 20% 80%, rgba(180,100,30,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(212,175,55,0.07) 0%, transparent 50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Animated shimmer sweep */
+.al-hero::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; right: 0; bottom: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(212, 175, 55, 0.06) 50%,
+    transparent 60%
+  );
+  animation: alHeroShimmer 6s ease-in-out infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@keyframes alHeroShimmer {
+  0% { left: -100%; }
+  100% { left: 200%; }
 }
 
 .al-hero-overlay {
   position: absolute;
   inset: 0;
   background: url('/herobg2.png') no-repeat center center / cover;
-  opacity: 0.05;
+  opacity: 0.08;
   z-index: 0;
-  filter: invert(1); /* Invert if the original bg was dark, to make it light, or just keep low opacity */
+  mix-blend-mode: luminosity;
+  filter: sepia(1) brightness(0.4);
 }
 
 .al-hero-content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   text-align: center;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .al-hero-tag {
   font-family: var(--font-montserrat), sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  color: #B5952F;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.45em;
+  color: #D4AF37;
   text-transform: uppercase;
-  margin-bottom: 1.2rem;
-  opacity: 0.9;
+  margin-bottom: 1.4rem;
+  opacity: 1;
+  /* Decorative left/right lines */
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.al-hero-tag::before,
+.al-hero-tag::after {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.6));
+}
+
+.al-hero-tag::after {
+  background: linear-gradient(90deg, rgba(212,175,55,0.6), transparent);
 }
 
 .al-hero-title {
   font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
-  font-size: clamp(3rem, 7vw, 5.5rem);
-  font-weight: 600;
-  color: #1A1A1A;
+  font-size: clamp(3.2rem, 7vw, 6rem);
+  font-weight: 700;
+  color: transparent;
+  background: linear-gradient(135deg, #F0D060 0%, #D4AF37 40%, #B8931F 70%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
   line-height: 1;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
+  text-shadow: none;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,0.5));
+}
+
+/* Decorative gold divider under title */
+.al-hero-title::after {
+  content: none; /* Handled via sibling element in CSS below */
+}
+
+.al-hero-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+  margin: 1rem auto;
 }
 
 .al-hero-sub {
   font-family: var(--font-montserrat), sans-serif;
-  font-size: 0.95rem;
-  color: #4A4A4A;
-  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.12em;
   font-weight: 400;
+  text-transform: uppercase;
 }
 
 .al-hero-scroll-hint {
@@ -595,6 +659,31 @@
 
 .al-img { object-fit: cover; }
 
+.al-img-dots {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  z-index: 12;
+}
+
+.al-img-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(4px);
+  transition: all 0.3s;
+}
+
+.al-img-dot.active {
+  background: #D4AF37;
+  transform: scale(1.2);
+}
+
 .al-badge {
   position: absolute;
   z-index: 10;
@@ -747,7 +836,7 @@
 @media (max-width: 768px) {
   .al-topbar { padding: 0 1.25rem; }
   .al-topbar-brand { font-size: 0.85rem; }
-  .al-hero { height: 280px; }
+  .al-hero { height: 300px; }
   .al-hero-title { font-size: clamp(2.5rem, 10vw, 4rem); }
   .al-controls-bar { padding: 0 1.25rem; }
   .al-controls-inner { gap: 0.5rem; padding: 12px 0; }

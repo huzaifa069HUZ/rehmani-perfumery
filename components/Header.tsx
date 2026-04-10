@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
+import GlobalSearch from './GlobalSearch';
 
 interface HeaderProps {
   onMenuOpen: () => void;
@@ -13,7 +14,7 @@ export default function Header({ onMenuOpen }: HeaderProps) {
   const { toggleCart, totalItems } = useCart();
   const { user, logout } = useAuth();
   const [logoSrc, setLogoSrc] = useState<string>('/logo-with-text.png');
-
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -83,7 +84,7 @@ export default function Header({ onMenuOpen }: HeaderProps) {
             </svg>
           </Link>
 
-          <button className="icon-btn" aria-label="Search">
+          <button className="icon-btn" aria-label="Search" onClick={() => setIsSearchOpen(true)}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
@@ -103,6 +104,8 @@ export default function Header({ onMenuOpen }: HeaderProps) {
           </button>
         </div>
       </div>
+
+      <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </header>
   );
 }

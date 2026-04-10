@@ -56,6 +56,33 @@ function AttrListCard({ product, onOpen }: { product: Product; onOpen: (p: Produ
   const [hovered, setHovered] = useState(false);
   const { addToCart } = useCart();
 
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && imgIdx === 0 && (product.images?.length || 0) > 1) {
+      setImgIdx(1);
+    } else if (isRightSwipe && imgIdx === 1) {
+      setImgIdx(0);
+    }
+  };
+
   const handleAdd = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     addToCart({ id: product.id, name: product.name, size: product.sizes?.[0] || 6, price: product.price, image: product.images?.[0] || '' });
@@ -73,7 +100,12 @@ function AttrListCard({ product, onOpen }: { product: Product; onOpen: (p: Produ
       onClick={handleCardClick}
       style={{ cursor: 'pointer' }}
     >
-      <div className="al-card-img-wrap">
+      <div
+        className="al-card-img-wrap"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         {product.isNew && <span className="al-badge al-badge-new">New</span>}
         {discountPct(product) > 0 && <span className="al-badge al-badge-discount">-{discountPct(product)}%</span>}
         
@@ -92,6 +124,16 @@ function AttrListCard({ product, onOpen }: { product: Product; onOpen: (p: Produ
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">No Image</div>
         )}
+
+        {/* Swipe dots */}
+        {product.images && product.images.length > 1 && (
+          <div className="al-img-dots">
+            {product.images.slice(0, 2).map((_, i) => (
+              <span key={i} className={`al-img-dot ${imgIdx === i ? 'active' : ''}`} />
+            ))}
+          </div>
+        )}
+
         <button
           className={`al-quick-add${hovered ? ' visible' : ''}`}
           onClick={(e) => { e.stopPropagation(); onOpen(product); }}
@@ -222,6 +264,7 @@ export default function AttarsPage() {
         <div className="al-hero-content">
           <p className="al-hero-tag">THE COMPLETE COLLECTION</p>
           <h1 className="al-hero-title">{category === 'all' ? 'All Attars' : CATEGORIES.find(c => c.id === category)?.label}</h1>
+          <div className="al-hero-divider" />
           <p className="al-hero-sub">Discover our full range of handcrafted Arabian perfume oils</p>
         </div>
         <div className="al-hero-scroll-hint">

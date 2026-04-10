@@ -5,31 +5,35 @@ import { useState, useEffect, useCallback } from 'react';
 const banners = [
   {
     id: 1,
-    image: '/banner1.png',
-    title: 'THE ROYAL MUSK',
-    subtitle: 'Discover our signature collection',
-    link: '#collections'
+    image: '/assets/freepik-perfume-twitter-banner-58813-20260410110951Mz5D.png',
+    title: '',
+    subtitle: '',
+    link: '/perfumes',
+    hasOwnText: true,
   },
   {
     id: 2,
     image: '/banner2.png',
     title: 'PURE OUD EXTRACT',
     subtitle: 'Aged to perfection for true connoisseurs',
-    link: '#collections'
+    link: '#collections',
+    hasOwnText: false,
   },
   {
     id: 3,
-    image: 'https://images.unsplash.com/photo-1585888126131-15feae4ad606?q=80&w=2400&auto=format&fit=crop',
-    title: 'LUXURY GIFT SETS',
-    subtitle: 'The perfect gift for your loved ones',
-    link: '#collections'
+    image: '/assets/il.png',
+    title: '',
+    subtitle: '',
+    link: '/perfumes',
+    hasOwnText: true,
   },
   {
     id: 4,
-    image: '/assets/luxury_attar_bottle_2_1773444458042.png',
-    title: 'SUMMER BREEZE',
-    subtitle: 'Fresh floral attars for the season',
-    link: '#collections'
+    image: '/assets/HAWAS SPECIAL.png',
+    title: '',
+    subtitle: '',
+    link: '/perfumes',
+    hasOwnText: true,
   }
 ];
 
@@ -60,20 +64,25 @@ export default function BannerSlider() {
           style={{ transform: `translateX(-${currentSlide * 100}%)` }}
         >
           {banners.map((banner, index) => (
-            <div className="banner-slide" key={banner.id}>
+            <div className={`banner-slide ${banner.hasOwnText ? 'banner-slide-has-text' : ''}`} key={banner.id}>
               <Image
                 src={banner.image}
-                alt={banner.title}
+                alt={banner.title || 'Banner'}
                 fill
                 priority={index === 0}
                 className="banner-img"
               />
-              <div className="banner-overlay"></div>
-              <div className="banner-content">
-                <span className="banner-subtitle">{banner.subtitle}</span>
-                <h2 className="banner-title">{banner.title}</h2>
-                <a href={banner.link} className="btn-primary banner-btn">Shop Now</a>
-              </div>
+              {!banner.hasOwnText && <div className="banner-overlay"></div>}
+              {!banner.hasOwnText && (
+                <div className="banner-content">
+                  <span className="banner-subtitle">{banner.subtitle}</span>
+                  <h2 className="banner-title">{banner.title}</h2>
+                  <a href={banner.link} className="btn-primary banner-btn">Shop Now</a>
+                </div>
+              )}
+              {banner.hasOwnText && (
+                <a href={banner.link} className="banner-full-link" aria-label={`Shop ${banner.title || 'now'}`}></a>
+              )}
             </div>
           ))}
         </div>
