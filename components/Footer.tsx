@@ -8,7 +8,7 @@ export default function Footer() {
             <p className="footer-text">Premium Arabian attars crafted with pure essential oils since 2015.</p>
             <div className="footer-socials">
               {['instagram', 'facebook', 'twitter'].map(s => (
-                <a key={s} href="#" aria-label={s} className="social-link">
+                <a key={s} href={s === 'instagram' ? 'https://www.instagram.com/rahmaniperfumery/' : '#'} target={s === 'instagram' ? '_blank' : undefined} rel={s === 'instagram' ? 'noopener noreferrer' : undefined} aria-label={s} className="social-link">
                   {s === 'instagram' && (
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></svg>
                   )}

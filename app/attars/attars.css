@@ -735,12 +735,13 @@
 }
 
 .al-card-name {
-  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-family: var(--font-cinzel), 'Clash Display', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
   color: #1A1A1A;
   margin-bottom: 6px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .al-card-notes { 

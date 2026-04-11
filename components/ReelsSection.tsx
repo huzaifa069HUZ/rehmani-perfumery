@@ -328,7 +328,7 @@ export default function ReelsSection() {
             <p className="reels-subtitle">See what our community is loving</p>
           </div>
           <a
-            href="https://instagram.com/rahmani"
+            href="https://www.instagram.com/rahmaniperfumery/"
             target="_blank"
             rel="noopener noreferrer"
             className="follow-btn"

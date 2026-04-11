@@ -3,27 +3,31 @@ import Image from 'next/image';
 export default function FeaturedCategories() {
   const categories = [
     {
-      img: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=1200&auto=format&fit=crop',
-      label: 'Signature Collection',
-      title: 'Royal Oud',
-      desc: 'Aged to perfection, sourced from the finest agarwood',
+      img: '/category_gifts.png',
+      label: 'Perfect Present',
+      title: 'Gifts',
+      desc: 'Exquisite fragrances wrapped in luxury — the gift they\'ll never forget',
       size: 'large',
+      href: '/attars',
     },
     {
-      img: 'https://images.unsplash.com/photo-1590156562745-5f4f59b9c7a3?q=80&w=800&auto=format&fit=crop',
-      label: 'Best Seller',
-      title: 'White Musk',
+      img: '/category_for_him.png',
+      label: 'Men\'s Collection',
+      title: 'For Him',
       desc: '',
       size: 'small',
+      href: '/attars',
     },
     {
-      img: 'https://images.unsplash.com/photo-1595425970377-c9703bc48b2d?q=80&w=800&auto=format&fit=crop',
-      label: 'New Arrival',
-      title: 'Rose Garden',
+      img: '/category_for_her.png',
+      label: 'Women\'s Collection',
+      title: 'For Her',
       desc: '',
       size: 'small',
+      href: '/perfumes',
     },
   ];
+
 
   return (
     <section className="categories-section">
@@ -45,7 +49,7 @@ export default function FeaturedCategories() {
                 <span className="category-label">{cat.label}</span>
                 <h3 className="category-title">{cat.title}</h3>
                 {cat.desc && <p className="category-desc">{cat.desc}</p>}
-                <a href="#collections" className="category-btn">Explore Now</a>
+                <a href={cat.href} className="category-btn">Explore Now</a>
               </div>
             </div>
           ))}

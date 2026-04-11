@@ -4,11 +4,11 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const bottles = [
-  { id: 1, name: 'Royal Oud',       notes: 'Oud · Amber · Musk',                price: '₹899',  desc: 'A bold, resinous oud wrapped in warm amber and skin-hugging white musk.', image: '/assets/attar1 remove bg.png', accent: '#C8963E', tag: 'Best Seller' },
-  { id: 2, name: 'Midnight Musk',   notes: 'White Musk · Vanilla · Sandalwood', price: '₹649',  desc: 'A sensuous night-time fragrance designed to linger till sunrise.', image: '/assets/attar2removedbg.png', accent: '#A88EC0', tag: 'New Arrival' },
-  { id: 3, name: 'Sicilian Citrus', notes: 'Bergamot · Lemon · Vetiver',        price: '₹549',  desc: 'A refreshing citrus burst from the sun-soaked groves of Sicily.', image: '/assets/attar1 remove bg.png', accent: '#7BAE7F', tag: 'Fresh Pick' },
-  { id: 4, name: 'Velvet Rose',     notes: 'Damask Rose · Patchouli · Jasmine', price: '₹799',  desc: 'Pure Damask rose petals aged in precious patchouli—timeless femininity.', image: '/assets/attar2removedbg.png', accent: '#C0687A', tag: 'Limited' },
-  { id: 5, name: 'Amiri Blend',     notes: 'Aged Oud · Saffron · Leather',      price: '₹1299', desc: 'A royal tribute crafted from sixty-year aged oud and precious saffron.', image: '/assets/attar1 remove bg.png', accent: '#D4AF37', tag: 'Premium' },
+  { id: 1, name: 'Royal Oud', notes: 'Oud · Amber · Musk', price: '₹899', desc: 'A bold, resinous oud wrapped in warm amber and skin-hugging white musk.', image: '/assets/attar1 remove bg.png', accent: '#C8963E', tag: 'Best Seller', link: '/attars' },
+  { id: 2, name: 'Midnight Musk', notes: 'White Musk · Vanilla · Sandalwood', price: '₹649', desc: 'A sensuous night-time fragrance designed to linger till sunrise.', image: '/assets/attar2removedbg.png', accent: '#A88EC0', tag: 'New Arrival', link: '/attars' },
+  { id: 3, name: 'Green Ajam', notes: 'Bergamot · Lemon · Vetiver', price: '₹349', desc: 'A refreshing citrus burst from the sun-soaked groves of Sicily.', image: '/assets/green ajam.png', accent: '#7BAE7F', tag: 'Fresh Pick', link: '/product/green-ajam-xnp8BPW' },
+  { id: 4, name: 'Velvet Rose', notes: 'Damask Rose · Patchouli · Jasmine', price: '₹799', desc: 'Pure Damask rose petals aged in precious patchouli—timeless femininity.', image: '/assets/attar2removedbg.png', accent: '#C0687A', tag: 'Limited', link: '/attars' },
+  { id: 5, name: 'Red Sea', notes: 'Aged Oud · Saffron · Leather', price: '₹199', desc: 'A royal tribute crafted from sixty-year aged oud and precious saffron.', image: '/assets/red sea 2 nobg.png', accent: '#db4d1e', tag: 'Premium', link: '/attars' },
 ];
 
 function mod(n: number, m: number) { return ((n % m) + m) % m; }
@@ -34,11 +34,11 @@ function useIsMobile() {
 
 /** Returns CSS-transform-friendly slot props per relative position */
 function slotProps(diff: number, mobile: boolean) {
-  if (diff === 0)  return { x: 0,    z: 0,    ry: 0,   s: 1,    o: 1,    blur: 0,  iw: mobile ? 160 : 240, ih: mobile ? 230 : 340, zi: 10 };
-  if (diff === 1)  return { x: mobile ? 100 : 270, z: mobile ? -80 : -160,  ry: mobile ? -18 : -22, s: 0.70, o: 0.65, blur: 1,  iw: mobile ? 110 : 170, ih: mobile ? 160 : 260, zi: 6 };
-  if (diff === -1) return { x: mobile ? -100 : -270, z: mobile ? -80 : -160, ry: mobile ? 18 : 22,  s: 0.70, o: 0.65, blur: 1,  iw: mobile ? 110 : 170, ih: mobile ? 160 : 260, zi: 6 };
-  if (diff === 2)  return { x: mobile ? 160 : 510, z: -320,  ry: -38,  s: 0.40, o: mobile ? 0 : 0.18, blur: 3, iw: 100, ih: 140, zi: 2 };
-  if (diff === -2) return { x: mobile ? -160 : -510, z: -320, ry: 38,   s: 0.40, o: mobile ? 0 : 0.18, blur: 3, iw: 100, ih: 140, zi: 2 };
+  if (diff === 0) return { x: 0, z: 0, ry: 0, s: 1, o: 1, blur: 0, iw: mobile ? 160 : 240, ih: mobile ? 230 : 340, zi: 10 };
+  if (diff === 1) return { x: mobile ? 100 : 270, z: mobile ? -80 : -160, ry: mobile ? -18 : -22, s: 0.70, o: 0.65, blur: 1, iw: mobile ? 110 : 170, ih: mobile ? 160 : 260, zi: 6 };
+  if (diff === -1) return { x: mobile ? -100 : -270, z: mobile ? -80 : -160, ry: mobile ? 18 : 22, s: 0.70, o: 0.65, blur: 1, iw: mobile ? 110 : 170, ih: mobile ? 160 : 260, zi: 6 };
+  if (diff === 2) return { x: mobile ? 160 : 510, z: -320, ry: -38, s: 0.40, o: mobile ? 0 : 0.18, blur: 3, iw: 100, ih: 140, zi: 2 };
+  if (diff === -2) return { x: mobile ? -160 : -510, z: -320, ry: 38, s: 0.40, o: mobile ? 0 : 0.18, blur: 3, iw: 100, ih: 140, zi: 2 };
   return { x: 0, z: -600, ry: 0, s: 0, o: 0, blur: 10, iw: 0, ih: 0, zi: 0 };
 }
 
@@ -79,7 +79,7 @@ export default function BottleCarousel() {
       id="signature-collection"
       style={{
         position: 'relative',
-        background: 'linear-gradient(165deg, #050402 0%, #100c05 40%, #130f08 70%, #050402 100%)',
+        backgroundColor: '#050402',
         padding: '48px 0 40px',
         overflow: 'hidden',
         // GPU layer hint
@@ -93,6 +93,18 @@ export default function BottleCarousel() {
         touchX.current = null;
       }}
     >
+      {/* Dynamic tinted background */}
+      <motion.div
+        key={`bg-${active}`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
+          background: `linear-gradient(165deg, color-mix(in srgb, ${cur.accent} 15%, #050402) 0%, color-mix(in srgb, ${cur.accent} 8%, #100c05) 40%, color-mix(in srgb, ${cur.accent} 3%, #130f08) 70%, #050402 100%)`,
+        }}
+      />
+
       {/* Ambient glow */}
       <motion.div
         key={active}
@@ -101,13 +113,13 @@ export default function BottleCarousel() {
         transition={{ duration: 0.7 }}
         style={{
           position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1,
-          background: `radial-gradient(ellipse 60% 55% at 50% 70%, ${cur.accent}26 0%, transparent 70%)`,
+          background: `radial-gradient(ellipse 70% 60% at 50% 65%, ${cur.accent}33 0%, transparent 75%)`,
         }}
       />
 
       {/* Decorative fine-line grid (purely CSS, no JS weight) */}
       <div style={{
-        position: 'absolute', inset: 0, zIndex: 0, opacity: 0.035,
+        position: 'absolute', inset: 0, zIndex: 2, opacity: 0.035,
         backgroundImage: 'linear-gradient(rgba(212,175,55,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.6) 1px, transparent 1px)',
         backgroundSize: '60px 60px',
         pointerEvents: 'none',
@@ -303,7 +315,7 @@ export default function BottleCarousel() {
               {cur.price}
             </span>
             <a
-              href="/attars"
+              href={cur.link || '/attars'}
               style={{
                 flex: 1, height: 44,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
