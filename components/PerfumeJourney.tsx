@@ -58,6 +58,16 @@ function Bottle3D({ progress }: { progress: React.RefObject<number> }) {
 
 useGLTF.preload('/assets/3dbottle.glb');
 
+import { useMotionValue } from 'framer-motion';
+import { TextRevealByWord } from '@/components/ui/text-reveal';
+
+const REVEAL_TEXT =
+  "Rahmani Perfumery — Patna's finest attar house. " +
+  "We craft pure, alcohol-free attars and long-lasting perfumes " +
+  "from the rarest oud, musk, rose and saffron oils. " +
+  "Every drop carries the soul of Arabian perfumery, " +
+  "bottled with heritage and delivered to your door.";
+
 // ─── Main Section ───────────────────────────────────────────────────────────────
 export default function PerfumeJourney() {
   const pinnedRef = useRef<HTMLDivElement>(null);
@@ -65,6 +75,7 @@ export default function PerfumeJourney() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const blurRef   = useRef<HTMLDivElement>(null);
   const progress  = useRef<number>(0);
+  const fmProgress = useMotionValue(0);
 
   useEffect(() => {
     if (!pinnedRef.current || !cardRef.current || !canvasRef.current || !blurRef.current) return;
@@ -77,7 +88,10 @@ export default function PerfumeJourney() {
         end: '+=150%',
         scrub: 1.4,
         invalidateOnRefresh: true,
-        onUpdate: (self) => { progress.current = self.progress; },
+        onUpdate: (self) => { 
+          progress.current = self.progress; 
+          fmProgress.set(self.progress);
+        },
       },
     });
 
@@ -86,7 +100,7 @@ export default function PerfumeJourney() {
     tl.fromTo(cardRef.current,   { opacity: 0, y: 50, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power2.out' }, 0.5);
 
     return () => { ScrollTrigger.getAll().forEach(st => st.kill()); };
-  }, []);
+  }, [fmProgress]);
 
   return (
     <section
@@ -123,6 +137,24 @@ export default function PerfumeJourney() {
         }} />
 
         <div className="relative w-full h-full max-w-6xl mx-auto flex items-center justify-center px-4 sm:px-8 pointer-events-none">
+
+          {/* BACKGROUND TEXT REVEAL */}
+          <div style={{
+            position: 'absolute',
+            top: '15%',
+            left: 0,
+            right: 0,
+            zIndex: 5,
+            padding: '0 40px',
+            opacity: 0.75, // Keeps it subtly in the background
+            mixBlendMode: 'screen',
+            pointerEvents: 'none'
+          }}>
+            <TextRevealByWord 
+              text={REVEAL_TEXT} 
+              progress={fmProgress}
+            />
+          </div>
 
           {/* Depth blur plate */}
           <div

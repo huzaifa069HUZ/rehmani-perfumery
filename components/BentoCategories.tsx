@@ -53,7 +53,7 @@ export default function BentoCategories() {
             {/* Gift Set - Short */}
             <div className="bento-item bento-short">
               <Image 
-                src="/assets/category_giftset.png" 
+                src="/giftset image.png" 
                 alt="Gift Set Category" 
                 fill 
                 className="bento-img" 

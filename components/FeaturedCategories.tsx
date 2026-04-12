@@ -1,9 +1,26 @@
+'use client';
+
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
+
+const SWIPER_IMAGES = [
+  '/banner_collection.png',
+  '/banner_combo_deal.png',
+];
 
 export default function FeaturedCategories() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % SWIPER_IMAGES.length);
+    }, 4000); // 4 seconds
+    return () => clearInterval(timer);
+  }, []);
+
   const categories = [
     {
-      img: '/category_gifts.png',
+      img: '/giftset image.png',
       label: 'Perfect Present',
       title: 'Gifts',
       desc: 'Exquisite fragrances wrapped in luxury — the gift they\'ll never forget',
@@ -28,11 +45,11 @@ export default function FeaturedCategories() {
     },
   ];
 
-
   return (
     <section className="categories-section">
       <div className="section-container">
         <div className="categories-grid">
+          {/* Main 3 static categories */}
           {categories.map((cat, i) => (
             <div key={i} className={`category-card${cat.size === 'large' ? ' category-large' : ''}`}>
               <div className="category-img-wrap">
@@ -53,8 +70,41 @@ export default function FeaturedCategories() {
               </div>
             </div>
           ))}
+
+          {/* Auto Image Swiper for the free space under Him & Her */}
+          <div className="category-swiper-cell">
+            {SWIPER_IMAGES.map((src, i) => (
+              <Image
+                key={i}
+                src={src}
+                alt={`Feature Banner ${i + 1}`}
+                fill
+                className={`swiper-img ${i === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+                style={{ transition: 'opacity 0.8s ease-in-out', objectFit: 'cover' }}
+              />
+            ))}
+          </div>
         </div>
       </div>
+
+      <style>{`
+        .category-swiper-cell {
+          position: relative;
+          grid-column: span 2;
+          border-radius: 3px;
+          overflow: hidden;
+          background: #0a0804;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        /* On mobile, stack everything normally */
+        @media (max-width: 900px) {
+          .category-swiper-cell {
+            grid-column: span 1;
+            min-height: 200px;
+          }
+        }
+      `}</style>
     </section>
   );
 }

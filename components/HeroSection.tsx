@@ -5,10 +5,11 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 
 /* ── Mobile slides ──────────────────────────────────────────────────────── */
 const MOBILE_SLIDES: { type: 'image' | 'video'; src: string; alt?: string }[] = [
-  { type: 'image', src: '/assets/FRAGRANCE THAT YOU SOUL DESIRES (1).png', alt: 'Fragrance That Your Soul Desires' },
-  { type: 'video', src: '/assets/hero mobile bg 2.mp4', alt: 'Hero Mobile Background 2' },
+  { type: 'video', src: '/assets/Video-16.mp4', alt: 'Rehmani Perfumery Hero' },
   { type: 'image', src: '/assets/SMELL THAT DEFINES YOU (4).png', alt: 'Smell That Defines You' },
+  { type: 'video', src: '/assets/hero mobile bg 2.mp4', alt: 'Hero Mobile Background 2' },
   { type: 'video', src: '/assets/herosection bg vid mobile.mp4' },
+  { type: 'image', src: '/assets/FRAGRANCE THAT YOU SOUL DESIRES (1).png', alt: 'Fragrance That Your Soul Desires' },
 ];
 
 const SLIDE_DURATION = 5000;

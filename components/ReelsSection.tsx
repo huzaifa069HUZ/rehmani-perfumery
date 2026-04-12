@@ -5,11 +5,7 @@ import { useCart } from '@/context/CartContext';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
-/* ─── Red Sea product static data ─── */
-const RED_SEA_ID = 'HT0gv7Hbem44if1vTttq';
-const RED_SEA_HREF = '/product/HT0gv7Hbem44if1vTttq';
-
-/* ─── Placeholder image reels (4 remaining) ─── */
+/* ─── Placeholder image reels (3 remaining) ─── */
 const IMAGE_REELS = [
   {
     poster: 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?q=80&w=600&auto=format&fit=crop',
@@ -25,11 +21,6 @@ const IMAGE_REELS = [
     poster: 'https://images.unsplash.com/photo-1595425970377-c9703bc48b2d?q=80&w=600&auto=format&fit=crop',
     likes: '52.1K',
     comments: '1.2K',
-  },
-  {
-    poster: 'https://images.unsplash.com/photo-1622618991746-fe6004db3a47?q=80&w=600&auto=format&fit=crop',
-    likes: '41.8K',
-    comments: '723',
   },
 ];
 
@@ -62,8 +53,20 @@ function ImageReelCard({ reel }: { reel: typeof IMAGE_REELS[0] }) {
   );
 }
 
-/* ─── Red Sea video card (first slot) ─── */
-function RedSeaVideoCard() {
+/* ─── Generic Shoppable Video Card ─── */
+function ShoppableVideoCard({
+  productId,
+  href,
+  videoSrc,
+  fallbackName,
+  fallbackPrice,
+}: {
+  productId: string;
+  href: string;
+  videoSrc: string;
+  fallbackName: string;
+  fallbackPrice: number;
+}) {
   const { addToCart } = useCart();
   const videoRef = useRef<HTMLVideoElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -79,18 +82,18 @@ function RedSeaVideoCard() {
   } | null>(null);
 
   useEffect(() => {
-    getDoc(doc(db, 'products', RED_SEA_ID)).then((snap) => {
+    getDoc(doc(db, 'products', productId)).then((snap) => {
       if (snap.exists()) {
         const d = snap.data();
         setProduct({
-          name: d.name ?? 'Red Sea',
-          price: d.price ?? 599,
+          name: d.name ?? fallbackName,
+          price: d.price ?? fallbackPrice,
           images: d.images ?? [],
           type: d.type ?? 'attar',
         });
       }
     }).catch(() => {/* silent fail, fallback values used */});
-  }, []);
+  }, [productId, fallbackName, fallbackPrice]);
 
   /* Autoplay when ≥20% of card is in view, pause when not */
   useEffect(() => {
@@ -125,20 +128,20 @@ function RedSeaVideoCard() {
       e.preventDefault();
       e.stopPropagation();
       addToCart({
-        id: RED_SEA_ID,
-        name: product?.name ?? 'Red Sea',
+        id: productId,
+        name: product?.name ?? fallbackName,
         size: 6,
-        price: product?.price ?? 599,
+        price: product?.price ?? fallbackPrice,
         image: product?.images?.[0] ?? '',
       });
       setAdded(true);
       setTimeout(() => setAdded(false), 1800);
     },
-    [addToCart, product]
+    [addToCart, product, productId, fallbackName, fallbackPrice]
   );
 
-  const productName = product?.name ?? 'Red Sea';
-  const productPrice = product?.price ?? 599;
+  const productName = product?.name ?? fallbackName;
+  const productPrice = product?.price ?? fallbackPrice;
   const productImage = product?.images?.[0] ?? '';
   const productType = product?.type ?? 'attar';
 
@@ -148,7 +151,7 @@ function RedSeaVideoCard() {
       <div className="reel-card" style={{ aspectRatio: '9/14', cursor: 'default' }}>
         <video
           ref={videoRef}
-          src="/videos/red-sea-video.mp4"
+          src={videoSrc}
           loop
           muted
           playsInline
@@ -216,7 +219,7 @@ function RedSeaVideoCard() {
 
       {/* Product bar below the video */}
       <Link
-        href={RED_SEA_HREF}
+        href={href}
         style={{
           display: 'flex', alignItems: 'center', gap: '10px',
           background: 'white',
@@ -235,7 +238,7 @@ function RedSeaVideoCard() {
           width: '38px', height: '38px', borderRadius: '8px',
           flexShrink: 0, overflow: 'hidden',
           background: 'linear-gradient(135deg, #1a0a0e 0%, #3d1020 100%)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center'
         }}>
           {productImage ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -344,9 +347,24 @@ export default function ReelsSection() {
 
         <div className="reels-grid-5">
           {/* Slot 1: Red Sea video */}
-          <RedSeaVideoCard />
+          <ShoppableVideoCard
+            productId="HT0gv7Hbem44if1vTttq"
+            href="/product/HT0gv7Hbem44if1vTttq"
+            videoSrc="/videos/red-sea-video.mp4"
+            fallbackName="Red Sea"
+            fallbackPrice={599}
+          />
+          
+          {/* Slot 2: Al Rajaal video */}
+          <ShoppableVideoCard
+            productId="jAQ4G57"
+            href="/product/ar-rijaal-jAQ4G57"
+            videoSrc="/assets/Video-807.mp4"
+            fallbackName="Al Rajaal"
+            fallbackPrice={499}
+          />
 
-          {/* Slots 2–5: image reels */}
+          {/* Slots 3–5: image reels */}
           {IMAGE_REELS.map((reel, i) => (
             <ImageReelCard key={i} reel={reel} />
           ))}
