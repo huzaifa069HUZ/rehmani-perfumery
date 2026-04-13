@@ -99,13 +99,31 @@ export default function PerfumeJourney() {
     tl.fromTo(blurRef.current,   { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.inOut' }, 0.5);
     tl.fromTo(cardRef.current,   { opacity: 0, y: 50, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power2.out' }, 0.5);
 
-    return () => { ScrollTrigger.getAll().forEach(st => st.kill()); };
+    // Deep layout shift compensation: observe the page for height changes (e.g. from images loading)
+    let ro: ResizeObserver | null = null;
+    if (typeof window !== 'undefined') {
+      ro = new ResizeObserver(() => {
+        ScrollTrigger.refresh();
+      });
+      ro.observe(document.body);
+    }
+    
+    // Fallback re-read incase visual elements load post-hydration
+    const tId1 = setTimeout(() => ScrollTrigger.refresh(), 500);
+    const tId2 = setTimeout(() => ScrollTrigger.refresh(), 1500);
+
+    return () => { 
+      ScrollTrigger.getAll().forEach(st => st.kill()); 
+      if (ro) ro.disconnect();
+      clearTimeout(tId1);
+      clearTimeout(tId2);
+    };
   }, [fmProgress]);
 
   return (
     <section
-      className="relative z-0 w-full overflow-hidden"
-      style={{ backgroundColor: '#060402' }}
+      className="relative z-[9999]"
+      style={{ background: '#060402' }}
     >
       {/* Subtle film grain overlay */}
       <div
@@ -120,7 +138,7 @@ export default function PerfumeJourney() {
       {/* ── Pinned viewport ── */}
       <div
         ref={pinnedRef}
-        className="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+        className="relative h-screen w-full overflow-hidden flex items-center justify-center"
         style={{
           background: 'radial-gradient(ellipse 80% 70% at 50% 55%, rgba(50,28,8,0.55) 0%, #050402 80%)',
         }}

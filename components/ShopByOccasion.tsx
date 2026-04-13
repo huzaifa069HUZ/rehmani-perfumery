@@ -44,7 +44,7 @@ export default function ShopByOccasion() {
   const filtered = products.filter(p => p.occasions && p.occasions.includes(activeFilter));
 
   return (
-    <section className="occasions-section relative z-20 bg-[var(--bg)]" style={{ background: 'var(--bg)' }}>
+    <section className="occasions-section relative z-[10000] bg-[var(--bg)]" style={{ background: 'var(--bg)' }}>
       <div className="section-container">
         
         <div className={`occasions-header ${isVisible ? 'animate' : ''}`} ref={titleRef}>
