@@ -104,7 +104,7 @@ export default function PerfumeJourney() {
 
   return (
     <section
-      className="relative z-10 w-full overflow-hidden"
+      className="relative z-0 w-full overflow-hidden"
       style={{ backgroundColor: '#060402' }}
     >
       {/* Subtle film grain overlay */}
