@@ -310,16 +310,29 @@ export default function ReelsSection() {
     <section className="reels-section">
       <style>{`
         .reels-grid-5 {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          gap: 16px;
-          align-items: start;
+          display: flex;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+          gap: 18px;
+          padding-bottom: 24px;
+          scrollbar-width: none;
         }
-        @media (max-width: 1100px) {
-          .reels-grid-5 { grid-template-columns: repeat(3, 1fr); }
+        .reels-grid-5::-webkit-scrollbar {
+          display: none;
         }
-        @media (max-width: 700px) {
-          .reels-grid-5 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .reels-grid-5 > * {
+          flex: 0 0 calc((100% - 72px) / 5); /* 5 cards exactly */
+          scroll-snap-align: start;
+          min-width: 220px; /* safety for ultra-small nested desktops */
+        }
+        @media (max-width: 900px) {
+          .reels-grid-5 > * { flex: 0 0 calc(40vw - 18px); min-width: 0; }
+        }
+        @media (max-width: 480px) {
+          .reels-grid-5 { gap: 12px; }
+          /* 1.5 cards visibility creates precise swipe affordance */
+          .reels-grid-5 > * { flex: 0 0 calc(65vw - 12px); }
         }
       `}</style>
 

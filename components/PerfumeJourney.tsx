@@ -104,8 +104,8 @@ export default function PerfumeJourney() {
 
   return (
     <section
-      className="relative z-[9999]"
-      style={{ background: '#060402' }}
+      className="relative z-10 w-full overflow-hidden"
+      style={{ backgroundColor: '#060402' }}
     >
       {/* Subtle film grain overlay */}
       <div
@@ -120,7 +120,7 @@ export default function PerfumeJourney() {
       {/* ── Pinned viewport ── */}
       <div
         ref={pinnedRef}
-        className="relative h-screen w-full overflow-hidden flex items-center justify-center"
+        className="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
         style={{
           background: 'radial-gradient(ellipse 80% 70% at 50% 55%, rgba(50,28,8,0.55) 0%, #050402 80%)',
         }}

@@ -28,7 +28,7 @@ export default function FeaturedCategories() {
       href: '/attars',
     },
     {
-      img: '/category_for_him.png',
+      img: '/assets/for him.png',
       label: 'Men\'s Collection',
       title: 'For Him',
       desc: '',
@@ -36,7 +36,7 @@ export default function FeaturedCategories() {
       href: '/attars',
     },
     {
-      img: '/category_for_her.png',
+      img: '/assets/for her.png',
       label: 'Women\'s Collection',
       title: 'For Her',
       desc: '',

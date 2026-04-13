@@ -1,9 +1,9 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
-import GlobalSearch from './GlobalSearch';
 
 interface HeaderProps {
   onMenuOpen: () => void;
@@ -13,68 +13,40 @@ interface HeaderProps {
 export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const { toggleCart, totalItems } = useCart();
-  const { user, logout } = useAuth();
-  const [logoSrc, setLogoSrc] = useState<string>('/logo-with-text.png');
+  const { user } = useAuth();
+  const pathname = usePathname();
+  const isHome = pathname === '/';
+  
+  const logoSrc = '/assets/logo with name removed bg.png';
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
+    handleScroll(); // Trigger instantly on load
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Process logo to remove white background
-  useEffect(() => {
-    const img = new window.Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      ctx.drawImage(img, 0, 0);
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-      // Replace white/near-white pixels with transparent
-      for (let i = 0; i < data.length; i += 4) {
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
-        // If pixel is white or near-white (threshold 235+)
-        if (r > 235 && g > 235 && b > 235) {
-          data[i + 3] = 0; // fully transparent
-        }
-        // Smooth transition for near-white pixels (220-235)
-        else if (r > 220 && g > 220 && b > 220) {
-          const avg = (r + g + b) / 3;
-          data[i + 3] = Math.round(255 * (1 - (avg - 220) / 35));
-        }
-      }
-      ctx.putImageData(imageData, 0, 0);
-      setLogoSrc(canvas.toDataURL('image/png'));
-    };
-    img.src = '/logo-with-text.png';
-  }, []);
+  const isScrolled = !isHome || scrolled;
 
   return (
-    <header id="main-header" className={`main-header${scrolled ? ' scrolled' : ''}`}>
+    <header id="main-header" className={`main-header${isScrolled ? ' scrolled' : ''}`}>
       <div className="header-inner">
         {/* Logo */}
-        <a href="#" className="logo-link">
+        <Link href="/" className="logo-link">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={logoSrc}
             alt="Rahmani Perfumery"
             className="header-logo-img"
           />
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="desktop-nav">
-          <a href="/#" className="nav-link active">HOME</a>
-          <Link href="/attars" className="nav-link">ATTARS</Link>
-          <Link href="/perfumes" className="nav-link">PERFUMES</Link>
-          <a href="/#about" className="nav-link">ABOUT</a>
+          <Link href="/" className={`nav-link${isHome ? ' active' : ''}`}>HOME</Link>
+          <Link href="/attars" className={`nav-link${pathname === '/attars' ? ' active' : ''}`}>ATTARS</Link>
+          <Link href="/perfumes" className={`nav-link${pathname === '/perfumes' ? ' active' : ''}`}>PERFUMES</Link>
+          <Link href="/#about" className="nav-link">ABOUT</Link>
         </nav>
 
         {/* Actions */}

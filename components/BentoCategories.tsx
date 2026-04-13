@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
 export default function BentoCategories() {
@@ -36,7 +37,7 @@ export default function BentoCategories() {
           {/* Left Column */}
           <div className="bento-col">
             {/* Perfume - Tall */}
-            <div className="bento-item bento-tall">
+            <Link href="/perfumes" className="bento-item bento-tall" style={{ order: 1 }}>
               <Image 
                 src="/assets/category_perfume.png" 
                 alt="Perfume Category" 
@@ -48,10 +49,10 @@ export default function BentoCategories() {
                 <h3 className="bento-item-title">Perfume</h3>
                 <p className="bento-item-desc">Connoisseurs of perfumery —<br/>heritage, held in a bottle.</p>
               </div>
-            </div>
+            </Link>
 
             {/* Gift Set - Short */}
-            <div className="bento-item bento-short">
+            <Link href="/attars" className="bento-item bento-short" style={{ order: 4 }}>
               <Image 
                 src="/giftset image.png" 
                 alt="Gift Set Category" 
@@ -63,13 +64,13 @@ export default function BentoCategories() {
                 <h3 className="bento-item-title">Gift set</h3>
                 <p className="bento-item-desc">Thoughtfully wrapped —<br/>the fragrance of memories.</p>
               </div>
-            </div>
+            </Link>
           </div>
 
           {/* Right Column */}
           <div className="bento-col">
              {/* Attar - Short */}
-             <div className="bento-item bento-short">
+             <Link href="/attars" className="bento-item bento-short" style={{ order: 2 }}>
               <Image 
                 src="/assets/category_attar.png" 
                 alt="Attar Category" 
@@ -78,13 +79,13 @@ export default function BentoCategories() {
               />
               <div className="bento-overlay"></div>
               <div className="bento-content">
-                <h3 className="bento-item-title">Attar</h3>
+                <h3 className="bento-item-title">Attars</h3>
                 <p className="bento-item-desc">Rich fragrant oils —<br/>a timeless touch of tradition.</p>
               </div>
-            </div>
+            </Link>
 
             {/* Dakhoon - Tall */}
-            <div className="bento-item bento-tall">
+            <Link href="/attars" className="bento-item bento-tall" style={{ order: 3 }}>
               <Image 
                 src="/assets/category_dakhoon.png" 
                 alt="Dakhoon Category" 
@@ -96,7 +97,7 @@ export default function BentoCategories() {
                 <h3 className="bento-item-title">Dakhoon</h3>
                 <p className="bento-item-desc">Aromas of royalty —<br/>incense that calms.</p>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </div>

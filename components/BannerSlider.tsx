@@ -5,10 +5,10 @@ import { useState, useEffect, useCallback } from 'react';
 const banners = [
   {
     id: 1,
-    image: '/assets/freepik-perfume-twitter-banner-58813-20260410110951Mz5D.png',
+    image: '/assets/red sea banner.png',
     title: '',
     subtitle: '',
-    link: '/perfumes',
+    link: '/product/red-sea-HT0gv7H',
     hasOwnText: true,
   },
   {

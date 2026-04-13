@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const bottles = [
-  { id: 1, name: 'Royal Oud', notes: 'Oud · Amber · Musk', price: '₹899', desc: 'A bold, resinous oud wrapped in warm amber and skin-hugging white musk.', image: '/assets/attar1 remove bg.png', accent: '#C8963E', tag: 'Best Seller', link: '/attars' },
+  { id: 1, name: 'Oud Nadira', notes: 'Oud · Amber · Musk', price: '₹400', desc: 'A bold, resinous oud wrapped in warm amber and skin-hugging white musk.', image: '/assets/oud nadira no bg.png', accent: '#C8963E', tag: 'Best Seller', link: '/product/oud-nadira-WgWGvlC' },
   { id: 2, name: 'Midnight Musk', notes: 'White Musk · Vanilla · Sandalwood', price: '₹649', desc: 'A sensuous night-time fragrance designed to linger till sunrise.', image: '/assets/attar2removedbg.png', accent: '#A88EC0', tag: 'New Arrival', link: '/attars' },
   { id: 3, name: 'Green Ajam', notes: 'Bergamot · Lemon · Vetiver', price: '₹349', desc: 'A refreshing citrus burst from the sun-soaked groves of Sicily.', image: '/assets/green ajam.png', accent: '#7BAE7F', tag: 'Fresh Pick', link: '/product/green-ajam-xnp8BPW' },
   { id: 4, name: 'Velvet Rose', notes: 'Damask Rose · Patchouli · Jasmine', price: '₹799', desc: 'Pure Damask rose petals aged in precious patchouli—timeless femininity.', image: '/assets/attar2removedbg.png', accent: '#C0687A', tag: 'Limited', link: '/attars' },
