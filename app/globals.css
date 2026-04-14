@@ -66,6 +66,38 @@ button {
 }
 
 /* =========================================================
+   MOBILE PERFORMANCE — GPU compositing + layout skip
+   ========================================================= */
+@media (max-width: 768px) {
+  /* Skip layout/paint for below-fold sections until near viewport */
+  .bento-section,
+  .occasions-section,
+  .banner-slider-section,
+  .reels-section,
+  .newsletter-section,
+  .testimonials-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+  }
+
+  /* Promote animated/scrollable containers to GPU layers */
+  .banner-track,
+  .product-grid,
+  .hero-mobile-swiper {
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  /* Smooth momentum scrolling for overflow containers */
+  .occasions-filters-wrapper,
+  .filter-dropdown-menu {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* =========================================================
    TOP BAR OVERLAY — fixed container for announce + header
    ========================================================= */
 .top-bar-overlay {
@@ -716,33 +748,105 @@ button {
   color: var(--text);
 }
 
-.filter-tabs {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+/* ── Filter Dropdown ── */
+.filter-dropdown-wrap {
+  position: relative;
+  z-index: 30;
 }
 
-.filter-tab {
-  padding: 10px 22px;
+.filter-dropdown-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
   background: transparent;
   border: 1px solid var(--border);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
   color: var(--text-muted);
   transition: all 0.3s;
   cursor: pointer;
+  border-radius: 50px;
+  font-family: inherit;
 }
 
-.filter-tab:hover {
+.filter-dropdown-btn:hover {
   border-color: var(--text);
   color: var(--text);
 }
 
-.filter-tab.active {
+.filter-dropdown-btn.open {
+  border-color: var(--text);
+  color: var(--text);
+  background: var(--bg-light);
+}
+
+.filter-dropdown-btn.has-filter {
   background: var(--text);
   color: #fff;
   border-color: var(--text);
+}
+
+.filter-chevron {
+  transition: transform 0.3s ease;
+}
+
+.filter-dropdown-btn.open .filter-chevron {
+  transform: rotate(180deg);
+}
+
+.filter-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 210px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 6px;
+  z-index: 50;
+  animation: filterDropIn 0.2s ease-out;
+}
+
+@keyframes filterDropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filter-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+.filter-dropdown-item:hover {
+  background: var(--bg-light);
+  color: var(--text);
+}
+
+.filter-dropdown-item.active {
+  background: var(--bg-light);
+  color: var(--text);
+  font-weight: 700;
 }
 
 .product-grid {
@@ -2262,7 +2366,7 @@ button {
 
 .banner-img {
   object-fit: fill !important;
-  /* Stretches edge-to-edge, NO crop, NO black bars */
+  /* Stretches edge-to-edge on desktop, NO crop, NO black bars */
 }
 
 /* Removed `.banner-slide-has-text .banner-img { object-fit: contain; }` to eliminate black bars */
@@ -2849,21 +2953,15 @@ body {
     font-size: 13px;
   }
 
-  /* ── Filter Tabs ── */
-  .filter-tabs {
-    gap: 6px;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 4px;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
+  /* ── Filter Dropdown Mobile ── */
+  .filter-dropdown-btn {
+    padding: 8px 16px;
+    font-size: 12px;
   }
 
-  .filter-tab {
-    padding: 8px 14px;
-    font-size: 11px;
-    white-space: nowrap;
-    flex-shrink: 0;
+  .filter-dropdown-menu {
+    right: 0;
+    min-width: 190px;
   }
 
   /* ── Categories Grid ── */
@@ -2942,7 +3040,24 @@ body {
 
   /* ── Banner Slider ── */
   .banner-slider-container {
-    height: clamp(360px, 65vw, 540px);
+    height: auto;
+    aspect-ratio: auto;
+  }
+
+  .banner-slide {
+    position: relative;
+    min-width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
+  }
+
+  .banner-img {
+    object-fit: contain !important;
+    background: var(--charcoal);
+  }
+
+  .banner-track {
+    align-items: stretch;
   }
 
   .banner-content {

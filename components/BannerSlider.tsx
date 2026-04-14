@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 const banners = [
   {
@@ -39,24 +39,65 @@ const banners = [
 
 export default function BannerSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+  const autoSlideRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const minSwipeDistance = 50;
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
   }, []);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
-  };
+  }, []);
+
+  // Start/restart auto-slide
+  const startAutoSlide = useCallback(() => {
+    if (autoSlideRef.current) clearInterval(autoSlideRef.current);
+    autoSlideRef.current = setInterval(nextSlide, 5000);
+  }, [nextSlide]);
 
   // Auto-slide every 5 seconds
   useEffect(() => {
-    const timer = setInterval(nextSlide, 5000);
-    return () => clearInterval(timer);
-  }, [nextSlide]);
+    startAutoSlide();
+    return () => { if (autoSlideRef.current) clearInterval(autoSlideRef.current); };
+  }, [startAutoSlide]);
+
+  // Touch handlers for swipe
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchEndX.current = null;
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchEnd = () => {
+    if (touchStartX.current === null || touchEndX.current === null) return;
+    const distance = touchStartX.current - touchEndX.current;
+    if (Math.abs(distance) >= minSwipeDistance) {
+      if (distance > 0) {
+        nextSlide(); // swipe left → next
+      } else {
+        prevSlide(); // swipe right → prev
+      }
+      // Restart auto-slide after manual swipe
+      startAutoSlide();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
 
   return (
     <section className="banner-slider-section">
-      <div className="banner-slider-container">
+      <div
+        className="banner-slider-container"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         
         {/* Slides */}
         <div 
@@ -88,12 +129,12 @@ export default function BannerSlider() {
         </div>
 
         {/* Navigation Arrows */}
-        <button className="banner-arrow banner-prev" onClick={prevSlide} aria-label="Previous slide">
+        <button className="banner-arrow banner-prev" onClick={() => { prevSlide(); startAutoSlide(); }} aria-label="Previous slide">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
         </button>
-        <button className="banner-arrow banner-next" onClick={nextSlide} aria-label="Next slide">
+        <button className="banner-arrow banner-next" onClick={() => { nextSlide(); startAutoSlide(); }} aria-label="Next slide">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
@@ -105,7 +146,7 @@ export default function BannerSlider() {
             <button
               key={index}
               className={`banner-dot ${currentSlide === index ? 'active' : ''}`}
-              onClick={() => setCurrentSlide(index)}
+              onClick={() => { setCurrentSlide(index); startAutoSlide(); }}
               aria-label={`Go to slide ${index + 1}`}
             ></button>
           ))}
@@ -115,3 +156,4 @@ export default function BannerSlider() {
     </section>
   );
 }
+
