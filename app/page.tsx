@@ -6,12 +6,14 @@ import HeroSection from '@/components/HeroSection';
 import FeaturesBar from '@/components/FeaturesBar';
 import ProductGrid from '@/components/ProductGrid';
 import FeaturedCategories from '@/components/FeaturedCategories';
+import PremiumBestSeller from '@/components/PremiumBestSeller';
 import ReelsSection from '@/components/ReelsSection';
 import BentoCategories from '@/components/BentoCategories';
 import BannerSlider from '@/components/BannerSlider';
 import ShopByOccasion from '@/components/ShopByOccasion';
 import PerfumeJourney from '@/components/PerfumeJourney';
 import BestSellers from '@/components/BestSellers';
+import LuxuryVideoSection from '@/components/LuxuryVideoSection';
 import BottleCarousel from '@/components/BottleCarousel';
 import ContactSection from '@/components/ContactSection';
 import Testimonials from '@/components/Testimonials';
@@ -44,6 +46,8 @@ export default function Home() {
         <FeaturesBar />
         <ProductGrid />
         <FeaturedCategories />
+        <PremiumBestSeller />
+        <LuxuryVideoSection />
         <ReelsSection />
         <BentoCategories />
         <BannerSlider />

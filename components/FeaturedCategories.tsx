@@ -83,6 +83,30 @@ export default function FeaturedCategories() {
                 style={{ transition: 'opacity 0.8s ease-in-out', objectFit: 'cover' }}
               />
             ))}
+
+            {/* Navigation Arrows */}
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setCurrentSlide((prev) => (prev - 1 + SWIPER_IMAGES.length) % SWIPER_IMAGES.length);
+              }}
+              className="swiper-arrow swiper-prev"
+              aria-label="Previous Slide"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setCurrentSlide((prev) => (prev + 1) % SWIPER_IMAGES.length);
+              }}
+              className="swiper-arrow swiper-next"
+              aria-label="Next Slide"
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
           </div>
         </div>
       </div>
@@ -96,6 +120,35 @@ export default function FeaturedCategories() {
           background: #0a0804;
           box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
+
+        .swiper-arrow {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          background: rgba(0, 0, 0, 0.4);
+          color: #fff;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 10;
+          transition: all 0.3s ease;
+          backdrop-filter: blur(4px);
+        }
+
+        .swiper-arrow:hover {
+          background: rgba(212, 175, 55, 0.85);
+          border-color: rgba(212, 175, 55, 1);
+          transform: translateY(-50%) scale(1.05);
+          color: #000;
+        }
+
+        .swiper-prev { left: 24px; }
+        .swiper-next { right: 24px; }
 
         /* On mobile, stack everything normally */
         @media (max-width: 900px) {

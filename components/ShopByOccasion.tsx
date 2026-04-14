@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { products } from '@/data/products';
 import ProductCard from './ProductCard';
 
-const FILTERS = ['daily wear', 'long lasting', 'festival', 'party', 'seductive'];
+const FILTERS = ['beast mode', 'everyday', 'party wear', 'date'];
 
 export default function ShopByOccasion() {
   const [activeFilter, setActiveFilter] = useState(FILTERS[0]);
@@ -51,6 +51,22 @@ export default function ShopByOccasion() {
           <h2 className="occasions-title">SHOP BY OCCASIONS</h2>
           <div className="occasions-line"></div>
         </div>
+
+        {activeFilter === 'beast mode' && (
+          <p style={{
+            textAlign: 'center',
+            marginTop: '18px',
+            marginBottom: '0',
+            fontSize: '0.75rem',
+            color: '#b8860b',
+            letterSpacing: '0.25em',
+            textTransform: 'uppercase',
+            fontWeight: '600',
+            fontFamily: 'inherit',
+          }}>
+            PROJECTION BEYOND YOUR IMAGINATION
+          </p>
+        )}
 
         <div className="occasions-filters-container">
           <div className="occasions-filters-wrapper" ref={containerRef}>

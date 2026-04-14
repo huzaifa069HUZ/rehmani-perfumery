@@ -13,7 +13,7 @@ const banners = [
   },
   {
     id: 2,
-    image: '/banner2.png',
+    image: '/assets/red sea banner.png',
     title: 'PURE OUD EXTRACT',
     subtitle: 'Aged to perfection for true connoisseurs',
     link: '#collections',

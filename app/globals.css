@@ -1724,26 +1724,46 @@ button {
 }
 
 .category-btn {
-  margin-top: 6px;
+  margin-top: 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 28px;
-  background: linear-gradient(135deg, #D4AF37 0%, #C8963E 100%);
-  color: #000;
-  font-size: 0.75rem;
-  font-weight: 800;
+  padding: 10px 28px;
+  background: transparent;
+  border: 1.5px solid #D4AF37;
+  color: #D4AF37;
+  font-size: 0.72rem;
+  font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;
-  border-radius: 8px;
-  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+  border-radius: 40px; /* Pill shape */
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.category-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #D4AF37;
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .category-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+  color: #000;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.category-btn:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 /* =========================================================
@@ -2377,7 +2397,14 @@ button {
   }
 
   .banner-arrow {
-    display: none;
+    width: 36px;
+    height: 36px;
+  }
+  .banner-prev {
+    left: 2%;
+  }
+  .banner-next {
+    right: 2%;
   }
 }
 
