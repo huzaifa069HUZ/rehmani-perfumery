@@ -8,6 +8,7 @@ import FeaturesBar from '@/components/FeaturesBar';
 import ProductGrid from '@/components/ProductGrid';
 import FeaturedCategories from '@/components/FeaturedCategories';
 import PremiumBestSeller from '@/components/PremiumBestSeller';
+import GiftingSection from '@/components/GiftingSection';
 import BentoCategories from '@/components/BentoCategories';
 import BannerSlider from '@/components/BannerSlider';
 import ShopByOccasion from '@/components/ShopByOccasion';
@@ -50,13 +51,14 @@ export default function Home() {
         <ProductGrid />
         <FeaturedCategories />
         <PremiumBestSeller />
+        <GiftingSection />
         <LuxuryVideoSection />
         <ReelsSection />
         <BentoCategories />
+        <BestSellers />
         <BannerSlider />
         <ShopByOccasion />
         <PerfumeJourney />
-        <BestSellers />
         <BottleCarousel />
         <ContactSection />
         <Testimonials />
