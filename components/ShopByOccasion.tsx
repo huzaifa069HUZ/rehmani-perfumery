@@ -66,27 +66,30 @@ export default function ShopByOccasion() {
 
   const getFilteredProducts = () => {
     return dbProducts.filter((p) => {
-      // 1. If backend has assigned occasion tags, use them:
+      const targetIds = ['XNzj20q', 'DEI2FRm', 'WgWGvlC', 'jAQ4G57'];
+      const pIdStr = String(p.id);
+      const pName = (p.name || '').toLowerCase();
+      
+      const isTarget = targetIds.some(id => pIdStr.includes(id)) || 
+                       ['reeh al', 'al asma', 'oud nadira', 'ar rijaal', 'ar rijal'].some(n => pName.includes(n));
+
+      // 1. Force the 4 specific cards to ONLY show up in 'beast mode'
+      if (activeFilter === 'beast mode') {
+        return isTarget;
+      }
+
+      // If we are on any other tab (like 'date'), specifically exclude those 4 so they don't leak
+      if (isTarget) {
+        return false;
+      }
+
+      // 2. Otherwise, use backend assigned tags for other tabs:
       if (p.occasions && Array.isArray(p.occasions)) {
         if (p.occasions.map(o => o.toLowerCase()).includes(activeFilter)) {
           return true;
         }
       }
 
-      // 2. Hard fallback specifically requested for BEAST MODE products
-      if (activeFilter === 'beast mode') {
-        const targetIds = ['XNzj20q', 'DEI2FRm', 'WgWGvlC', 'jAQ4G57'];
-        if (targetIds.includes(String(p.id))) {
-          return true;
-        }
-      }
-      
-      // Fallback for other categories if no tags exist
-      if (activeFilter === 'everyday') {
-        const everydayIds = ['YTkL7PZ', 'A1b2C3d']; // Examples
-        if (everydayIds.includes(String(p.id))) return true;
-      }
-      
       return false;
     });
   };
