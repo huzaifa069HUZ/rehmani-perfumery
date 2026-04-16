@@ -35,7 +35,7 @@ export default function AddProductPage() {
     12: { price: '', originalPrice: '' },
     24: { price: '', originalPrice: '' },
   });
-  const [category, setCategory] = useState(CATEGORIES[0].value);
+  const [categories, setCategories] = useState<string[]>([CATEGORIES[0].value]);
   const [gender, setGender] = useState('Unisex');
   const [description, setDescription] = useState('');
   const [notes, setNotes] = useState('');
@@ -69,6 +69,8 @@ export default function AddProductPage() {
     setSaveError('');
 
     try {
+      if (categories.length === 0) { alert('Please select at least one category.'); setLoading(false); return; }
+      
       const sortedSizes = [...sizes].sort((a, b) => a - b);
       if (sortedSizes.length === 0) { alert('Please select at least one bottle size.'); setLoading(false); return; }
       
@@ -92,7 +94,7 @@ export default function AddProductPage() {
 
       // Race the Firestore save against a 15-second timeout
       const savePromise = addDoc(collection(db, 'products'), {
-        name, category, gender, description, notes,
+        name, category: categories.join(', '), gender, description, notes,
         price: basePrice, originalPrice: baseOriginalPrice, isNew,
         sizes: sortedSizes, pricing: parsedPricing, images, occasions: parsedTags, type: productType,
         slug: slugify(name),
@@ -1001,14 +1003,46 @@ export default function AddProductPage() {
               <div className="card-body">
                 <div className="field-group">
                   <label className="field-label" htmlFor="product-category">Category</label>
-                  <select
-                    id="product-category"
-                    value={category}
-                    onChange={e => setCategory(e.target.value)}
-                    className="premium-select"
-                  >
-                    {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-                  </select>
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {CATEGORIES.map(c => {
+                      const isActive = categories.includes(c.value);
+                      return (
+                        <button
+                          key={c.value}
+                          type="button"
+                          onClick={() => setCategories(prev => 
+                            prev.includes(c.value) ? prev.filter(cat => cat !== c.value) : [...prev, c.value]
+                          )}
+                          style={{
+                            padding: '6px 12px',
+                            borderRadius: '20px',
+                            border: isActive ? '1.5px solid #d4af5f' : '1.5px solid #e2e8f0',
+                            background: isActive ? 'linear-gradient(135deg, rgba(212,175,95,0.15), rgba(212,175,95,0.08))' : '#f8fafc',
+                            color: isActive ? '#b8860b' : '#64748b',
+                            fontSize: '12px',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            transition: 'all 0.2s',
+                          }}
+                        >
+                          {c.label.split(' ')[0]} {/* Shorthand for pills */}
+                          {isActive && (
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {categories.length === 0 && (
+                    <div style={{ marginTop: '8px', fontSize: '11px', color: '#ef4444', fontWeight: '500' }}>
+                      Select at least one category.
+                    </div>
+                  )}
                 </div>
 
                 <div className="field-group">
