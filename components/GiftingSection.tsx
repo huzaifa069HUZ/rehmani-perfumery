@@ -6,6 +6,7 @@ import {
   HoverSliderImageWrap,
   TextStaggerHover 
 } from "@/components/ui/animated-slideshow";
+import { SparklesText } from "@/components/ui/sparkles-text";
 
 const SLIDES = [
   {
@@ -52,9 +53,11 @@ export default function GiftingSection() {
         {/* Header - Dark bold font against light beige */}
         <div className="mb-14 lg:mb-20 flex flex-col md:flex-row items-center gap-4 md:gap-8 justify-center">
           <span className="hidden md:block w-16 md:w-32 h-[2px] bg-[#d3a958]" />
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-sans font-black tracking-tight text-[#2b1f13] uppercase text-center md:text-left drop-shadow-sm">
-            The Art Of Gifting
-          </h2>
+          <SparklesText 
+            text="The Art Of Gifting" 
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-sans font-black tracking-tight text-[#2b1f13] uppercase text-center md:text-left drop-shadow-sm"
+            colors={{ first: "#d3a958", second: "#b8860b" }}
+          />
           <span className="w-16 md:hidden h-[2px] bg-[#d3a958]" />
         </div>
         

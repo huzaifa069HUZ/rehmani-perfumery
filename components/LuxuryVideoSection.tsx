@@ -1,9 +1,20 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { useInView } from 'framer-motion';
 
 export default function LuxuryVideoSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const isVideoInView = useInView(videoRef, { margin: '200px' });
   const [isMuted, setIsMuted] = useState(true);
+
+  useEffect(() => {
+    if (!videoRef.current) return;
+    if (isVideoInView) {
+      videoRef.current.play().catch(() => {});
+    } else {
+      videoRef.current.pause();
+    }
+  }, [isVideoInView]);
 
   const toggleMute = () => {
     if (!videoRef.current) return;

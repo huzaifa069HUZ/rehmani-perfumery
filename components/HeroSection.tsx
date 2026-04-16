@@ -3,6 +3,52 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState, useCallback } from 'react';
 
+function CountUpNumber({ end, suffix = '', prefix = '', duration = 2000 }: { end: number, suffix?: string, prefix?: string, duration?: number }) {
+  const startValue = end > 1900 ? end - 50 : 0;
+  const [count, setCount] = useState(startValue);
+  const [hasStarted, setHasStarted] = useState(false);
+  const nodeRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasStarted) {
+          setHasStarted(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (nodeRef.current) observer.observe(nodeRef.current);
+    return () => observer.disconnect();
+  }, [hasStarted]);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+    let startTime: number | null = null;
+    let animationFrame: number;
+    
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      // easeOutCubic
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      
+      const currentVal = Math.floor(startValue + (easeOut * (end - startValue)));
+      setCount(currentVal);
+      
+      if (progress < 1) {
+        animationFrame = window.requestAnimationFrame(step);
+      } else {
+        setCount(end); // ensure exact finish
+      }
+    };
+    animationFrame = window.requestAnimationFrame(step);
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [hasStarted, end, duration, startValue]);
+
+  return <span ref={nodeRef} style={{ display: 'inline-block' }}>{prefix}{count}{suffix}</span>;
+}
+
 /* ── Mobile slides ──────────────────────────────────────────────────────── */
 const MOBILE_SLIDES: { type: 'image' | 'video'; src: string; alt?: string }[] = [
   { type: 'video', src: '/assets/Video-16.mp4', alt: 'Rehmani Perfumery Hero' },
@@ -47,7 +93,7 @@ export default function HeroSection() {
   useEffect(() => {
     if (MOBILE_SLIDES[current].type === 'video' && videoRef.current) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
+      videoRef.current.play().catch(() => { });
     }
   }, [current]);
 
@@ -151,7 +197,7 @@ export default function HeroSection() {
 
           <p className="hero-tagline fade-in" style={{ animationDelay: '0.7s' }}>
             Pure Attar. Pure Identity.<br />
-            Crafted with passion since 2015.
+            Fragrance that your soul desires.
           </p>
 
           <div className="hero-actions fade-in" style={{ animationDelay: '0.9s' }}>
@@ -161,18 +207,19 @@ export default function HeroSection() {
 
           <div className="hero-stats fade-in" style={{ animationDelay: '1.1s' }}>
             <div className="hero-stat">
-              <span className="stat-value">25+</span>
+              <span className="stat-value"><CountUpNumber end={25} suffix="+" /></span>
               <span className="stat-label">SIGNATURE ATTARS</span>
             </div>
             <div className="stat-divider" />
             <div className="hero-stat">
-              <span className="stat-value">100%</span>
+              <span className="stat-value"><CountUpNumber end={100} suffix="%" /></span>
               <span className="stat-label">PURE OILS</span>
             </div>
+
             <div className="stat-divider" />
             <div className="hero-stat">
-              <span className="stat-value">SINCE 2015</span>
-              <span className="stat-label">TRUSTED HERITAGE</span>
+              <span className="stat-value"><CountUpNumber end={99} suffix="%" /></span>
+              <span className="stat-label">SATISFACTION</span>
             </div>
           </div>
         </div>

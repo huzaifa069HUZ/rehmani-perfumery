@@ -21,10 +21,12 @@ import GlobalSearch from '@/components/GlobalSearch';
 
 /* ── CSR-only lazy imports — heavy GPU/3D/map components ── */
 const PerfumeJourney = dynamic(() => import('@/components/PerfumeJourney'), { ssr: false });
+const CustomBlendDelivery = dynamic(() => import('@/components/CustomBlendDelivery'), { ssr: false });
 const BottleCarousel = dynamic(() => import('@/components/BottleCarousel'), { ssr: false });
 const ContactSection = dynamic(() => import('@/components/ContactSection'), { ssr: false });
 const BestSellers = dynamic(() => import('@/components/BestSellers'), { ssr: false });
 const LuxuryVideoSection = dynamic(() => import('@/components/LuxuryVideoSection'), { ssr: false });
+const FeaturesStrip = dynamic(() => import('@/components/FeaturesStrip'), { ssr: false });
 const ReelsSection = dynamic(() => import('@/components/ReelsSection'), { ssr: false });
 
 export default function Home() {
@@ -53,12 +55,14 @@ export default function Home() {
         <PremiumBestSeller />
         <GiftingSection />
         <LuxuryVideoSection />
+        <FeaturesStrip />
         <ReelsSection />
         <BentoCategories />
         <BestSellers />
         <BannerSlider />
         <ShopByOccasion />
         <PerfumeJourney />
+        <CustomBlendDelivery />
         <BottleCarousel />
         <ContactSection />
         <Testimonials />

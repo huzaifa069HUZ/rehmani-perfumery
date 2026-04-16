@@ -58,7 +58,7 @@ function Bottle3D({ progress }: { progress: React.RefObject<number> }) {
 
 useGLTF.preload('/assets/3dbottle.glb');
 
-import { useMotionValue } from 'framer-motion';
+import { useMotionValue, useInView } from 'framer-motion';
 import { TextRevealByWord } from '@/components/ui/text-reveal';
 
 const REVEAL_TEXT =
@@ -76,6 +76,7 @@ export default function PerfumeJourney() {
   const blurRef   = useRef<HTMLDivElement>(null);
   const progress  = useRef<number>(0);
   const fmProgress = useMotionValue(0);
+  const isCanvasInView = useInView(pinnedRef, { margin: '800px 0px' });
 
   useEffect(() => {
     if (!pinnedRef.current || !cardRef.current || !canvasRef.current || !blurRef.current) return;
@@ -397,25 +398,27 @@ export default function PerfumeJourney() {
               willChange: 'opacity', // hint browser to keep on GPU
             }}
           >
-            <Canvas
-              camera={{ position: [0, 0, 5], fov: 35 }}
-              // Cap pixel ratio to 2 - prevents excessive GPU load on retina screens
-              dpr={[1, 2]}
-              // Use offscreen rendering for better perf on modern browsers
-              gl={{ antialias: true, powerPreference: 'high-performance', alpha: true }}
-              className="w-full h-full"
-            >
-              <ambientLight intensity={0.6} />
-              <spotLight position={[5, 10, 5]} intensity={6} angle={0.4} penumbra={1} color="#ffdcb4" />
-              <directionalLight position={[-5, 5, -5]} intensity={1.2} color="#b0caff" />
-              <pointLight position={[0, -2, 3]} intensity={4} color="#ffedd5" />
-              <Environment preset="studio" />
-              {/* Reduced sparkle count for mobile perf */}
-              <Sparkles count={50} scale={6} size={2} speed={0.15} opacity={0.22} color="#f5c97a" />
-              <Suspense fallback={null}>
-                <Bottle3D progress={progress} />
-              </Suspense>
-            </Canvas>
+            {isCanvasInView && (
+              <Canvas
+                camera={{ position: [0, 0, 5], fov: 35 }}
+                // Cap pixel ratio to 2 - prevents excessive GPU load on retina screens
+                dpr={[1, 2]}
+                // Use offscreen rendering for better perf on modern browsers
+                gl={{ antialias: true, powerPreference: 'high-performance', alpha: true }}
+                className="w-full h-full"
+              >
+                <ambientLight intensity={0.6} />
+                <spotLight position={[5, 10, 5]} intensity={6} angle={0.4} penumbra={1} color="#ffdcb4" />
+                <directionalLight position={[-5, 5, -5]} intensity={1.2} color="#b0caff" />
+                <pointLight position={[0, -2, 3]} intensity={4} color="#ffedd5" />
+                <Environment preset="studio" />
+                {/* Reduced sparkle count for mobile perf */}
+                <Sparkles count={50} scale={6} size={2} speed={0.15} opacity={0.22} color="#f5c97a" />
+                <Suspense fallback={null}>
+                  <Bottle3D progress={progress} />
+                </Suspense>
+              </Canvas>
+            )}
           </div>
 
         </div>
