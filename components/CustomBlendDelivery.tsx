@@ -43,7 +43,7 @@ export default function CustomBlendDelivery() {
       >
         <video 
           ref={videoRef}
-          src="/assets/same day delivery.mp4"
+          src="/assets/custom attar.mp4"
           autoPlay
           muted={isMuted}
           loop

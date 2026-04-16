@@ -26,7 +26,7 @@ export default function ContactSection() {
 
   return (
     <>
-      <div style={{
+      <div id="contact" style={{
         background: 'linear-gradient(135deg, #050011 0%, #0e0535 18%, #180850 32%, #0b1a55 48%, #081640 62%, #12063a 78%, #040010 100%)',
         position: 'relative',
         overflow: 'hidden',

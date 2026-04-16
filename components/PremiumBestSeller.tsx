@@ -62,7 +62,7 @@ export default function PremiumBestSeller() {
   };
 
   return (
-    <section className="pbs-section">
+    <section id="signature" className="pbs-section">
       <style>{`
         .pbs-section {
           padding: 60px 0;

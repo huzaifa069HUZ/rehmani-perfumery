@@ -307,7 +307,7 @@ function ShoppableVideoCard({
 /* ─── Main section ─── */
 export default function ReelsSection() {
   return (
-    <section className="reels-section">
+    <section id="reels" className="reels-section">
       <style>{`
         .reels-grid-5 {
           display: flex;

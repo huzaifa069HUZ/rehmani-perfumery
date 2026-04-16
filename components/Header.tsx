@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
@@ -17,6 +18,9 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
   const pathname = usePathname();
   const isHome = pathname === '/';
   
+  const [homeHover, setHomeHover] = useState(false);
+  const [attarsHover, setAttarsHover] = useState(false);
+
   const logoSrc = '/assets/logo with name removed bg.png';
 
   useEffect(() => {
@@ -43,10 +47,66 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
 
         {/* Desktop Nav */}
         <nav className="desktop-nav">
-          <Link href="/" className={`nav-link${isHome ? ' active' : ''}`}>HOME</Link>
-          <Link href="/attars" className={`nav-link${pathname === '/attars' ? ' active' : ''}`}>ATTARS</Link>
-          <Link href="/perfumes" className={`nav-link${pathname === '/perfumes' ? ' active' : ''}`}>PERFUMES</Link>
-          <Link href="/#about" className="nav-link">ABOUT</Link>
+          <div 
+            className="nav-item group"
+            onMouseEnter={() => setHomeHover(true)}
+            onMouseLeave={() => setHomeHover(false)}
+          >
+            <Link href="/" className={`nav-link${isHome ? ' active' : ''} flex items-center`}>
+              HOME
+              <svg className="nav-chevron transition-transform duration-300" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '4px', marginTop: '1px' }}>
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </Link>
+            <AnimatePresence>
+              {homeHover && (
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 15 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                  className="nav-dropdown"
+                >
+                  <Link href="/#bestsellers" className="nav-dropdown-item">Best Seller</Link>
+                  <Link href="/#signature" className="nav-dropdown-item">Signature Collection</Link>
+                  <Link href="/#reels" className="nav-dropdown-item">Trending on Insta</Link>
+                  <Link href="/#contact" className="nav-dropdown-item">Our Location</Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <div 
+            className="nav-item group"
+            onMouseEnter={() => setAttarsHover(true)}
+            onMouseLeave={() => setAttarsHover(false)}
+          >
+            <Link href="/attars" className={`nav-link${pathname === '/attars' ? ' active' : ''} flex items-center`}>
+              ATTARS
+              <svg className="nav-chevron transition-transform duration-300" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '4px', marginTop: '1px' }}>
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </Link>
+            <AnimatePresence>
+              {attarsHover && (
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 15 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                  className="nav-dropdown"
+                >
+                  <span className="nav-dropdown-category">Categories</span>
+                  <Link href="/attars?filter=men" className="nav-dropdown-item">Men&apos;s Collection</Link>
+                  <Link href="/attars?filter=women" className="nav-dropdown-item">Women&apos;s Collection</Link>
+                  <Link href="/attars?filter=unisex" className="nav-dropdown-item">Unisex Favorites</Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <Link href="/perfumes" className={`nav-link${pathname === '/perfumes' ? ' active' : ''} flex items-center`}>PERFUMES</Link>
+          <Link href="/#about" className="nav-link flex items-center">ABOUT</Link>
         </nav>
 
         {/* Actions */}

@@ -396,7 +396,7 @@ export default function BestSellers() {
         }
       `}</style>
 
-      <section className="bs-section">
+      <section id="bestsellers" className="bs-section">
         {/* Header */}
         <div className="bs-header">
           <div>
