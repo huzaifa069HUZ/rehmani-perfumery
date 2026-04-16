@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Product } from '@/data/products';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, query, limit } from 'firebase/firestore';
+import { collection, getDocs, query, limit, startAfter, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 import ProductCard from './ProductCard';
 
 type FilterType = 'default' | 'price-high' | 'price-low' | 'new';
@@ -23,23 +23,50 @@ export default function ProductGrid() {
   
   const [dbProducts, setDbProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [lastDoc, setLastDoc] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
+  const [hasMore, setHasMore] = useState(true);
+
+  const fetchProducts = async (isLoadMore = false) => {
+    try {
+      if (isLoadMore) setLoadingMore(true);
+      else setLoading(true);
+
+      let q = query(collection(db, 'products'), limit(8));
+      if (isLoadMore && lastDoc) {
+        q = query(collection(db, 'products'), startAfter(lastDoc), limit(8));
+      }
+
+      const snapshot = await getDocs(q);
+      const newProducts = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as unknown as Product[];
+      
+      if (isLoadMore) {
+        setDbProducts(prev => [...prev, ...newProducts]);
+      } else {
+        setDbProducts(newProducts);
+      }
+
+      if (snapshot.docs.length < 8) {
+        setHasMore(false);
+      } else {
+        setHasMore(true);
+      }
+      
+      if (snapshot.docs.length > 0) {
+        setLastDoc(snapshot.docs[snapshot.docs.length - 1]);
+      }
+    } catch (error) {
+      console.error('ProductGrid fetch error:', error);
+    } finally {
+      if (isLoadMore) setLoadingMore(false);
+      else setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const q = query(collection(db, 'products'), limit(8));
-        const snapshot = await getDocs(q);
-        const liveProducts = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as unknown as Product[];
-        setDbProducts(liveProducts);
-      } catch (error) {
-        console.error('ProductGrid fetch error:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchProducts();
   }, []);
 
@@ -144,8 +171,45 @@ export default function ProductGrid() {
           )}
         </div>
 
+        {/* Load More Button */}
+        {hasMore && !loading && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem', marginBottom: '1rem' }}>
+            <button
+              onClick={() => fetchProducts(true)}
+              disabled={loadingMore}
+              style={{
+                padding: '10px 24px',
+                border: '1px solid #d3a958',
+                background: 'transparent',
+                color: '#2b1f13',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                cursor: loadingMore ? 'not-allowed' : 'pointer',
+                opacity: loadingMore ? 0.6 : 1,
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                if (!loadingMore) {
+                  e.currentTarget.style.background = '#d3a958';
+                  e.currentTarget.style.color = '#fff';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!loadingMore) {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.color = '#2b1f13';
+                }
+              }}
+            >
+              {loadingMore ? 'Loading...' : 'Load More'}
+            </button>
+          </div>
+        )}
+
         {/* View All Attars CTA */}
-        <div className="view-all-cta">
+        <div className="view-all-cta" style={{ marginTop: hasMore ? '1rem' : '4rem' }}>
           <div className="view-all-divider">
             <span className="view-all-line" />
             <span className="view-all-diamond">◆</span>

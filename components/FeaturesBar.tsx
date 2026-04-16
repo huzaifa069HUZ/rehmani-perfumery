@@ -82,8 +82,8 @@ export default function FeaturesBar() {
               {f.icon}
             </div>
             <div>
-              <h4 className="feature-title">{f.title}</h4>
-              <p className="feature-desc">{f.desc}</p>
+              <h4 className="feature-title text-white" style={{ color: '#fff' }}>{f.title}</h4>
+              <p className="feature-desc text-gray-300" style={{ color: 'rgba(255,255,255,0.7)' }}>{f.desc}</p>
             </div>
           </div>
         ))}
