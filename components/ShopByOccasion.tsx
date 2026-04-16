@@ -1,7 +1,9 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { products } from '@/data/products';
+import { Product } from '@/data/products';
 import ProductCard from './ProductCard';
+import { db } from '@/lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 const FILTERS = ['beast mode', 'everyday', 'party wear', 'date'];
 
@@ -11,6 +13,27 @@ export default function ShopByOccasion() {
   const titleRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeRect, setActiveRect] = useState({ left: 0, width: 0 });
+  const [dbProducts, setDbProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch live products
+  useEffect(() => {
+    const fetchOccasionProducts = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, 'products'));
+        const liveProducts = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as unknown as Product[];
+        setDbProducts(liveProducts);
+      } catch (error) {
+        console.error('Failed to fetch occasion products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOccasionProducts();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -41,7 +64,34 @@ export default function ShopByOccasion() {
     }, 50);
   }, [activeFilter]);
 
-  const filtered = products.filter(p => p.occasions && p.occasions.includes(activeFilter));
+  const getFilteredProducts = () => {
+    return dbProducts.filter((p) => {
+      // 1. If backend has assigned occasion tags, use them:
+      if (p.occasions && Array.isArray(p.occasions)) {
+        if (p.occasions.map(o => o.toLowerCase()).includes(activeFilter)) {
+          return true;
+        }
+      }
+
+      // 2. Hard fallback specifically requested for BEAST MODE products
+      if (activeFilter === 'beast mode') {
+        const targetIds = ['XNzj20q', 'DEI2FRm', 'WgWGvlC', 'jAQ4G57'];
+        if (targetIds.includes(String(p.id))) {
+          return true;
+        }
+      }
+      
+      // Fallback for other categories if no tags exist
+      if (activeFilter === 'everyday') {
+        const everydayIds = ['YTkL7PZ', 'A1b2C3d']; // Examples
+        if (everydayIds.includes(String(p.id))) return true;
+      }
+      
+      return false;
+    });
+  };
+
+  const filtered = getFilteredProducts();
 
   return (
     <section className="occasions-section relative z-[10000] bg-[var(--bg)]" style={{ background: 'var(--bg)' }}>
@@ -87,13 +137,17 @@ export default function ShopByOccasion() {
         </div>
 
         <div className="product-grid">
-          {filtered.length > 0 ? (
+          {loading ? (
+             <div style={{ padding: '40px', textAlign: 'center', gridColumn: '1 / -1', color: '#d3a958' }}>
+               Loading premium selections...
+             </div>
+          ) : filtered.length > 0 ? (
             filtered.map(product => (
               <ProductCard key={product.id} product={product} />
             ))
           ) : (
              <div style={{ padding: '40px', textAlign: 'center', gridColumn: '1 / -1', color: '#888' }}>
-               No products found for this occasion.
+               No collection available for this occasion yet.
              </div>
           )}
         </div>
