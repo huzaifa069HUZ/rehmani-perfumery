@@ -3,6 +3,7 @@ import { Playfair_Display, Amiri, Poppins, Montserrat, Bebas_Neue, Cormorant_Gar
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
 import { AuthProvider } from '@/context/AuthContext';
+import { WishlistProvider } from '@/context/WishlistContext';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap', style: ['normal', 'italic'], weight: ['400','500','600','700','800','900'] });
@@ -101,7 +102,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <AuthProvider>
           <CartProvider>
-            {children}
+            <WishlistProvider>
+              {children}
+            </WishlistProvider>
           </CartProvider>
         </AuthProvider>
         <FloatingWhatsApp />

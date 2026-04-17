@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 import { useAuth } from '@/context/AuthContext';
 
 interface HeaderProps {
@@ -14,6 +15,7 @@ interface HeaderProps {
 export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const { toggleCart, totalItems } = useCart();
+  const { totalWishlistItems } = useWishlist();
   const { user } = useAuth();
   const pathname = usePathname();
   const isHome = pathname === '/';
@@ -123,10 +125,13 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
             </svg>
           </button>
           
-          <Link href="/wishlist" className="icon-btn" aria-label="Wishlist" title="Wishlist">
+          <Link href="/wishlist" className="icon-btn wishlist-icon-btn" aria-label="Wishlist" title="Wishlist">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
+            {totalWishlistItems > 0 && (
+              <span className="wishlist-badge">{totalWishlistItems}</span>
+            )}
           </Link>
           <button id="cart-btn" className="icon-btn cart-icon-btn" onClick={toggleCart} aria-label="Cart">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

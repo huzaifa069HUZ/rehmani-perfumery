@@ -3,6 +3,7 @@ import { useState, useCallback } from 'react';
 import Image from 'next/image';
 import { Product } from '@/data/products';
 import { useCart } from '@/context/CartContext';
+import { useWishlist } from '@/context/WishlistContext';
 import { useRouter } from 'next/navigation';
 import QuickViewModal from './QuickViewModal';
 import { buildProductSlug } from '@/lib/utils';
@@ -17,6 +18,9 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const { addToCart, toggleCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
+
+  const liked = isInWishlist(product.id);
 
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -60,6 +64,18 @@ export default function ProductCard({ product }: ProductCardProps) {
     });
   }, [product, addToCart]);
 
+  const handleWishlistToggle = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    const images = product.images || [];
+    toggleWishlist({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      image: images[0] || '',
+    });
+  }, [product, toggleWishlist]);
+
   return (
     <>
       <div
@@ -102,17 +118,30 @@ export default function ProductCard({ product }: ProductCardProps) {
             ))}
           </div>
 
-          {/* Quick view */}
-          <button
-            className={`quick-view-btn${isHovered ? ' visible' : ''}`}
-            onClick={(e) => { e.stopPropagation(); setModalOpen(true); }}
-            aria-label="Quick View"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-          </button>
+          {/* Action buttons stack (top-right) */}
+          <div className={`product-action-btns${isHovered ? ' visible' : ''}`}>
+            {/* Wishlist heart */}
+            <button
+              className={`wishlist-btn${liked ? ' active' : ''}`}
+              onClick={handleWishlistToggle}
+              aria-label={liked ? 'Remove from Wishlist' : 'Add to Wishlist'}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill={liked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+            </button>
+            {/* Quick view eye */}
+            <button
+              className="quickview-btn"
+              onClick={(e) => { e.stopPropagation(); setModalOpen(true); }}
+              aria-label="Quick View"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
 
           {/* Quick add */}
           <button
