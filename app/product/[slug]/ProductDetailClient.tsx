@@ -511,9 +511,14 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                 <h2 className="pp-section-title">Customer Reviews</h2>
                 {reviews.length > 0 && (
                   <div className="pp-reviews-summary">
-                    {renderStars(avgRating, 20)}
-                    <span className="pp-reviews-avg">{avgRating.toFixed(1)} out of 5</span>
-                    <span className="pp-reviews-total">Based on {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}</span>
+                    <span className="pp-reviews-avg-big">{avgRating.toFixed(1)}</span>
+                    <div className="pp-reviews-avg-right">
+                      {renderStars(avgRating, 18)}
+                      <span className="pp-reviews-avg">out of 5 stars</span>
+                      <span className="pp-reviews-total">
+                        {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
+                      </span>
+                    </div>
                   </div>
                 )}
               </div>
@@ -524,7 +529,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                   setReviewFormOpen(true);
                 }}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
                 </svg>
                 Write a Review
@@ -533,7 +538,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
 
             {reviews.length === 0 ? (
               <div className="pp-reviews-empty">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--border)', marginBottom: '16px' }}>
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round">
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                 </svg>
                 <p>No reviews yet. Be the first to share your experience!</p>
@@ -551,20 +556,34 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                         <span className="pp-review-date">
                           {new Date(review.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
                         </span>
+                        <span className="pp-review-verified">
+                          <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                          </svg>
+                          Verified Purchase
+                        </span>
                       </div>
                       {user && user.uid === review.userId && (
                         <button className="pp-review-delete" onClick={() => handleDeleteReview(review.id)} title="Delete review">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
                         </button>
                       )}
                     </div>
-                    <div style={{ marginBottom: '10px' }}>{renderStars(review.rating, 15)}</div>
-                    <p className="pp-review-text">{review.text}</p>
+
+                    <div className="pp-review-stars-row">
+                      {renderStars(review.rating, 16)}
+                      <span className="pp-review-rating-label">
+                        {review.rating === 5 ? 'Excellent' : review.rating === 4 ? 'Very Good' : review.rating === 3 ? 'Good' : review.rating === 2 ? 'Fair' : 'Poor'}
+                      </span>
+                    </div>
+
+                    <p className="pp-review-text">"{review.text}"</p>
+
                     {review.photos && review.photos.length > 0 && (
                       <div className="pp-review-photos">
                         {review.photos.map((photo, i) => (
                           <div key={i} className="pp-review-photo" onClick={() => setLightboxImg(photo)}>
-                            <Image src={photo} alt={`Review photo ${i+1}`} fill style={{ objectFit: 'cover' }} sizes="80px" />
+                            <Image src={photo} alt={`Review photo ${i + 1}`} fill style={{ objectFit: 'cover' }} sizes="80px" />
                           </div>
                         ))}
                       </div>

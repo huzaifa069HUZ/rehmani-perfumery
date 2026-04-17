@@ -15,7 +15,7 @@ const DEFAULT_TESTIMONIALS = [
 ];
 
 const StarIcon = ({ filled = true }) => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill={filled ? "#fbbf24" : "transparent"} stroke={filled ? "#fbbf24" : "rgba(255,255,255,0.2)"} strokeWidth="1">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill={filled ? "#fbbf24" : "transparent"} stroke={filled ? "#fbbf24" : "rgba(255,255,255,0.25)"} strokeWidth="1.5">
     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
   </svg>
 );
@@ -66,6 +66,7 @@ export default function Testimonials() {
         <div className="testimonials-header">
           <span className="section-badge">Community</span>
           <h2 className="section-title">What Our Customers Say</h2>
+          <p className="testimonials-subtext">Trusted by <strong>1000+ happy customers</strong> across India</p>
         </div>
       </div>
 
@@ -73,13 +74,16 @@ export default function Testimonials() {
         <div className="testimonials-track">
           {doubled.map((t, i) => (
             <div className="testimonial-card" key={i}>
-              <div className="stars">
-                {[...Array(5)].map((_, j) => <StarIcon key={j} filled={j < (t.rating || 5)} />)}
-              </div>
-              <p className="testimonial-text">{t.text}</p>
-              <div className="testimonial-author">
-                <div className="author-avatar">{t.initial}</div>
-                <div>
+              {/* Avatar floats above the glass card */}
+              <div className="author-avatar">{(t.initial || t.name?.charAt(0) || 'U').toUpperCase()}</div>
+
+              {/* Glass card body */}
+              <div className="testimonial-card-inner">
+                <div className="stars">
+                  {[...Array(5)].map((_, j) => <StarIcon key={j} filled={j < (t.rating || 5)} />)}
+                </div>
+                <p className="testimonial-text">{t.text}</p>
+                <div className="testimonial-author">
                   <h4>{t.name}</h4>
                   <p>{t.product ? `Bought: ${t.product}` : 'Verified Buyer'}</p>
                 </div>
