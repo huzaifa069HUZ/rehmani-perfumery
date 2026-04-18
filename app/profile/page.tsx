@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { doc, getDoc, setDoc, collection, query, where, getDocs, DocumentData } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
+import { useWishlist } from '@/context/WishlistContext';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -25,9 +26,8 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
 
-  // Wishlist Data
-  const [wishlistIds, setWishlistIds] = useState<string[]>([]);
-  const [likedProducts, setLikedProducts] = useState<DocumentData[]>([]);
+  // Wishlist Context Data
+  const { wishlist: contextWishlist, removeFromWishlist } = useWishlist();
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -48,7 +48,7 @@ export default function ProfilePage() {
           setAddress(data.address || '');
           
           if (data.wishlist && Array.isArray(data.wishlist)) {
-            setWishlistIds(data.wishlist);
+            // Note: WishlistContext handles the syncing of this data automatically.
           }
         }
       } catch (err) {
@@ -59,33 +59,6 @@ export default function ProfilePage() {
     };
     fetchUserData();
   }, [user]);
-
-  useEffect(() => {
-    const fetchLikedProducts = async () => {
-      if (wishlistIds.length === 0) {
-        setLikedProducts([]);
-        return;
-      }
-      try {
-        // Firestore 'in' query limitation is 10 chunks. For a standard wishlist, batching is optimal.
-        // We will fetch up to 10 for display natively to prevent chunking logic for basic integration.
-        const chunk = wishlistIds.slice(0, 10);
-        const q = query(collection(db, 'products'), where('__name__', 'in', chunk));
-        const snapshots = await getDocs(q);
-        const products: DocumentData[] = [];
-        snapshots.forEach(doc => {
-          products.push({ id: doc.id, ...doc.data() });
-        });
-        setLikedProducts(products);
-      } catch (error) {
-        console.error("Error fetching liked products:", error);
-      }
-    };
-    
-    if (activeTab === 'wishlist' && wishlistIds.length > 0) {
-      fetchLikedProducts();
-    }
-  }, [activeTab, wishlistIds]);
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -109,20 +82,8 @@ export default function ProfilePage() {
     }
   };
 
-  const handleRemoveFromWishlist = async (productId: string) => {
-    if (!user) return;
-    try {
-      const updatedList = wishlistIds.filter(id => id !== productId);
-      setWishlistIds(updatedList);
-      setLikedProducts(likedProducts.filter(p => p.id !== productId));
-      
-      const userRef = doc(db, 'users', user.uid);
-      await setDoc(userRef, {
-        wishlist: updatedList
-      }, { merge: true });
-    } catch (err) {
-      console.error("Error removing from wishlist", err);
-    }
+  const handleRemoveFromWishlist = async (productId: string | number) => {
+    removeFromWishlist(productId);
   };
 
   if (authLoading || profileLoading) {
@@ -374,7 +335,7 @@ export default function ProfilePage() {
                 className={`tab-btn ${activeTab === 'wishlist' ? 'active' : ''}`}
                 onClick={() => setActiveTab('wishlist')}
               >
-                My Wishlist ({wishlistIds.length})
+                My Wishlist ({contextWishlist.length})
               </button>
             </div>
 
@@ -420,26 +381,26 @@ export default function ProfilePage() {
                   <p className="section-desc">Products you have saved for later.</p>
 
                   <div className="wishlist-grid">
-                    {likedProducts.map(p => (
+                    {contextWishlist.map(p => (
                       <div className="wishlist-card" key={p.id}>
-                        <div className="wish-img-box" onClick={() => router.push(`/product/${p.id}`)}>
+                        <div className="wish-img-box" onClick={() => router.push(`/product/${p.name.toLowerCase().replace(/\s+/g, '-')}-${p.id}`)}>
                           <button className="wish-remove-btn" onClick={(e) => { e.stopPropagation(); handleRemoveFromWishlist(p.id); }} aria-label="Remove">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                           </button>
-                          {p.images?.[0] && (
-                            <Image src={p.images[0]} alt={p.name} fill style={{ objectFit: 'cover', padding: '10%' }} />
+                          {p.image && (
+                            <Image src={p.image} alt={p.name} fill style={{ objectFit: 'cover', padding: '10%' }} />
                           )}
                         </div>
                         <div className="wish-info">
-                          <div className="wish-cat">{p.category || 'Perfume'}</div>
-                          <div className="wish-name" onClick={() => router.push(`/product/${p.id}`)}>{p.name}</div>
+                          <div className="wish-cat">Attar</div>
+                          <div className="wish-name" onClick={() => router.push(`/product/${p.name.toLowerCase().replace(/\s+/g, '-')}-${p.id}`)}>{p.name}</div>
                           <div style={{ fontWeight: 700 }}>₹{p.price}</div>
                         </div>
                       </div>
                     ))}
                   </div>
 
-                  {wishlistIds.length === 0 && (
+                  {contextWishlist.length === 0 && (
                     <div className="empty-state">
                       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 16px', opacity: 0.3 }}><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                       <p>Your wishlist is currently empty.</p>

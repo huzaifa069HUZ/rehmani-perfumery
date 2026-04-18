@@ -158,10 +158,7 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
       {/* Mobile Bottom Navigation */}
       <div className="mobile-bottom-nav">
         <Link href="/" className="bottom-nav-item">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"></path>
-            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-          </svg>
+          <img src="/assets/home.png" alt="Shop" width="22" height="22" style={{ objectFit: 'contain' }} />
           <span>Shop</span>
         </Link>
         <Link href="/wishlist" className="bottom-nav-item">
