@@ -157,7 +157,7 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
 
       {/* Mobile Bottom Navigation */}
       <div className="mobile-bottom-nav">
-        <Link href="/" className="bottom-nav-item">
+        <Link href="/attars" className="bottom-nav-item">
           <img src="/assets/home.png" alt="Shop" width="22" height="22" style={{ objectFit: 'contain' }} />
           <span>Shop</span>
         </Link>

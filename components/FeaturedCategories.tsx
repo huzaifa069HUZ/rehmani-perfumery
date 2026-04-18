@@ -150,12 +150,19 @@ export default function FeaturedCategories() {
         .swiper-prev { left: 24px; }
         .swiper-next { right: 24px; }
 
-        /* On mobile, stack everything normally */
+        /* Scale down the swiper arrows on mobile so they don't block content */
         @media (max-width: 900px) {
-          .category-swiper-cell {
-            grid-column: span 1;
-            min-height: 200px;
+          .swiper-arrow {
+            width: 28px;
+            height: 28px;
+            background: rgba(0, 0, 0, 0.6);
           }
+          .swiper-arrow svg {
+            width: 14px;
+            height: 14px;
+          }
+          .swiper-prev { left: 8px; }
+          .swiper-next { right: 8px; }
         }
       `}</style>
     </section>

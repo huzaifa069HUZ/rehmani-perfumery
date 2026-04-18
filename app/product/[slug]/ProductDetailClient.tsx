@@ -129,6 +129,27 @@ export default function ProductDetailClient({ product }: { product: ProductData 
     ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length
     : 0;
 
+  const ratingCounts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+  let recommendedCount = 0;
+  const allPhotos: string[] = [];
+
+  reviews.forEach(r => {
+    if (r.rating >= 1 && r.rating <= 5) ratingCounts[r.rating as keyof typeof ratingCounts]++;
+    if (r.rating >= 4) recommendedCount++;
+    if (r.photos) {
+      r.photos.forEach(p => allPhotos.push(p));
+    }
+  });
+
+  const recommendedPct = reviews.length > 0 ? Math.round((recommendedCount / reviews.length) * 100) : 0;
+  const reviewCarouselRef = useRef<HTMLDivElement>(null);
+
+  const scrollReviewCarousel = (dir: 'left' | 'right') => {
+    if (!reviewCarouselRef.current) return;
+    const w = reviewCarouselRef.current.offsetWidth;
+    reviewCarouselRef.current.scrollBy({ left: dir === 'left' ? -w * 0.7 : w * 0.7, behavior: 'smooth' });
+  };
+
   /* ---------- Fetch reviews (real-time) ---------- */
   useEffect(() => {
     const reviewsRef = collection(db, 'products', product.id, 'reviews');
@@ -339,7 +360,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                   src={product.images[currentImg]}
                   alt={product.name}
                   fill
-                  style={{ objectFit: 'contain', padding: '8%' }}
+                  style={{ objectFit: 'cover' }}
                   priority
                   sizes="(max-width: 900px) 100vw, 50vw"
                 />
@@ -505,93 +526,114 @@ export default function ProductDetailClient({ product }: { product: ProductData 
 
         {/* ─── REVIEWS SECTION ─── */}
         <section className="pp-reviews-section">
-          <div className="pp-section-container">
-            <div className="pp-reviews-header">
-              <div>
-                <h2 className="pp-section-title">Customer Reviews</h2>
+          <div className="pp-reviews-container">
+            <div className="pp-reviews-top-row">
+              {/* Review Summary */}
+              <div className="pp-reviews-summary-col">
+                <div className="pp-rc-flex-header">
+                  <h2 className="pp-rc-title">Review Summary</h2>
+                  <button
+                    className="pp-rc-write-btn"
+                    onClick={() => {
+                      if (!user) { router.push('/auth'); return; }
+                      setReviewFormOpen(true);
+                    }}
+                  >
+                    Write a review
+                  </button>
+                </div>
+                
+                <div className="pp-rc-overview">
+                  <span className="pp-rc-pct">{recommendedPct}% <span className="pp-rc-small-txt">Recommended</span></span>
+                  <span className="pp-rc-avg">{avgRating.toFixed(1)} {renderStars(Math.round(avgRating), 16)} <span className="pp-rc-small-txt">out of {reviews.length} reviews</span></span>
+                </div>
+
+                <div className="pp-rc-bars">
+                  {[5, 4, 3, 2, 1].map((star) => (
+                    <div key={star} className="pp-rc-bar-row">
+                      <span className="pp-rc-bar-label">{star}</span>
+                      <div className="pp-rc-bar-track">
+                        <div className="pp-rc-bar-fill" style={{ width: reviews.length > 0 ? `${(ratingCounts[star as keyof typeof ratingCounts] / reviews.length) * 100}%` : '0%' }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Photos Grid */}
+              <div className="pp-reviews-photos-col">
+                <h3 className="pp-rc-title" style={{ marginBottom: '14px' }}>Pictures by customers</h3>
+                {allPhotos.length === 0 ? (
+                  <p className="pp-rc-empty-txt">No customer photos yet.</p>
+                ) : (
+                  <div className="pp-rc-photos-grid">
+                    {allPhotos.slice(0, 10).map((photo, i) => {
+                      const isLast = i === 9;
+                      const remainder = allPhotos.length - 10;
+                      return (
+                        <div key={i} className="pp-rc-photo-tile" onClick={() => setLightboxImg(photo)}>
+                          <Image src={photo} alt="Customer upload" fill style={{ objectFit: 'cover' }} sizes="120px" />
+                          {isLast && remainder > 0 && (
+                            <div className="pp-rc-photo-overlay">+{remainder}</div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Comments by customers */}
+            <div className="pp-reviews-bottom-row">
+              <div className="pp-rc-comments-header">
+                <h2 className="pp-rc-title">Comments by customers</h2>
                 {reviews.length > 0 && (
-                  <div className="pp-reviews-summary">
-                    <span className="pp-reviews-avg-big">{avgRating.toFixed(1)}</span>
-                    <div className="pp-reviews-avg-right">
-                      {renderStars(avgRating, 18)}
-                      <span className="pp-reviews-avg">out of 5 stars</span>
-                      <span className="pp-reviews-total">
-                        {reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}
-                      </span>
+                  <div className="pp-rc-nav">
+                    <span className="pp-rc-view-all">View all</span>
+                    <div className="pp-rc-nav-circles">
+                      <button onClick={() => scrollReviewCarousel('left')} aria-label="Previous">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 18l-6-6 6-6"/></svg>
+                      </button>
+                      <button onClick={() => scrollReviewCarousel('right')} aria-label="Next">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 18l6-6-6-6"/></svg>
+                      </button>
                     </div>
                   </div>
                 )}
               </div>
-              <button
-                className="pp-write-review-btn"
-                onClick={() => {
-                  if (!user) { router.push('/auth'); return; }
-                  setReviewFormOpen(true);
-                }}
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
-                </svg>
-                Write a Review
-              </button>
+
+              {reviews.length === 0 ? (
+                <p className="pp-rc-empty-txt">Be the first to share your experience!</p>
+              ) : (
+                <div className="pp-rc-cards-track" ref={reviewCarouselRef}>
+                  {reviews.map((review) => (
+                    <div key={review.id} className="pp-rc-card">
+                      <div className="pp-rc-card-top">
+                        <div className="pp-rc-avatar">
+                          {review.photos && review.photos.length > 0 ? (
+                            <Image src={review.photos[0]} alt="" fill style={{ objectFit: 'cover' }} sizes="40px" />
+                          ) : (
+                            review.userName?.charAt(0)?.toUpperCase() || 'U'
+                          )}
+                        </div>
+                        <span className="pp-rc-name">{review.userName}</span>
+                        {user && user.uid === review.userId && (
+                          <button className="pp-rc-delete" onClick={() => handleDeleteReview(review.id)}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                          </button>
+                        )}
+                      </div>
+                      <div className="pp-rc-stars">
+                        <span style={{ fontWeight: 600, fontSize: '13px' }}>{review.rating}/5</span>
+                        <div style={{ marginLeft: 4 }}>{renderStars(review.rating, 14)}</div>
+                      </div>
+                      <p className="pp-rc-text">{review.text}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-
-            {reviews.length === 0 ? (
-              <div className="pp-reviews-empty">
-                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                <p>No reviews yet. Be the first to share your experience!</p>
-              </div>
-            ) : (
-              <div className="pp-reviews-grid">
-                {reviews.map((review) => (
-                  <div key={review.id} className="pp-review-card">
-                    <div className="pp-review-card-top">
-                      <div className="pp-review-avatar">
-                        {review.userName?.charAt(0)?.toUpperCase() || 'U'}
-                      </div>
-                      <div className="pp-review-meta">
-                        <span className="pp-review-name">{review.userName}</span>
-                        <span className="pp-review-date">
-                          {new Date(review.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
-                        </span>
-                        <span className="pp-review-verified">
-                          <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
-                          </svg>
-                          Verified Purchase
-                        </span>
-                      </div>
-                      {user && user.uid === review.userId && (
-                        <button className="pp-review-delete" onClick={() => handleDeleteReview(review.id)} title="Delete review">
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
-                        </button>
-                      )}
-                    </div>
-
-                    <div className="pp-review-stars-row">
-                      {renderStars(review.rating, 16)}
-                      <span className="pp-review-rating-label">
-                        {review.rating === 5 ? 'Excellent' : review.rating === 4 ? 'Very Good' : review.rating === 3 ? 'Good' : review.rating === 2 ? 'Fair' : 'Poor'}
-                      </span>
-                    </div>
-
-                    <p className="pp-review-text">"{review.text}"</p>
-
-                    {review.photos && review.photos.length > 0 && (
-                      <div className="pp-review-photos">
-                        {review.photos.map((photo, i) => (
-                          <div key={i} className="pp-review-photo" onClick={() => setLightboxImg(photo)}>
-                            <Image src={photo} alt={`Review photo ${i + 1}`} fill style={{ objectFit: 'cover' }} sizes="80px" />
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </section>
 
@@ -703,7 +745,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                 {recommended.map((p) => (
                   <div key={p.id} className="pp-recommend-card">
                     <ProductCard product={{
-                      id: typeof p.id === 'string' ? parseInt(p.id) || 0 : p.id,
+                      id: p.id as any,
                       name: p.name,
                       category: p.category,
                       notes: p.notes || '',
@@ -714,7 +756,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                       isNew: p.isNew || false,
                       occasions: p.occasions || [],
                       type: p.type,
-                    }} />
+                    } as any} />
                   </div>
                 ))}
               </div>
