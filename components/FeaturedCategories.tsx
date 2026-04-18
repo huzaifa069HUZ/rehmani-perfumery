@@ -28,8 +28,8 @@ export default function FeaturedCategories() {
       href: '/attars',
     },
     {
-      img: '/assets/for him.png',
-      label: 'Men\'s Collection',
+      img: '/assets/for him1.png',
+      label: '',
       title: 'For Him',
       desc: '',
       size: 'small',
@@ -37,7 +37,7 @@ export default function FeaturedCategories() {
     },
     {
       img: '/assets/for her.png',
-      label: 'Women\'s Collection',
+      label: '',
       title: 'For Her',
       desc: '',
       size: 'small',
@@ -63,8 +63,8 @@ export default function FeaturedCategories() {
               </div>
               <div className="category-overlay" />
               <div className="category-content">
-                <span className="category-label">{cat.label}</span>
-                <h3 className="category-title">{cat.title}</h3>
+                {cat.label && <span className="category-label">{cat.label}</span>}
+                <h3 className={`category-title ${!cat.label ? 'luxury-text' : ''}`}>{cat.title}</h3>
                 {cat.desc && <p className="category-desc">{cat.desc}</p>}
                 <a href={cat.href} className="category-btn">Explore Now</a>
               </div>
@@ -163,6 +163,22 @@ export default function FeaturedCategories() {
           }
           .swiper-prev { left: 8px; }
           .swiper-next { right: 8px; }
+        }
+
+        .luxury-text {
+          font-family: var(--font-cormorant), var(--font-serif), serif !important;
+          font-size: 2.6rem !important;
+          font-weight: 600 !important;
+          letter-spacing: 0.05em !important;
+          text-shadow: 0 4px 20px rgba(0,0,0,0.8), 0 2px 8px rgba(212,175,55,0.3) !important;
+          color: #ffffff !important;
+          margin-bottom: 20px !important;
+        }
+
+        @media (max-width: 900px) {
+          .luxury-text {
+            font-size: 2rem !important;
+          }
         }
       `}</style>
     </section>

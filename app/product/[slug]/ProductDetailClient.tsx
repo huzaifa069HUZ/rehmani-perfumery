@@ -150,6 +150,11 @@ export default function ProductDetailClient({ product }: { product: ProductData 
     reviewCarouselRef.current.scrollBy({ left: dir === 'left' ? -w * 0.7 : w * 0.7, behavior: 'smooth' });
   };
 
+  /* ---------- Scroll to Top on Mount ---------- */
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   /* ---------- Fetch reviews (real-time) ---------- */
   useEffect(() => {
     const reviewsRef = collection(db, 'products', product.id, 'reviews');

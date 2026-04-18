@@ -39,7 +39,7 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
       <header id="main-header" className={`main-header${isScrolled ? ' scrolled' : ''}`}>
         <div className="header-inner">
           {/* Mobile Menu Button - Moved to front for flex ordering on mobile */}
-          <button id="mobile-menu-btn" className="icon-btn mobile-only modern-menu-btn" onClick={onMenuOpen} aria-label="Menu" style={{ zIndex: 10 }}>
+          <button id="mobile-menu-btn" className="icon-btn mobile-only modern-menu-btn" onClick={onMenuOpen} aria-label="Menu" style={{ zIndex: 9999, position: 'relative' }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.2s ease-in-out' }}>
               <path d="M4 7h16" />
               <path d="M4 12h10" />

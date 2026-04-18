@@ -4,11 +4,27 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 const banners = [
   {
+    id: 4,
+    image: '/assets/HAWAS SPECIAL.png',
+    title: '',
+    subtitle: '',
+    link: '/product/hawas-special-O64Q6fI',
+    hasOwnText: true,
+  },
+  {
     id: 1,
     image: '/assets/red sea banner.png',
     title: '',
     subtitle: '',
     link: '/product/red-sea-HT0gv7H',
+    hasOwnText: true,
+  },
+  {
+    id: 5,
+    image: '/assets/atlantis banner.png',
+    title: '',
+    subtitle: '',
+    link: '/product/atlantis-aV6ian8',
     hasOwnText: true,
   },
   {
@@ -22,14 +38,6 @@ const banners = [
   {
     id: 3,
     image: '/assets/il.png',
-    title: '',
-    subtitle: '',
-    link: '/perfumes',
-    hasOwnText: true,
-  },
-  {
-    id: 4,
-    image: '/assets/HAWAS SPECIAL.png',
     title: '',
     subtitle: '',
     link: '/perfumes',
