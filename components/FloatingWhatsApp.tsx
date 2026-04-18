@@ -237,7 +237,7 @@ export default function FloatingWhatsApp() {
         /* ── MOBILE ── */
         @media (max-width: 768px) {
           .wa-wrapper {
-            bottom: 20px;
+            bottom: 80px; /* Shifted up to prevent overlap with bottom navigation */
             right: 16px;
             gap: 12px;
           }

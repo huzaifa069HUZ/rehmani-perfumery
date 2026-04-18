@@ -6500,4 +6500,90 @@ body {
   }
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin { to { transform: rotate(360deg); } }/* =========================================
+   Mobile Bottom Navigation
+   ========================================= */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  z-index: 9999;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid #eaeaea;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--charcoal, #333);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.bottom-nav-item svg {
+  color: var(--charcoal, #333);
+}
+
+.bottom-nav-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: var(--gold, #d4af37);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex;
+  }
+  
+  /* Center logo on mobile */
+  .logo-link {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Make sure header inner is relative for absolute positioning of logo */
+  .header-inner {
+    position: relative;
+    justify-content: space-between;
+  }
+  
+  /* Hide duplicates from top header */
+  .hide-on-mobile-strict {
+    display: none !important;
+  }
+  
+  /* Pushing right items */
+  .header-actions {
+    margin-left: auto;
+  }
+  
+  /* Adding bottom padding to main layout to avoid content being hidden by nav */
+  body {
+    padding-bottom: 60px;
+  }
+}

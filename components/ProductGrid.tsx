@@ -7,9 +7,11 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, query, limit, startAfter, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 import ProductCard from './ProductCard';
 
-type FilterType = 'default' | 'price-high' | 'price-low' | 'new';
+type FilterType = 'default' | 'price-high' | 'price-low' | 'new' | 'for-him' | 'for-her';
 
 const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
+  { value: 'for-him', label: 'For Him' },
+  { value: 'for-her', label: 'For Her' },
   { value: 'price-high', label: 'Price: High to Low' },
   { value: 'price-low', label: 'Price: Low to High' },
   { value: 'new', label: 'New' },
@@ -68,6 +70,18 @@ export default function ProductGrid() {
 
   useEffect(() => {
     fetchProducts();
+    
+    // Check if there is a filter query param for handling FeaturedCategories click
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const filter = urlParams.get('filter');
+      if (filter === 'for-him' || filter === 'for-her') {
+        setActiveFilter(filter);
+        setTimeout(() => {
+          document.getElementById('collections')?.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
+      }
+    }
   }, []);
 
   // Close dropdown on outside click
@@ -94,6 +108,12 @@ export default function ProductGrid() {
         break;
       case 'new':
         result = result.filter(p => p.isNew);
+        break;
+      case 'for-him':
+        result = result.filter(p => ['REEH AL KAABAH', 'OUD NADIRA', 'KAMRAH', 'KHAMRAH', 'HAWAS SPECIAL'].includes((p.name || '').toUpperCase()));
+        break;
+      case 'for-her':
+        result = result.filter(p => ['BLUSH AURA', 'PROFFESOR', 'PROFESSOR', 'EHSAS UL ABEER', 'MYSTERY'].includes((p.name || '').toUpperCase()));
         break;
       default:
         break;

@@ -33,7 +33,7 @@ export default function FeaturedCategories() {
       title: 'For Him',
       desc: '',
       size: 'small',
-      href: '/attars',
+      href: '/?filter=for-him#collections',
     },
     {
       img: '/assets/for her.png',
@@ -41,7 +41,7 @@ export default function FeaturedCategories() {
       title: 'For Her',
       desc: '',
       size: 'small',
-      href: '/perfumes',
+      href: '/?filter=for-her#collections',
     },
   ];
 

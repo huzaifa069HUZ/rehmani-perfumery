@@ -132,19 +132,38 @@ export default function FeaturesStrip() {
         }
 
         @media (max-width: 768px) {
+          .features-strip {
+            padding: 2rem 0.5rem;
+          }
           .features-container {
-            gap: 2rem;
-            justify-content: center;
+            gap: 0.25rem;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
           }
           .feature-item {
-            flex: 0 0 40%;
+            flex: 1 1 0;
+            min-width: 0;
+            padding: 0 2px;
           }
           .feature-title {
-            font-size: 0.8rem;
+            font-size: 0.65rem;
+            word-break: break-word;
+            margin-top: 0.5rem;
           }
-          .feature-icon svg {
-            width: 40px;
-            height: 40px;
+          .feature-icon svg, .feature-icon img {
+            width: 32px !important;
+            height: 32px !important;
+          }
+          
+          /* Hide scrollbar for a cleaner look */
+          .features-container::-webkit-scrollbar {
+            display: none;
+          }
+          .features-container {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
           }
         }
       `}</style>
