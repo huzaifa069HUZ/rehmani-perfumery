@@ -3021,16 +3021,21 @@ button {
 }
 
 .occasions-title {
-  font-family: var(--font-montserrat);
-  font-size: clamp(26px, 3.5vw, 40px);
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: clamp(32px, 4.5vw, 48px);
+  font-weight: 800;
+  color: #1e1b4b; /* Deep navy/slate blue */
+  letter-spacing: -0.02em;
   margin-bottom: 25px;
   opacity: 0;
   transform: scale(0.95) translateY(15px);
   transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.occasions-highlight {
+  color: #e1003c; /* Vibrant magenta/crimson */
+  font-style: italic;
+  font-weight: 700;
 }
 
 .occasions-header.animate .occasions-title {

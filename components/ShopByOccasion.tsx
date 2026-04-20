@@ -101,7 +101,19 @@ export default function ShopByOccasion() {
       <div className="section-container">
         
         <div className={`occasions-header ${isVisible ? 'animate' : ''}`} ref={titleRef}>
-          <h2 className="occasions-title">SHOP BY OCCASIONS</h2>
+          <h2 style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize: 'clamp(32px, 4.5vw, 48px)',
+            fontWeight: 800,
+            color: '#1e1b4b',
+            letterSpacing: '-0.02em',
+            marginBottom: '25px',
+            textTransform: 'none'
+          }} className="occasions-title">Shop by <span style={{
+            color: '#e1003c',
+            fontStyle: 'italic',
+            fontWeight: 700
+          }}>OCCASIONS</span></h2>
           <div className="occasions-line"></div>
         </div>
 
