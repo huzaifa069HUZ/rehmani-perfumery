@@ -218,8 +218,8 @@ export default function HeroSection() {
 
             <div className="stat-divider" />
             <div className="hero-stat">
-              <span className="stat-value"><CountUpNumber end={99} suffix="%" /></span>
-              <span className="stat-label">SATISFACTION</span>
+              <span className="stat-value"><CountUpNumber end={1000} suffix="+" /></span>
+              <span className="stat-label">HAPPY CUSTOMERS</span>
             </div>
           </div>
         </div>

@@ -9,12 +9,14 @@ import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
-import Footer from '@/components/Footer';
-import AnnouncementBar from '@/components/AnnouncementBar';
+import dynamic from 'next/dynamic';
+
+const Footer = dynamic(() => import('@/components/Footer'), { ssr: true });
+const AnnouncementBar = dynamic(() => import('@/components/AnnouncementBar'), { ssr: true });
 import Header from '@/components/Header';
-import CartDrawer from '@/components/CartDrawer';
-import MobileMenu from '@/components/MobileMenu';
-import GlobalSearch from '@/components/GlobalSearch';
+const CartDrawer = dynamic(() => import('@/components/CartDrawer'), { ssr: false });
+const MobileMenu = dynamic(() => import('@/components/MobileMenu'), { ssr: false });
+const GlobalSearch = dynamic(() => import('@/components/GlobalSearch'), { ssr: false });
 import ProductCard from '@/components/ProductCard';
 import { buildProductSlug } from '@/lib/utils';
 

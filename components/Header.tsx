@@ -118,7 +118,11 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
             </div>
 
             <Link href="/perfumes" className={`nav-link${pathname === '/perfumes' ? ' active' : ''} flex items-center`}>PERFUMES</Link>
-            <Link href="/#about" className="nav-link flex items-center">ABOUT</Link>
+            <Link href="/category/gifting" className={`nav-link${pathname === '/category/gifting' ? ' active' : ''} flex items-center`}>GIFTING</Link>
+            <Link href="/category/oud" className={`nav-link${pathname === '/category/oud' ? ' active' : ''} flex items-center`}>OUD</Link>
+            <Link href="/about" className={`nav-link${pathname === '/about' ? ' active' : ''} flex items-center`}>ABOUT</Link>
+            <Link href="/store" className={`nav-link${pathname === '/store' ? ' active' : ''} flex items-center`}>OUR STORE</Link>
+            <Link href="/contact" className={`nav-link${pathname === '/contact' ? ' active' : ''} flex items-center`}>CONTACT</Link>
           </nav>
 
           {/* Actions */}

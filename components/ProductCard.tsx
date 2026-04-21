@@ -1,6 +1,7 @@
 'use client';
 import { useState, useCallback } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Product } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import { useWishlist } from '@/context/WishlistContext';
@@ -52,6 +53,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   const handleQuickAdd = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     const images = product.images || [];
     const sizes = product.sizes || [6, 12];
@@ -65,6 +67,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   }, [product, addToCart]);
 
   const handleWishlistToggle = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     const images = product.images || [];
     toggleWishlist({
@@ -78,11 +81,13 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <>
-      <div
+      <Link
         className="product-card"
+        href={`/product/${buildProductSlug(product.name, String(product.id))}`}
+        prefetch={true}
         onMouseEnter={() => { setIsHovered(true); setCurrentImg(1); }}
         onMouseLeave={() => { setIsHovered(false); setCurrentImg(0); }}
-        onClick={() => router.push(`/product/${buildProductSlug(product.name, String(product.id))}`)}
+        style={{ display: 'block', color: 'inherit', textDecoration: 'none' }}
       >
         <div
           className="product-img-wrap"
@@ -133,7 +138,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             {/* Quick view eye */}
             <button
               className="quickview-btn"
-              onClick={(e) => { e.stopPropagation(); setModalOpen(true); }}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); setModalOpen(true); }}
               aria-label="Quick View"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -168,7 +173,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             )}
           </div>
         </div>
-      </div>
+      </Link>
 
       {modalOpen && (
         <QuickViewModal product={product} onClose={() => setModalOpen(false)} />

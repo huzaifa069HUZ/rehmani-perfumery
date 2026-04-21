@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+
+export const revalidate = 3600; // Cache the product page for 1 hour (ISR)
 import { doc, getDoc, collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { buildProductSlug, extractIdFromSlug } from '@/lib/utils';
