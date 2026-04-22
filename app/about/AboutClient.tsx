@@ -3,7 +3,7 @@
 import { useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
@@ -23,6 +23,17 @@ export default function AboutClient() {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     const heroRef = useRef(null);
+    const section2Ref = useRef(null);
+
+    const { scrollYProgress: section2Scroll } = useScroll({
+        target: section2Ref,
+        offset: ["start start", "end end"]
+    });
+    
+    // Animate text opacity and position based on scroll progress of Section 2
+    const textOpacity = useTransform(section2Scroll, [0, 0.4, 0.8], [0, 1, 1]);
+    const textY = useTransform(section2Scroll, [0, 0.4, 0.8], [150, 0, 0]);
+
     const handlePreloaderComplete = useCallback(() => setShowPreloader(false), []);
 
     const HF = "font-['Impact',_'Arial_Black',_sans-serif] uppercase tracking-[-0.02em]";
@@ -97,30 +108,38 @@ export default function AboutClient() {
                     </div>
                 </section>
 
-                {/* ── SECTION 2: WHITE BLOCK ── */}
-                <section className="relative w-full bg-white text-black py-0 z-30">
-                    <div className="w-full h-[60vh] md:h-[80vh] relative bg-black">
-                        <Image src="/assets/category_attar.png" alt="Pure Form" fill className="object-cover object-center opacity-100 contrast-110" />
+                {/* ── SECTION 2: SCROLL-PINNED IMAGE WITH ANIMATED TEXT ── */}
+                <section ref={section2Ref} className="relative w-full h-[150vh] bg-black text-white z-30">
+                    <div className="sticky top-0 w-full h-screen overflow-hidden">
+                        {/* Pinned Background Image */}
+                        <div className="absolute inset-0">
+                            <Image src="/assets/category_attar.png" alt="Pure Form" fill className="object-cover object-center opacity-60 contrast-110" />
+                        </div>
+
+                        {/* Subtle Grid Lines Overlay */}
+                        <div className="absolute inset-0 z-0 pointer-events-none grid grid-cols-4 divide-x divide-white/10 opacity-30">
+                            <div /><div /><div /><div />
+                        </div>
+
+                        {/* Animated Overlay Text */}
+                        <div className="absolute inset-0 z-10 flex flex-col justify-center max-w-[1600px] mx-auto px-4 md:px-8">
+                            <motion.h2
+                                style={{ opacity: textOpacity, y: textY }}
+                                className={`${HF} text-[8vw] leading-[0.85] text-balance text-white`}
+                            >
+                                MERGING EASTERN <br />
+                                <span className="text-[#ccff00] drop-shadow-sm">CRAFT HERITAGE</span> WITH <br />
+                                BOLD MODERNITY, WE <span className="text-[#ccff00] drop-shadow-sm">CREATE</span> <br />
+                                <span className="text-[#ccff00] drop-shadow-sm">SCENTS</span> THAT DEFY <br />
+                                CONVENTION.
+                            </motion.h2>
+                        </div>
                     </div>
+                </section>
 
-                    <div className="absolute inset-0 z-0 pointer-events-none grid grid-cols-4 divide-x divide-black/5 opacity-50">
-                        <div /><div /><div /><div />
-                    </div>
-
-                    <div className="relative z-10 max-w-[1600px] mx-auto px-4 md:px-8 py-32">
-                        <motion.h2
-                            initial={{ y: 50, opacity: 0 }}
-                            whileInView={{ y: 0, opacity: 1 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            className={`${HF} text-[8vw] leading-[0.85] text-balance mb-32`}
-                        >
-                            MERGING EASTERN <br />
-                            <span className="text-[#ccff00] drop-shadow-sm mix-blend-darken">CRAFT HERITAGE</span> WITH <br />
-                            BOLD MODERNITY, WE <span className="text-[#ccff00] drop-shadow-sm mix-blend-darken">CREATE</span> <br />
-                            <span className="text-[#ccff00] drop-shadow-sm mix-blend-darken">SCENTS</span> THAT DEFY <br />
-                            CONVENTION.
-                        </motion.h2>
-
+                {/* ── SECTION 3: THREE PILLARS & FOUNDED TEXT ── */}
+                <section className="relative w-full bg-white text-black py-20 z-30">
+                    <div className="relative z-10 max-w-[1600px] mx-auto px-4 md:px-8">
                         {/* Three Pillars */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-y border-black">
                             {[
