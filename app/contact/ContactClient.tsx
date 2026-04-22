@@ -1,13 +1,16 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Great_Vibes } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
 import MobileMenu from '@/components/MobileMenu';
 import GlobalSearch from '@/components/GlobalSearch';
 import Preloader from '@/components/ui/preloader';
+
+const greatVibes = Great_Vibes({ weight: '400', subsets: ['latin'] });
 
 /* ── Floating Petal / Leaf SVG Components ── */
 const Petal = ({ style, className }: { style: React.CSSProperties; className?: string }) => (
@@ -27,20 +30,22 @@ const Leaf = ({ style, className }: { style: React.CSSProperties; className?: st
 function FloatingElements() {
   const [elements, setElements] = useState<Array<{
     id: number; type: 'petal' | 'leaf'; x: number; y: number;
-    size: number; rotation: number; delay: number; duration: number; opacity: number;
+    size: number; rotation: number; delay: number; duration: number; opacity: number; color: string;
   }>>([]);
 
   useEffect(() => {
-    const els = Array.from({ length: 18 }, (_, i) => ({
+    const colors = ['#dcb47b', '#d4af37', '#e6dec8'];
+    const els = Array.from({ length: 15 }, (_, i) => ({
       id: i,
       type: (i % 3 === 0 ? 'leaf' : 'petal') as 'petal' | 'leaf',
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: 12 + Math.random() * 20,
+      size: 15 + Math.random() * 25,
       rotation: Math.random() * 360,
       delay: Math.random() * 8,
-      duration: 12 + Math.random() * 10,
-      opacity: 0.06 + Math.random() * 0.1,
+      duration: 15 + Math.random() * 12,
+      opacity: 0.1 + Math.random() * 0.15,
+      color: colors[i % colors.length]
     }));
     setElements(els);
   }, []);
@@ -66,9 +71,9 @@ function FloatingElements() {
           className="absolute"
         >
           {el.type === 'petal' ? (
-            <Petal style={{ width: el.size, height: el.size * 1.6, color: '#ccff00' }} />
+            <Petal style={{ width: el.size, height: el.size * 1.6, color: el.color }} />
           ) : (
-            <Leaf style={{ width: el.size * 1.8, height: el.size, color: '#7a8a3a' }} />
+            <Leaf style={{ width: el.size * 1.8, height: el.size, color: '#1a2415' }} />
           )}
         </motion.div>
       ))}
@@ -76,7 +81,7 @@ function FloatingElements() {
   );
 }
 
-const HF = "font-['Impact',_'Arial_Black',_sans-serif] uppercase tracking-[-0.02em]";
+const HF = "font-['Cinzel',_serif] uppercase tracking-wider";
 
 export default function ContactClient() {
   const [showPreloader, setShowPreloader] = useState(true);
@@ -98,10 +103,15 @@ export default function ContactClient() {
     setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
   };
 
-  const inputClass = "w-full bg-transparent border-b border-white/20 py-3 px-0 text-white text-sm font-light tracking-wide placeholder:text-white/30 focus:outline-none focus:border-[#ccff00] transition-colors duration-500";
+  const inputClass = "w-full bg-transparent border-b border-[#dcb47b]/30 py-4 px-0 text-[#e6dec8] text-sm font-light tracking-wide placeholder:text-[#dcb47b]/40 focus:outline-none focus:border-[#d4af37] transition-colors duration-500";
 
   return (
-    <div className="bg-black min-h-screen text-white selection:bg-[#ccff00] selection:text-black font-sans">
+    <div className="bg-[#0a0c0a] min-h-screen text-[#e6dec8] selection:bg-[#d4af37] selection:text-black font-sans relative overflow-x-hidden">
+      
+      {/* Background Gradient overlay */}
+      <div className="absolute inset-0 z-0 pointer-events-none" 
+           style={{ background: 'radial-gradient(circle at top, rgba(26,36,21,0.5) 0%, rgba(10,12,10,1) 50%)' }} />
+
       <AnimatePresence>
         {showPreloader && <Preloader key="preloader" onComplete={handlePreloaderComplete} />}
       </AnimatePresence>
@@ -116,48 +126,53 @@ export default function ContactClient() {
 
       <FloatingElements />
 
-      <main className="relative z-20 w-full">
+      <main className="relative z-20 w-full pt-32">
 
         {/* ── HERO ── */}
-        <section className="relative w-full min-h-[60vh] md:min-h-[70vh] flex flex-col justify-end pb-12 md:pb-20 px-5 md:px-12" style={{ paddingTop: 'calc(var(--announce-h) + var(--header-h) + 4vw)' }}>
-          {/* Grid lines */}
-          <div className="absolute inset-0 z-0 pointer-events-none grid grid-cols-4 divide-x divide-white/[0.06]">
-            <div /><div /><div /><div />
-          </div>
+        <section className="relative w-full min-h-[50vh] md:min-h-[60vh] flex flex-col items-center justify-center text-center px-5 md:px-12">
+          
+          {/* subtle pattern overlay */}
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: 'url("/assets/floral-transparent-pattern.png")', backgroundSize: '400px' }} />
 
-          <div className="relative z-10 max-w-[1400px] mx-auto w-full">
+          <div className="relative z-10 max-w-[1000px] mx-auto w-full flex flex-col items-center">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40 mb-4"
+              className={`${greatVibes.className} text-4xl md:text-5xl text-[#dcb47b] mb-4`}
             >
-              Get in Touch
+              We would love to hear from you!
             </motion.p>
             <motion.h1
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-              className={`${HF} text-[12vw] md:text-[8vw] leading-[0.85]`}
+              className={`${HF} text-4xl md:text-6xl lg:text-7xl leading-tight text-white mb-6 drop-shadow-lg`}
             >
-              CONTACT <span className="text-[#ccff00]">US</span>
+              GET IN <span className="text-[#d4af37]">TOUCH</span>
             </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.4 }}
+              className="font-light text-[#dcb47b]/80 text-sm md:text-base max-w-2xl mx-auto tracking-wide leading-relaxed"
+            >
+              Ask any query or just drop your doubt. Whether it's about our signature collections or our exclusive <strong className="text-[#d4af37] font-medium">custom blend of attars available</strong>, our experts are here to guide you.
+            </motion.p>
+
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="h-px bg-gradient-to-r from-[#ccff00] to-transparent mt-8 origin-left"
+              className="w-32 h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mt-12"
             />
           </div>
         </section>
 
         {/* ── CONTACT DETAILS + FORM ── */}
         <section className="relative w-full py-16 md:py-24 px-5 md:px-12">
-          <div className="absolute inset-0 z-0 pointer-events-none grid grid-cols-4 divide-x divide-white/[0.06]">
-            <div /><div /><div /><div />
-          </div>
-
-          <div className="relative z-10 max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+          
+          <div className="relative z-10 max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
 
             {/* Left — Contact Info */}
             <motion.div
@@ -165,44 +180,40 @@ export default function ContactClient() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="space-y-12"
+              className="space-y-16"
             >
-              <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#ccff00] mb-6">Reach Out</p>
-                <p className="text-white/60 text-sm leading-relaxed max-w-md">
-                  We&apos;d love to hear from you. Whether you have a question about our attars, need a recommendation, or want to place a bulk order — our team is here to help.
-                </p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+                {/* Info cards */}
+                {[
+                  { label: 'Visit Us', value: 'Kankarbagh Main Road,\nPatna, Bihar 800020', icon: '📍' },
+                  { label: 'Call Us', value: '+91 83409 44998', icon: '📞' },
+                  { label: 'Email', value: 'rahmaniperfumerypatna\n@gmail.com', icon: '✉️' },
+                  { label: 'Hours', value: 'Mon – Sat: 10 AM – 9 PM\nSunday: 11 AM – 7 PM', icon: '🕐' },
+                ].map((item, i) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: i * 0.1 }}
+                    className="flex flex-col gap-3 group"
+                  >
+                    <span className="text-3xl grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500 origin-left drop-shadow-md">{item.icon}</span>
+                    <div>
+                      <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#dcb47b] mb-2">{item.label}</p>
+                      <p className="text-[#e6dec8]/80 text-sm whitespace-pre-line leading-relaxed font-light">{item.value}</p>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
 
-              {/* Info cards */}
-              {[
-                { label: 'Visit Us', value: 'Kankarbagh Main Road,\nPatna, Bihar 800020', icon: '📍' },
-                { label: 'Call Us', value: '+91 83409 44998', icon: '📞' },
-                { label: 'Email', value: 'rahmaniperfumerypatna\n@gmail.com', icon: '✉️' },
-                { label: 'Hours', value: 'Mon – Sat: 10 AM – 9 PM\nSunday: 11 AM – 7 PM', icon: '🕐' },
-              ].map((item, i) => (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
-                  className="flex gap-4 items-start group"
-                >
-                  <span className="text-lg mt-0.5 grayscale group-hover:grayscale-0 transition-all duration-500">{item.icon}</span>
-                  <div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40 mb-1">{item.label}</p>
-                    <p className="text-white/80 text-sm whitespace-pre-line leading-relaxed">{item.value}</p>
-                  </div>
-                </motion.div>
-              ))}
-
               {/* Social */}
-              <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40 mb-4">Follow Us</p>
-                <div className="flex gap-4">
+              <div className="pt-8 border-t border-[#dcb47b]/20">
+                <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#dcb47b] mb-6">Connect Digitally</p>
+                <div className="flex gap-8">
                   {['Instagram', 'WhatsApp', 'Facebook'].map((s) => (
-                    <a key={s} href="#" className="text-xs uppercase tracking-widest text-white/40 hover:text-[#ccff00] transition-colors duration-300 border-b border-transparent hover:border-[#ccff00] pb-0.5">
+                    <a key={s} href="#" className="text-xs uppercase tracking-widest text-[#e6dec8]/60 hover:text-[#d4af37] transition-all duration-300 border-b border-transparent hover:border-[#d4af37] pb-1">
                       {s}
                     </a>
                   ))}
@@ -217,17 +228,17 @@ export default function ContactClient() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div className="border border-white/10 p-6 md:p-10 relative overflow-hidden">
+              <div className="bg-[#121612]/60 backdrop-blur-md border border-[#dcb47b]/20 p-8 md:p-12 relative overflow-hidden shadow-2xl rounded-sm">
                 {/* Corner accents */}
-                <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-[#ccff00]/40" />
-                <div className="absolute top-0 right-0 w-6 h-6 border-t border-r border-[#ccff00]/40" />
-                <div className="absolute bottom-0 left-0 w-6 h-6 border-b border-l border-[#ccff00]/40" />
-                <div className="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-[#ccff00]/40" />
+                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#d4af37]/60" />
+                <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#d4af37]/60" />
+                <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#d4af37]/60" />
+                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#d4af37]/60" />
 
-                <h2 className={`${HF} text-2xl md:text-3xl mb-2`}>
-                  SEND A <span className="text-[#ccff00]">MESSAGE</span>
+                <h2 className={`${HF} text-2xl md:text-3xl mb-3 text-white`}>
+                  SEND AN <span className="text-[#d4af37]">INQUIRY</span>
                 </h2>
-                <p className="text-white/40 text-xs font-mono uppercase tracking-widest mb-10">We&apos;ll get back within 24 hours</p>
+                <p className="text-[#dcb47b]/70 text-xs font-mono uppercase tracking-widest mb-10">Experience bespoke service</p>
 
                 <AnimatePresence mode="wait">
                   {submitted ? (
@@ -236,20 +247,20 @@ export default function ContactClient() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0 }}
-                      className="flex flex-col items-center justify-center py-16 text-center"
+                      className="flex flex-col items-center justify-center py-20 text-center"
                     >
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
-                        className="w-16 h-16 rounded-full border-2 border-[#ccff00] flex items-center justify-center mb-6"
+                        className="w-20 h-20 rounded-full border border-[#d4af37] flex items-center justify-center mb-6 bg-[#d4af37]/10"
                       >
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ccff00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d4af37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
                       </motion.div>
-                      <h3 className={`${HF} text-xl mb-2`}>MESSAGE SENT</h3>
-                      <p className="text-white/50 text-sm">Thank you. We&apos;ll be in touch soon.</p>
+                      <h3 className={`${HF} text-2xl mb-3 text-white`}>MESSAGE RECEIVED</h3>
+                      <p className="text-[#e6dec8]/70 text-sm font-light">Thank you. Our artisans will be in touch with you shortly.</p>
                     </motion.div>
                   ) : (
                     <motion.form
@@ -261,32 +272,32 @@ export default function ContactClient() {
                       className="space-y-8"
                     >
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <input name="name" value={formData.name} onChange={handleChange} placeholder="YOUR NAME" required className={inputClass} />
-                        <input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="EMAIL ADDRESS" required className={inputClass} />
+                        <input name="name" value={formData.name} onChange={handleChange} placeholder="YOUR NAME *" required className={inputClass} />
+                        <input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="EMAIL ADDRESS *" required className={inputClass} />
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <input name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="PHONE NUMBER" className={inputClass} />
                         <select name="subject" value={formData.subject} onChange={handleChange} required className={`${inputClass} appearance-none cursor-pointer`}>
-                          <option value="" disabled className="bg-black">SELECT SUBJECT</option>
-                          <option value="general" className="bg-black">General Inquiry</option>
-                          <option value="order" className="bg-black">Order Related</option>
-                          <option value="bulk" className="bg-black">Bulk / Wholesale</option>
-                          <option value="feedback" className="bg-black">Feedback</option>
+                          <option value="" disabled className="bg-[#0a0c0a] text-[#dcb47b]/50">SELECT SUBJECT *</option>
+                          <option value="general" className="bg-[#0a0c0a] text-white">General Inquiry</option>
+                          <option value="custom" className="bg-[#0a0c0a] text-[#d4af37]">Custom Attar Blend</option>
+                          <option value="order" className="bg-[#0a0c0a] text-white">Order Related</option>
+                          <option value="bulk" className="bg-[#0a0c0a] text-white">Bulk / Wholesale</option>
                         </select>
                       </div>
                       <textarea
                         name="message" value={formData.message} onChange={handleChange}
-                        placeholder="YOUR MESSAGE" required rows={4}
+                        placeholder="YOUR MESSAGE *" required rows={4}
                         className={`${inputClass} resize-none`}
                       />
                       <motion.button
                         type="submit"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full bg-[#ccff00] text-black font-bold uppercase text-xs tracking-[0.2em] py-4 hover:bg-[#d8ff4d] transition-colors duration-300 flex items-center justify-center gap-3"
+                        className="w-full bg-gradient-to-r from-[#b59530] via-[#d4af37] to-[#b59530] text-black font-semibold uppercase text-xs tracking-[0.2em] py-5 transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] rounded-sm"
                       >
-                        SEND MESSAGE
-                        <span className="w-5 h-5 rounded-full border border-black flex items-center justify-center text-[11px]">↗</span>
+                        SUBMIT INQUIRY
+                        <span className="w-5 h-5 rounded-full border border-black/40 flex items-center justify-center text-[10px]">↗</span>
                       </motion.button>
                     </motion.form>
                   )}
@@ -297,27 +308,27 @@ export default function ContactClient() {
         </section>
 
         {/* ── MAP SECTION ── */}
-        <section className="relative w-full px-5 md:px-12 pb-0">
+        <section className="relative w-full px-5 md:px-12 pb-20">
           <div className="max-w-[1400px] mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4"
+              className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#dcb47b]/20 pb-6"
             >
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#ccff00] mb-3">Find Us</p>
-                <h2 className={`${HF} text-3xl md:text-4xl`}>OUR <span className="text-[#ccff00]">LOCATION</span></h2>
+                <h2 className={`${HF} text-3xl md:text-4xl text-white drop-shadow-md`}>LOCATE <span className="text-[#d4af37]">US</span></h2>
+                <p className={`${greatVibes.className} text-2xl text-[#dcb47b] mt-2`}>Experience the essence in person</p>
               </div>
               <a
                 href="https://maps.google.com/?q=Rahmani+Perfumery+Patna"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-white/50 hover:text-[#ccff00] transition-colors border-b border-white/20 hover:border-[#ccff00] pb-1 w-fit"
+                className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-[#dcb47b] hover:text-white transition-colors pb-1 w-fit border border-[#dcb47b]/30 px-5 py-3 rounded-full hover:bg-[#dcb47b]/10"
               >
-                Open in Google Maps
-                <span className="text-[10px]">↗</span>
+                Open in Maps
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
               </a>
             </motion.div>
 
@@ -326,49 +337,21 @@ export default function ContactClient() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.2 }}
-              className="relative w-full h-[350px] md:h-[500px] border border-white/10 overflow-hidden"
+              className="relative w-full h-[400px] md:h-[550px] border border-[#dcb47b]/20 overflow-hidden rounded-sm shadow-2xl shadow-black/50"
             >
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.9!2d85.1376!3d25.5941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDM1JzM4LjgiTiA4NcKwMDgnMTUuNCJF!5e0!3m2!1sen!2sin!4v1"
                 width="100%"
                 height="100%"
-                style={{ border: 0, filter: 'invert(0.9) hue-rotate(180deg) saturate(0.3) brightness(0.7)' }}
+                style={{ border: 0, filter: 'sepia(40%) hue-rotate(60deg) saturate(1.5) brightness(0.6) contrast(1.1)' }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Rahmani Perfumery Location"
               />
               {/* Map overlay gradient */}
-              <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-[#0a0c0a]/20 pointer-events-none" />
             </motion.div>
-          </div>
-        </section>
-
-        {/* ── BOTTOM CTA STRIP ── */}
-        <section className="relative w-full py-20 md:py-28 px-5 md:px-12 overflow-hidden">
-          <div className="absolute inset-0 z-0 pointer-events-none grid grid-cols-4 divide-x divide-white/[0.06]">
-            <div /><div /><div /><div />
-          </div>
-          <div className="relative z-10 max-w-[1400px] mx-auto text-center">
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className={`${HF} text-[10vw] md:text-[6vw] leading-[0.85] mb-6`}
-            >
-              LET&apos;S CREATE <br />
-              <span className="text-[#ccff00]">SOMETHING BEAUTIFUL</span>
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-white/40 text-sm font-mono uppercase tracking-widest"
-            >
-              Rahmani Perfumery — Patna, India
-            </motion.p>
           </div>
         </section>
 
