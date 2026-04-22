@@ -33,10 +33,8 @@ export default function AboutClient() {
     
     // Animate text opacity and position based on scroll progress of Section 2
     // Finishes animation by 30% scroll, leaving 70% of the pinned time to read the text
-    const textOpacity = useTransform(section2Scroll, [0, 0.3], [0, 1]);
-    const textY = useTransform(section2Scroll, [0, 0.3], [120, 0]);
-    // Fixed image fades in when section2 enters, fades out when it leaves
-    const fixedImageOpacity = useTransform(section2Scroll, [0, 0.02, 0.95, 1], [0, 1, 1, 0]);
+    const textOpacity = useTransform(section2Scroll, [0, 0.4], [0, 1]);
+    const textY = useTransform(section2Scroll, [0, 0.4], [120, 0]);
 
     const handlePreloaderComplete = useCallback(() => setShowPreloader(false), []);
 
@@ -55,18 +53,6 @@ export default function AboutClient() {
             <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
             <CartDrawer />
             <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
-
-            {/* ── FIXED IMAGE OVERLAY for Section 2 scroll-pin (outside main stacking context) ── */}
-            <motion.div
-                className="fixed inset-0 pointer-events-none"
-                style={{ opacity: fixedImageOpacity, zIndex: 25 }}
-            >
-                <Image src="/assets/category_attar.png" alt="Pure Form" fill className="object-cover object-center contrast-110" />
-                <div className="absolute inset-0 bg-black/40" />
-                <div className="absolute inset-0 grid grid-cols-4 divide-x divide-white/10 opacity-30 pointer-events-none">
-                    <div /><div /><div /><div />
-                </div>
-            </motion.div>
 
             <main className="relative z-20 w-full">
 
@@ -122,45 +108,58 @@ export default function AboutClient() {
                     </div>
                 </section>
 
-                {/* ── SECTION 2: SCROLL-PINNED — transparent spacer, image is fixed sibling ── */}
-                <section ref={section2Ref} className="relative w-full h-[300vh]" style={{ zIndex: 30 }}>
-                    {/* Sticky text panel — sits on top of the fixed image (z:25) via section z:30 */}
-                    <div className="sticky top-0 h-screen flex flex-col justify-center px-4 md:px-8 pointer-events-none">
-                        <motion.h2
-                            style={{ opacity: textOpacity, y: textY, perspective: "800px" }}
-                            className={`${HF} text-[6vw] md:text-[5vw] lg:text-[6vw] leading-[1.1] text-balance text-white max-w-[1600px] mx-auto w-full`}
-                        >
-                            {(() => {
-                                const parts = [
-                                    { text: "MERGING EASTERN ", color: "text-white" },
-                                    { text: "CRAFT HERITAGE", color: "text-[#ccff00] drop-shadow-sm" },
-                                    { text: " WITH BOLD MODERNITY, WE ", color: "text-white" },
-                                    { text: "CREATE", color: "text-[#ccff00] drop-shadow-sm" },
-                                    { text: " SCENTS", color: "text-[#ccff00] drop-shadow-sm" },
-                                    { text: " THAT DEFY CONVENTION.", color: "text-white" }
-                                ];
-                                const totalChars = parts.reduce((acc, part) => acc + part.text.length, 0);
-                                const centerIndex = Math.floor(totalChars / 2);
-                                let globalIdx = 0;
-                                return parts.map((part, pIdx) => (
-                                    <span key={pIdx}>
-                                        {part.text.split("").map((char) => {
-                                            const currentIdx = globalIdx++;
-                                            return (
-                                                <CharacterV1
-                                                    key={currentIdx}
-                                                    char={char}
-                                                    index={currentIdx}
-                                                    centerIndex={centerIndex}
-                                                    scrollYProgress={section2Scroll}
-                                                    className={part.color}
-                                                />
-                                            );
-                                        })}
-                                    </span>
-                                ));
-                            })()}
-                        </motion.h2>
+                {/* ── SECTION 2: SCROLL-PINNED IMAGE WITH ANIMATED TEXT ── */}
+                <section ref={section2Ref} className="relative w-full h-[300vh] z-30">
+                    <div className="sticky top-0 w-full h-screen overflow-hidden">
+                        {/* Pinned Background Image */}
+                        <div className="absolute inset-0">
+                            <Image src="/assets/category_attar.png" alt="Pure Form" fill className="object-cover object-center opacity-70 contrast-110" />
+                            <div className="absolute inset-0 bg-black/40" />
+                        </div>
+
+                        {/* Grid Lines Overlay */}
+                        <div className="absolute inset-0 z-0 pointer-events-none grid grid-cols-4 divide-x divide-white/10 opacity-30">
+                            <div /><div /><div /><div />
+                        </div>
+
+                        {/* Animated Text */}
+                        <div className="absolute inset-0 z-10 flex flex-col justify-center px-4 md:px-8 pointer-events-none">
+                            <motion.h2
+                                style={{ opacity: textOpacity, y: textY, perspective: "800px" }}
+                                className={`${HF} text-[6vw] leading-[1.1] text-white max-w-[1600px] mx-auto w-full`}
+                            >
+                                {(() => {
+                                    const parts = [
+                                        { text: "MERGING EASTERN ", color: "text-white" },
+                                        { text: "CRAFT HERITAGE", color: "text-[#ccff00]" },
+                                        { text: " WITH BOLD MODERNITY, WE ", color: "text-white" },
+                                        { text: "CREATE", color: "text-[#ccff00]" },
+                                        { text: " SCENTS", color: "text-[#ccff00]" },
+                                        { text: " THAT DEFY CONVENTION.", color: "text-white" }
+                                    ];
+                                    const totalChars = parts.reduce((acc, part) => acc + part.text.length, 0);
+                                    const centerIndex = Math.floor(totalChars / 2);
+                                    let globalIdx = 0;
+                                    return parts.map((part, pIdx) => (
+                                        <span key={pIdx}>
+                                            {part.text.split("").map((char) => {
+                                                const currentIdx = globalIdx++;
+                                                return (
+                                                    <CharacterV1
+                                                        key={currentIdx}
+                                                        char={char}
+                                                        index={currentIdx}
+                                                        centerIndex={centerIndex}
+                                                        scrollYProgress={section2Scroll}
+                                                        className={part.color}
+                                                    />
+                                                );
+                                            })}
+                                        </span>
+                                    ));
+                                })()}
+                            </motion.h2>
+                        </div>
                     </div>
                 </section>
 
