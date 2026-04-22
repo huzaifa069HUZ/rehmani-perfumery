@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Great_Vibes } from 'next/font/google';
+import { Great_Vibes, Playfair_Display } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
@@ -11,6 +11,7 @@ import GlobalSearch from '@/components/GlobalSearch';
 import Preloader from '@/components/ui/preloader';
 
 const greatVibes = Great_Vibes({ weight: '400', subsets: ['latin'] });
+const playfair = Playfair_Display({ subsets: ['latin'] });
 
 /* ── Floating Petal / Leaf SVG Components ── */
 const Petal = ({ style, className }: { style: React.CSSProperties; className?: string }) => (
@@ -22,7 +23,7 @@ const Petal = ({ style, className }: { style: React.CSSProperties; className?: s
 const Leaf = ({ style, className }: { style: React.CSSProperties; className?: string }) => (
   <svg viewBox="0 0 60 30" fill="none" className={className} style={style}>
     <path d="M0 15C0 15 10 0 30 0C50 0 60 15 60 15C60 15 50 30 30 30C10 30 0 15 0 15Z" fill="currentColor" />
-    <path d="M5 15C5 15 15 5 30 5" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" />
+    <path d="M5 15C5 15 15 5 30 5" stroke="rgba(255,255,255,0.8)" strokeWidth="0.8" />
   </svg>
 );
 
@@ -34,17 +35,18 @@ function FloatingElements() {
   }>>([]);
 
   useEffect(() => {
-    const colors = ['#dcb47b', '#d4af37', '#e6dec8'];
+    // Soft white, pale gold, blush pink
+    const colors = ['#ffffff', '#F4E4C6', '#FBEAE7'];
     const els = Array.from({ length: 15 }, (_, i) => ({
       id: i,
       type: (i % 3 === 0 ? 'leaf' : 'petal') as 'petal' | 'leaf',
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: 15 + Math.random() * 25,
+      size: 20 + Math.random() * 30,
       rotation: Math.random() * 360,
       delay: Math.random() * 8,
       duration: 15 + Math.random() * 12,
-      opacity: 0.1 + Math.random() * 0.15,
+      opacity: 0.4 + Math.random() * 0.4,
       color: colors[i % colors.length]
     }));
     setElements(els);
@@ -73,15 +75,13 @@ function FloatingElements() {
           {el.type === 'petal' ? (
             <Petal style={{ width: el.size, height: el.size * 1.6, color: el.color }} />
           ) : (
-            <Leaf style={{ width: el.size * 1.8, height: el.size, color: '#1a2415' }} />
+            <Leaf style={{ width: el.size * 1.8, height: el.size, color: '#FDF7F5' }} />
           )}
         </motion.div>
       ))}
     </div>
   );
 }
-
-const HF = "font-['Cinzel',_serif] uppercase tracking-wider";
 
 export default function ContactClient() {
   const [showPreloader, setShowPreloader] = useState(true);
@@ -103,20 +103,22 @@ export default function ContactClient() {
     setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
   };
 
-  const inputClass = "w-full bg-transparent border-b border-[#dcb47b]/30 py-4 px-0 text-[#e6dec8] text-sm font-light tracking-wide placeholder:text-[#dcb47b]/40 focus:outline-none focus:border-[#d4af37] transition-colors duration-500";
+  // Modern, large clean input style
+  const inputClass = "w-full bg-[#fcf9f8] border border-[#E8DCCB] rounded-xl py-4 px-6 text-[#5A4A42] text-base font-light placeholder:text-[#A6998F] focus:outline-none focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20 transition-all duration-300";
 
   return (
-    <div className="bg-[#0a0c0a] min-h-screen text-[#e6dec8] selection:bg-[#d4af37] selection:text-black font-sans relative overflow-x-hidden">
+    <div className="bg-[#FAF5F2] min-h-screen text-[#5A4A42] selection:bg-[#D4AF37] selection:text-white font-sans relative overflow-x-hidden">
       
-      {/* Background Gradient overlay */}
+      {/* Soft gradient background */}
       <div className="absolute inset-0 z-0 pointer-events-none" 
-           style={{ background: 'radial-gradient(circle at top, rgba(26,36,21,0.5) 0%, rgba(10,12,10,1) 50%)' }} />
+           style={{ background: 'radial-gradient(circle at top, #FFF 0%, #FAF5F2 100%)' }} />
 
       <AnimatePresence>
         {showPreloader && <Preloader key="preloader" onComplete={handlePreloaderComplete} />}
       </AnimatePresence>
 
-      <div className="fixed top-0 w-full z-50">
+      {/* Adding a custom class for header if needed to make it light, but using existing Header component */}
+      <div className="fixed top-0 w-full z-50 mix-blend-difference">
         <Header onMenuOpen={() => setMobileMenuOpen(true)} onSearchOpen={() => setIsSearchOpen(true)} />
       </div>
 
@@ -126,20 +128,16 @@ export default function ContactClient() {
 
       <FloatingElements />
 
-      <main className="relative z-20 w-full pt-32">
+      <main className="relative z-20 w-full pt-36">
 
         {/* ── HERO ── */}
-        <section className="relative w-full min-h-[50vh] md:min-h-[60vh] flex flex-col items-center justify-center text-center px-5 md:px-12">
-          
-          {/* subtle pattern overlay */}
-          <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style={{ backgroundImage: 'url("/assets/floral-transparent-pattern.png")', backgroundSize: '400px' }} />
-
+        <section className="relative w-full flex flex-col items-center justify-center text-center px-5 md:px-12 pb-16">
           <div className="relative z-10 max-w-[1000px] mx-auto w-full flex flex-col items-center">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className={`${greatVibes.className} text-4xl md:text-5xl text-[#dcb47b] mb-4`}
+              className={`${greatVibes.className} text-5xl md:text-6xl text-[#C8A97E] mb-6`}
             >
               We would love to hear from you!
             </motion.p>
@@ -147,32 +145,25 @@ export default function ContactClient() {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-              className={`${HF} text-4xl md:text-6xl lg:text-7xl leading-tight text-white mb-6 drop-shadow-lg`}
+              className={`${playfair.className} text-5xl md:text-7xl lg:text-8xl leading-tight text-[#4A3C34] mb-8 font-serif tracking-tight`}
             >
-              GET IN <span className="text-[#d4af37]">TOUCH</span>
+              Get in <span className="text-[#D4AF37] italic">Touch</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.4 }}
-              className="font-light text-[#dcb47b]/80 text-sm md:text-base max-w-2xl mx-auto tracking-wide leading-relaxed"
+              className="font-light text-[#736357] text-lg md:text-xl max-w-3xl mx-auto tracking-wide leading-relaxed"
             >
-              Ask any query or just drop your doubt. Whether it's about our signature collections or our exclusive <strong className="text-[#d4af37] font-medium">custom blend of attars available</strong>, our experts are here to guide you.
+              Ask any query or just drop your doubt. Whether it's about our signature collections or our exclusive <strong className="text-[#C8A97E] font-medium">custom blend of attars available</strong>, our experts are here to guide you.
             </motion.p>
-
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="w-32 h-px bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mt-12"
-            />
           </div>
         </section>
 
         {/* ── CONTACT DETAILS + FORM ── */}
-        <section className="relative w-full py-16 md:py-24 px-5 md:px-12">
+        <section className="relative w-full py-12 md:py-20 px-5 md:px-12">
           
-          <div className="relative z-10 max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+          <div className="relative z-10 max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-start">
 
             {/* Left — Contact Info */}
             <motion.div
@@ -180,10 +171,10 @@ export default function ContactClient() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="space-y-16"
+              className="lg:col-span-5 space-y-16 lg:sticky lg:top-40"
             >
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+              <div className="space-y-10">
                 {/* Info cards */}
                 {[
                   { label: 'Visit Us', value: 'Kankarbagh Main Road,\nPatna, Bihar 800020', icon: '📍' },
@@ -197,23 +188,25 @@ export default function ContactClient() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: i * 0.1 }}
-                    className="flex flex-col gap-3 group"
+                    className="flex items-start gap-6 group bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white shadow-sm hover:shadow-md transition-all duration-300"
                   >
-                    <span className="text-3xl grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-500 origin-left drop-shadow-md">{item.icon}</span>
+                    <div className="w-14 h-14 rounded-full bg-[#FAF5F2] flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-500 shadow-inner flex-shrink-0">
+                      {item.icon}
+                    </div>
                     <div>
-                      <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#dcb47b] mb-2">{item.label}</p>
-                      <p className="text-[#e6dec8]/80 text-sm whitespace-pre-line leading-relaxed font-light">{item.value}</p>
+                      <p className="font-sans text-xs uppercase tracking-widest text-[#D4AF37] font-semibold mb-2">{item.label}</p>
+                      <p className="text-[#5A4A42] text-base whitespace-pre-line leading-relaxed font-medium">{item.value}</p>
                     </div>
                   </motion.div>
                 ))}
               </div>
 
               {/* Social */}
-              <div className="pt-8 border-t border-[#dcb47b]/20">
-                <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#dcb47b] mb-6">Connect Digitally</p>
+              <div className="pt-8 border-t border-[#E8DCCB]">
+                <p className="font-sans text-xs uppercase tracking-widest text-[#C8A97E] mb-6 font-semibold">Connect Digitally</p>
                 <div className="flex gap-8">
                   {['Instagram', 'WhatsApp', 'Facebook'].map((s) => (
-                    <a key={s} href="#" className="text-xs uppercase tracking-widest text-[#e6dec8]/60 hover:text-[#d4af37] transition-all duration-300 border-b border-transparent hover:border-[#d4af37] pb-1">
+                    <a key={s} href="#" className="text-sm uppercase tracking-widest text-[#736357] hover:text-[#D4AF37] transition-all duration-300 font-medium">
                       {s}
                     </a>
                   ))}
@@ -223,22 +216,21 @@ export default function ContactClient() {
 
             {/* Right — Form */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
+              className="lg:col-span-7"
             >
-              <div className="bg-[#121612]/60 backdrop-blur-md border border-[#dcb47b]/20 p-8 md:p-12 relative overflow-hidden shadow-2xl rounded-sm">
-                {/* Corner accents */}
-                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#d4af37]/60" />
-                <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#d4af37]/60" />
-                <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#d4af37]/60" />
-                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#d4af37]/60" />
+              <div className="bg-white p-8 md:p-14 lg:p-16 rounded-[2rem] shadow-[0_20px_50px_rgba(90,74,66,0.05)] border border-white relative overflow-hidden">
+                
+                {/* Decorative background element */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#FFF9F0] to-transparent rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl pointer-events-none" />
 
-                <h2 className={`${HF} text-2xl md:text-3xl mb-3 text-white`}>
-                  SEND AN <span className="text-[#d4af37]">INQUIRY</span>
+                <h2 className={`${playfair.className} text-3xl md:text-5xl mb-4 text-[#4A3C34]`}>
+                  Send an <span className="text-[#D4AF37] italic">Inquiry</span>
                 </h2>
-                <p className="text-[#dcb47b]/70 text-xs font-mono uppercase tracking-widest mb-10">Experience bespoke service</p>
+                <p className="text-[#A6998F] text-sm uppercase tracking-widest mb-12 font-medium">Experience bespoke service</p>
 
                 <AnimatePresence mode="wait">
                   {submitted ? (
@@ -247,20 +239,20 @@ export default function ContactClient() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0 }}
-                      className="flex flex-col items-center justify-center py-20 text-center"
+                      className="flex flex-col items-center justify-center py-32 text-center"
                     >
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
-                        className="w-20 h-20 rounded-full border border-[#d4af37] flex items-center justify-center mb-6 bg-[#d4af37]/10"
+                        className="w-24 h-24 rounded-full bg-[#FAF5F2] flex items-center justify-center mb-8"
                       >
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d4af37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
                       </motion.div>
-                      <h3 className={`${HF} text-2xl mb-3 text-white`}>MESSAGE RECEIVED</h3>
-                      <p className="text-[#e6dec8]/70 text-sm font-light">Thank you. Our artisans will be in touch with you shortly.</p>
+                      <h3 className={`${playfair.className} text-4xl mb-4 text-[#4A3C34]`}>Message Received</h3>
+                      <p className="text-[#736357] text-lg font-light max-w-sm">Thank you. Our artisans will be in touch with you shortly.</p>
                     </motion.div>
                   ) : (
                     <motion.form
@@ -269,35 +261,50 @@ export default function ContactClient() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       onSubmit={handleSubmit}
-                      className="space-y-8"
+                      className="space-y-8 relative z-10"
                     >
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <input name="name" value={formData.name} onChange={handleChange} placeholder="YOUR NAME *" required className={inputClass} />
-                        <input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="EMAIL ADDRESS *" required className={inputClass} />
+                        <div className="space-y-2">
+                          <label className="text-xs uppercase tracking-widest text-[#A6998F] font-semibold pl-2">Your Name *</label>
+                          <input name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required className={inputClass} />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs uppercase tracking-widest text-[#A6998F] font-semibold pl-2">Email Address *</label>
+                          <input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" required className={inputClass} />
+                        </div>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <input name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="PHONE NUMBER" className={inputClass} />
-                        <select name="subject" value={formData.subject} onChange={handleChange} required className={`${inputClass} appearance-none cursor-pointer`}>
-                          <option value="" disabled className="bg-[#0a0c0a] text-[#dcb47b]/50">SELECT SUBJECT *</option>
-                          <option value="general" className="bg-[#0a0c0a] text-white">General Inquiry</option>
-                          <option value="custom" className="bg-[#0a0c0a] text-[#d4af37]">Custom Attar Blend</option>
-                          <option value="order" className="bg-[#0a0c0a] text-white">Order Related</option>
-                          <option value="bulk" className="bg-[#0a0c0a] text-white">Bulk / Wholesale</option>
-                        </select>
+                        <div className="space-y-2">
+                          <label className="text-xs uppercase tracking-widest text-[#A6998F] font-semibold pl-2">Phone Number</label>
+                          <input name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="+1 (555) 000-0000" className={inputClass} />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-xs uppercase tracking-widest text-[#A6998F] font-semibold pl-2">Subject *</label>
+                          <select name="subject" value={formData.subject} onChange={handleChange} required className={`${inputClass} appearance-none cursor-pointer bg-no-repeat`} style={{ backgroundPosition: 'right 1.5rem center', backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23A6998F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`, backgroundSize: '1.2em 1.2em' }}>
+                            <option value="" disabled>Select a topic</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="custom">Custom Attar Blend</option>
+                            <option value="order">Order Related</option>
+                            <option value="bulk">Bulk / Wholesale</option>
+                          </select>
+                        </div>
                       </div>
-                      <textarea
-                        name="message" value={formData.message} onChange={handleChange}
-                        placeholder="YOUR MESSAGE *" required rows={4}
-                        className={`${inputClass} resize-none`}
-                      />
+                      <div className="space-y-2">
+                        <label className="text-xs uppercase tracking-widest text-[#A6998F] font-semibold pl-2">Your Message *</label>
+                        <textarea
+                          name="message" value={formData.message} onChange={handleChange}
+                          placeholder="How can we help you today?" required rows={5}
+                          className={`${inputClass} resize-none`}
+                        />
+                      </div>
                       <motion.button
                         type="submit"
-                        whileHover={{ scale: 1.02 }}
+                        whileHover={{ scale: 1.01, translateY: -2 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full bg-gradient-to-r from-[#b59530] via-[#d4af37] to-[#b59530] text-black font-semibold uppercase text-xs tracking-[0.2em] py-5 transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] rounded-sm"
+                        className="w-full bg-[#4A3C34] text-white font-semibold uppercase text-sm tracking-widest py-5 rounded-xl hover:bg-[#D4AF37] transition-all duration-300 flex items-center justify-center gap-3 shadow-lg shadow-[#4A3C34]/10 mt-4"
                       >
-                        SUBMIT INQUIRY
-                        <span className="w-5 h-5 rounded-full border border-black/40 flex items-center justify-center text-[10px]">↗</span>
+                        Submit Inquiry
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                       </motion.button>
                     </motion.form>
                   )}
@@ -308,27 +315,27 @@ export default function ContactClient() {
         </section>
 
         {/* ── MAP SECTION ── */}
-        <section className="relative w-full px-5 md:px-12 pb-20">
+        <section className="relative w-full px-5 md:px-12 pb-24 pt-12">
           <div className="max-w-[1400px] mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#dcb47b]/20 pb-6"
+              className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6"
             >
               <div>
-                <h2 className={`${HF} text-3xl md:text-4xl text-white drop-shadow-md`}>LOCATE <span className="text-[#d4af37]">US</span></h2>
-                <p className={`${greatVibes.className} text-2xl text-[#dcb47b] mt-2`}>Experience the essence in person</p>
+                <p className="font-sans text-xs uppercase tracking-widest text-[#D4AF37] mb-3 font-bold">Discover</p>
+                <h2 className={`${playfair.className} text-4xl md:text-5xl text-[#4A3C34]`}>Our <span className="text-[#D4AF37] italic">Location</span></h2>
               </div>
               <a
                 href="https://maps.google.com/?q=Rahmani+Perfumery+Patna"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-[#dcb47b] hover:text-white transition-colors pb-1 w-fit border border-[#dcb47b]/30 px-5 py-3 rounded-full hover:bg-[#dcb47b]/10"
+                className="inline-flex items-center gap-3 text-sm uppercase tracking-widest text-[#4A3C34] hover:text-[#D4AF37] transition-colors border-b-2 border-[#D4AF37] pb-1 font-semibold"
               >
                 Open in Maps
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
               </a>
             </motion.div>
 
@@ -337,20 +344,20 @@ export default function ContactClient() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1, delay: 0.2 }}
-              className="relative w-full h-[400px] md:h-[550px] border border-[#dcb47b]/20 overflow-hidden rounded-sm shadow-2xl shadow-black/50"
+              className="relative w-full h-[450px] md:h-[600px] bg-white p-3 md:p-5 rounded-[2rem] shadow-[0_20px_50px_rgba(90,74,66,0.08)]"
             >
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.9!2d85.1376!3d25.5941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDM1JzM4LjgiTiA4NcKwMDgnMTUuNCJF!5e0!3m2!1sen!2sin!4v1"
-                width="100%"
-                height="100%"
-                style={{ border: 0, filter: 'sepia(40%) hue-rotate(60deg) saturate(1.5) brightness(0.6) contrast(1.1)' }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Rahmani Perfumery Location"
-              />
-              {/* Map overlay gradient */}
-              <div className="absolute inset-0 bg-[#0a0c0a]/20 pointer-events-none" />
+              <div className="w-full h-full overflow-hidden rounded-[1.5rem]">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.9!2d85.1376!3d25.5941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDM1JzM4LjgiTiA4NcKwMDgnMTUuNCJF!5e0!3m2!1sen!2sin!4v1"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, filter: 'grayscale(0.3) contrast(1.1) opacity(0.9) hue-rotate(340deg)' }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Rahmani Perfumery Location"
+                />
+              </div>
             </motion.div>
           </div>
         </section>
