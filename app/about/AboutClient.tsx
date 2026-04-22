@@ -32,8 +32,9 @@ export default function AboutClient() {
     });
     
     // Animate text opacity and position based on scroll progress of Section 2
-    const textOpacity = useTransform(section2Scroll, [0, 0.4, 0.8], [0, 1, 1]);
-    const textY = useTransform(section2Scroll, [0, 0.4, 0.8], [150, 0, 0]);
+    // Finishes animation by 30% scroll, leaving 70% of the pinned time to read the text
+    const textOpacity = useTransform(section2Scroll, [0, 0.3], [0, 1]);
+    const textY = useTransform(section2Scroll, [0, 0.3], [150, 0]);
 
     const handlePreloaderComplete = useCallback(() => setShowPreloader(false), []);
 
@@ -110,7 +111,7 @@ export default function AboutClient() {
                 </section>
 
                 {/* ── SECTION 2: SCROLL-PINNED IMAGE WITH ANIMATED TEXT ── */}
-                <section ref={section2Ref} className="relative w-full h-[150vh] bg-black text-white z-30">
+                <section ref={section2Ref} className="relative w-full h-[300vh] bg-black text-white z-30">
                     <div className="sticky top-0 w-full h-screen overflow-hidden">
                         {/* Pinned Background Image */}
                         <div className="absolute inset-0">
