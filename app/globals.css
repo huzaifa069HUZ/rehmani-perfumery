@@ -45,7 +45,7 @@ body {
   color: var(--text);
   background: var(--bg);
   line-height: 1.6;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
 
 img {

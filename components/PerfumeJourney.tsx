@@ -71,10 +71,10 @@ const REVEAL_TEXT =
 // ─── Main Section ───────────────────────────────────────────────────────────────
 export default function PerfumeJourney() {
   const pinnedRef = useRef<HTMLDivElement>(null);
-  const cardRef   = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
-  const blurRef   = useRef<HTMLDivElement>(null);
-  const progress  = useRef<number>(0);
+  const blurRef = useRef<HTMLDivElement>(null);
+  const progress = useRef<number>(0);
   const fmProgress = useMotionValue(0);
   const isCanvasInView = useInView(pinnedRef, { margin: '800px 0px' });
 
@@ -89,16 +89,16 @@ export default function PerfumeJourney() {
         end: '+=150%',
         scrub: 1.4,
         invalidateOnRefresh: true,
-        onUpdate: (self) => { 
-          progress.current = self.progress; 
+        onUpdate: (self) => {
+          progress.current = self.progress;
           fmProgress.set(self.progress);
         },
       },
     });
 
     tl.fromTo(canvasRef.current, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0);
-    tl.fromTo(blurRef.current,   { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.inOut' }, 0.5);
-    tl.fromTo(cardRef.current,   { opacity: 0, y: 50, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power2.out' }, 0.5);
+    tl.fromTo(blurRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.inOut' }, 0.5);
+    tl.fromTo(cardRef.current, { opacity: 0, y: 50, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power2.out' }, 0.5);
 
     // Deep layout shift compensation: observe the page for height changes (e.g. from images loading)
     let ro: ResizeObserver | null = null;
@@ -108,13 +108,13 @@ export default function PerfumeJourney() {
       });
       ro.observe(document.body);
     }
-    
+
     // Fallback re-read incase visual elements load post-hydration
     const tId1 = setTimeout(() => ScrollTrigger.refresh(), 500);
     const tId2 = setTimeout(() => ScrollTrigger.refresh(), 1500);
 
-    return () => { 
-      ScrollTrigger.getAll().forEach(st => st.kill()); 
+    return () => {
+      ScrollTrigger.getAll().forEach(st => st.kill());
       if (ro) ro.disconnect();
       clearTimeout(tId1);
       clearTimeout(tId2);
@@ -169,8 +169,8 @@ export default function PerfumeJourney() {
             mixBlendMode: 'screen',
             pointerEvents: 'none'
           }}>
-            <TextRevealByWord 
-              text={REVEAL_TEXT} 
+            <TextRevealByWord
+              text={REVEAL_TEXT}
               progress={fmProgress}
             />
           </div>

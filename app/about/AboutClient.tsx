@@ -1,9 +1,13 @@
 'use client';
 
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
@@ -24,17 +28,29 @@ export default function AboutClient() {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     const heroRef = useRef(null);
-    const section2Ref = useRef(null);
+    const section2PinRef = useRef<HTMLDivElement>(null);
 
-    const { scrollYProgress: section2Scroll } = useScroll({
-        target: section2Ref,
-        offset: ["start start", "end end"]
-    });
-    
-    // Animate text opacity and position based on scroll progress of Section 2
-    // Finishes animation by 30% scroll, leaving 70% of the pinned time to read the text
-    const textOpacity = useTransform(section2Scroll, [0, 0.4], [0, 1]);
-    const textY = useTransform(section2Scroll, [0, 0.4], [120, 0]);
+    // GSAP-driven scroll progress bridged to Framer Motion
+    const scrollProgress = useMotionValue(0);
+    const textOpacity = useTransform(scrollProgress, [0, 0.6], [0, 1]);
+    const textY = useTransform(scrollProgress, [0, 0.6], [120, 0]);
+
+    useEffect(() => {
+        if (!section2PinRef.current) return;
+        const ctx = gsap.context(() => {
+            ScrollTrigger.create({
+                trigger: section2PinRef.current,
+                start: 'top top',
+                end: '+=150%',   // pin for 150vh of scroll distance
+                pin: true,
+                pinSpacing: true,
+                onUpdate: (self) => {
+                    scrollProgress.set(self.progress);
+                },
+            });
+        });
+        return () => ctx.revert();
+    }, [scrollProgress]);
 
     const handlePreloaderComplete = useCallback(() => setShowPreloader(false), []);
 
@@ -108,60 +124,58 @@ export default function AboutClient() {
                     </div>
                 </section>
 
-                {/* ── SECTION 2: SCROLL-PINNED IMAGE WITH ANIMATED TEXT ── */}
-                <section ref={section2Ref} className="relative w-full h-[300vh] z-30">
-                    <div className="sticky top-0 w-full h-screen overflow-hidden">
-                        {/* Pinned Background Image */}
-                        <div className="absolute inset-0">
-                            <Image src="/assets/category_attar.png" alt="Pure Form" fill className="object-cover object-center opacity-70 contrast-110" />
-                            <div className="absolute inset-0 bg-black/40" />
-                        </div>
-
-                        {/* Grid Lines Overlay */}
-                        <div className="absolute inset-0 z-0 pointer-events-none grid grid-cols-4 divide-x divide-white/10 opacity-30">
-                            <div /><div /><div /><div />
-                        </div>
-
-                        {/* Animated Text */}
-                        <div className="absolute inset-0 z-10 flex flex-col justify-center px-4 md:px-8 pointer-events-none">
-                            <motion.h2
-                                style={{ opacity: textOpacity, y: textY, perspective: "800px" }}
-                                className={`${HF} text-[6vw] leading-[1.1] text-white max-w-[1600px] mx-auto w-full`}
-                            >
-                                {(() => {
-                                    const parts = [
-                                        { text: "MERGING EASTERN ", color: "text-white" },
-                                        { text: "CRAFT HERITAGE", color: "text-[#ccff00]" },
-                                        { text: " WITH BOLD MODERNITY, WE ", color: "text-white" },
-                                        { text: "CREATE", color: "text-[#ccff00]" },
-                                        { text: " SCENTS", color: "text-[#ccff00]" },
-                                        { text: " THAT DEFY CONVENTION.", color: "text-white" }
-                                    ];
-                                    const totalChars = parts.reduce((acc, part) => acc + part.text.length, 0);
-                                    const centerIndex = Math.floor(totalChars / 2);
-                                    let globalIdx = 0;
-                                    return parts.map((part, pIdx) => (
-                                        <span key={pIdx}>
-                                            {part.text.split("").map((char) => {
-                                                const currentIdx = globalIdx++;
-                                                return (
-                                                    <CharacterV1
-                                                        key={currentIdx}
-                                                        char={char}
-                                                        index={currentIdx}
-                                                        centerIndex={centerIndex}
-                                                        scrollYProgress={section2Scroll}
-                                                        className={part.color}
-                                                    />
-                                                );
-                                            })}
-                                        </span>
-                                    ));
-                                })()}
-                            </motion.h2>
-                        </div>
+                {/* ── SECTION 2: GSAP-PINNED IMAGE WITH ANIMATED TEXT ── */}
+                <div ref={section2PinRef} className="relative w-full h-screen overflow-hidden">
+                    {/* Background Image */}
+                    <div className="absolute inset-0">
+                        <Image src="/assets/category_attar.png" alt="Pure Form" fill className="object-cover object-center opacity-70 contrast-110" />
+                        <div className="absolute inset-0 bg-black/40" />
                     </div>
-                </section>
+
+                    {/* Grid Lines Overlay */}
+                    <div className="absolute inset-0 z-0 pointer-events-none grid grid-cols-4 divide-x divide-white/10 opacity-30">
+                        <div /><div /><div /><div />
+                    </div>
+
+                    {/* Animated Text */}
+                    <div className="absolute inset-0 z-10 flex flex-col justify-center px-4 md:px-8 pointer-events-none">
+                        <motion.h2
+                            style={{ opacity: textOpacity, y: textY, perspective: "800px" }}
+                            className={`${HF} text-[6vw] leading-[1.1] text-white max-w-[1600px] mx-auto w-full`}
+                        >
+                            {(() => {
+                                const parts = [
+                                    { text: "MERGING EASTERN ", color: "text-white" },
+                                    { text: "CRAFT HERITAGE", color: "text-[#ccff00]" },
+                                    { text: " WITH BOLD MODERNITY, WE ", color: "text-white" },
+                                    { text: "CREATE", color: "text-[#ccff00]" },
+                                    { text: " SCENTS", color: "text-[#ccff00]" },
+                                    { text: " THAT DEFY CONVENTION.", color: "text-white" }
+                                ];
+                                const totalChars = parts.reduce((acc, part) => acc + part.text.length, 0);
+                                const centerIndex = Math.floor(totalChars / 2);
+                                let globalIdx = 0;
+                                return parts.map((part, pIdx) => (
+                                    <span key={pIdx}>
+                                        {part.text.split("").map((char) => {
+                                            const currentIdx = globalIdx++;
+                                            return (
+                                                <CharacterV1
+                                                    key={currentIdx}
+                                                    char={char}
+                                                    index={currentIdx}
+                                                    centerIndex={centerIndex}
+                                                    scrollYProgress={scrollProgress}
+                                                    className={part.color}
+                                                />
+                                            );
+                                        })}
+                                    </span>
+                                ));
+                            })()}
+                        </motion.h2>
+                    </div>
+                </div>
 
                 {/* ── SECTION 3: THREE PILLARS & FOUNDED TEXT ── */}
                 <section className="relative w-full bg-white text-black py-20 z-30">
