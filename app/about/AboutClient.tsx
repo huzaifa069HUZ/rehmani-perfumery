@@ -41,7 +41,7 @@ export default function AboutClient() {
     const HF = "font-['Impact',_'Arial_Black',_sans-serif] uppercase tracking-[-0.02em]";
 
     return (
-        <div className="bg-black min-h-screen text-white overflow-x-hidden selection:bg-[#ccff00] selection:text-black font-sans">
+        <div className="bg-black min-h-screen text-white overflow-clip selection:bg-[#ccff00] selection:text-black font-sans">
             <AnimatePresence>
                 {showPreloader && <Preloader key="preloader" onComplete={handlePreloaderComplete} />}
             </AnimatePresence>
