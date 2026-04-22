@@ -12,6 +12,7 @@ import GlobalSearch from '@/components/GlobalSearch';
 import Preloader from '@/components/ui/preloader';
 
 import { Great_Vibes } from 'next/font/google';
+import { CharacterV1 } from '@/components/ui/text-scroll-animation';
 
 const greatVibes = Great_Vibes({ weight: '400', subsets: ['latin'] });
 
@@ -122,16 +123,43 @@ export default function AboutClient() {
                         </div>
 
                         {/* Animated Overlay Text */}
-                        <div className="absolute inset-0 z-10 flex flex-col justify-center max-w-[1600px] mx-auto px-4 md:px-8">
+                        <div className="absolute inset-0 z-10 flex flex-col justify-center max-w-[1600px] mx-auto px-4 md:px-8 pointer-events-none">
                             <motion.h2
-                                style={{ opacity: textOpacity, y: textY }}
-                                className={`${HF} text-[8vw] leading-[0.85] text-balance text-white`}
+                                style={{ opacity: textOpacity, y: textY, perspective: "800px" }}
+                                className={`${HF} text-[6vw] md:text-[5vw] lg:text-[6vw] leading-[1.1] text-balance text-white`}
                             >
-                                MERGING EASTERN <br />
-                                <span className="text-[#ccff00] drop-shadow-sm">CRAFT HERITAGE</span> WITH <br />
-                                BOLD MODERNITY, WE <span className="text-[#ccff00] drop-shadow-sm">CREATE</span> <br />
-                                <span className="text-[#ccff00] drop-shadow-sm">SCENTS</span> THAT DEFY <br />
-                                CONVENTION.
+                                {(() => {
+                                    const parts = [
+                                        { text: "MERGING EASTERN ", color: "text-white" },
+                                        { text: "CRAFT HERITAGE", color: "text-[#ccff00] drop-shadow-sm" },
+                                        { text: " WITH BOLD MODERNITY, WE ", color: "text-white" },
+                                        { text: "CREATE", color: "text-[#ccff00] drop-shadow-sm" },
+                                        { text: " SCENTS", color: "text-[#ccff00] drop-shadow-sm" },
+                                        { text: " THAT DEFY CONVENTION.", color: "text-white" }
+                                    ];
+                                    
+                                    const totalChars = parts.reduce((acc, part) => acc + part.text.length, 0);
+                                    const centerIndex = Math.floor(totalChars / 2);
+                                    let globalIdx = 0;
+                                    
+                                    return parts.map((part, pIdx) => (
+                                        <span key={pIdx}>
+                                            {part.text.split("").map((char) => {
+                                                const currentIdx = globalIdx++;
+                                                return (
+                                                    <CharacterV1
+                                                        key={currentIdx}
+                                                        char={char}
+                                                        index={currentIdx}
+                                                        centerIndex={centerIndex}
+                                                        scrollYProgress={section2Scroll}
+                                                        className={part.color}
+                                                    />
+                                                );
+                                            })}
+                                        </span>
+                                    ));
+                                })()}
                             </motion.h2>
                         </div>
                     </div>
