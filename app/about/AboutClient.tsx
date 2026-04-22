@@ -73,14 +73,14 @@ export default function AboutClient() {
             <main className="relative z-20 w-full">
 
                 {/* ── SECTION 1: DARK STRUCTURAL HERO ── */}
-                <section ref={heroRef} className="relative w-full min-h-[140vh] bg-black text-white pb-20" style={{ paddingTop: 'calc(var(--announce-h) + var(--header-h) + 3vw)' }}>
+                <section ref={heroRef} className="relative w-full min-h-screen md:min-h-[140vh] bg-black text-white pb-12 md:pb-20" style={{ paddingTop: 'calc(var(--announce-h) + var(--header-h) + 3vw)' }}>
                     {/* Vertical grid lines */}
                     <div className="absolute inset-0 z-0 pointer-events-none grid grid-cols-4 divide-x divide-white/10 opacity-40">
                         <div /><div /><div /><div />
                     </div>
 
-                    {/* Chrome metallic figure — in front of text (z:15 > text z:10) */}
-                    <div className="absolute top-0 left-0 w-[48vw] h-full pointer-events-none" style={{ zIndex: 15 }}>
+                    {/* Chrome metallic figure — hidden on mobile, in front of text on desktop */}
+                    <div className="absolute top-0 left-0 w-[48vw] h-full pointer-events-none hidden md:block" style={{ zIndex: 15 }}>
                         <Image
                             src="/assets/chrome-figure-v2nobg.png"
                             alt="Chrome Sculpture"
@@ -96,20 +96,20 @@ export default function AboutClient() {
                             initial={{ y: 60, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-                            className={`${HF} text-[15vw] leading-[0.85] select-none`}
+                            className={`${HF} text-[13vw] md:text-[15vw] leading-[0.85] select-none`}
                         >
-                            <h1 className="text-left pl-[3vw]">REDEFINING</h1>
-                            <h1 className="text-center text-[#ccff00] pr-[8vw]">PERFUMERY</h1>
-                            <h1 className="text-right pr-[3vw] opacity-80">RESHAPING</h1>
-                            <h1 className="text-right text-[#ccff00] pr-[3vw]">NORMS</h1>
+                            <h1 className="text-left pl-[3vw]">BEYOND</h1>
+                            <h1 className="text-center text-[#ccff00] pr-[8vw]">ORDINARY</h1>
+                            <h1 className="text-right pr-[3vw] opacity-80">FRAGRANCE</h1>
+                            <h1 className="text-right text-[#ccff00] pr-[3vw]">ALWAYS</h1>
                         </motion.div>
                     </div>
 
                     {/* Stats / Info grid — inside constrained container */}
-                    <div className="relative max-w-[1600px] mx-auto px-4 md:px-8 mt-16 md:mt-24" style={{ zIndex: 10 }}>
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 border-t border-white/20 pt-16">
+                    <div className="relative max-w-[1600px] mx-auto px-4 md:px-8 mt-10 md:mt-24" style={{ zIndex: 10 }}>
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 border-t border-white/20 pt-10 md:pt-16">
                             <div className="col-span-1 md:col-span-2">
-                                <h2 className={`${HF} text-6xl md:text-[5vw] leading-[0.9]`}>
+                                <h2 className={`${HF} text-4xl md:text-6xl lg:text-[5vw] leading-[0.9]`}>
                                     ABOUT <br /><span className="text-[#ccff00]">RAHMANI PERFUMERY</span>
                                 </h2>
                             </div>
@@ -141,7 +141,7 @@ export default function AboutClient() {
                     <div className="absolute inset-0 z-10 flex flex-col justify-center px-4 md:px-8 pointer-events-none">
                         <motion.h2
                             style={{ opacity: textOpacity, y: textY, perspective: "800px" }}
-                            className={`${HF} text-[6vw] leading-[1.1] text-white max-w-[1600px] mx-auto w-full`}
+                            className={`${HF} text-[9vw] md:text-[6vw] leading-[1.1] text-white max-w-[1600px] mx-auto w-full`}
                         >
                             {(() => {
                                 const parts = [
@@ -187,7 +187,7 @@ export default function AboutClient() {
                                 { title: 'CREATE', img: '/assets/bottle red crustal no bg.png', icon: '▲' },
                                 { title: 'CONNECT', img: '/assets/green bottle.png', icon: '🔗' }
                             ].map((item, i) => (
-                                <div key={item.title} className={`relative py-12 md:py-24 px-6 md:px-12 flex flex-col justify-between h-[450px] overflow-hidden border-black ${i < 2 ? 'md:border-r border-b md:border-b-0' : ''}`}>
+                                <div key={item.title} className={`relative py-8 md:py-24 px-4 md:px-12 flex flex-col justify-between h-[300px] md:h-[450px] overflow-hidden border-black ${i < 2 ? 'md:border-r border-b md:border-b-0' : ''}`}>
                                     <div className="flex justify-between items-start relative z-10">
                                         <h3 className={`${HF} text-4xl md:text-5xl ${i === 1 ? 'text-[#ccff00]' : 'text-black'}`}>{item.title}</h3>
                                         <span className="text-xl font-light">{item.icon}</span>
@@ -214,7 +214,7 @@ export default function AboutClient() {
 
                         <div className="mt-20 grid grid-cols-1 md:grid-cols-4 gap-8">
                             <div className="col-span-1 md:col-span-3 pb-20">
-                                <h3 className={`${HF} text-[6vw] leading-[0.85] mb-8`}>
+                                <h3 className={`${HF} text-[10vw] md:text-[6vw] leading-[0.85] mb-8`}>
                                     FOUNDED UPON <span className="text-[#ccff00]">TRADITION,</span> <br />
                                     RAHMANI FUSES HERITAGE <br />
                                     WITH <span className="text-[#ccff00]">MODERN INNOVATION</span> TO <br />
@@ -225,7 +225,7 @@ export default function AboutClient() {
                                     <p>No synthetics. No dilutions. Just pure projection.</p>
                                 </div>
                             </div>
-                            <div className="col-span-1 h-[400px] md:h-full relative overflow-hidden">
+                            <div className="col-span-1 h-[250px] md:h-full relative overflow-hidden">
                                 <Image src="/assets/category_dakhoon.png" alt="Raw Ingredients" fill className="object-cover contrast-110" />
                             </div>
                         </div>
@@ -271,11 +271,10 @@ export default function AboutClient() {
 
                     {/* 4-col grid */}
                     <div
-                        className="relative z-10"
-                        style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr" }}
+                        className="relative z-10 grid grid-cols-1 md:grid-cols-4"
                     >
                         {/* ROW 1 COL 1 — CTA */}
-                        <div className="px-8 pt-10 pb-4 flex flex-col gap-4">
+                        <div className="px-5 md:px-8 pt-8 md:pt-10 pb-4 flex flex-col gap-4">
                             <p style={{ fontSize: 11, maxWidth: 160, lineHeight: 1.5, color: "rgba(255,255,255,0.8)" }}>
                                 Ready to Discover Your Next Statement Piece?
                             </p>
@@ -291,14 +290,14 @@ export default function AboutClient() {
                             </button>
                         </div>
 
-                        {/* ROW 1 COL 2 — empty */}
-                        <div />
+                        {/* ROW 1 COL 2 — empty (hidden on mobile) */}
+                        <div className="hidden md:block" />
 
-                        {/* ROW 1 COL 3 — empty */}
-                        <div />
+                        {/* ROW 1 COL 3 — empty (hidden on mobile) */}
+                        <div className="hidden md:block" />
 
                         {/* ROW 1 COL 4 — IN PATNA */}
-                        <div className="px-8 pt-10 pb-4 flex justify-end">
+                        <div className="px-5 md:px-8 pt-6 md:pt-10 pb-4 flex md:justify-end">
                             <h2
                                 className={HF}
                                 style={{ fontSize: "clamp(2.5rem, 5.5vw, 5.5rem)", color: "#2a3020", lineHeight: 1, textAlign: "right" }}
@@ -308,14 +307,14 @@ export default function AboutClient() {
                         </div>
 
                         {/* ROW 2 COL 1 — RAHMANI PERFUMERY label */}
-                        <div className="px-8 pt-6 pb-10 flex items-center">
+                        <div className="px-5 md:px-8 pt-6 pb-6 md:pb-10 flex items-center">
                             <h4 className={HF} style={{ fontSize: "clamp(1rem, 1.8vw, 1.5rem)", color: "white" }}>
                                 RAHMANI PERFUMERY
                             </h4>
                         </div>
 
                         {/* ROW 2 COL 2 — Nav */}
-                        <div className="px-8 py-10 flex items-center">
+                        <div className="px-5 md:px-8 py-6 md:py-10 flex items-center">
                             <nav className="flex flex-col gap-3 w-full">
                                 {["HOME", "ABOUT", "PRODUCTS", "AFFILIATE", "CONTACT"].map((item, i) => (
                                     <a
@@ -332,8 +331,8 @@ export default function AboutClient() {
                             </nav>
                         </div>
 
-                        {/* ROW 2 COL 3 — IMAGE spans both rows (absolute from section top) */}
-                        <div className="relative" style={{ minHeight: "50vh" }}>
+                        {/* ROW 2 COL 3 — IMAGE (hidden on mobile to avoid clutter) */}
+                        <div className="relative hidden md:block" style={{ minHeight: "50vh" }}>
                             <div
                                 className="absolute pointer-events-none"
                                 style={{
@@ -354,7 +353,7 @@ export default function AboutClient() {
                         </div>
 
                         {/* ROW 2 COL 4 — Newsletter */}
-                        <div className="px-8 py-10 flex flex-col justify-center">
+                        <div className="px-5 md:px-8 py-6 md:py-10 flex flex-col justify-center">
                             <h4
                                 className={HF}
                                 style={{ fontSize: "clamp(0.85rem, 1.5vw, 1.3rem)", color: "white", marginBottom: 14 }}
