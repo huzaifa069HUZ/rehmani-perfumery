@@ -10,12 +10,12 @@ import CartDrawer from '@/components/CartDrawer';
 import MobileMenu from '@/components/MobileMenu';
 import GlobalSearch from '@/components/GlobalSearch';
 import Preloader from '@/components/ui/preloader';
-import dynamic from 'next/dynamic';
+
 import { Great_Vibes } from 'next/font/google';
 
 const greatVibes = Great_Vibes({ weight: '400', subsets: ['latin'] });
 
-const About3DScene = dynamic(() => import('@/components/About3DScene'), { ssr: false });
+
 
 export default function AboutClient() {
     const [showPreloader, setShowPreloader] = useState(true);
@@ -33,7 +33,7 @@ export default function AboutClient() {
                 {showPreloader && <Preloader key="preloader" onComplete={handlePreloaderComplete} />}
             </AnimatePresence>
 
-            <div className="fixed top-0 w-full z-50 mix-blend-difference">
+            <div className="fixed top-0 w-full z-50">
                 <Header onMenuOpen={() => setMobileMenuOpen(true)} onSearchOpen={() => setIsSearchOpen(true)} />
             </div>
 
@@ -41,33 +41,46 @@ export default function AboutClient() {
             <CartDrawer />
             <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
 
-            {/* 3D floating scene */}
-            <div className="fixed top-0 left-0 w-[50vw] h-screen pointer-events-none z-10">
-                <About3DScene />
-            </div>
+
 
             <main className="relative z-20 w-full">
 
                 {/* ── SECTION 1: DARK STRUCTURAL HERO ── */}
-                <section ref={heroRef} className="relative w-full min-h-[140vh] bg-black text-white pt-[20vh] pb-20">
+                <section ref={heroRef} className="relative w-full min-h-[140vh] bg-black text-white pb-20" style={{ paddingTop: 'calc(var(--announce-h) + var(--header-h) + 3vw)' }}>
+                    {/* Vertical grid lines */}
                     <div className="absolute inset-0 z-0 pointer-events-none grid grid-cols-4 divide-x divide-white/10 opacity-40">
                         <div /><div /><div /><div />
                     </div>
 
-                    <div className="relative z-10 max-w-[1600px] mx-auto px-4 md:px-8">
-                        <motion.div
-                            initial={{ y: 50, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
-                            className={`${HF} text-[15vw] leading-[0.8] mix-blend-difference z-20 relative`}
-                        >
-                            <h1 className="text-right pr-[5vw]">REDEFINING</h1>
-                            <h1 className="text-right text-[#ccff00] pr-[20vw]">PERFUMERY</h1>
-                            <h1 className="text-right pr-[5vw] opacity-90">RESHAPING</h1>
-                            <h1 className="text-right text-[#ccff00] pr-[25vw]">NORMS</h1>
-                        </motion.div>
+                    {/* Chrome metallic figure — in front of text (z:15 > text z:10) */}
+                    <div className="absolute top-0 left-0 w-[48vw] h-full pointer-events-none" style={{ zIndex: 15 }}>
+                        <Image
+                            src="/assets/chrome-figure-v2nobg.png"
+                            alt="Chrome Sculpture"
+                            fill
+                            priority
+                            style={{ objectFit: 'contain', objectPosition: 'center bottom' }}
+                        />
+                    </div>
 
-                        <div className="mt-32 md:mt-48 grid grid-cols-1 md:grid-cols-4 gap-8 border-t border-white/20 pt-16">
+                    {/* Full-width title — BEHIND the figure (z:10 < figure z:15) */}
+                    <div className="relative w-full overflow-hidden" style={{ zIndex: 10 }}>
+                        <motion.div
+                            initial={{ y: 60, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+                            className={`${HF} text-[15vw] leading-[0.85] select-none`}
+                        >
+                            <h1 className="text-left pl-[3vw]">REDEFINING</h1>
+                            <h1 className="text-center text-[#ccff00] pr-[8vw]">PERFUMERY</h1>
+                            <h1 className="text-right pr-[3vw] opacity-80">RESHAPING</h1>
+                            <h1 className="text-right text-[#ccff00] pr-[3vw]">NORMS</h1>
+                        </motion.div>
+                    </div>
+
+                    {/* Stats / Info grid — inside constrained container */}
+                    <div className="relative max-w-[1600px] mx-auto px-4 md:px-8 mt-16 md:mt-24" style={{ zIndex: 10 }}>
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 border-t border-white/20 pt-16">
                             <div className="col-span-1 md:col-span-2">
                                 <h2 className={`${HF} text-6xl md:text-[5vw] leading-[0.9]`}>
                                     ABOUT <br /><span className="text-[#ccff00]">RAHMANI PERFUMERY</span>
@@ -124,11 +137,11 @@ export default function AboutClient() {
                                     {/* Product Image */}
                                     <div className="absolute inset-0 flex items-center justify-center p-4 py-20 pointer-events-none z-20">
                                         <div className="relative w-full h-full transition-opacity duration-500">
-                                            <Image 
-                                                src={item.img} 
-                                                alt={item.title} 
-                                                fill 
-                                                className="object-contain contrast-110 brightness-110 transition-all duration-700" 
+                                            <Image
+                                                src={item.img}
+                                                alt={item.title}
+                                                fill
+                                                className="object-contain contrast-110 brightness-110 transition-all duration-700"
                                             />
                                         </div>
                                     </div>
@@ -183,7 +196,7 @@ export default function AboutClient() {
 
                 {/* ── SECTION 4: FOOTER (Hatton Labs exact layout) ──
                     4-col × 2-row grid:
-                    Row 1: [CTA]        [—]         [—]           [IN GULF]
+                    Row 1: [CTA]        [—]         [—]           [IN PATNA]
                     Row 2: [RAHMANI…]   [NAV]       [IMAGE]       [NEWSLETTER]
                     +  Full-width 3D perspective text below
                 */}
@@ -225,13 +238,13 @@ export default function AboutClient() {
                         {/* ROW 1 COL 3 — empty */}
                         <div />
 
-                        {/* ROW 1 COL 4 — IN GULF */}
+                        {/* ROW 1 COL 4 — IN PATNA */}
                         <div className="px-8 pt-10 pb-4 flex justify-end">
                             <h2
                                 className={HF}
                                 style={{ fontSize: "clamp(2.5rem, 5.5vw, 5.5rem)", color: "#2a3020", lineHeight: 1, textAlign: "right" }}
                             >
-                                IN GULF
+                                IN PATNA
                             </h2>
                         </div>
 
