@@ -2,6 +2,7 @@
 import { useCart } from '@/context/CartContext';
 import Image from 'next/image';
 import { useMemo } from 'react';
+import { MYSTERY_ATTAR_ID } from '@/components/FreeAttarPopup';
 
 const FREE_SHIPPING_THRESHOLD = 999;
 
@@ -131,13 +132,33 @@ export default function CartDrawer() {
                   <h4>{item.name}</h4>
                   <p>Size: {item.size}ml</p>
                   <div className="cart-item-footer">
-                    <div className="qty-ctrl">
-                      <button onClick={() => updateQuantity(i, -1)}>−</button>
-                      <span>{item.quantity}</span>
-                      <button onClick={() => updateQuantity(i, 1)}>+</button>
-                    </div>
+                    {item.id === MYSTERY_ATTAR_ID ? (
+                      /* Mystery attar: locked at qty 1, no +/- controls */
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{
+                          background: 'linear-gradient(135deg,#d4af37,#b8902a)',
+                          color: '#fff', fontSize: '0.65rem', fontWeight: 800,
+                          padding: '4px 10px', borderRadius: '20px', letterSpacing: '0.06em',
+                          whiteSpace: 'nowrap',
+                        }}>
+                          🎁 FREE GIFT
+                        </span>
+                        <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Qty: 1 (locked)</span>
+                      </div>
+                    ) : (
+                      <div className="qty-ctrl">
+                        <button onClick={() => updateQuantity(i, -1)}>−</button>
+                        <span>{item.quantity}</span>
+                        <button onClick={() => updateQuantity(i, 1)}>+</button>
+                      </div>
+                    )}
                     <div className="cart-item-price-row">
-                      <span className="cart-item-price">₹{item.price * item.quantity}</span>
+                      <span className="cart-item-price">
+                        {item.id === MYSTERY_ATTAR_ID
+                          ? <span style={{ color: '#16a34a', fontWeight: 800 }}>FREE</span>
+                          : `₹${item.price * item.quantity}`
+                        }
+                      </span>
                       <button className="remove-btn" onClick={() => removeItem(i)} aria-label="Remove">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6m4-6v6"/><path d="M9 6V4h6v2"/>

@@ -4,6 +4,16 @@ import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
+interface PopupLead {
+  id: string;
+  name: string;
+  phone: string;
+  address: string;
+  offer: string;
+  claimedAt?: { toDate?: () => Date; seconds?: number };
+  source?: string;
+}
+
 interface ProductStat {
   id: string;
   name: string;
@@ -38,6 +48,7 @@ export default function AnalyticsPage() {
   const [products, setProducts] = useState<ProductStat[]>([]);
   const [users, setUsers] = useState<{ id: string; wishlist?: string[] }[]>([]);
   const [cartUsers, setCartUsers] = useState<CartUser[]>([]);
+  const [popupLeads, setPopupLeads] = useState<PopupLead[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
   const [lastUpdated, setLastUpdated] = useState<string>('');
@@ -58,7 +69,7 @@ export default function AnalyticsPage() {
         }));
 
         const userSnap = await getDocsFromServer(collection(db, 'users'));
-        const userList = userSnap.docs.map(d => ({ id: d.id, ...(d.data() as { wishlist?: string[] }) }));
+        const userList = userSnap.docs.map(d => ({ id: d.id, ...(d.data() as { wishlist?: any[] }) }));
 
         // Build cart users list — users who have at least one item in their cart
         const cartUsersList: CartUser[] = [];
@@ -86,17 +97,33 @@ export default function AnalyticsPage() {
         cartUsersList.sort((a, b) => b.cartTotal - a.cartTotal);
 
         userList.forEach(u => {
-          if (u.wishlist) {
-            u.wishlist.forEach(pid => {
+          if (u.wishlist && Array.isArray(u.wishlist)) {
+            u.wishlist.forEach((item: any) => {
+              // Wishlist items are stored as objects { id, name, price, ... }, so extract the id
+              const pid = typeof item === 'object' && item !== null && 'id' in item ? item.id : item;
               const prod = prodList.find(p => p.id === pid);
               if (prod) prod.wishlistCount++;
             });
           }
         });
 
+        // Fetch popup leads
+        const leadsSnap = await getDocsFromServer(collection(db, 'popup_leads'));
+        const leadsList: PopupLead[] = leadsSnap.docs.map(d => ({
+          id: d.id,
+          ...(d.data() as Omit<PopupLead, 'id'>),
+        }));
+        // Sort newest first
+        leadsList.sort((a, b) => {
+          const aTime = a.claimedAt?.seconds ?? 0;
+          const bTime = b.claimedAt?.seconds ?? 0;
+          return bTime - aTime;
+        });
+
         setProducts(prodList);
         setUsers(userList);
         setCartUsers(cartUsersList);
+        setPopupLeads(leadsList);
         setLastUpdated(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
       } catch (err) {
         console.error('Analytics fetch error:', err);
@@ -121,7 +148,11 @@ export default function AnalyticsPage() {
     { label: 'Registered Users', value: totalUsers, sub: 'Unique accounts', color: '#14302a', accent: '#16a34a', icon: '👤' },
     { label: 'Total Hearts', value: totalWishlisted, sub: 'Across all users', color: '#3b1f0a', accent: '#d4af37', icon: '❤️' },
     { label: 'Wishlist Rate', value: `${wishlistRate}%`, sub: 'Users who engaged', color: '#1f1040', accent: '#7c3aed', icon: '📊' },
+    { label: 'Free Attar Leads', value: popupLeads.length, sub: 'Popup submissions', color: '#2d1515', accent: '#dc2626', icon: '🎁' },
   ];
+
+  // uid → popup lead map (for cross-referencing in Active Carts)
+  const popupLeadByUid = new Map(popupLeads.filter(l => l.uid).map(l => [l.uid!, l]));
 
   const suggestions = [
     { icon: '🛒', title: 'Cart Abandonment', desc: 'Track users who added to cart but never purchased. Industry avg: 70%. Key lever for recovery.', tag: 'HIGH IMPACT', tc: '#dc2626', bg: '#fef2f2' },
@@ -434,11 +465,28 @@ export default function AnalyticsPage() {
                         )}
                       </td>
                       <td>
-                        {cu.phone ? (
-                          <span style={{ color: '#0f172a', fontSize: '0.88rem', fontWeight: 600 }}>{cu.phone}</span>
-                        ) : (
-                          <span style={{ color: '#cbd5e1', fontSize: '0.82rem', fontStyle: 'italic' }}>Not provided</span>
-                        )}
+                        {/* Show popup-form phone first, then profile phone as fallback */}
+                        {(() => {
+                          const lead = popupLeadByUid.get(cu.uid);
+                          const popupPhone = lead?.phone;
+                          const profilePhone = cu.phone;
+                          if (popupPhone) return (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                              <a href={`tel:+91${popupPhone}`} style={{ color: '#0f172a', fontSize: '0.88rem', fontWeight: 700, textDecoration: 'none' }}>
+                                +91 {popupPhone}
+                              </a>
+                              <span style={{
+                                display: 'inline-flex', alignItems: 'center', gap: '3px',
+                                background: 'linear-gradient(135deg,#d4af37,#b8902a)',
+                                color: '#fff', fontSize: '0.58rem', fontWeight: 800,
+                                padding: '2px 7px', borderRadius: '20px', letterSpacing: '0.06em',
+                                width: 'fit-content',
+                              }}>🎁 Offer Claim</span>
+                            </div>
+                          );
+                          if (profilePhone) return <span style={{ color: '#0f172a', fontSize: '0.88rem', fontWeight: 600 }}>{profilePhone}</span>;
+                          return <span style={{ color: '#cbd5e1', fontSize: '0.82rem', fontStyle: 'italic' }}>Not provided</span>;
+                        })()}
                       </td>
                       <td style={{ textAlign: 'center' }}>
                         <span style={{ background: '#eff6ff', color: '#2563eb', padding: '3px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 800 }}>
@@ -463,6 +511,74 @@ export default function AnalyticsPage() {
                       </td>
                     </tr>
                   ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        {/* Free Attar Popup Leads */}
+        <div className="an-panel">
+          <div className="an-panel-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d4af37" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+            🎁 Free 2ml Attar — Popup Leads
+            <span className="live-badge" style={{ background: '#fef9c3', color: '#b45309', borderColor: '#fde68a' }}>FREE OFFER</span>
+            <span style={{ marginLeft: 'auto', fontSize: '0.78rem', color: '#64748b', fontWeight: 500 }}>
+              {popupLeads.length} claim{popupLeads.length !== 1 ? 's' : ''} collected
+            </span>
+          </div>
+          {popupLeads.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '32px 20px', color: '#94a3b8', fontSize: '0.88rem' }}>
+              No popup leads yet — the offer will appear to visitors after 8 seconds on the site.
+            </div>
+          ) : (
+            <div style={{ overflowX: 'auto' }}>
+              <table className="lb-table" style={{ minWidth: '640px' }}>
+                <thead>
+                  <tr>
+                    <th style={{ width: 36 }}>#</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Delivery Address</th>
+                    <th>Offer</th>
+                    <th style={{ textAlign: 'right' }}>Claimed At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {popupLeads.map((lead, idx) => {
+                    let claimedDate = '';
+                    if (lead.claimedAt) {
+                      if (lead.claimedAt.toDate) {
+                        claimedDate = lead.claimedAt.toDate().toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                      } else if (lead.claimedAt.seconds) {
+                        claimedDate = new Date(lead.claimedAt.seconds * 1000).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                      }
+                    }
+                    return (
+                      <tr key={lead.id}>
+                        <td>
+                          <span className="rank-ball" style={{ background: '#fef9c3', color: '#b45309' }}>{idx + 1}</span>
+                        </td>
+                        <td style={{ fontWeight: 700, color: '#0f172a' }}>{lead.name || '—'}</td>
+                        <td>
+                          {lead.phone ? (
+                            <a href={`tel:+91${lead.phone}`} style={{ color: '#0f172a', fontWeight: 600, textDecoration: 'none', fontSize: '0.88rem' }}>
+                              +91 {lead.phone}
+                            </a>
+                          ) : <span style={{ color: '#cbd5e1', fontStyle: 'italic' }}>—</span>}
+                        </td>
+                        <td style={{ fontSize: '0.8rem', color: '#475569', maxWidth: '220px' }}>{lead.address || '—'}</td>
+                        <td>
+                          <span style={{ background: '#fef9c3', color: '#b45309', padding: '3px 10px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 800 }}>
+                            {lead.offer || '2ml Free Attar'}
+                          </span>
+                        </td>
+                        <td style={{ textAlign: 'right', fontSize: '0.78rem', color: '#64748b' }}>
+                          {claimedDate || '—'}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

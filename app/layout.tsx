@@ -5,6 +5,7 @@ import { CartProvider } from '@/context/CartContext';
 import { AuthProvider } from '@/context/AuthContext';
 import { WishlistProvider } from '@/context/WishlistContext';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
+import FreeAttarPopup from '@/components/FreeAttarPopup';
 
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap', style: ['normal', 'italic'], weight: ['400','500','600','700','800','900'] });
 const amiri = Amiri({ subsets: ['arabic', 'latin'], variable: '--font-arabic', display: 'swap', weight: ['400', '700'] });
@@ -104,6 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <CartProvider>
             <WishlistProvider>
               {children}
+              <FreeAttarPopup />
             </WishlistProvider>
           </CartProvider>
         </AuthProvider>
