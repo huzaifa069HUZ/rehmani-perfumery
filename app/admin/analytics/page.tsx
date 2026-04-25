@@ -6,6 +6,7 @@ import { db } from '@/lib/firebase';
 
 interface PopupLead {
   id: string;
+  uid?: string;
   name: string;
   phone: string;
   address: string;
