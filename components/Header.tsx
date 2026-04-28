@@ -82,7 +82,20 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
                     <Link href="/#bestsellers" className="nav-dropdown-item">Best Seller</Link>
                     <Link href="/#signature" className="nav-dropdown-item">Signature Collection</Link>
                     <Link href="/#reels" className="nav-dropdown-item">Trending on Insta</Link>
-                    <Link href="/#contact" className="nav-dropdown-item">Our Location</Link>
+                    <Link 
+                      href="/#contact" 
+                      onClick={(e) => {
+                        if (pathname === '/') {
+                          e.preventDefault();
+                          const el = document.getElementById('contact');
+                          if (el) el.scrollIntoView({ behavior: 'smooth' });
+                          else setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 300);
+                        }
+                      }}
+                      className="nav-dropdown-item"
+                    >
+                      Our Location
+                    </Link>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -121,7 +134,20 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
             <Link href="/category/gifting" className={`nav-link${pathname === '/category/gifting' ? ' active' : ''} flex items-center`}>GIFTING</Link>
             <Link href="/about" className={`nav-link${pathname === '/about' ? ' active' : ''} flex items-center`}>ABOUT</Link>
             <Link href="/store" className={`nav-link${pathname === '/store' ? ' active' : ''} flex items-center`}>OUR STORE</Link>
-            <Link href="/contact" className={`nav-link${pathname === '/contact' ? ' active' : ''} flex items-center`}>CONTACT</Link>
+            <Link 
+              href="/#contact" 
+              onClick={(e) => {
+                if (pathname === '/') {
+                  e.preventDefault();
+                  const el = document.getElementById('contact');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  else setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 300);
+                }
+              }}
+              className={`nav-link${pathname === '/#contact' ? ' active' : ''} flex items-center`}
+            >
+              CONTACT
+            </Link>
           </nav>
 
           {/* Actions */}

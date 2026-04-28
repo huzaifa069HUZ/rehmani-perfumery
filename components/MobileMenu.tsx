@@ -66,7 +66,21 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                         <Link href="/#bestsellers" className="mm-sublink" onClick={onClose}>Best Seller</Link>
                         <Link href="/#signature" className="mm-sublink" onClick={onClose}>Signature Collection</Link>
                         <Link href="/#reels" className="mm-sublink" onClick={onClose}>Trending on Insta</Link>
-                        <Link href="/contact" className="mm-sublink" onClick={onClose}>Our Location</Link>
+                        <Link 
+                          href="/#contact" 
+                          className="mm-sublink" 
+                          onClick={(e) => {
+                            onClose();
+                            if (window.location.pathname === '/') {
+                              e.preventDefault();
+                              const el = document.getElementById('contact');
+                              if (el) el.scrollIntoView({ behavior: 'smooth' });
+                              else setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 300);
+                            }
+                          }}
+                        >
+                          Our Location
+                        </Link>
                       </motion.div>
                     )}
                   </AnimatePresence>

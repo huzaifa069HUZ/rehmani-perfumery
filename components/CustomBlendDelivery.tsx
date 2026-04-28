@@ -130,7 +130,7 @@ export default function CustomBlendDelivery() {
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          <Link href="/contact" style={{ display: 'inline-block' }}>
+          <Link href="/#contact" style={{ display: 'inline-block' }}>
             <button className="custom-blend-btn" aria-label="Learn More About Custom Blends" style={{ zIndex: 1 }}>
               Learn More
             </button>
