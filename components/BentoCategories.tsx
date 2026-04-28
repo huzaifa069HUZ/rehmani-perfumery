@@ -39,7 +39,7 @@ export default function BentoCategories() {
             {/* Perfume - Tall */}
             <Link href="/perfumes" className="bento-item bento-tall" style={{ order: 1 }}>
               <Image 
-                src="/assets/category_perfume.png" 
+                src="/assets/ringlight.png" 
                 alt="Perfume Category" 
                 fill 
                 className="bento-img" 
@@ -54,7 +54,7 @@ export default function BentoCategories() {
             {/* Gift Set - Short */}
             <Link href="/attars" className="bento-item bento-short" style={{ order: 4 }}>
               <Image 
-                src="/giftset image.png" 
+                src="/assets/giftset.png" 
                 alt="Gift Set Category" 
                 fill 
                 className="bento-img" 
@@ -72,7 +72,7 @@ export default function BentoCategories() {
              {/* Attar - Short */}
              <Link href="/attars" className="bento-item bento-short" style={{ order: 2 }}>
               <Image 
-                src="/assets/category_attar.png" 
+                src="/assets/attar banner.png" 
                 alt="Attar Category" 
                 fill 
                 className="bento-img" 
@@ -84,17 +84,17 @@ export default function BentoCategories() {
               </div>
             </Link>
 
-            {/* Dakhoon - Tall */}
+            {/* Bakhoor - Tall */}
             <Link href="/attars" className="bento-item bento-tall" style={{ order: 3 }}>
               <Image 
-                src="/assets/category_dakhoon.png" 
-                alt="Dakhoon Category" 
+                src="/assets/bakhoor.png" 
+                alt="Bakhoor Category" 
                 fill 
                 className="bento-img" 
               />
               <div className="bento-overlay"></div>
               <div className="bento-content">
-                <h3 className="bento-item-title">Dakhoon</h3>
+                <h3 className="bento-item-title">BAKHOOR</h3>
                 <p className="bento-item-desc">Aromas of royalty —<br/>incense that calms.</p>
               </div>
             </Link>

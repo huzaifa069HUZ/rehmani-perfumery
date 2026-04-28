@@ -20,7 +20,8 @@ export default function FeaturedCategories() {
 
   const categories = [
     {
-      img: '/giftset image.png',
+      img: '/assets/giftbox.png',
+      desktopImg: '/assets/giftbox square.png',
       label: 'Perfect Present',
       title: 'Gifts',
       desc: 'Exquisite fragrances wrapped in luxury — the gift they\'ll never forget',
@@ -53,13 +54,32 @@ export default function FeaturedCategories() {
           {categories.map((cat, i) => (
             <div key={i} className={`category-card${cat.size === 'large' ? ' category-large' : ''}`}>
               <div className="category-img-wrap">
-                <Image
-                  src={cat.img}
-                  alt={cat.title}
-                  fill
-                  sizes={cat.size === 'large' ? '50vw' : '25vw'}
-                  className="category-img"
-                />
+                {cat.desktopImg ? (
+                  <>
+                    <Image
+                      src={cat.desktopImg}
+                      alt={cat.title}
+                      fill
+                      sizes={cat.size === 'large' ? '50vw' : '25vw'}
+                      className="category-img hidden md:block"
+                    />
+                    <Image
+                      src={cat.img}
+                      alt={cat.title}
+                      fill
+                      sizes={cat.size === 'large' ? '50vw' : '25vw'}
+                      className="category-img block md:hidden"
+                    />
+                  </>
+                ) : (
+                  <Image
+                    src={cat.img}
+                    alt={cat.title}
+                    fill
+                    sizes={cat.size === 'large' ? '50vw' : '25vw'}
+                    className="category-img"
+                  />
+                )}
               </div>
               <div className="category-overlay" />
               <div className="category-content">
