@@ -44,7 +44,7 @@ export default function BentoCategories() {
                 fill 
                 className="bento-img" 
               />
-              <div className="bento-overlay"></div>
+              <div className="absolute inset-0 bg-black/20 pointer-events-none" style={{ zIndex: 1 }}></div>
               <div className="bento-content">
                 <h3 className="bento-item-title">Perfume</h3>
                 <p className="bento-item-desc">Connoisseurs of perfumery —<br/>heritage, held in a bottle.</p>
@@ -59,7 +59,7 @@ export default function BentoCategories() {
                 fill 
                 className="bento-img" 
               />
-              <div className="bento-overlay"></div>
+              <div className="absolute inset-0 bg-black/20 pointer-events-none" style={{ zIndex: 1 }}></div>
               <div className="bento-content">
                 <h3 className="bento-item-title">Gift set</h3>
                 <p className="bento-item-desc">Thoughtfully wrapped —<br/>the fragrance of memories.</p>
@@ -77,7 +77,7 @@ export default function BentoCategories() {
                 fill 
                 className="bento-img" 
               />
-              <div className="bento-overlay"></div>
+              <div className="absolute inset-0 bg-black/20 pointer-events-none" style={{ zIndex: 1 }}></div>
               <div className="bento-content">
                 <h3 className="bento-item-title">Attars</h3>
                 <p className="bento-item-desc">Rich fragrant oils —<br/>a timeless touch of tradition.</p>
@@ -92,7 +92,6 @@ export default function BentoCategories() {
                 fill 
                 className="bento-img" 
               />
-              <div className="bento-overlay"></div>
               <div className="bento-content">
                 <h3 className="bento-item-title">BAKHOOR</h3>
                 <p className="bento-item-desc">Aromas of royalty —<br/>incense that calms.</p>

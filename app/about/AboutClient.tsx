@@ -73,24 +73,24 @@ export default function AboutClient() {
             <main className="relative z-20 w-full">
 
                 {/* ── SECTION 1: DARK STRUCTURAL HERO ── */}
-                <section ref={heroRef} className="relative w-full min-h-screen md:min-h-[140vh] bg-black text-white pb-12 md:pb-20" style={{ paddingTop: 'calc(var(--announce-h) + var(--header-h) + 3vw)' }}>
+                <section ref={heroRef} className="relative w-full bg-black text-white pb-12 md:pb-20" style={{ paddingTop: 'calc(var(--announce-h) + var(--header-h) + 3vw)' }}>
+                    {/* Mobile Background Image */}
+                    <div className="absolute top-0 left-0 w-full h-[55vh] md:hidden pointer-events-none z-0">
+                        <Image
+                            src="/assets/about%20hero%20phone.png"
+                            alt="Mobile Hero Background"
+                            fill
+                            priority
+                            style={{ objectFit: 'cover', objectPosition: 'center', opacity: 0.8 }}
+                        />
+                    </div>
+
                     {/* Vertical grid lines */}
                     <div className="absolute inset-0 z-0 pointer-events-none grid grid-cols-4 divide-x divide-white/10 opacity-40">
                         <div /><div /><div /><div />
                     </div>
 
-                    {/* Chrome metallic figure — hidden on mobile, in front of text on desktop */}
-                    <div className="absolute top-0 left-0 w-[48vw] h-full pointer-events-none hidden md:block" style={{ zIndex: 15 }}>
-                        <Image
-                            src="/assets/chrome-figure-v2nobg.png"
-                            alt="Chrome Sculpture"
-                            fill
-                            priority
-                            style={{ objectFit: 'contain', objectPosition: 'center bottom' }}
-                        />
-                    </div>
-
-                    {/* Full-width title — BEHIND the figure (z:10 < figure z:15) */}
+                    {/* Full-width title */}
                     <div className="relative w-full overflow-hidden" style={{ zIndex: 10 }}>
                         <motion.div
                             initial={{ y: 60, opacity: 0 }}
@@ -145,12 +145,12 @@ export default function AboutClient() {
                         >
                             {(() => {
                                 const parts = [
-                                    { text: "MERGING EASTERN ", color: "text-white" },
-                                    { text: "CRAFT HERITAGE", color: "text-[#ccff00]" },
-                                    { text: " WITH BOLD MODERNITY, WE ", color: "text-white" },
-                                    { text: "CREATE", color: "text-[#ccff00]" },
-                                    { text: " SCENTS", color: "text-[#ccff00]" },
-                                    { text: " THAT DEFY CONVENTION.", color: "text-white" }
+                                    { text: "TIMELESS ATTARS ", color: "text-white" },
+                                    { text: "THAT STAYS.", color: "text-[#ccff00]" },
+                                    { text: " IMPRESSIONS THAT ", color: "text-white" },
+                                    { text: "LAST", color: "text-[#ccff00]" },
+                                    { text: " BEYOND", color: "text-[#ccff00]" },
+                                    { text: " THE MOMENTS.", color: "text-white" }
                                 ];
                                 const totalChars = parts.reduce((acc, part) => acc + part.text.length, 0);
                                 const centerIndex = Math.floor(totalChars / 2);
@@ -226,7 +226,7 @@ export default function AboutClient() {
                                 </div>
                             </div>
                             <div className="col-span-1 h-[250px] md:h-full relative overflow-hidden">
-                                <Image src="/assets/category_dakhoon.png" alt="Raw Ingredients" fill className="object-cover contrast-110" />
+                                <Image src="/assets/bakhoor.png" alt="Raw Ingredients" fill className="object-cover contrast-110" />
                             </div>
                         </div>
                     </div>

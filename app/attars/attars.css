@@ -109,6 +109,14 @@
   z-index: 0;
 }
 
+@media (min-width: 768px) {
+  .al-hero-overlay {
+    background: 
+      radial-gradient(ellipse at center, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 70%),
+      url('/assets/perfume%20page%20bg%20pc.png') no-repeat center center / cover;
+  }
+}
+
 .al-hero-content {
   position: relative;
   z-index: 3;

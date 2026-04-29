@@ -6,16 +6,36 @@ export default function ContactSection() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate network request
-    setTimeout(() => {
+    setSuccess(false);
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name') as string;
+    const phone = formData.get('phone') as string;
+    const message = formData.get('message') as string;
+
+    try {
+      const res = await fetch('/api/send-inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, message }),
+      });
+
+      if (res.ok) {
+        setSuccess(true);
+        (e.target as HTMLFormElement).reset();
+        setTimeout(() => setSuccess(false), 5000);
+      } else {
+        alert('Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while sending. Please try again.');
+    } finally {
       setLoading(false);
-      setSuccess(true);
-      (e.target as HTMLFormElement).reset();
-      setTimeout(() => setSuccess(false), 5000);
-    }, 1500);
+    }
   };
   const [activeMap, setActiveMap] = useState<'phulwari' | 'sabzibagh'>('phulwari');
 
@@ -121,10 +141,10 @@ export default function ContactSection() {
 
               <form className="contact-form" onSubmit={handleSubmit}>
                 <div className="form-row">
-                  <input type="text" placeholder="Your Name" required className="form-input" />
-                  <input type="tel" placeholder="Your Phone Number" required className="form-input" />
+                  <input type="text" name="name" placeholder="Your Name" required className="form-input" />
+                  <input type="tel" name="phone" placeholder="Your Phone Number" required className="form-input" />
                 </div>
-                <textarea placeholder="How can we help you?" required className="form-input form-textarea" rows={4}></textarea>
+                <textarea name="message" placeholder="How can we help you?" required className="form-input form-textarea" rows={4}></textarea>
                 <button type="submit" className={`submit-btn ${loading ? 'loading' : ''}`} disabled={loading || success}>
                   {loading ? 'Sending...' : success ? 'Message Sent!' : 'Send Message'}
                 </button>
