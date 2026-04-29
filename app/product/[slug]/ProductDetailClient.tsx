@@ -36,6 +36,7 @@ interface ProductData {
   pricing?: Record<string, { price: number; originalPrice: number }>;
   occasions?: string[];
   isNew?: boolean;
+  inStock?: boolean;
 }
 
 interface Review {
@@ -62,6 +63,7 @@ interface FirestoreProduct {
   isNew: boolean;
   occasions: string[];
   type?: 'attar' | 'perfume';
+  inStock?: boolean;
 }
 
 /* ── Accordion data ── */
@@ -467,11 +469,21 @@ export default function ProductDetailClient({ product }: { product: ProductData 
             )}
 
             <div className="pp-cta-row">
-              <button className={`pp-btn-cart ${adding ? 'adding' : ''}`} onClick={handleAdd}>
-                {adding ? 'Adding...' : 'Add to Cart'}
+              <button 
+                className={`pp-btn-cart ${adding ? 'adding' : ''}`} 
+                onClick={handleAdd}
+                disabled={product.inStock === false || adding}
+                style={{ opacity: product.inStock === false ? 0.6 : 1, cursor: product.inStock === false ? 'not-allowed' : 'pointer' }}
+              >
+                {product.inStock === false ? 'Out of Stock' : adding ? 'Adding...' : 'Add to Cart'}
               </button>
-              <button className="pp-btn-buy" onClick={handleAdd}>
-                Buy Now
+              <button 
+                className="pp-btn-buy" 
+                onClick={handleAdd}
+                disabled={product.inStock === false}
+                style={{ opacity: product.inStock === false ? 0.6 : 1, cursor: product.inStock === false ? 'not-allowed' : 'pointer' }}
+              >
+                {product.inStock === false ? 'Out of Stock' : 'Buy Now'}
               </button>
             </div>
 

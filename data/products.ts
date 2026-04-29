@@ -11,6 +11,7 @@ export interface Product {
   isNew: boolean;
   occasions: string[];
   type?: 'attar' | 'perfume';
+  inStock?: boolean;
 }
 
 const MOCKUP2 = '/assets/mockup2.png';

@@ -151,10 +151,17 @@ export default function ProductCard({ product }: ProductCardProps) {
           {/* Quick add */}
           <button
             className={`quick-add-btn${isHovered ? ' visible' : ''}`}
-            onClick={handleQuickAdd}
+            onClick={product.inStock === false ? (e) => { e.preventDefault(); e.stopPropagation(); } : handleQuickAdd}
+            disabled={product.inStock === false}
             aria-label="Quick Add"
+            style={{ 
+              opacity: product.inStock === false ? 0.8 : 1, 
+              cursor: product.inStock === false ? 'not-allowed' : 'pointer',
+              backgroundColor: product.inStock === false ? '#d32f2f' : undefined,
+              color: product.inStock === false ? '#fff' : undefined
+            }}
           >
-            ADD TO BAG
+            {product.inStock === false ? 'OUT OF STOCK' : 'ADD TO BAG'}
           </button>
         </div>
 

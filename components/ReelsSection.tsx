@@ -79,6 +79,7 @@ function ShoppableVideoCard({
     price: number;
     images: string[];
     type?: string;
+    inStock?: boolean;
   } | null>(null);
 
   useEffect(() => {
@@ -90,6 +91,7 @@ function ShoppableVideoCard({
           price: d.price ?? fallbackPrice,
           images: d.images ?? [],
           type: d.type ?? 'attar',
+          inStock: d.inStock,
         });
       }
     }).catch(() => {/* silent fail, fallback values used */});
@@ -273,22 +275,32 @@ function ShoppableVideoCard({
 
         {/* Add to cart button */}
         <button
-          onClick={handleAddToCart}
-          title="Add to cart"
+          onClick={product?.inStock === false ? (e) => {e.preventDefault(); e.stopPropagation();} : handleAddToCart}
+          title={product?.inStock === false ? "Out of stock" : "Add to cart"}
+          disabled={product?.inStock === false}
           style={{
-            width: '30px', height: '30px', borderRadius: '8px',
+            width: product?.inStock === false ? 'auto' : '30px', height: '30px', borderRadius: '8px',
             flexShrink: 0,
-            border: 'none', cursor: 'pointer',
+            padding: product?.inStock === false ? '0 8px' : '0',
+            border: 'none', cursor: product?.inStock === false ? 'not-allowed' : 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: added
+            background: product?.inStock === false
+              ? '#ef4444'
+              : added
               ? 'linear-gradient(135deg, #10b981, #059669)'
               : 'linear-gradient(135deg, #d4af5f, #c9973a)',
             transition: 'background 0.25s, transform 0.15s',
+            opacity: product?.inStock === false ? 0.8 : 1,
+            color: 'white',
+            fontSize: '10px',
+            fontWeight: '700'
           }}
-          onMouseDown={e => (e.currentTarget.style.transform = 'scale(0.9)')}
-          onMouseUp={e => (e.currentTarget.style.transform = 'scale(1)')}
+          onMouseDown={e => {if(product?.inStock !== false) e.currentTarget.style.transform = 'scale(0.9)'}}
+          onMouseUp={e => {if(product?.inStock !== false) e.currentTarget.style.transform = 'scale(1)'}}
         >
-          {added ? (
+          {product?.inStock === false ? (
+            "OUT OF STOCK"
+          ) : added ? (
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>

@@ -16,6 +16,7 @@ interface FBProduct {
   originalPrice?: number;
   images?: string[];
   sizes?: number[];
+  inStock?: boolean;
 }
 
 function discountPct(p: number, op?: number) {
@@ -493,8 +494,12 @@ export default function BestSellers() {
                       <button
                         className={`bs-atc${isAdded ? ' added' : ''}`}
                         onClick={e => handleAddToCart(p, e)}
+                        disabled={p.inStock === false}
+                        style={{ opacity: p.inStock === false ? 0.6 : 1, cursor: p.inStock === false ? 'not-allowed' : 'pointer' }}
                       >
-                        {isAdded ? (
+                        {p.inStock === false ? (
+                          <>OUT OF STOCK</>
+                        ) : isAdded ? (
                           <>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>
                             ADDED!

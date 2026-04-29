@@ -15,6 +15,7 @@ interface DBProduct {
   originalPrice: number;
   isNew: boolean;
   isBestSeller?: boolean;
+  inStock?: boolean;
   images: string[];
   type?: 'attar' | 'perfume';
 }
@@ -65,6 +66,19 @@ export default function AdminProductsPage() {
       setProducts(prev => prev.map(p => p.id === product.id ? { ...p, isBestSeller: newVal } : p));
     } catch {
       alert('Failed to update Best Seller status.');
+    } finally {
+      setTogglingId(null);
+    }
+  };
+
+  const handleToggleStock = async (product: DBProduct) => {
+    setTogglingId(product.id + '-stock');
+    const newVal = product.inStock === false ? true : false;
+    try {
+      await updateDoc(doc(db, 'products', product.id), { inStock: newVal });
+      setProducts(prev => prev.map(p => p.id === product.id ? { ...p, inStock: newVal } : p));
+    } catch {
+      alert('Failed to update Stock status.');
     } finally {
       setTogglingId(null);
     }
@@ -703,11 +717,32 @@ export default function AdminProductsPage() {
 
                     {/* Status */}
                     <div className="prd-status" style={{ minWidth: '80px' }}>
-                      {product.isNew ? (
-                        <span className="badge-new">● Active</span>
-                      ) : (
-                        <span className="badge-draft">Draft</span>
-                      )}
+                      <button 
+                        onClick={() => handleToggleStock(product)}
+                        disabled={togglingId === product.id + '-stock'}
+                        style={{
+                          border: 'none',
+                          background: product.inStock === false ? 'rgba(239, 68, 68, 0.15)' : 'rgba(34, 197, 94, 0.15)',
+                          color: product.inStock === false ? '#ef4444' : '#22c55e',
+                          padding: '4px 10px',
+                          borderRadius: '6px',
+                          fontSize: '11px',
+                          fontWeight: '700',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          cursor: 'pointer',
+                          opacity: togglingId === product.id + '-stock' ? 0.5 : 1,
+                          transition: 'all 0.2s ease',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        <span style={{ 
+                          width: '6px', height: '6px', borderRadius: '50%', 
+                          background: product.inStock === false ? '#ef4444' : '#22c55e' 
+                        }}></span>
+                        {product.inStock === false ? 'Out of Stock' : 'Active'}
+                      </button>
                     </div>
 
                     {/* Best Seller Toggle */}

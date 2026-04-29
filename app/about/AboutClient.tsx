@@ -90,6 +90,23 @@ export default function AboutClient() {
                         <div /><div /><div /><div />
                     </div>
 
+                    {/* Chrome Figure for PC */}
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.9, x: 50 }}
+                        animate={{ opacity: 1, scale: 1, x: 0 }}
+                        transition={{ duration: 1.2, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        className="hidden md:block absolute right-[5%] top-[10%] w-[35vw] h-[65vh] pointer-events-none"
+                        style={{ zIndex: 5 }}
+                    >
+                        <Image
+                            src="/assets/chrome-figure-v2nobg.png"
+                            alt="Chrome Figure"
+                            fill
+                            priority
+                            className="object-contain object-right drop-shadow-[0_0_60px_rgba(204,255,0,0.15)]"
+                        />
+                    </motion.div>
+
                     {/* Full-width title */}
                     <div className="relative w-full overflow-hidden" style={{ zIndex: 10 }}>
                         <motion.div
