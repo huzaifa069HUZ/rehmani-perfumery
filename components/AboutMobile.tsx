@@ -12,21 +12,21 @@ const staggerContainer = {
 };
 const staggerItem = {
   hidden: { opacity: 0, y: 28 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] as any } },
 };
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 32 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-40px' },
-  transition: { duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] },
+  transition: { duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] as any },
 });
 
 const scaleIn = (delay = 0) => ({
   initial: { opacity: 0, scale: 0.92 },
   whileInView: { opacity: 1, scale: 1 },
   viewport: { once: true, margin: '-30px' },
-  transition: { duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] },
+  transition: { duration: 0.7, delay, ease: [0.25, 0.46, 0.45, 0.94] as any },
 });
 
 export default function AboutMobile() {
