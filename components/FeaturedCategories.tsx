@@ -37,7 +37,7 @@ export default function FeaturedCategories() {
       href: '/?filter=for-him#collections',
     },
     {
-      img: '/assets/FOR HER img.png',
+      img: '/assets/FOR HER IMG.png',
       label: '',
       title: 'For Her',
       desc: '',
@@ -197,7 +197,7 @@ export default function FeaturedCategories() {
 
         @media (max-width: 900px) {
           .luxury-text {
-            font-size: 2rem !important;
+            font-size: 2.4rem !important;
           }
         }
       `}</style>

@@ -2081,7 +2081,7 @@ button {
     gap: 6px;
   }
 
-  .category-title {
+  .category-title:not(.luxury-text) {
     font-size: clamp(0.9rem, 3vw, 1.2rem) !important;
   }
 
