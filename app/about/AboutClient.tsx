@@ -14,6 +14,8 @@ import CartDrawer from '@/components/CartDrawer';
 import MobileMenu from '@/components/MobileMenu';
 import GlobalSearch from '@/components/GlobalSearch';
 import Preloader from '@/components/ui/preloader';
+import AboutMobile from '@/components/AboutMobile';
+import AnnouncementBar from '@/components/AnnouncementBar';
 
 import { Great_Vibes } from 'next/font/google';
 import { CharacterV1 } from '@/components/ui/text-scroll-animation';
@@ -70,7 +72,20 @@ export default function AboutClient() {
             <CartDrawer />
             <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
 
-            <main className="relative z-20 w-full">
+            {/* ═══ MOBILE LAYOUT ═══ */}
+            <div className="block md:hidden">
+                <div className="fixed top-0 w-full z-50">
+                    <AnnouncementBar />
+                    <Header onMenuOpen={() => setMobileMenuOpen(true)} onSearchOpen={() => setIsSearchOpen(true)} />
+                </div>
+                <div style={{ paddingTop: 'calc(var(--announce-h, 36px) + var(--header-h, 60px))' }}>
+                    <AboutMobile />
+                </div>
+                <Footer />
+            </div>
+
+            {/* ═══ DESKTOP LAYOUT ═══ */}
+            <main className="relative z-20 w-full hidden md:block">
 
                 {/* ── SECTION 1: DARK STRUCTURAL HERO ── */}
                 <section ref={heroRef} className="relative w-full bg-black text-white pb-12 md:pb-20" style={{ paddingTop: 'calc(var(--announce-h) + var(--header-h) + 3vw)' }}>
@@ -424,7 +439,9 @@ export default function AboutClient() {
 
             </main>
 
-            <Footer />
+            <div className="hidden md:block">
+                <Footer />
+            </div>
         </div>
     );
 }

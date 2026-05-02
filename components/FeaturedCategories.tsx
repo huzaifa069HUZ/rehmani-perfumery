@@ -37,7 +37,7 @@ export default function FeaturedCategories() {
       href: '/?filter=for-him#collections',
     },
     {
-      img: '/assets/for her.png',
+      img: '/assets/FOR HER img.png',
       label: '',
       title: 'For Her',
       desc: '',
@@ -105,7 +105,7 @@ export default function FeaturedCategories() {
             ))}
 
             {/* Navigation Arrows */}
-            <button 
+            <button
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -116,7 +116,7 @@ export default function FeaturedCategories() {
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
             </button>
-            <button 
+            <button
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

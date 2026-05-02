@@ -124,6 +124,38 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     <Link href="/about" className="mm-link" onClick={onClose}>ABOUT</Link>
                   </div>
                 </div>
+
+                <div className="mm-group">
+                  <div className="mm-group-header">
+                    <Link href="/category/gifting" className="mm-link" onClick={onClose}>GIFTING</Link>
+                  </div>
+                </div>
+
+                <div className="mm-group">
+                  <div className="mm-group-header">
+                    <Link href="/store" className="mm-link" onClick={onClose}>OUR STORE</Link>
+                  </div>
+                </div>
+
+                <div className="mm-group">
+                  <div className="mm-group-header">
+                    <Link 
+                      href="/#contact" 
+                      className="mm-link" 
+                      onClick={(e) => {
+                        onClose();
+                        if (window.location.pathname === '/') {
+                          e.preventDefault();
+                          const el = document.getElementById('contact');
+                          if (el) el.scrollIntoView({ behavior: 'smooth' });
+                          else setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 300);
+                        }
+                      }}
+                    >
+                      CONTACT
+                    </Link>
+                  </div>
+                </div>
               </div>
 
               {/* Bottom Footer Area */}
