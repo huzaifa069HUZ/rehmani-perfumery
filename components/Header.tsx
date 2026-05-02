@@ -131,23 +131,10 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
             </div>
 
             <Link href="/perfumes" className={`nav-link${pathname === '/perfumes' ? ' active' : ''} flex items-center`}>PERFUMES</Link>
+            <Link href="/incense-sticks" className={`nav-link${pathname === '/incense-sticks' ? ' active' : ''} flex items-center`}>INCENSE STICKS</Link>
             <Link href="/category/gifting" className={`nav-link${pathname === '/category/gifting' ? ' active' : ''} flex items-center`}>GIFTING</Link>
             <Link href="/about" className={`nav-link${pathname === '/about' ? ' active' : ''} flex items-center`}>ABOUT</Link>
             <Link href="/store" className={`nav-link${pathname === '/store' ? ' active' : ''} flex items-center`}>OUR STORE</Link>
-            <Link 
-              href="/#contact" 
-              onClick={(e) => {
-                if (pathname === '/') {
-                  e.preventDefault();
-                  const el = document.getElementById('contact');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  else setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 300);
-                }
-              }}
-              className={`nav-link${pathname === '/#contact' ? ' active' : ''} flex items-center`}
-            >
-              CONTACT
-            </Link>
           </nav>
 
           {/* Actions */}
