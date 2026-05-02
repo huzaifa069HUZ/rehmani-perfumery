@@ -206,7 +206,7 @@ button {
 
 .desktop-nav {
   display: flex;
-  gap: 1.3rem;
+  gap: 1.5rem;
   margin-left: auto;
   flex-wrap: nowrap;
   white-space: nowrap;
@@ -220,9 +220,9 @@ button {
 
 .nav-link {
   color: rgba(255, 255, 255, 0.8);
-  font-size: 0.62rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   position: relative;
   padding-bottom: 3px;
