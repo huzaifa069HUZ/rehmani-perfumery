@@ -658,6 +658,8 @@
   transition: transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.35s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.35s;
   overflow: hidden;
   box-shadow: 0 4px 18px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.02);
+  display: flex;
+  flex-direction: column;
 }
 
 .al-card:hover {
@@ -762,8 +764,40 @@
 .al-quick-add:hover { background: #D4AF37; color: #fff; }
 
 .al-card-body {
-  padding: 22px 20px;
+  padding: 18px 16px;
   background: #fff;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.al-card-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.al-add-cart-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #F5F2EC;
+  color: #1A1714;
+  border: 1px solid rgba(212,175,55,0.3);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.al-add-cart-btn:hover {
+  background: #D4AF37;
+  color: #fff;
+  border-color: #D4AF37;
+  transform: scale(1.05);
 }
 
 .al-card-name {
@@ -785,7 +819,7 @@
   font-weight: 500;
 }
 
-.al-card-sizes { display: flex; gap: 0.5rem; margin-bottom: 16px; flex-wrap: wrap; }
+.al-card-sizes { display: flex; gap: 0.5rem; margin-bottom: 0; flex-wrap: wrap; }
 
 .al-size-chip {
   padding: 5px 14px;
@@ -952,9 +986,19 @@
 }
 
 @media (max-width: 480px) {
-  .al-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .al-card-body { padding: 16px 14px; }
-  .al-card-name { font-size: 1.05rem; font-weight: 800; }
-  .al-price-now { font-size: 1.1rem; }
-  .al-price-was { font-size: 0.82rem; }
+  .al-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .al-card-body { padding: 12px 10px; }
+  .al-card-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; line-height: 1.2; }
+  .al-card-notes { font-size: 0.7rem; margin-bottom: 10px; line-height: 1.3; }
+  .al-card-sizes { gap: 0.3rem; }
+  .al-size-chip { padding: 4px 8px; font-size: 0.65rem; border-radius: 4px; }
+  .al-price-now { font-size: 1.05rem; }
+  .al-price-was { font-size: 0.75rem; }
+  .al-card-footer { padding-top: 10px; }
+  .al-add-cart-btn { width: 30px; height: 30px; }
+  .al-add-cart-btn svg { width: 14px; height: 14px; }
+  
+  .al-badge { padding: 4px 8px; font-size: 0.6rem; letter-spacing: 0.08em; }
+  .al-badge-new { top: 8px; left: 8px; }
+  .al-badge-discount { top: 8px; right: 8px; }
 }
