@@ -74,7 +74,7 @@ const ACCORDION_DATA = [
   },
   {
     title: 'Clean Ingredients',
-    content: `• 100% pure essential oils & natural extracts\n• No synthetic fillers or artificial stabilizers\n• Cruelty-free — never tested on animals\n• Free from parabens, phthalates & sulfates\n• Ethically sourced from trusted Arabian suppliers`,
+    content: `• 100% pure   concentrated & natural extracts\n• No synthetic fillers or artificial stabilizers\n• Cruelty-free — never tested on animals\n• Free from parabens, phthalates & sulfates\n• Ethically sourced from trusted Arabian suppliers`,
   },
   {
     title: 'How to Use',
@@ -212,7 +212,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
   const handleShare = async () => {
     const url = `https://rahmaniperfumery.com/product/${buildProductSlug(product.name, product.id)}`;
     if (navigator.share) {
-      try { await navigator.share({ title: product.name, text: `Check out ${product.name} on Rahmani Perfumery!`, url }); } catch {}
+      try { await navigator.share({ title: product.name, text: `Check out ${product.name} on Rahmani Perfumery!`, url }); } catch { }
     } else {
       navigator.clipboard.writeText(url);
       setShareMsg(true);
@@ -360,7 +360,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
             <div className="pp-main-img">
               {product.images && product.images.length > 1 && (
                 <button className="pp-arrow pp-arrow-left" onClick={prevImage}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
                 </button>
               )}
 
@@ -377,15 +377,15 @@ export default function ProductDetailClient({ product }: { product: ProductData 
 
               {product.images && product.images.length > 1 && (
                 <button className="pp-arrow pp-arrow-right" onClick={nextImage}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
                 </button>
               )}
 
               <div className="pp-img-actions">
                 <button className="pp-img-action-btn" aria-label="Share" onClick={handleShare}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
                   </svg>
                   {shareMsg && (
                     <div style={{ position: 'absolute', right: '50px', background: '#000', color: '#fff', fontSize: '10px', padding: '4px 8px', borderRadius: '4px', whiteSpace: 'nowrap' }}>
@@ -398,7 +398,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                     fill={liked ? '#e74c6f' : 'none'}
                     stroke={liked ? '#e74c6f' : 'currentColor'}
                     strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                   </svg>
                 </button>
               </div>
@@ -406,7 +406,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
               {/* Long Lasting Badge */}
               <div className="pp-longlasting-badge">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                  <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
                 </svg>
                 Long Lasting
               </div>
@@ -469,16 +469,16 @@ export default function ProductDetailClient({ product }: { product: ProductData 
             )}
 
             <div className="pp-cta-row">
-              <button 
-                className={`pp-btn-cart ${adding ? 'adding' : ''}`} 
+              <button
+                className={`pp-btn-cart ${adding ? 'adding' : ''}`}
                 onClick={handleAdd}
                 disabled={product.inStock === false || adding}
                 style={{ opacity: product.inStock === false ? 0.6 : 1, cursor: product.inStock === false ? 'not-allowed' : 'pointer' }}
               >
                 {product.inStock === false ? 'Out of Stock' : adding ? 'Adding...' : 'Add to Cart'}
               </button>
-              <button 
-                className="pp-btn-buy" 
+              <button
+                className="pp-btn-buy"
                 onClick={handleAdd}
                 disabled={product.inStock === false}
                 style={{ opacity: product.inStock === false ? 0.6 : 1, cursor: product.inStock === false ? 'not-allowed' : 'pointer' }}
@@ -490,19 +490,19 @@ export default function ProductDetailClient({ product }: { product: ProductData 
             {/* Trust badges */}
             <div className="pp-trust-row">
               <div className="pp-trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
                 Long Lasting 8-12 Hrs
               </div>
               <div className="pp-trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
                 100% Pure Oils
               </div>
               <div className="pp-trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                 Free Shipping ₹999+
               </div>
               <div className="pp-trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="23 4 23 10 17 10" /><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" /></svg>
                 Easy Returns
               </div>
             </div>
@@ -524,7 +524,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                     <span>{item.title}</span>
                     <span className="pp-accordion-icon">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="10"/>
+                        <circle cx="12" cy="12" r="10" />
                         <line x1="12" y1="8" x2="12" y2="16" className="pp-accordion-vline" />
                         <line x1="8" y1="12" x2="16" y2="12" />
                       </svg>
@@ -561,7 +561,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                     Write a review
                   </button>
                 </div>
-                
+
                 <div className="pp-rc-overview">
                   <span className="pp-rc-pct">{recommendedPct}% <span className="pp-rc-small-txt">Recommended</span></span>
                   <span className="pp-rc-avg">{avgRating.toFixed(1)} {renderStars(Math.round(avgRating), 16)} <span className="pp-rc-small-txt">out of {reviews.length} reviews</span></span>
@@ -612,10 +612,10 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                     <span className="pp-rc-view-all">View all</span>
                     <div className="pp-rc-nav-circles">
                       <button onClick={() => scrollReviewCarousel('left')} aria-label="Previous">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 18l-6-6 6-6"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 18l-6-6 6-6" /></svg>
                       </button>
                       <button onClick={() => scrollReviewCarousel('right')} aria-label="Next">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 18l6-6-6-6"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 18l6-6-6-6" /></svg>
                       </button>
                     </div>
                   </div>
@@ -639,7 +639,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                         <span className="pp-rc-name">{review.userName}</span>
                         {user && user.uid === review.userId && (
                           <button className="pp-rc-delete" onClick={() => handleDeleteReview(review.id)}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
                           </button>
                         )}
                       </div>
@@ -662,7 +662,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
             <div className="pp-review-modal" onClick={(e) => e.stopPropagation()}>
               <button className="pp-review-modal-close" onClick={() => setReviewFormOpen(false)}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                  <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
               <h3 className="pp-review-modal-title">Share Your Experience</h3>
@@ -690,7 +690,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                 <div className="pp-review-photo-upload">
                   {newPhotos.map((p, i) => (
                     <div key={i} className="pp-review-photo-thumb">
-                      <Image src={p} alt={`Upload ${i+1}`} fill style={{ objectFit: 'cover' }} sizes="60px" />
+                      <Image src={p} alt={`Upload ${i + 1}`} fill style={{ objectFit: 'cover' }} sizes="60px" />
                       <button onClick={() => setNewPhotos(prev => prev.filter((_, j) => j !== i))} className="pp-review-photo-remove">×</button>
                     </div>
                   ))}
@@ -705,7 +705,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                         <div style={{ width: '18px', height: '18px', border: '2px solid #e2e8f0', borderTopColor: '#d4af5f', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
                       ) : (
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
+                          <rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path d="M21 15l-5-5L5 21" />
                         </svg>
                       )}
                     </button>
@@ -740,7 +740,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
           <div className="pp-lightbox" onClick={() => setLightboxImg(null)}>
             <Image src={lightboxImg} alt="Review photo" fill style={{ objectFit: 'contain', padding: '5%' }} sizes="100vw" />
             <button className="pp-lightbox-close" onClick={() => setLightboxImg(null)}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
             </button>
           </div>
         )}
@@ -753,10 +753,10 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                 <h2 className="pp-section-title">Recommended For You</h2>
                 <div className="pp-recommend-arrows">
                   <button onClick={() => scrollCarousel('left')} className="pp-rec-arrow">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
                   </button>
                   <button onClick={() => scrollCarousel('right')} className="pp-rec-arrow">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
                   </button>
                 </div>
               </div>

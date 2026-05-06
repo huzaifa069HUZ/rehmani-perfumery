@@ -164,8 +164,10 @@ function FreeAttarPopupInner() {
     }
   };
 
+  const [dismissed, setDismissed] = useState(false);
+
   // ─── Floating gift icon (shown when not yet claimed & popup is closed) ───
-  const floatBtn = !claimed && !visible && !checkingClaim ? (
+  const floatBtn = !claimed && !visible && !checkingClaim && !dismissed ? (
     <>
       <style>{`
         @keyframes giftGlow {
@@ -181,7 +183,7 @@ function FreeAttarPopupInner() {
           70% { transform: scale(1.2); }
           100% { transform: scale(1); opacity: 1; }
         }
-        .frp-float-btn {
+        .frp-float-container {
           position: fixed;
           left: 16px;
           bottom: 80px;
@@ -190,10 +192,42 @@ function FreeAttarPopupInner() {
           flex-direction: column;
           align-items: center;
           gap: 6px;
+        }
+        .frp-float-btn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
           cursor: pointer;
           border: none;
           background: none;
           padding: 0;
+          position: relative;
+        }
+        .frp-float-dismiss {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.9);
+          color: #333;
+          border: 1px solid #ddd;
+          font-size: 12px;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          z-index: 10;
+          transition: all 0.2s;
+        }
+        .frp-float-dismiss:hover {
+          background: #fff;
+          transform: scale(1.1);
+          color: #d4af37;
         }
         .frp-float-circle {
           width: 56px;
@@ -225,19 +259,22 @@ function FreeAttarPopupInner() {
           animation: giftBadgePop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
         }
         @media (max-width: 640px) {
-          .frp-float-btn { bottom: 100px; left: 12px; }
+          .frp-float-container { bottom: 100px; left: 12px; }
           .frp-float-circle { width: 48px; height: 48px; font-size: 1.35rem; }
         }
       `}</style>
-      <button
-        className="frp-float-btn"
-        onClick={() => setVisible(true)}
-        aria-label="Claim your free 2ml mystery attar"
-        title="Claim Free 2ml Attar!"
-      >
-        <div className="frp-float-circle">🎁</div>
-        <span className="frp-float-label">Free Attar!</span>
-      </button>
+      <div className="frp-float-container">
+        <button className="frp-float-dismiss" onClick={() => setDismissed(true)} aria-label="Dismiss offer" title="Close">✕</button>
+        <button
+          className="frp-float-btn"
+          onClick={() => setVisible(true)}
+          aria-label="Claim your free 2ml mystery attar"
+          title="Claim Free 2ml Attar!"
+        >
+          <div className="frp-float-circle">🎁</div>
+          <span className="frp-float-label">Free Attar!</span>
+        </button>
+      </div>
     </>
   ) : null;
 

@@ -5,7 +5,7 @@ export default function Footer() {
         <div className="footer-grid">
           <div className="footer-col">
             <h3 className="footer-brand">rahmani</h3>
-            <p className="footer-text">Premium Arabian attars crafted with pure essential oils since 2015.</p>
+            <p className="footer-text">Premium Arabian attars crafted with pure concentrated oils since 2015.</p>
             <div className="footer-socials">
               {['instagram', 'facebook', 'twitter'].map(s => (
                 <a key={s} href={s === 'instagram' ? 'https://www.instagram.com/rahmaniperfumery/' : '#'} target={s === 'instagram' ? '_blank' : undefined} rel={s === 'instagram' ? 'noopener noreferrer' : undefined} aria-label={s} className="social-link">
