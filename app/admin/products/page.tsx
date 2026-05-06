@@ -17,7 +17,7 @@ interface DBProduct {
   isBestSeller?: boolean;
   inStock?: boolean;
   images: string[];
-  type?: 'attar' | 'perfume';
+  type?: 'attar' | 'perfume' | 'bakhoor' | 'incense';
 }
 
 export default function AdminProductsPage() {
@@ -703,10 +703,10 @@ export default function AdminProductsPage() {
                       <div className="prd-type" style={{ minWidth: '90px' }}>
                         <span style={{ 
                         display: 'inline-flex', padding: '3px 8px', borderRadius: '6px', fontSize: '10px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em',
-                        background: product.type === 'perfume' ? 'rgba(56, 189, 248, 0.15)' : 'rgba(212,175,95,0.15)',
-                        color: product.type === 'perfume' ? '#0ea5e9' : '#d4af5f', border: `1px solid ${product.type === 'perfume' ? 'rgba(56, 189, 248, 0.3)' : 'rgba(212,175,95,0.3)'}`
+                        background: product.type === 'perfume' ? 'rgba(56, 189, 248, 0.15)' : product.type === 'bakhoor' ? 'rgba(168,132,42,0.15)' : product.type === 'incense' ? 'rgba(234,179,8,0.15)' : 'rgba(212,175,95,0.15)',
+                        color: product.type === 'perfume' ? '#0ea5e9' : product.type === 'bakhoor' ? '#a8842a' : product.type === 'incense' ? '#ca8a04' : '#d4af5f', border: `1px solid ${product.type === 'perfume' ? 'rgba(56, 189, 248, 0.3)' : product.type === 'bakhoor' ? 'rgba(168,132,42,0.3)' : product.type === 'incense' ? 'rgba(234,179,8,0.3)' : 'rgba(212,175,95,0.3)'}`
                       }}>
-                        {product.type === 'perfume' ? 'Perfume' : 'Attar'}
+                        {product.type === 'perfume' ? 'Perfume' : product.type === 'bakhoor' ? 'Bakhoor' : product.type === 'incense' ? 'Incense' : 'Attar'}
                       </span>
                     </div>
 
@@ -883,6 +883,40 @@ export default function AdminProductsPage() {
                 <div>
                   <div style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '2px' }}>Luxury Perfume</div>
                   <div style={{ fontSize: '12px', color: '#64748b' }}>30ml, 50ml, and 100ml sprays</div>
+                </div>
+              </Link>
+
+              <Link href="/admin/products/add?type=bakhoor" 
+                style={{
+                   display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', borderRadius: '12px',
+                   border: '1px solid #e2e8f0', background: '#f8fafc', textDecoration: 'none', transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.borderColor = '#d4af5f'; e.currentTarget.style.background = 'rgba(212,175,95,0.05)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#f8fafc'; }}
+              >
+                <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <span style={{ fontSize: '24px' }}>🪔</span>
+                </div>
+                <div>
+                  <div style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '2px' }}>Premium Bakhoor</div>
+                  <div style={{ fontSize: '12px', color: '#64748b' }}>20g, 40g, and 100g incense chips</div>
+                </div>
+              </Link>
+
+              <Link href="/admin/products/add?type=incense" 
+                style={{
+                   display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', borderRadius: '12px',
+                   border: '1px solid #e2e8f0', background: '#f8fafc', textDecoration: 'none', transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.borderColor = '#d4af5f'; e.currentTarget.style.background = 'rgba(212,175,95,0.05)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.background = '#f8fafc'; }}
+              >
+                <div style={{ width: '48px', height: '48px', borderRadius: '10px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <span style={{ fontSize: '24px' }}>🕯️</span>
+                </div>
+                <div>
+                  <div style={{ fontSize: '15px', fontWeight: '600', color: '#1e293b', marginBottom: '2px' }}>Incense Sticks</div>
+                  <div style={{ fontSize: '12px', color: '#64748b' }}>Premium aggarbatti packs</div>
                 </div>
               </Link>
             </div>

@@ -70,7 +70,6 @@ export default function Home() {
         <Footer />
       </main>
 
-      <CartDrawer />
       <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
     </>
   );

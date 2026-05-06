@@ -42,16 +42,27 @@ export default function AddProductPage() {
   const [images, setImages] = useState<string[]>([]);
   const [tagsInput, setTagsInput] = useState('');
   const [isNew, setIsNew] = useState(true);
-  const [productType, setProductType] = useState<'attar' | 'perfume'>('attar');
+  const [productType, setProductType] = useState<'attar' | 'perfume' | 'bakhoor' | 'incense'>('attar');
   const [sizes, setSizes] = useState<number[]>([6, 12, 24]);
   const [availableSizes, setAvailableSizes] = useState<number[]>([6, 12, 24]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('type') === 'perfume') {
+    const t = params.get('type');
+    if (t === 'perfume') {
       setProductType('perfume');
       setSizes([30, 50, 100]);
       setAvailableSizes([30, 50, 100]);
+    } else if (t === 'bakhoor') {
+      setProductType('bakhoor');
+      setSizes([20, 40, 100]);
+      setAvailableSizes([20, 40, 100]);
+      setPricing({ 20: { price: '', originalPrice: '' }, 40: { price: '', originalPrice: '' }, 100: { price: '', originalPrice: '' } });
+    } else if (t === 'incense') {
+      setProductType('incense');
+      setSizes([10, 20, 50]);
+      setAvailableSizes([10, 20, 50]);
+      setPricing({ 10: { price: '', originalPrice: '' }, 20: { price: '', originalPrice: '' }, 50: { price: '', originalPrice: '' } });
     } else {
       setProductType('attar');
       setSizes([6, 12, 24]);
@@ -628,16 +639,17 @@ export default function AddProductPage() {
                 {/* ─── Type Segmented Control ─── */}
                 <div className="field-group">
                   <label className="field-label">Product Type</label>
-                  <div style={{ display: 'flex', gap: '8px', background: '#f8fafc', padding: '6px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ display: 'flex', gap: '8px', background: '#f8fafc', padding: '6px', borderRadius: '12px', border: '1px solid #e2e8f0', flexWrap: 'wrap' }}>
                     <button
                       type="button"
                       onClick={() => {
                         setProductType('attar');
                         setSizes([6, 12, 24]);
                         setAvailableSizes([6, 12, 24]);
+                        setPricing({ 6: { price: '', originalPrice: '' }, 12: { price: '', originalPrice: '' }, 24: { price: '', originalPrice: '' } });
                       }}
                       style={{ 
-                        flex: 1, padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
+                        flex: 1, minWidth: '70px', padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
                         background: productType === 'attar' ? '#fff' : 'transparent',
                         color: productType === 'attar' ? '#0f172a' : '#64748b',
                         boxShadow: productType === 'attar' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none', border: 'none', cursor: 'pointer'
@@ -650,14 +662,47 @@ export default function AddProductPage() {
                         setProductType('perfume');
                         setSizes([30, 50, 100]);
                         setAvailableSizes([30, 50, 100]);
+                        setPricing({ 30: { price: '', originalPrice: '' }, 50: { price: '', originalPrice: '' }, 100: { price: '', originalPrice: '' } });
                       }}
                       style={{ 
-                        flex: 1, padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
+                        flex: 1, minWidth: '70px', padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
                         background: productType === 'perfume' ? '#fff' : 'transparent',
                         color: productType === 'perfume' ? '#0f172a' : '#64748b',
                         boxShadow: productType === 'perfume' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none', border: 'none', cursor: 'pointer'
                       }}>
                       Perfume
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProductType('bakhoor');
+                        setSizes([20, 40, 100]);
+                        setAvailableSizes([20, 40, 100]);
+                        setPricing({ 20: { price: '', originalPrice: '' }, 40: { price: '', originalPrice: '' }, 100: { price: '', originalPrice: '' } });
+                      }}
+                      style={{ 
+                        flex: 1, minWidth: '70px', padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
+                        background: productType === 'bakhoor' ? '#fff' : 'transparent',
+                        color: productType === 'bakhoor' ? '#0f172a' : '#64748b',
+                        boxShadow: productType === 'bakhoor' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none', border: 'none', cursor: 'pointer'
+                      }}>
+                      Bakhoor
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProductType('incense');
+                        setSizes([10, 20, 50]);
+                        setAvailableSizes([10, 20, 50]);
+                        setPricing({ 10: { price: '', originalPrice: '' }, 20: { price: '', originalPrice: '' }, 50: { price: '', originalPrice: '' } });
+                      }}
+                      style={{ 
+                        flex: 1, minWidth: '70px', padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
+                        background: productType === 'incense' ? '#fff' : 'transparent',
+                        color: productType === 'incense' ? '#0f172a' : '#64748b',
+                        boxShadow: productType === 'incense' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none', border: 'none', cursor: 'pointer'
+                      }}>
+                      Incense
                     </button>
                   </div>
                 </div>
@@ -777,14 +822,14 @@ export default function AddProductPage() {
                 </div>
                 <div>
                   <h2>Bottle Sizes & Pricing</h2>
-                  <p>Configure options and their prices</p>
+                  <p>{productType === 'bakhoor' ? 'Configure weight options' : productType === 'incense' ? 'Configure pack sizes' : 'Configure options and their prices'}</p>
                 </div>
               </div>
               <div className="card-body">
                 {/* ─── Bottle Sizes ─── */}
                 <div className="field-group">
                   <label className="field-label">
-                    Active Bottle Sizes
+                    {productType === 'bakhoor' ? 'Weight Options' : productType === 'incense' ? 'Pack Sizes' : 'Active Bottle Sizes'}
                     <span style={{ marginLeft: '6px', fontSize: '10px', fontWeight: '500', color: '#94a3b8', textTransform: 'none', letterSpacing: 0 }}>(select all that apply)</span>
                   </label>
                   <div style={{ display: 'flex', gap: '10px' }}>
@@ -845,7 +890,7 @@ export default function AddProductPage() {
                             color: active ? '#b8860b' : '#64748b',
                             transition: 'color 0.2s',
                             letterSpacing: '-0.01em',
-                          }}>{ml} ml</span>
+                          }}>{ml}{productType === 'bakhoor' ? 'g' : productType === 'incense' ? ' sticks' : ' ml'}</span>
                         </button>
                       );
                     })}
@@ -866,7 +911,7 @@ export default function AddProductPage() {
                     return (
                       <div key={size} style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                           <span style={{ fontWeight: '700', color: '#0f172a', fontSize: '15px' }}>{size}ml Pricing</span>
+                           <span style={{ fontWeight: '700', color: '#0f172a', fontSize: '15px' }}>{size}{productType === 'bakhoor' ? 'g' : productType === 'incense' ? ' sticks' : 'ml'} Pricing</span>
                         </div>
                         <div className="pricing-grid">
                           <div className="field-group">

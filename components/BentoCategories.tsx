@@ -85,7 +85,7 @@ export default function BentoCategories() {
             </Link>
 
             {/* Bakhoor - Tall */}
-            <Link href="/attars" className="bento-item bento-tall" style={{ order: 3 }}>
+            <Link href="/bakhoor" className="bento-item bento-tall" style={{ order: 3 }}>
               <Image 
                 src="/assets/bakhoor.png" 
                 alt="Bakhoor Category" 

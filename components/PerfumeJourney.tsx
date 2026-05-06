@@ -71,7 +71,6 @@ const REVEAL_TEXT =
 // ─── Main Section ───────────────────────────────────────────────────────────────
 export default function PerfumeJourney() {
   const pinnedRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const blurRef = useRef<HTMLDivElement>(null);
   const progress = useRef<number>(0);
@@ -79,7 +78,7 @@ export default function PerfumeJourney() {
   const isCanvasInView = useInView(pinnedRef, { margin: '800px 0px' });
 
   useEffect(() => {
-    if (!pinnedRef.current || !cardRef.current || !canvasRef.current || !blurRef.current) return;
+    if (!pinnedRef.current || !canvasRef.current || !blurRef.current) return;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -98,7 +97,6 @@ export default function PerfumeJourney() {
 
     tl.fromTo(canvasRef.current, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0);
     tl.fromTo(blurRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.inOut' }, 0.5);
-    tl.fromTo(cardRef.current, { opacity: 0, y: 50, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'power2.out' }, 0.5);
 
     // Deep layout shift compensation: observe the page for height changes (e.g. from images loading)
     let ro: ResizeObserver | null = null;
@@ -181,213 +179,6 @@ export default function PerfumeJourney() {
             className="absolute inset-0 z-10 hidden md:block"
             style={{ opacity: 0, backdropFilter: 'blur(5px)', WebkitBackdropFilter: 'blur(5px)', background: 'rgba(0,0,0,0.12)' }}
           />
-
-          {/* ── Premium Info Card ─────────────────────────────────────────── */}
-          <div
-            ref={cardRef}
-            style={{
-              position: 'absolute',
-              zIndex: 20,
-              inset: 'auto',
-              // Desktop: right-positioned. Mobile: centred bottom
-              right: 'clamp(12px, 4vw, 48px)',
-              bottom: 'clamp(40px, 8vh, 80px)',
-              width: 'min(100% - 24px, 480px)',
-              opacity: 0,
-              borderRadius: 24,
-              overflow: 'hidden',
-              boxShadow: [
-                '0 2px 0 0 rgba(255,255,255,0.06) inset',
-                '0 60px 100px -20px rgba(0,0,0,0.8)',
-                '0 0 0 0.5px rgba(255,255,255,0.07)',
-                '0 0 50px 10px rgba(212,175,55,0.04)',
-              ].join(', '),
-              cursor: 'default',
-              pointerEvents: 'auto',
-              transition: 'transform 0.45s cubic-bezier(0.25,1,0.5,1)',
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px) scale(1.012)'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0) scale(1)'; }}
-          >
-            {/* Glass surface */}
-            <div style={{
-              position: 'relative',
-              padding: 'clamp(1.6rem, 4vw, 2.6rem)',
-              background: 'linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)',
-              backdropFilter: 'blur(32px)',
-              WebkitBackdropFilter: 'blur(32px)',
-              border: '1px solid rgba(255,255,255,0.09)',
-              borderRadius: 24,
-            }}>
-              {/* Top glass highlight streak */}
-              <div style={{
-                position: 'absolute', top: 0, left: '8%', right: '8%', height: 1,
-                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                borderRadius: 999, pointerEvents: 'none',
-              }} />
-              {/* Right edge glow */}
-              <div style={{
-                position: 'absolute', top: '25%', right: -1, width: 1, height: '40%',
-                background: 'linear-gradient(180deg, transparent, rgba(212,175,55,0.22), transparent)',
-                pointerEvents: 'none',
-              }} />
-
-              {/* Content */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-
-                {/* Eyebrow */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{
-                      width: 5, height: 5, borderRadius: '50%',
-                      background: 'rgba(212,175,55,0.9)',
-                      boxShadow: '0 0 8px rgba(212,175,55,0.65)',
-                      display: 'inline-block', flexShrink: 0,
-                    }} />
-                    <span style={{
-                      fontSize: '0.58rem', letterSpacing: '0.42em',
-                      textTransform: 'uppercase', fontWeight: 500,
-                      color: 'rgba(212,175,55,0.75)',
-                    }}>
-                      Rahmani Perfumery&nbsp;·&nbsp;Est. 2010
-                    </span>
-                  </div>
-                  {/* Quality badge */}
-                  <span style={{
-                    fontSize: '0.55rem', fontWeight: 700,
-                    letterSpacing: '0.12em', textTransform: 'uppercase',
-                    color: 'rgba(212,175,55,0.6)',
-                    border: '1px solid rgba(212,175,55,0.2)',
-                    borderRadius: 30, padding: '3px 9px',
-                  }}>
-                    Premium
-                  </span>
-                </div>
-
-                {/* Heading */}
-                <h2 style={{
-                  margin: 0,
-                  fontFamily: '"Playfair Display", Georgia, serif',
-                  fontSize: 'clamp(1.8rem, 4.5vw, 2.6rem)',
-                  fontWeight: 700, lineHeight: 1.1,
-                  letterSpacing: '-0.015em', color: '#ffffff',
-                }}>
-                  Crafted for{' '}
-                  <span style={{
-                    fontStyle: 'italic', fontWeight: 400,
-                    background: 'linear-gradient(110deg, #D4AF37 10%, #e8b84b 55%, #f0d080 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}>
-                    Presence
-                  </span>
-                </h2>
-
-                {/* Divider */}
-                <div style={{
-                  height: 0.5,
-                  background: 'linear-gradient(90deg, rgba(212,175,55,0.25), rgba(255,255,255,0.04))',
-                  borderRadius: 999,
-                }} />
-
-                {/* Description — fixed: warm off-white, NOT green */}
-                <p style={{
-                  margin: 0,
-                  fontFamily: '"Inter", "Satoshi", system-ui, sans-serif',
-                  fontSize: 'clamp(0.84rem, 1.3vw, 0.95rem)',
-                  fontWeight: 300, lineHeight: 1.8,
-                  color: 'rgba(230,220,200,0.72)', // warm off-white — matches brand
-                  maxWidth: '40ch',
-                }}>
-                  From sunlit rose fields to ancient oud forests — every bottle
-                  is a journey into pure sensory artistry. Worn by those who
-                  move through the world with intention.
-                </p>
-
-                {/* Feature tags */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                  {['Pure Attar', 'Handcrafted', 'Long-Lasting', 'Alcohol Free'].map(tag => (
-                    <span key={tag} style={{
-                      padding: '4px 13px', borderRadius: 999,
-                      fontSize: '0.58rem', letterSpacing: '0.07em',
-                      fontWeight: 500,
-                      color: 'rgba(235,225,200,0.55)',
-                      background: 'rgba(255,255,255,0.04)',
-                      border: '0.5px solid rgba(255,255,255,0.09)',
-                    }}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* CTA row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', paddingTop: '0.15rem' }}>
-
-                  {/* Primary gold button */}
-                  <a
-                    href="/attars"
-                    style={{
-                      position: 'relative', overflow: 'hidden',
-                      display: 'inline-flex', alignItems: 'center', gap: 9,
-                      padding: '13px 26px', borderRadius: 999,
-                      fontSize: '0.68rem', letterSpacing: '0.2em',
-                      textTransform: 'uppercase', fontWeight: 700,
-                      color: '#0d0900', textDecoration: 'none',
-                      background: 'linear-gradient(120deg, #D4AF37 0%, #c88a1a 55%, #e8b84b 100%)',
-                      boxShadow: '0 4px 22px rgba(212,175,55,0.28), 0 1px 0 rgba(255,255,255,0.18) inset',
-                      transition: 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease',
-                      whiteSpace: 'nowrap',
-                    }}
-                    onMouseEnter={e => {
-                      const el = e.currentTarget as HTMLElement;
-                      el.style.transform = 'translateY(-2px) scale(1.04)';
-                      el.style.boxShadow = '0 10px 40px rgba(212,175,55,0.55), 0 1px 0 rgba(255,255,255,0.25) inset';
-                    }}
-                    onMouseLeave={e => {
-                      const el = e.currentTarget as HTMLElement;
-                      el.style.transform = 'translateY(0) scale(1)';
-                      el.style.boxShadow = '0 4px 22px rgba(212,175,55,0.28), 0 1px 0 rgba(255,255,255,0.18) inset';
-                    }}
-                  >
-                    {/* Shimmer sweep on hover */}
-                    <span style={{
-                      position: 'absolute', inset: 0,
-                      background: 'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.28) 50%, transparent 70%)',
-                      transform: 'translateX(-100%)',
-                      transition: 'transform 0.55s ease',
-                      pointerEvents: 'none',
-                    }} />
-                    <span>Explore Collection</span>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                  </a>
-
-                  {/* Ghost text link */}
-                  <a
-                    href="#about"
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 5,
-                      fontSize: '0.65rem', letterSpacing: '0.14em',
-                      textTransform: 'uppercase', fontWeight: 400,
-                      color: 'rgba(215,205,180,0.4)',
-                      textDecoration: 'none',
-                      transition: 'color 0.25s ease',
-                    }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(212,175,55,0.82)'; }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(215,205,180,0.4)'; }}
-                  >
-                    Our Story
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M9 18l6-6-6-6" />
-                    </svg>
-                  </a>
-                </div>
-
-              </div>
-            </div>
-          </div>
 
           {/* WebGL Canvas — GPU composited layer */}
           <div

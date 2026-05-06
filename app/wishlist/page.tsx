@@ -32,7 +32,6 @@ export default function WishlistPage() {
       <Header onMenuOpen={() => setMenuOpen(true)} onSearchOpen={() => setSearchOpen(true)} />
       <MobileMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
       <GlobalSearch isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
-      <CartDrawer />
 
       <main className="wishlist-page">
         <div className="wishlist-container">
