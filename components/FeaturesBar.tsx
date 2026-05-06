@@ -25,7 +25,7 @@ export default function FeaturesBar() {
         </svg>
       ),
       title: 'Easy Returns',
-      desc: '7-day return policy',
+      desc: '7-day return policy (T&C Apply)',
     },
     {
       icon: (

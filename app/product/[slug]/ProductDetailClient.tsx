@@ -74,7 +74,7 @@ const ACCORDION_DATA = [
   },
   {
     title: 'Clean Ingredients',
-    content: `• 100% pure   concentrated & natural extracts\n• No synthetic fillers or artificial stabilizers\n• Cruelty-free — never tested on animals\n• Free from parabens, phthalates & sulfates\n• Ethically sourced from trusted Arabian suppliers`,
+    content: `• 100% pure concentrated oils & natural extracts\n• No synthetic fillers or artificial stabilizers\n• Cruelty-free — never tested on animals\n• Free from parabens, phthalates & sulfates\n• Ethically sourced from trusted Arabian suppliers`,
   },
   {
     title: 'How to Use',

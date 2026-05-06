@@ -1,11 +1,13 @@
+import Link from 'next/link';
+
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="section-container">
         <div className="footer-grid">
           <div className="footer-col">
-            <h3 className="footer-brand">rahmani</h3>
-            <p className="footer-text">Premium Arabian attars crafted with pure concentrated oils since 2015.</p>
+            <h3 className="footer-brand">Rahmani Perfumery</h3>
+            <p className="footer-text">Premium Arabian attars, oud, and perfumes crafted with pure concentrated oils since 2015. Recognized as one of the best attar shops in Patna, Bihar.</p>
             <div className="footer-socials">
               {['instagram', 'facebook', 'twitter'].map(s => (
                 <a key={s} href={s === 'instagram' ? 'https://www.instagram.com/rahmaniperfumery/' : '#'} target={s === 'instagram' ? '_blank' : undefined} rel={s === 'instagram' ? 'noopener noreferrer' : undefined} aria-label={s} className="social-link">
@@ -26,18 +28,20 @@ export default function Footer() {
           <div className="footer-col">
             <h4 className="footer-heading">Shop</h4>
             <ul className="footer-links">
-              {['New Arrivals', 'Best Sellers', 'Gift Sets', 'Sale'].map(l => (
-                <li key={l}><a href="#">{l}</a></li>
-              ))}
+              <li><Link href="/attars">Attars & Oud</Link></li>
+              <li><Link href="/perfumes">Perfumes</Link></li>
+              <li><Link href="/bakhoor">Bakhoor</Link></li>
+              <li><Link href="/incense-sticks">Incense Sticks</Link></li>
             </ul>
           </div>
 
           <div className="footer-col">
             <h4 className="footer-heading">Help</h4>
             <ul className="footer-links">
-              {['Contact Us', 'Shipping', 'Returns', 'FAQ'].map(l => (
-                <li key={l}><a href="#">{l}</a></li>
-              ))}
+              <li><Link href="/about">About Us</Link></li>
+              <li><Link href="/store">Our Stores</Link></li>
+              <li><a href="https://wa.me/919835612345?text=Hello%20Rahmani%20Perfumery,%20I%20have%20a%20question." target="_blank" rel="noopener noreferrer">Contact Us</a></li>
+              <li><Link href="/store">Shipping & Returns</Link></li>
             </ul>
           </div>
 
@@ -45,14 +49,17 @@ export default function Footer() {
             <h4 className="footer-heading">Contact</h4>
             <ul className="footer-links">
               <li>Khagaul Rd, Fiya Colony, Maulana Azad Nagar, Phulwari Sharif, Patna, Bihar 801505</li>
-              <li>+91 98765 43210</li>
-              <li>rahmaniperfumery@gmail.com</li>
+              <li><a href="tel:+919835612345">+91 98356 12345</a></li>
+              <li><a href="mailto:rahmaniperfumerypatna@gmail.com">rahmaniperfumerypatna@gmail.com</a></li>
             </ul>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <p>© 2024 rahmani. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Rahmani Perfumery. All rights reserved.</p>
+          <p className="footer-brand-alt" style={{ fontSize: '0.7rem', opacity: 0.5, marginTop: '0.25rem' }}>
+            Also known as Rehmani Perfumery | Best Attar Shop in Patna, Bihar
+          </p>
         </div>
       </div>
     </footer>
