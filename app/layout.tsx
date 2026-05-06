@@ -67,8 +67,14 @@ export const metadata: Metadata = {
     canonical: 'https://rahmaniperfumery.com',
   },
   icons: {
-    icon: '/favicon.png',
-    apple: '/apple-icon.png',
+    icon: [
+      { url: '/favicon.png', type: 'image/png', sizes: '192x192' },
+      { url: '/icon.png', type: 'image/png', sizes: '512x512' },
+    ],
+    shortcut: '/favicon.png',
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
 };
 
