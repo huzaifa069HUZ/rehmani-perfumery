@@ -19,15 +19,17 @@ const cormorant = Cormorant_Garamond({ subsets: ['latin'], variable: '--font-cor
 export const metadata: Metadata = {
   metadataBase: new URL('https://rahmaniperfumery.com'),
   title: {
-    default: 'Rahmani Perfumery — Fragrance Your Soul Desires',
-    template: '%s | Rahmani Perfumery',
+    default: 'Rahmani Perfumery | Best Attar Shops in Patna, Bihar',
+    template: '%s | Best Attar Shop in Patna, Bihar | Rahmani Perfumery',
   },
   description:
-    'Discover handcrafted Arabian attars, premium oud, musk, and floral perfume oils from Rahmani Perfumery. Rated the best attars in Patna. Buy pure, long-lasting fragrances online.',
+    'Rahmani Perfumery is recognized as one of the best attar shops in Patna, Bihar, and across India. Discover handcrafted Arabian attars, premium oud, musk, and long-lasting floral perfume oils. Buy the finest authentic fragrances online.',
   keywords: [
-    'best attars in Patna', 'best fragrance', 'Rahmani Perfumery', 'attar shop in Patna',
-    'buy attar online', 'Arabian perfume', 'oud attar', 'musk perfume', 'Indian perfume',
-    'ittar', 'floral attar', 'luxury fragrance', 'concentrated perfume oil', 'natural attar',
+    'best attar shops in Patna', 'best attar shop in Bihar', 'top perfumery in Patna', 
+    'best fragrance store in Bihar', 'buy attar online in India', 'best perfumes in Patna',
+    'Rahmani Perfumery Patna', 'attar shop in Patna', 'buy attar online', 
+    'Arabian perfume', 'oud attar', 'musk perfume', 'Indian perfume', 'ittar', 
+    'floral attar', 'luxury fragrance', 'concentrated perfume oil', 'natural attar',
     'Oud Nadira', 'Shamamatul Amber', 'Ruh Khus', 'best oud in India', 'premium attar brand'
   ],
   authors: [{ name: 'Rahmani Perfumery', url: 'https://rahmaniperfumery.com' }],
@@ -42,23 +44,23 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_IN',
     url: 'https://rahmaniperfumery.com',
-    siteName: 'Rahmani Perfumery',
-    title: 'Rahmani Perfumery — Fragrance Your Soul Desires',
+    siteName: 'Rahmani Perfumery - Best Attar Shop in Patna',
+    title: 'Rahmani Perfumery | Best Attar Shops in Patna, Bihar',
     description:
-      'Discover handcrafted Arabian attars, premium oud, musk, and floral perfume oils from Rahmani Perfumery. The best attars in Patna.',
+      'Recognized as one of the best attar shops in Patna, Bihar. Handcrafted Arabian attars, premium oud, musk, and floral perfume oils delivered across India.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Rahmani Perfumery — Fragrance Your Soul Desires',
+        alt: 'Rahmani Perfumery — Best Attar Shops in Patna, Bihar',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Rahmani Perfumery — Fragrance Your Soul Desires',
-    description: 'Discover handcrafted Arabian attars, premium oud, musk, and floral perfume oils.',
+    title: 'Rahmani Perfumery | Best Attar Shops in Patna, Bihar',
+    description: 'Recognized as one of the best attar shops in Patna, Bihar. Handcrafted Arabian attars, premium oud, musk, and floral perfume oils.',
     images: ['/og-image.jpg'],
   },
   alternates: {
@@ -83,7 +85,7 @@ const organizationJsonLd = {
   name: 'Rahmani Perfumery',
   url: 'https://rahmaniperfumery.com',
   logo: 'https://rahmaniperfumery.com/assets/logo.png',
-  description: 'Premium Arabian attars, oud, musk, and floral perfume oils — handcrafted and delivered across India.',
+  description: 'Rahmani Perfumery is the best attar shop in Patna, Bihar. Premium Arabian attars, oud, musk, and floral perfume oils — handcrafted and delivered across India.',
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer service',
