@@ -31,7 +31,6 @@ interface ShadowOverlayProps {
     noise?: NoiseConfig;
     style?: CSSProperties;
     className?: string;
-    children?: React.ReactNode;
 }
 
 function mapRange(
@@ -51,17 +50,17 @@ function mapRange(
 const useInstanceId = (): string => {
     const id = useId();
     const cleanId = id.replace(/:/g, "");
-    return `shadowoverlay-${cleanId}`;
+    const instanceId = `shadowoverlay-${cleanId}`;
+    return instanceId;
 };
 
 export function EtheralShadow({
     sizing = 'fill',
-    color = 'rgba(212, 175, 55, 0.1)', // Adjusted default to a slight gold hue
+    color = 'rgba(128, 128, 128, 1)',
     animation,
     noise,
     style,
-    className,
-    children
+    className
 }: ShadowOverlayProps) {
     const id = useInstanceId();
     const animationEnabled = animation && animation.scale > 0;
@@ -104,9 +103,12 @@ export function EtheralShadow({
         <div
             className={className}
             style={{
-                position: "relative",
+                overflow: "hidden",
+                position: "absolute",
+                inset: 0,
                 width: "100%",
                 height: "100%",
+                zIndex: 0,
                 ...style
             }}
         >
@@ -114,13 +116,11 @@ export function EtheralShadow({
                 style={{
                     position: "absolute",
                     inset: -displacementScale,
-                    filter: animationEnabled ? `url(#${id}) blur(8px)` : "none",
-                    pointerEvents: "none",
-                    zIndex: 0
+                    filter: animationEnabled ? `url(#${id}) blur(4px)` : "none"
                 }}
             >
                 {animationEnabled && (
-                    <svg style={{ position: "absolute", width: 0, height: 0 }}>
+                    <svg style={{ position: "absolute" }}>
                         <defs>
                             <filter id={id}>
                                 <feTurbulence
@@ -166,9 +166,7 @@ export function EtheralShadow({
                         maskRepeat: "no-repeat",
                         maskPosition: "center",
                         width: "100%",
-                        height: "100%",
-                        backgroundBlendMode: "screen",
-                        mixBlendMode: "screen"
+                        height: "100%"
                     }}
                 />
             </div>
@@ -181,17 +179,10 @@ export function EtheralShadow({
                         backgroundImage: `url("https://framerusercontent.com/images/g0QcWrxr87K0ufOxIUFBakwYA8.png")`,
                         backgroundSize: noise.scale * 200,
                         backgroundRepeat: "repeat",
-                        opacity: noise.opacity / 2,
-                        pointerEvents: "none",
-                        zIndex: 0
+                        opacity: noise.opacity / 2
                     }}
                 />
             )}
-
-            {/* Render children safely above the background overlay */}
-            <div style={{ position: "relative", zIndex: 1, width: '100%', height: '100%' }}>
-                {children}
-            </div>
         </div>
     );
 }

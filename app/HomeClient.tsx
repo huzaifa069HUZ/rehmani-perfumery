@@ -21,6 +21,7 @@ import GlobalSearch from '@/components/GlobalSearch';
 
 /* ── CSR-only lazy imports — heavy GPU/3D/map components ── */
 const PerfumeJourney = dynamic(() => import('@/components/PerfumeJourney'), { ssr: false });
+const GiftingBannerSection = dynamic(() => import('@/components/GiftingBannerSection'), { ssr: false });
 const CustomBlendDelivery = dynamic(() => import('@/components/CustomBlendDelivery'), { ssr: false });
 const BottleCarousel = dynamic(() => import('@/components/BottleCarousel'), { ssr: false });
 const ContactSection = dynamic(() => import('@/components/ContactSection'), { ssr: false });
@@ -62,6 +63,7 @@ export default function HomeClient() {
         <BannerSlider />
         <ShopByOccasion />
         <PerfumeJourney />
+        <GiftingBannerSection />
         <CustomBlendDelivery />
         <BottleCarousel />
         <ContactSection />

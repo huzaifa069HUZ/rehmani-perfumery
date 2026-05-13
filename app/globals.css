@@ -220,6 +220,7 @@ button {
 
 .nav-link {
   color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-poppins), sans-serif;
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -303,6 +304,7 @@ button {
 
 .nav-dropdown-item {
   padding: 10px 24px;
+  font-family: var(--font-poppins), sans-serif;
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--charcoal);

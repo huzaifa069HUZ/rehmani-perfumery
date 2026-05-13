@@ -60,6 +60,7 @@ useGLTF.preload('/assets/3dbottle.glb');
 
 import { useMotionValue, useInView } from 'framer-motion';
 import { TextRevealByWord } from '@/components/ui/text-reveal';
+import { EtheralShadow } from '@/components/ui/etheral-shadow';
 
 const REVEAL_TEXT =
   "Rahmani Perfumery — Patna's finest attar house. " +
@@ -124,24 +125,18 @@ export default function PerfumeJourney() {
       className="relative z-[9999]"
       style={{ background: '#060402' }}
     >
-      {/* Subtle film grain overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          opacity: 0.28,
-          mixBlendMode: 'overlay',
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-        }}
-      />
-
       {/* ── Pinned viewport ── */}
       <div
         ref={pinnedRef}
         className="relative h-screen w-full overflow-hidden flex items-center justify-center"
-        style={{
-          background: 'radial-gradient(ellipse 80% 70% at 50% 55%, rgba(50,28,8,0.55) 0%, #050402 80%)',
-        }}
       >
+        <EtheralShadow
+          color="rgba(128, 128, 128, 1)"
+          animation={{ scale: 100, speed: 90 }}
+          noise={{ opacity: 1, scale: 1.2 }}
+          sizing="fill"
+        />
+
         {/* Large ambient glow */}
         <div style={{
           position: 'absolute', top: '43%', left: '50%',

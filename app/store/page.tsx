@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowUpRight, ArrowRight, MapPin, Sparkles, Phone, Clock } from 'lucide-react';
+import { ArrowUpRight, ArrowRight, MapPin, Phone, Clock, Eye, Droplet, Tag, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 import AnnouncementBar from '@/components/AnnouncementBar';
@@ -140,6 +140,12 @@ export default function StorePage() {
         }
         .store-btn:hover .btn-text {
           color: #fff;
+        }
+        .store-btn-green .circle {
+          background: #2B4C33;
+        }
+        .store-btn-green .btn-text {
+          color: #2B4C33;
         }
         @keyframes floralFloat {
           0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -317,13 +323,12 @@ export default function StorePage() {
                   boxShadow: '0 12px 40px 0 rgba(30,60,35,0.1), 0 4px 12px 0 rgba(30,60,35,0.05), inset 0 1.5px 1.5px 0 rgba(255,255,255,0.9)',
                   border: '1.5px solid rgba(200, 230, 210, 0.7)'
                 }}
-                className="group relative flex flex-col lg:flex-row w-full max-w-[1200px] p-3 sm:p-4 md:p-6 lg:p-8 rounded-[24px] sm:rounded-[32px] lg:rounded-[40px] transition-all duration-500 mx-auto"
+                className="group relative flex flex-col-reverse lg:flex-row w-full max-w-[1200px] p-2 sm:p-4 md:p-6 lg:p-8 rounded-[24px] sm:rounded-[32px] lg:rounded-[40px] transition-all duration-500 mx-auto"
               >
                 {/* Left Side: Info */}
-                <div className="w-full lg:w-1/2 flex flex-col items-center text-center justify-center p-6 sm:p-8 md:p-10 lg:p-12 z-10">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 border border-[#E0E8E2] w-fit mb-6 sm:mb-8 shadow-sm">
-                    <MapPin className="w-3.5 h-3.5 text-[#5C6E5C]" />
-                    <span className="text-[10px] tracking-[0.25em] uppercase text-[#5C6E5C] font-bold">Phulwari</span>
+                <div className="w-full lg:w-1/2 flex flex-col items-center text-center justify-center p-4 sm:p-8 md:p-10 lg:p-12 z-10">
+                  <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/70 border border-[#E0E8E2] mb-4 sm:mb-8 shadow-sm">
+                    <MapPin className="w-4 h-4 text-[#5C6E5C]" />
                   </div>
 
                   <h3
@@ -345,7 +350,7 @@ export default function StorePage() {
                     </div>
                     <div className="flex items-center gap-3.5 text-left">
                       <Phone className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
-                      <span className="text-[#3a4a3c] text-[13px] sm:text-sm font-semibold">+91 9835 612 345</span>
+                      <span className="text-[#3a4a3c] text-[13px] sm:text-sm font-semibold">+91 8340783679</span>
                     </div>
                     <div className="flex items-center gap-3.5 text-left">
                       <Clock className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
@@ -353,23 +358,33 @@ export default function StorePage() {
                     </div>
                   </div>
 
-                  <Link href="#">
-                    <button className="store-btn">
-                      <span className="circle" aria-hidden="true">
-                        <span className="icon arrow" />
-                      </span>
-                      <span className="btn-text">Explore Store</span>
-                    </button>
-                  </Link>
+                  <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-10 sm:mt-14">
+                    <Link href="#">
+                      <button className="store-btn">
+                        <span className="circle" aria-hidden="true">
+                          <span className="icon arrow" />
+                        </span>
+                        <span className="btn-text">Explore Store</span>
+                      </button>
+                    </Link>
+                    <a href="tel:+918340783679">
+                      <button className="store-btn store-btn-green">
+                        <span className="circle" aria-hidden="true">
+                          <span className="icon arrow" />
+                        </span>
+                        <span className="btn-text">Call Now</span>
+                      </button>
+                    </a>
+                  </div>
                 </div>
 
                 {/* Right Side: Image with Slant Cut */}
-                <div className="w-full lg:w-1/2 h-[260px] sm:h-[320px] lg:h-[500px] relative rounded-[18px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden">
+                <div className="w-full lg:w-1/2 h-[220px] sm:h-[320px] lg:h-[500px] relative rounded-[18px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden mb-4 lg:mb-0">
                   <div
                     className="absolute inset-0 w-full h-full transform transition-transform duration-[1.2s] ease-[0.25,0.46,0.45,0.94] group-hover:scale-105 clip-slant-right"
                   >
                     <img
-                      src="/assets/store-phulwari.png"
+                      src="/assets/phulwari%20interior.jpeg"
                       alt="Phulwari Sharif Store"
                       className="absolute inset-0 w-full h-full object-cover"
                     />
@@ -395,13 +410,12 @@ export default function StorePage() {
                   boxShadow: '0 12px 40px 0 rgba(25,50,80,0.1), 0 4px 12px 0 rgba(25,50,80,0.05), inset 0 1.5px 1.5px 0 rgba(255,255,255,0.9)',
                   border: '1.5px solid rgba(180, 210, 240, 0.7)'
                 }}
-                className="group relative flex flex-col lg:flex-row w-full max-w-[1200px] p-3 sm:p-4 md:p-6 lg:p-8 rounded-[24px] sm:rounded-[32px] lg:rounded-[40px] transition-all duration-500 mx-auto"
+                className="group relative flex flex-col-reverse lg:flex-row w-full max-w-[1200px] p-2 sm:p-4 md:p-6 lg:p-8 rounded-[24px] sm:rounded-[32px] lg:rounded-[40px] transition-all duration-500 mx-auto"
               >
                 {/* Left Side: Info */}
-                <div className="w-full lg:w-1/2 flex flex-col items-center text-center justify-center p-6 sm:p-8 md:p-10 lg:p-12 z-10">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 border border-[#E0E8E2] w-fit mb-6 sm:mb-8 shadow-sm">
-                    <MapPin className="w-3.5 h-3.5 text-[#5C6E5C]" />
-                    <span className="text-[10px] tracking-[0.25em] uppercase text-[#5C6E5C] font-bold">Sabzibagh</span>
+                <div className="w-full lg:w-1/2 flex flex-col items-center text-center justify-center p-4 sm:p-8 md:p-10 lg:p-12 z-10">
+                  <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/70 border border-[#E0E8E2] mb-4 sm:mb-8 shadow-sm">
+                    <MapPin className="w-4 h-4 text-[#5C6E5C]" />
                   </div>
 
                   <h3
@@ -423,7 +437,7 @@ export default function StorePage() {
                     </div>
                     <div className="flex items-center gap-3.5 text-left">
                       <Phone className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
-                      <span className="text-[#3a4060] text-[13px] sm:text-sm font-semibold">+91 9835 612 345</span>
+                      <span className="text-[#3a4060] text-[13px] sm:text-sm font-semibold">+91 7484878288</span>
                     </div>
                     <div className="flex items-center gap-3.5 text-left">
                       <Clock className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
@@ -431,23 +445,33 @@ export default function StorePage() {
                     </div>
                   </div>
 
-                  <Link href="#">
-                    <button className="store-btn">
-                      <span className="circle" aria-hidden="true">
-                        <span className="icon arrow" />
-                      </span>
-                      <span className="btn-text">Explore Store</span>
-                    </button>
-                  </Link>
+                  <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-10 sm:mt-14">
+                    <Link href="#">
+                      <button className="store-btn">
+                        <span className="circle" aria-hidden="true">
+                          <span className="icon arrow" />
+                        </span>
+                        <span className="btn-text">Explore Store</span>
+                      </button>
+                    </Link>
+                    <a href="tel:+917484878288">
+                      <button className="store-btn store-btn-green">
+                        <span className="circle" aria-hidden="true">
+                          <span className="icon arrow" />
+                        </span>
+                        <span className="btn-text">Call Now</span>
+                      </button>
+                    </a>
+                  </div>
                 </div>
 
                 {/* Right Side: Image with Slant Cut */}
-                <div className="w-full lg:w-1/2 h-[260px] sm:h-[320px] lg:h-[500px] relative rounded-[18px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden">
+                <div className="w-full lg:w-1/2 h-[220px] sm:h-[320px] lg:h-[500px] relative rounded-[18px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden mb-4 lg:mb-0">
                   <div
                     className="absolute inset-0 w-full h-full transform transition-transform duration-[1.2s] ease-[0.25,0.46,0.45,0.94] group-hover:scale-105 clip-slant-right"
                   >
                     <img
-                      src="/assets/store-sabzibagh.png"
+                      src="/assets/sabjibagh%20interior.jpeg"
                       alt="Sabzibagh Store"
                       className="absolute inset-0 w-full h-full object-cover"
                     />
@@ -458,84 +482,154 @@ export default function StorePage() {
 
             </div>
 
-            {/* ── Premium Features Strip ── */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
+          </div>
+        </section>
+
+        {/* ── Cream In-Store Exclusive Section ── */}
+        <section className="relative w-full bg-gradient-to-b from-[#FDFBF7] to-[#F1EBE1] py-24 sm:py-32 md:py-40 overflow-hidden flex flex-col items-center">
+          
+          <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            {/* Fully Centered Header */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="w-full max-w-[1200px] mx-auto mt-20 sm:mt-24 md:mt-32"
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              className="flex justify-center text-center w-full mt-10 mb-24 sm:mb-32"
             >
-              <div
-                className="w-full rounded-[20px] sm:rounded-[28px] px-4 sm:px-8 py-6 sm:py-8 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-0"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(250,248,244,0.95) 0%, rgba(245,241,235,0.9) 100%)',
-                  border: '1.5px solid rgba(200, 185, 160, 0.35)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.04), inset 0 1px 1px rgba(255,255,255,0.8)',
-                }}
+              <h2 
+                className="text-4xl sm:text-5xl md:text-[64px] text-[#1c1a18] w-full leading-tight uppercase tracking-widest font-bold"
+                style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", serif' }}
               >
-                {/* Feature 1 */}
-                <div className="flex items-center gap-3 sm:gap-4 px-2 sm:px-4 py-3 lg:py-0 lg:border-r lg:border-[#d4c5a9]/30">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center flex-shrink-0">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b8955a" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                      <line x1="3" y1="6" x2="21" y2="6" />
-                      <path d="M16 10a4 4 0 01-8 0" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-[#2a2a2a] font-bold leading-tight">Experience Before</p>
-                    <p className="text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-[#2a2a2a] font-bold leading-tight">You Buy</p>
-                  </div>
-                </div>
-
-                {/* Feature 2 */}
-                <div className="flex items-center gap-3 sm:gap-4 px-2 sm:px-4 py-3 lg:py-0 lg:border-r lg:border-[#d4c5a9]/30">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center flex-shrink-0">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b8955a" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                      <line x1="3" y1="6" x2="21" y2="6" />
-                      <circle cx="12" cy="14" r="3" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-[#2a2a2a] font-bold leading-tight">Test Our Attars</p>
-                    <p className="text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-[#2a2a2a] font-bold leading-tight">In Person</p>
-                  </div>
-                </div>
-
-                {/* Feature 3 */}
-                <div className="flex items-center gap-3 sm:gap-4 px-2 sm:px-4 py-3 lg:py-0 lg:border-r lg:border-[#d4c5a9]/30">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center flex-shrink-0">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b8955a" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="8" width="18" height="14" rx="2" />
-                      <path d="M12 8V5a3 3 0 00-6 0v3" />
-                      <path d="M18 8V5a3 3 0 00-6 0" />
-                      <line x1="12" y1="12" x2="12" y2="18" />
-                      <line x1="9" y1="15" x2="15" y2="15" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-[#2a2a2a] font-bold leading-tight">Exclusive</p>
-                    <p className="text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-[#2a2a2a] font-bold leading-tight">In-Store Offers</p>
-                  </div>
-                </div>
-
-                {/* Feature 4 */}
-                <div className="flex items-center gap-3 sm:gap-4 px-2 sm:px-4 py-3 lg:py-0">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center flex-shrink-0">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#b8955a" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-[#2a2a2a] font-bold leading-tight">Premium Fragrances</p>
-                    <p className="text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-[#2a2a2a] font-bold leading-tight">Certified & Authentic</p>
-                  </div>
-                </div>
-              </div>
+                In-Store <span className="text-[#C62828]">Exclusive</span>
+              </h2>
             </motion.div>
 
+            {/* 4 Centered Symmetrical Cards (Always visible images with day/night hover effect) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 w-full">
+              
+              {/* Card 1: Experience First */}
+              <motion.div 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                className="group relative h-[450px] sm:h-[500px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
+              >
+                <div className="absolute inset-0 z-0">
+                  <img src="/assets/minimal-boutique.png" alt="Experience First" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-[#111] group-hover:via-[#111]/80 group-hover:to-[#111]/30 transition-colors duration-700" />
+                  <div className="absolute inset-5 border border-[#c4a46c]/30 rounded-xl z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                </div>
+
+                <div className="relative z-10 h-full flex flex-col p-8 text-center items-center justify-between">
+                  <div className="w-full flex-1 flex items-center justify-center transform group-hover:-translate-y-4 transition-transform duration-700">
+                    <div className="w-16 h-16 rounded-full border border-[#d6c7b3] group-hover:border-[#c4a46c]/40 bg-white/60 group-hover:bg-[#111]/60 backdrop-blur-md flex items-center justify-center transition-colors duration-700">
+                       <Eye className="w-6 h-6 text-[#8b7355] group-hover:text-[#c4a46c] transition-colors duration-700" />
+                    </div>
+                  </div>
+                  <div className="w-full transform group-hover:-translate-y-2 transition-transform duration-700">
+                    <h3 className="text-[#1c1a18] group-hover:text-white text-[13px] tracking-[0.25em] font-bold mb-4 uppercase transition-colors duration-700">Experience First</h3>
+                    <div className="w-8 h-[1px] bg-[#d6c7b3] group-hover:bg-[#c4a46c]/50 mx-auto mb-4 transition-colors duration-700" />
+                    <p className="text-[#5c534b] group-hover:text-[#ccc] text-[13px] leading-[1.8] transition-colors duration-700">
+                      Unsure which fragrance matches your aura? Explore our complete collection in person before committing to your signature scent.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Card 2: Exclusive Offers */}
+              <motion.div 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="group relative h-[450px] sm:h-[500px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
+              >
+                <div className="absolute inset-0 z-0">
+                  <img src="/assets/minimal-perfume.png" alt="Exclusive Offers" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-[#111] group-hover:via-[#111]/80 group-hover:to-[#111]/30 transition-colors duration-700" />
+                  <div className="absolute inset-5 border border-[#c4a46c]/30 rounded-xl z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                </div>
+
+                <div className="relative z-10 h-full flex flex-col p-8 text-center items-center justify-between">
+                  <div className="w-full flex-1 flex items-center justify-center transform group-hover:-translate-y-4 transition-transform duration-700">
+                    <div className="w-16 h-16 rounded-full border border-[#d6c7b3] group-hover:border-[#c4a46c]/40 bg-white/60 group-hover:bg-[#111]/60 backdrop-blur-md flex items-center justify-center transition-colors duration-700">
+                       <Tag className="w-6 h-6 text-[#8b7355] group-hover:text-[#c4a46c] transition-colors duration-700" />
+                    </div>
+                  </div>
+                  <div className="w-full transform group-hover:-translate-y-2 transition-transform duration-700">
+                    <h3 className="text-[#1c1a18] group-hover:text-white text-[13px] tracking-[0.25em] font-bold mb-4 uppercase transition-colors duration-700">Exclusive Offers</h3>
+                    <div className="w-8 h-[1px] bg-[#d6c7b3] group-hover:bg-[#c4a46c]/50 mx-auto mb-4 transition-colors duration-700" />
+                    <p className="text-[#5c534b] group-hover:text-[#ccc] text-[13px] leading-[1.8] transition-colors duration-700">
+                      Enjoy special walk-in discounts, bundle deals, and complimentary samples strictly reserved for physical store visitors.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Card 3: Premium Certified */}
+              <motion.div 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="group relative h-[450px] sm:h-[500px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
+              >
+                <div className="absolute inset-0 z-0">
+                  <img src="/assets/minimal-oud.png" alt="Premium Certified" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-[#111] group-hover:via-[#111]/80 group-hover:to-[#111]/30 transition-colors duration-700" />
+                  <div className="absolute inset-5 border border-[#c4a46c]/30 rounded-xl z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                </div>
+
+                <div className="relative z-10 h-full flex flex-col p-8 text-center items-center justify-between">
+                  <div className="w-full flex-1 flex items-center justify-center transform group-hover:-translate-y-4 transition-transform duration-700">
+                    <div className="w-16 h-16 rounded-full border border-[#d6c7b3] group-hover:border-[#c4a46c]/40 bg-white/60 group-hover:bg-[#111]/60 backdrop-blur-md flex items-center justify-center transition-colors duration-700">
+                       <ShieldCheck className="w-6 h-6 text-[#8b7355] group-hover:text-[#c4a46c] transition-colors duration-700" />
+                    </div>
+                  </div>
+                  <div className="w-full transform group-hover:-translate-y-2 transition-transform duration-700">
+                    <h3 className="text-[#1c1a18] group-hover:text-white text-[13px] tracking-[0.25em] font-bold mb-4 uppercase transition-colors duration-700">Premium Certified</h3>
+                    <div className="w-8 h-[1px] bg-[#d6c7b3] group-hover:bg-[#c4a46c]/50 mx-auto mb-4 transition-colors duration-700" />
+                    <p className="text-[#5c534b] group-hover:text-[#ccc] text-[13px] leading-[1.8] transition-colors duration-700">
+                      Every drop of our oud and musk is 100% authentic and ethically sourced. We guarantee purely premium fragrance oils.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Card 4: Test On Skin */}
+              <motion.div 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="group relative h-[450px] sm:h-[500px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
+              >
+                <div className="absolute inset-0 z-0">
+                  <img src="/assets/minimal-skin.png" alt="Test on Skin" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-[#111] group-hover:via-[#111]/80 group-hover:to-[#111]/30 transition-colors duration-700" />
+                  <div className="absolute inset-5 border border-[#c4a46c]/30 rounded-xl z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                </div>
+
+                <div className="relative z-10 h-full flex flex-col p-8 text-center items-center justify-between">
+                  <div className="w-full flex-1 flex items-center justify-center transform group-hover:-translate-y-4 transition-transform duration-700">
+                    <div className="w-16 h-16 rounded-full border border-[#d6c7b3] group-hover:border-[#c4a46c]/40 bg-white/60 group-hover:bg-[#111]/60 backdrop-blur-md flex items-center justify-center transition-colors duration-700">
+                       <Droplet className="w-6 h-6 text-[#8b7355] group-hover:text-[#c4a46c] transition-colors duration-700" />
+                    </div>
+                  </div>
+                  <div className="w-full transform group-hover:-translate-y-2 transition-transform duration-700">
+                    <h3 className="text-[#1c1a18] group-hover:text-white text-[13px] tracking-[0.25em] font-bold mb-4 uppercase transition-colors duration-700">Test On Skin</h3>
+                    <div className="w-8 h-[1px] bg-[#d6c7b3] group-hover:bg-[#c4a46c]/50 mx-auto mb-4 transition-colors duration-700" />
+                    <p className="text-[#5c534b] group-hover:text-[#ccc] text-[13px] leading-[1.8] transition-colors duration-700">
+                      Test the longevity and projection on your own skin. See exactly how the notes evolve with your unique body chemistry.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+            </div>
           </div>
         </section>
         <Footer />
