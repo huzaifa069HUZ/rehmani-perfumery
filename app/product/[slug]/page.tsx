@@ -89,26 +89,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const canonicalSlug = buildProductSlug(product.name, product.id);
-  const title = `Buy ${product.name} ${product.type === 'attar' ? 'Attar' : 'Perfume'} Online | Best Fragrance in Patna | Rahmani Perfumery`;
+  const typeLabel = product.type === 'perfume' ? 'Perfume' : 'Attar';
   
-  const baseDesc = product.description ? product.description.slice(0, 100) : `A luxurious Arabian fragrance.`;
-  const description = `Looking for ${product.name}? ${baseDesc} Handcrafted ${product.type || 'attar'} with notes of ${product.notes || 'premium essence'}. Buy the best attars in Patna online from Rahmani Perfumery.`;
+  // Highly optimized SEO Title for exact match product searches like "Oud Mohammad Attar"
+  const title = `${product.name} ${typeLabel} | Buy 100% Original Online | Rahmani Perfumery`;
+  
+  const baseDesc = product.description ? `${product.description.slice(0, 120)}...` : `Experience the luxurious ${product.name} ${typeLabel}, a premium Arabian fragrance.`;
+  
+  // SEO Description that includes exact matches and long-tail keywords
+  const description = `${baseDesc} Buy 100% original, long-lasting ${product.name} ${typeLabel} online. Handcrafted with notes of ${product.notes || 'premium essence'}. Best ${typeLabel.toLowerCase()}s in India by Rahmani Perfumery.`;
   
   const keywords = [
     product.name,
+    `${product.name} ${typeLabel}`,
+    `${product.name} attar`,
     `buy ${product.name} online`,
-    `${product.name} ${product.type || 'attar'}`,
-    `best ${product.type || 'attar'} in Patna`,
+    `buy ${product.name} ${typeLabel}`,
     `original ${product.name}`,
+    `long lasting ${product.name}`,
     `Rahmani Perfumery ${product.name}`,
-    `Rahmani ${product.type || 'attar'}`,
-    `Rehmani ${product.type || 'attar'}`,
+    `best ${typeLabel.toLowerCase()} in Patna`,
+    `best ${typeLabel.toLowerCase()} in India`,
     product.notes ? `${product.notes} fragrance` : 'premium fragrance',
     'alcohol-free attar',
-    'best fragrance in India',
+    'attar',
     'Rahmani Perfumery',
-    'Rehmani Perfumery',
-    'buy oud online',
+    'Rehmani Perfumery'
   ];
 
   const image = product.images?.[0] || 'https://rahmaniperfumery.com/og-image.jpg';
@@ -163,12 +169,14 @@ export default async function ProductPage({ params }: PageProps) {
   const hashCode = product.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const reviewCount = 45 + (hashCode % 106); // Range: 45-150, deterministic per product
 
+  const typeLabel = product.type === 'perfume' ? 'Perfume' : 'Attar';
+
   // JSON-LD structured data for Google Product rich results
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: product.name,
-    description: product.description || `Buy ${product.name} — luxurious Arabian fragrance by Rahmani Perfumery. Rated as one of the best attars in Patna.`,
+    name: `${product.name} ${typeLabel}`,
+    description: product.description || `Buy 100% original ${product.name} ${typeLabel}. A luxurious, long-lasting Arabian fragrance by Rahmani Perfumery.`,
     image: product.images || [],
     sku: product.id,
     brand: {
