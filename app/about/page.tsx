@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     'bakhoor', 'Eid gift pack', 'premium perfume', 'Arabian fragrance brand',
     'Rahmani attar', 'Rahmani oud', 'Patna perfumery',
   ],
-  alternates: { canonical: 'https://rahmaniperfumery.com/about' },
+  alternates: { canonical: 'https://www.rahmaniperfumery.com/about' },
   openGraph: {
     title: 'About Rahmani Perfumery — Our Story & Heritage',
     description: 'Rahmani Perfumery (Rehmani Perfumery) — the best attar shop in Patna. Premium alcohol-free attars, oud, bakhoor and Eid gift packs — handcrafted with love.',
-    url: 'https://rahmaniperfumery.com/about',
+    url: 'https://www.rahmaniperfumery.com/about',
     siteName: 'Rahmani Perfumery',
   },
 };

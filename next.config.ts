@@ -78,6 +78,46 @@ const nextConfig: NextConfig = {
         source: '/(.*)',
         headers: securityHeaders,
       },
+      {
+        // Correct MIME type for .ico files (Google favicon requirement)
+        source: '/favicon.ico',
+        headers: [
+          { key: 'Content-Type', value: 'image/x-icon' },
+          { key: 'Cache-Control', value: 'public, max-age=2592000, immutable' },
+        ],
+      },
+      {
+        // Correct MIME type and caching for favicon PNGs
+        source: '/favicon-:size(\\d+x\\d+).png',
+        headers: [
+          { key: 'Content-Type', value: 'image/png' },
+          { key: 'Cache-Control', value: 'public, max-age=2592000, immutable' },
+        ],
+      },
+      {
+        // Apple touch icon caching
+        source: '/apple-touch-icon.png',
+        headers: [
+          { key: 'Content-Type', value: 'image/png' },
+          { key: 'Cache-Control', value: 'public, max-age=2592000, immutable' },
+        ],
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      {
+        // Force non-www to www for canonical consistency
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'rahmaniperfumery.com',
+          },
+        ],
+        destination: 'https://www.rahmaniperfumery.com/:path*',
+        permanent: true,
+      },
     ];
   },
 };

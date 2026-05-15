@@ -12,12 +12,12 @@ export const metadata: Metadata = {
     'Rahmani Perfumery location', 'Rahmani Perfumery address',
   ],
   alternates: {
-    canonical: 'https://rahmaniperfumery.com/store',
+    canonical: 'https://www.rahmaniperfumery.com/store',
   },
   openGraph: {
     title: 'Visit Rahmani Perfumery Stores in Patna — Best Attar Shop in Bihar',
     description: 'Looking for the best attar shop in Patna? Visit Rahmani Perfumery stores in Phulwari Sharif and Sabzibagh, Bihar.',
-    url: 'https://rahmaniperfumery.com/store',
+    url: 'https://www.rahmaniperfumery.com/store',
     siteName: 'Rahmani Perfumery',
   },
 };

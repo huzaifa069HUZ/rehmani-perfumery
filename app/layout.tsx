@@ -17,7 +17,7 @@ const bebasNeue = Bebas_Neue({ subsets: ['latin'], variable: '--font-bebas', dis
 const cormorant = Cormorant_Garamond({ subsets: ['latin'], variable: '--font-cormorant', display: 'swap', style: ['normal', 'italic'], weight: ['300','400','500','600','700'] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://rahmaniperfumery.com'),
+  metadataBase: new URL('https://www.rahmaniperfumery.com'),
   title: {
     default: 'Rahmani Perfumery — Premium Attars, Oud & Perfumes | Patna, Bihar',
     template: '%s | Rahmani Perfumery',
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     // Specific products
     'Oud Nadira', 'Shamamatul Amber', 'Ruh Khus', 'best oud in India',
   ],
-  authors: [{ name: 'Rahmani Perfumery', url: 'https://rahmaniperfumery.com' }],
+  authors: [{ name: 'Rahmani Perfumery', url: 'https://www.rahmaniperfumery.com' }],
   creator: 'Rahmani Perfumery',
   publisher: 'Rahmani Perfumery',
   robots: {
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    url: 'https://rahmaniperfumery.com',
+    url: 'https://www.rahmaniperfumery.com',
     siteName: 'Rahmani Perfumery',
     title: 'Rahmani Perfumery — Premium Attars, Oud & Perfumes',
     description:
@@ -74,18 +74,20 @@ export const metadata: Metadata = {
     images: ['/og-image.jpg'],
   },
   alternates: {
-    canonical: 'https://rahmaniperfumery.com',
+    canonical: 'https://www.rahmaniperfumery.com/',
   },
   manifest: '/manifest.json',
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/favicon.png', type: 'image/png', sizes: '192x192' },
-      { url: '/icon.png', type: 'image/png', sizes: '512x512' },
+      { url: 'https://www.rahmaniperfumery.com/favicon.ico', sizes: 'any' },
+      { url: 'https://www.rahmaniperfumery.com/favicon-48x48.png', type: 'image/png', sizes: '48x48' },
+      { url: 'https://www.rahmaniperfumery.com/favicon-96x96.png', type: 'image/png', sizes: '96x96' },
+      { url: 'https://www.rahmaniperfumery.com/favicon.png', type: 'image/png', sizes: '192x192' },
+      { url: 'https://www.rahmaniperfumery.com/icon.png', type: 'image/png', sizes: '512x512' },
     ],
-    shortcut: '/favicon.ico',
+    shortcut: 'https://www.rahmaniperfumery.com/favicon.ico',
     apple: [
-      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: 'https://www.rahmaniperfumery.com/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
 };
@@ -110,9 +112,9 @@ const organizationJsonLd = {
     'Rahmani Perfumery Patna',
     'rahmaniperfumery',
   ],
-  url: 'https://rahmaniperfumery.com',
-  logo: 'https://rahmaniperfumery.com/assets/logo.png',
-  image: 'https://rahmaniperfumery.com/og-image.jpg',
+  url: 'https://www.rahmaniperfumery.com',
+  logo: 'https://www.rahmaniperfumery.com/logo.png',
+  image: 'https://www.rahmaniperfumery.com/og-image.jpg',
   description: 'Rahmani Perfumery (also known as Rehmani Perfumery) is the best attar and oud shop in Patna, Bihar. We offer premium Arabian attars, luxury oud, musk, bakhoor, and imported perfumes — handcrafted and delivered across India.',
   foundingDate: '2015',
   contactPoint: {
@@ -135,13 +137,13 @@ const organizationJsonLd = {
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  url: 'https://rahmaniperfumery.com',
+  url: 'https://www.rahmaniperfumery.com',
   name: 'Rahmani Perfumery',
   alternateName: ['Rehmani Perfumery', 'Rahmani Perfumary', 'Rahmani Attar Shop'],
   description: 'Rahmani Perfumery — shop premium Arabian attars, oud, perfumes, bakhoor and incense sticks online. The best attar shop in Patna, Bihar.',
   potentialAction: {
     '@type': 'SearchAction',
-    target: 'https://rahmaniperfumery.com/store?q={search_term_string}',
+    target: 'https://www.rahmaniperfumery.com/store?q={search_term_string}',
     'query-input': 'required name=search_term_string',
   },
 };
@@ -152,9 +154,9 @@ const localBusinessJsonLd = [
     '@context': 'https://schema.org',
     '@type': 'Store',
     name: 'Rahmani Perfumery - Phulwari Sharif',
-    image: 'https://rahmaniperfumery.com/assets/store-phulwari.png',
-    '@id': 'https://rahmaniperfumery.com/#store-phulwari',
-    url: 'https://rahmaniperfumery.com/store',
+    image: 'https://www.rahmaniperfumery.com/assets/store-phulwari.png',
+    '@id': 'https://www.rahmaniperfumery.com/#store-phulwari',
+    url: 'https://www.rahmaniperfumery.com/store',
     telephone: '+919835612345',
     address: {
       '@type': 'PostalAddress',
@@ -180,9 +182,9 @@ const localBusinessJsonLd = [
     '@context': 'https://schema.org',
     '@type': 'Store',
     name: 'Rahmani Perfumery - Sabzibagh',
-    image: 'https://rahmaniperfumery.com/assets/store-sabzibagh.png',
-    '@id': 'https://rahmaniperfumery.com/#store-sabzibagh',
-    url: 'https://rahmaniperfumery.com/store',
+    image: 'https://www.rahmaniperfumery.com/assets/store-sabzibagh.png',
+    '@id': 'https://www.rahmaniperfumery.com/#store-sabzibagh',
+    url: 'https://www.rahmaniperfumery.com/store',
     telephone: '+919835612345',
     address: {
       '@type': 'PostalAddress',

@@ -3,7 +3,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { buildProductSlug } from '@/lib/utils';
 
-const BASE_URL = 'https://rahmaniperfumery.com';
+const BASE_URL = 'https://www.rahmaniperfumery.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages

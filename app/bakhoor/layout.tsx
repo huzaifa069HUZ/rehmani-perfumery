@@ -11,12 +11,12 @@ export const metadata: Metadata = {
     'bakhoor India', 'buy bakhoor online', 'luxury home fragrance',
   ],
   alternates: {
-    canonical: 'https://rahmaniperfumery.com/bakhoor',
+    canonical: 'https://www.rahmaniperfumery.com/bakhoor',
   },
   openGraph: {
     title: 'Premium Bakhoor — Arabian Incense & Oud Muattar | Rahmani Perfumery',
     description: 'Elevate your home with premium bakhoor and oud muattar from Rahmani Perfumery. Authentic Arabian incense chips in Patna, Bihar.',
-    url: 'https://rahmaniperfumery.com/bakhoor',
+    url: 'https://www.rahmaniperfumery.com/bakhoor',
     siteName: 'Rahmani Perfumery',
   },
 };

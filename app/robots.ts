@@ -14,7 +14,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: 'https://rahmaniperfumery.com/sitemap.xml',
-    host: 'https://rahmaniperfumery.com',
+    sitemap: 'https://www.rahmaniperfumery.com/sitemap.xml',
+    host: 'https://www.rahmaniperfumery.com',
   };
 }

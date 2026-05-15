@@ -117,19 +117,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     'Rehmani Perfumery'
   ];
 
-  const image = product.images?.[0] || 'https://rahmaniperfumery.com/og-image.jpg';
+  const image = product.images?.[0] || 'https://www.rahmaniperfumery.com/og-image.jpg';
 
   return {
     title,
     description,
     keywords,
     alternates: {
-      canonical: `https://rahmaniperfumery.com/product/${canonicalSlug}`,
+      canonical: `https://www.rahmaniperfumery.com/product/${canonicalSlug}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://rahmaniperfumery.com/product/${canonicalSlug}`,
+      url: `https://www.rahmaniperfumery.com/product/${canonicalSlug}`,
       siteName: 'Rahmani Perfumery',
       images: [
         {
@@ -187,7 +187,7 @@ export default async function ProductPage({ params }: PageProps) {
     category: product.category || product.type || 'Fragrance',
     offers: {
       '@type': 'Offer',
-      url: `https://rahmaniperfumery.com/product/${canonicalSlug}`,
+      url: `https://www.rahmaniperfumery.com/product/${canonicalSlug}`,
       priceCurrency: 'INR',
       price: product.price,
       itemCondition: 'https://schema.org/NewCondition',
@@ -254,19 +254,19 @@ export default async function ProductPage({ params }: PageProps) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://rahmaniperfumery.com',
+        item: 'https://www.rahmaniperfumery.com',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: product.type === 'perfume' ? 'Perfumes' : 'Attars',
-        item: product.type === 'perfume' ? 'https://rahmaniperfumery.com/perfumes' : 'https://rahmaniperfumery.com/attars',
+        item: product.type === 'perfume' ? 'https://www.rahmaniperfumery.com/perfumes' : 'https://www.rahmaniperfumery.com/attars',
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: product.name,
-        item: `https://rahmaniperfumery.com/product/${canonicalSlug}`,
+        item: `https://www.rahmaniperfumery.com/product/${canonicalSlug}`,
       },
     ],
   };

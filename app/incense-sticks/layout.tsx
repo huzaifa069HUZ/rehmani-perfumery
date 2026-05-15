@@ -11,12 +11,12 @@ export const metadata: Metadata = {
     'natural agarbatti', 'fragrance sticks',
   ],
   alternates: {
-    canonical: 'https://rahmaniperfumery.com/incense-sticks',
+    canonical: 'https://www.rahmaniperfumery.com/incense-sticks',
   },
   openGraph: {
     title: 'Incense Sticks — Premium Aggarbatti | Rahmani Perfumery',
     description: 'Discover Rahmani Perfumery\'s collection of premium, long-lasting incense sticks. Perfect for meditation, prayer, or a serene ambiance.',
-    url: 'https://rahmaniperfumery.com/incense-sticks',
+    url: 'https://www.rahmaniperfumery.com/incense-sticks',
     siteName: 'Rahmani Perfumery',
   },
 };

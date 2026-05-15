@@ -12,12 +12,12 @@ export const metadata: Metadata = {
     'musk perfume', 'Arabian perfume spray',
   ],
   alternates: {
-    canonical: 'https://rahmaniperfumery.com/perfumes',
+    canonical: 'https://www.rahmaniperfumery.com/perfumes',
   },
   openGraph: {
     title: 'Luxury Perfumes — Long-Lasting Imported Perfumes | Rahmani Perfumery',
     description: 'Explore Rahmani Perfumery\'s premium collection of long-lasting, luxury spray perfumes for men and women. Best perfumes in Patna.',
-    url: 'https://rahmaniperfumery.com/perfumes',
+    url: 'https://www.rahmaniperfumery.com/perfumes',
     siteName: 'Rahmani Perfumery',
   },
 };

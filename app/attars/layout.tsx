@@ -12,12 +12,12 @@ export const metadata: Metadata = {
     'concentrated perfume oil', 'premium attar brand India',
   ],
   alternates: {
-    canonical: 'https://rahmaniperfumery.com/attars',
+    canonical: 'https://www.rahmaniperfumery.com/attars',
   },
   openGraph: {
     title: 'Premium Attars — Buy Best Arabian Attar & Oud Online | Rahmani Perfumery',
     description: 'Shop the finest selection of pure, alcohol-free Arabian attars from Rahmani Perfumery — the best attar shop in Patna, Bihar. Oud, musk, floral & more.',
-    url: 'https://rahmaniperfumery.com/attars',
+    url: 'https://www.rahmaniperfumery.com/attars',
     siteName: 'Rahmani Perfumery',
   },
 };
