@@ -426,7 +426,10 @@ export default function ProductDetailClient({ product }: { product: ProductData 
           {/* ── Info ── */}
           <div className="pp-info">
             <div className="pp-subtitle">{product.category} · {product.type === 'perfume' ? 'Perfume' : 'Attar'}</div>
-            <h1 className="pp-maintitle">{product.name}</h1>
+            <h1 className="pp-maintitle">
+              {product.name}
+              <span className="sr-only"> {product.type === 'perfume' ? 'Perfume' : 'Attar'} by Rahmani Perfumery</span>
+            </h1>
 
             {/* Rating summary */}
             {reviews.length > 0 && (
@@ -507,11 +510,16 @@ export default function ProductDetailClient({ product }: { product: ProductData 
               </div>
             </div>
 
-            <div className="pp-desc-title">Description</div>
-            <p className="pp-desc-text">
-              {product.description ||
-                'Effortlessly luxurious and highly concentrated, this fragrance is perfect for daily wear or grand occasions. Crafted using centuries-old Arabic extraction techniques for maximum projection and an unforgettable sillage.'}
-            </p>
+            <h2 className="pp-desc-title">Description</h2>
+            <div className="pp-desc-text">
+              <p>
+                {product.description ||
+                  'Effortlessly luxurious and highly concentrated, this fragrance is perfect for daily wear or grand occasions. Crafted using centuries-old Arabic extraction techniques for maximum projection and an unforgettable sillage.'}
+              </p>
+              <p className="sr-only">
+                Buy original {product.name} {product.type === 'perfume' ? 'perfume' : 'attar'} online from Rahmani Perfumery, the best fragrance shop in Patna, Bihar. We offer authentic, long-lasting {product.name} delivered across India.
+              </p>
+            </div>
 
             {/* ─── Accordion ─── */}
             <div className="pp-accordion">
