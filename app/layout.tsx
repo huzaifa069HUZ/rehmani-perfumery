@@ -73,9 +73,6 @@ export const metadata: Metadata = {
     description: 'Rahmani Perfumery (Rehmani Perfumery) — best attar & oud shop in Patna. Handcrafted Arabian attars, premium oud, musk, and perfume oils.',
     images: ['/og-image.jpg'],
   },
-  alternates: {
-    canonical: 'https://www.rahmaniperfumery.com/',
-  },
   manifest: '/manifest.json',
   icons: {
     icon: [

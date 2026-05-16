@@ -210,7 +210,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
   };
 
   const handleShare = async () => {
-    const url = `https://rahmaniperfumery.com/product/${buildProductSlug(product.name, product.id)}`;
+    const url = `https://www.rahmaniperfumery.com/product/${buildProductSlug(product.name, product.id)}`;
     if (navigator.share) {
       try { await navigator.share({ title: product.name, text: `Check out ${product.name} on Rahmani Perfumery!`, url }); } catch { }
     } else {

@@ -4,6 +4,9 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Rahmani Perfumery — Premium Attars, Oud & Perfumes | Patna, Bihar',
+  alternates: {
+    canonical: 'https://www.rahmaniperfumery.com/',
+  },
 };
 
 // SEO Content JSON-LD for the homepage (ItemList of top products)
@@ -18,25 +21,25 @@ const homepageJsonLd = {
     {
       '@type': 'ListItem',
       position: 1,
-      url: 'https://rahmaniperfumery.com/attars',
+      url: 'https://www.rahmaniperfumery.com/attars',
       name: 'Premium Attars Collection',
     },
     {
       '@type': 'ListItem',
       position: 2,
-      url: 'https://rahmaniperfumery.com/perfumes',
+      url: 'https://www.rahmaniperfumery.com/perfumes',
       name: 'Luxury Perfumes Collection',
     },
     {
       '@type': 'ListItem',
       position: 3,
-      url: 'https://rahmaniperfumery.com/bakhoor',
+      url: 'https://www.rahmaniperfumery.com/bakhoor',
       name: 'Bakhoor & Oud Muattar',
     },
     {
       '@type': 'ListItem',
       position: 4,
-      url: 'https://rahmaniperfumery.com/incense-sticks',
+      url: 'https://www.rahmaniperfumery.com/incense-sticks',
       name: 'Premium Incense Sticks',
     },
   ],
