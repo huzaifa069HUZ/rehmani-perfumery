@@ -60,7 +60,7 @@ export const metadata: Metadata = {
       'Rahmani Perfumery (Rehmani Perfumery) — the best attar and oud shop in Patna, Bihar. Premium Arabian attars, luxury oud, musk, and perfume oils handcrafted and delivered across India.',
     images: [
       {
-        url: '/og-image.jpg',
+        url: 'https://www.rahmaniperfumery.com/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Rahmani Perfumery — Premium Attars, Oud & Perfumes in Patna',
@@ -71,20 +71,20 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Rahmani Perfumery — Premium Attars, Oud & Perfumes',
     description: 'Rahmani Perfumery (Rehmani Perfumery) — best attar & oud shop in Patna. Handcrafted Arabian attars, premium oud, musk, and perfume oils.',
-    images: ['/og-image.jpg'],
+    images: ['https://www.rahmaniperfumery.com/og-image.jpg'],
   },
   manifest: '/manifest.json',
   icons: {
     icon: [
-      { url: 'https://www.rahmaniperfumery.com/favicon.ico', sizes: 'any' },
-      { url: 'https://www.rahmaniperfumery.com/favicon-48x48.png', type: 'image/png', sizes: '48x48' },
-      { url: 'https://www.rahmaniperfumery.com/favicon-96x96.png', type: 'image/png', sizes: '96x96' },
-      { url: 'https://www.rahmaniperfumery.com/favicon.png', type: 'image/png', sizes: '192x192' },
-      { url: 'https://www.rahmaniperfumery.com/icon.png', type: 'image/png', sizes: '512x512' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-48x48.png', type: 'image/png', sizes: '48x48' },
+      { url: '/favicon-96x96.png', type: 'image/png', sizes: '96x96' },
+      { url: '/favicon.png', type: 'image/png', sizes: '192x192' },
+      { url: '/icon.png', type: 'image/png', sizes: '512x512' },
     ],
-    shortcut: 'https://www.rahmaniperfumery.com/favicon.ico',
+    shortcut: '/favicon.ico',
     apple: [
-      { url: 'https://www.rahmaniperfumery.com/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
 };

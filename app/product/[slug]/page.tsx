@@ -203,6 +203,11 @@ export default async function ProductPage({ params }: PageProps) {
           '@type': 'DefinedRegion',
           addressCountry: 'IN',
         },
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: '0',
+          currency: 'INR',
+        },
         deliveryTime: {
           '@type': 'ShippingDeliveryTime',
           handlingTime: {
@@ -225,6 +230,7 @@ export default async function ProductPage({ params }: PageProps) {
         returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
         merchantReturnDays: 7,
         returnMethod: 'https://schema.org/ReturnByMail',
+        returnFees: 'https://schema.org/FreeReturn',
       },
     },
     aggregateRating: {

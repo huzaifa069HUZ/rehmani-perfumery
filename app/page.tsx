@@ -16,7 +16,7 @@ const homepageJsonLd = {
   name: 'Featured Products — Rahmani Perfumery',
   description: 'Top-selling attars, oud, perfumes, and bakhoor from Rahmani Perfumery in Patna, Bihar.',
   itemListOrder: 'https://schema.org/ItemListUnordered',
-  numberOfItems: 6,
+  numberOfItems: 4,
   itemListElement: [
     {
       '@type': 'ListItem',

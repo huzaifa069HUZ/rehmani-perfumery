@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     siteName: 'Rahmani Perfumery',
     images: [
       {
-        url: '/og-image.jpg',
+        url: 'https://www.rahmaniperfumery.com/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'About Rahmani Perfumery',
