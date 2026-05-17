@@ -104,22 +104,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  async redirects() {
-    return [
-      {
-        // Force non-www to www for canonical consistency
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'rahmaniperfumery.com',
-          },
-        ],
-        destination: 'https://www.rahmaniperfumery.com/:path*',
-        permanent: true,
-      },
-    ];
-  },
+  // No custom redirects — domain registrar handles non-www → www
 };
 
 export default nextConfig;
