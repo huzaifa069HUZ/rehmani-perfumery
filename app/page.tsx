@@ -5,7 +5,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Rahmani Perfumery — Premium Attars, Oud & Perfumes | Patna, Bihar',
   alternates: {
-    canonical: 'https://www.rahmaniperfumery.com/',
+    canonical: 'https://www.rahmaniperfumery.com',
   },
 };
 

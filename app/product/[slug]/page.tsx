@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { redirect, permanentRedirect } from 'next/navigation';
 
 export const revalidate = 3600; // Cache the product page for 1 hour (ISR)
 import { doc, getDoc, collection, query, where, getDocs, limit } from 'firebase/firestore';
@@ -159,10 +159,11 @@ export default async function ProductPage({ params }: PageProps) {
     redirect('/404');
   }
 
-  // Canonical slug redirect — if someone arrives with old ID or wrong slug, redirect
+  // Canonical slug redirect — if someone arrives with old ID or wrong slug,
+  // use 308 permanent redirect so Google updates its index and stops crawling the old URL
   const canonicalSlug = buildProductSlug(product.name, product.id);
   if (slug !== canonicalSlug) {
-    redirect(`/product/${canonicalSlug}`);
+    permanentRedirect(`/product/${canonicalSlug}`);
   }
 
   // Deterministic review count based on product ID (avoids Math.random inconsistency)

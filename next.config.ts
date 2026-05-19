@@ -104,6 +104,9 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Explicitly disable trailing slashes — prevents Google from indexing
+  // duplicate URLs like /attars/ vs /attars (which trigger "Page with redirect")
+  trailingSlash: false,
   // No custom redirects — domain registrar handles non-www → www
 };
 
