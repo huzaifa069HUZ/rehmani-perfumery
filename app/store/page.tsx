@@ -199,7 +199,7 @@ export default function StorePage() {
           animation: marqueeRight 40s linear infinite;
         }
         .text-stroke-transparent {
-          -webkit-text-stroke: 1.5px rgba(28, 31, 28, 0.8);
+          -webkit-text-stroke: 2px rgba(248, 246, 243, 0.5);
           color: transparent;
         }
       `}} />
