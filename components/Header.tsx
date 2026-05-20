@@ -19,6 +19,7 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
   const { user } = useAuth();
   const pathname = usePathname();
   const isHome = pathname === '/';
+  const isStore = pathname === '/store';
   
   const [homeHover, setHomeHover] = useState(false);
   const [attarsHover, setAttarsHover] = useState(false);
@@ -32,7 +33,7 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isScrolled = !isHome || scrolled;
+  const isScrolled = !(isHome || isStore) || scrolled;
 
   return (
     <>

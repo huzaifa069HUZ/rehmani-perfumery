@@ -206,21 +206,21 @@ export default function StorePage() {
 
       <main className="store-page min-h-screen">
         {/* ═══ Hero Video Section ═══ */}
-        <div className="relative w-full aspect-video min-h-[70vh] bg-black flex items-center justify-center overflow-hidden">
-          <section className="absolute inset-0 w-full h-full flex flex-col items-center">
-            <div className="absolute inset-0 bg-black/40 z-[1]" />
+        <div className="relative w-full h-[100svh] md:h-auto md:aspect-video bg-black flex flex-col items-center justify-center overflow-hidden">
+          <section className="absolute inset-0 w-full h-full flex flex-col items-center justify-center">
+            <div className="absolute inset-0 bg-black/40 md:bg-black/20 z-[1]" />
             <video
               autoPlay muted loop playsInline
-              className="absolute inset-0 w-full h-full object-cover z-0"
+              className="absolute inset-0 w-full h-full object-contain md:object-cover z-0"
               src="/assets/our_store_vid.mp4"
             />
-            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center pt-20">
+            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center pt-20 pb-10">
               <div className="w-full flex flex-col items-center text-center max-w-5xl px-6">
                 <motion.h1
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-5xl sm:text-6xl md:text-7xl lg:text-[90px] font-normal text-white mb-6 tracking-tight leading-[1.1]"
+                  className="text-5xl sm:text-6xl md:text-7xl lg:text-[90px] font-normal text-white mb-6 tracking-tight leading-[1.1] drop-shadow-xl"
                   style={{ fontFamily: 'var(--font-cormorant), "Cormorant Garamond", serif' }}
                 >
                   Experience the Essence
@@ -229,7 +229,7 @@ export default function StorePage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  className="text-base sm:text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl font-light mb-10"
+                  className="text-base sm:text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl font-light mb-12 drop-shadow-md"
                 >
                   Visit any of our two stores in Patna to experience the true luxury of original attars.
                 </motion.p>
@@ -238,7 +238,7 @@ export default function StorePage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.6 }}
                 >
-                  <div className="p-2 border border-white/40 rounded-lg bg-black/20 backdrop-blur-md shadow-2xl">
+                  <div className="p-2 sm:p-3 border border-white/50 rounded-xl bg-white/10 backdrop-blur-md shadow-2xl">
                     <button
                       onClick={() => {
                         const storesSection = document.getElementById('our-stores');
@@ -248,7 +248,7 @@ export default function StorePage() {
                           window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
                         }
                       }}
-                      className="btn-glow px-10 py-4 bg-white text-black text-[14px] tracking-[0.2em] uppercase font-bold hover:bg-[#c4a46c] hover:text-white transition-colors duration-300 rounded-md"
+                      className="btn-glow px-12 py-5 sm:px-14 sm:py-6 bg-white text-black text-[16px] sm:text-[18px] tracking-[0.25em] uppercase font-black hover:bg-[#c4a46c] hover:text-white transition-colors duration-300 rounded-lg shadow-[0_0_20px_rgba(255,255,255,0.8)]"
                     >
                       VISIT OUR SHOPS
                     </button>
