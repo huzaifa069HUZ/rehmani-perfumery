@@ -565,14 +565,14 @@ export default function StorePage() {
                     key={idx}
                     initial={false}
                     animate={{
-                      x: \`\${offset * 75}%\`,
+                      x: `${offset * 75}%`,
                       scale: isCenter ? 1 : 0.8 - (absOffset * 0.05),
                       rotateY: offset * -25,
                       opacity: absOffset > 1.5 ? 0 : 1 - (absOffset * 0.4),
                       zIndex
                     }}
                     transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-                    className={\`absolute top-0 group w-full max-w-[280px] sm:max-w-[340px] h-full rounded-2xl overflow-hidden shadow-2xl transition-shadow \${isCenter ? 'cursor-default' : 'cursor-pointer hover:shadow-[0_0_30px_rgba(196,164,108,0.3)]'}\`}
+                    className={`absolute top-0 group w-full max-w-[280px] sm:max-w-[340px] h-full rounded-2xl overflow-hidden shadow-2xl transition-shadow ${isCenter ? 'cursor-default' : 'cursor-pointer hover:shadow-[0_0_30px_rgba(196,164,108,0.3)]'}`}
                     onClick={() => {
                       if (!isCenter) setActiveExclusiveIndex(idx);
                     }}
