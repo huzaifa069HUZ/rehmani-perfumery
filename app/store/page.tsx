@@ -186,7 +186,7 @@ export default function StorePage() {
             <video
               autoPlay muted loop playsInline
               className="absolute inset-0 w-full h-full object-cover z-0"
-              src="/assets/mp_.mp4"
+              src="/assets/our_store_vid.mp4"
             />
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center pt-20">
               <div className="w-full flex flex-col items-center text-center max-w-5xl px-6">
