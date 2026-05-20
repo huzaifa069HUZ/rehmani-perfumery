@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowRight, MapPin, Phone, Clock, Eye, Droplet, Tag, ShieldCheck } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AnnouncementBar from '@/components/AnnouncementBar';
 import Header from '@/components/Header';
@@ -18,7 +18,6 @@ export default function StorePage() {
   const [activeExclusiveIndex, setActiveExclusiveIndex] = useState(0);
   
   // Auto-rotate exclusive cards every 6 seconds
-  import { useEffect } from 'react';
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveExclusiveIndex((prev) => (prev + 1) % 4);
