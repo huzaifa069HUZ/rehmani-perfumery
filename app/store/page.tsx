@@ -180,12 +180,12 @@ export default function StorePage() {
 
       <main className="store-page min-h-screen">
         {/* ═══ Hero Video Section ═══ */}
-        <div className="w-full h-[100svh] flex items-center justify-center p-3 md:p-5 bg-[#F8F6F3]">
-          <section className="relative w-full max-w-[1600px] h-full rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden flex flex-col items-center">
-            <div className="absolute inset-0 bg-black/30 z-[1]" />
+        <div className="w-full h-[100svh] flex items-center justify-center bg-black">
+          <section className="relative w-full h-full overflow-hidden flex flex-col items-center">
+            <div className="absolute inset-0 bg-black/40 z-[1]" />
             <video
               autoPlay muted loop playsInline
-              className="absolute inset-0 w-full h-full object-cover z-0"
+              className="absolute inset-0 w-full h-full object-contain z-0"
               src="/assets/our_store_vid.mp4"
             />
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center pt-20">
@@ -205,7 +205,7 @@ export default function StorePage() {
                   transition={{ duration: 0.8, delay: 0.4 }}
                   className="text-base sm:text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl font-light mb-10"
                 >
-                  A legacy of authentic Arabian perfumery. Discover the timeless art of fragrance at Rahmani Perfumery, where every scent tells a story of heritage and luxury.
+                  Visit any of our two stores in Patna to experience the true luxury of original attars.
                 </motion.p>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -221,9 +221,9 @@ export default function StorePage() {
                         window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
                       }
                     }}
-                    className="px-8 py-3.5 border border-[#888888] text-white text-[13px] tracking-[0.2em] uppercase font-medium hover:bg-white hover:text-black transition-colors duration-300 backdrop-blur-sm"
+                    className="px-10 py-4 bg-white text-black text-[13px] tracking-[0.2em] uppercase font-bold hover:bg-[#c4a46c] hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(196,164,108,0.5)] rounded-sm"
                   >
-                    OUR SHOPS
+                    VISIT OUR SHOPS
                   </button>
                 </motion.div>
               </div>
