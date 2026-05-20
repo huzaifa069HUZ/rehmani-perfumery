@@ -176,16 +176,23 @@ export default function StorePage() {
         .floral-accent-left { animation: floralSway 5s ease-in-out infinite; }
         .floral-accent-right { animation: floralSwayReverse 5s ease-in-out infinite; }
         .floral-glow { animation: floralPulse 4s ease-in-out infinite; }
+        @keyframes buttonGlow {
+          0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.4), 0 0 30px rgba(255, 255, 255, 0.2); transform: scale(1); }
+          50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.8), 0 0 50px rgba(255, 255, 255, 0.4); transform: scale(1.02); }
+        }
+        .btn-glow {
+          animation: buttonGlow 2.5s ease-in-out infinite;
+        }
       `}} />
 
       <main className="store-page min-h-screen">
         {/* ═══ Hero Video Section ═══ */}
-        <div className="w-full h-[100svh] flex items-center justify-center bg-black">
-          <section className="relative w-full h-full overflow-hidden flex flex-col items-center">
+        <div className="relative w-full aspect-video min-h-[70vh] bg-black flex items-center justify-center overflow-hidden">
+          <section className="absolute inset-0 w-full h-full flex flex-col items-center">
             <div className="absolute inset-0 bg-black/40 z-[1]" />
             <video
               autoPlay muted loop playsInline
-              className="absolute inset-0 w-full h-full object-contain z-0"
+              className="absolute inset-0 w-full h-full object-cover z-0"
               src="/assets/our_store_vid.mp4"
             />
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center pt-20">
@@ -221,7 +228,7 @@ export default function StorePage() {
                         window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
                       }
                     }}
-                    className="px-10 py-4 bg-white text-black text-[13px] tracking-[0.2em] uppercase font-bold hover:bg-[#c4a46c] hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(196,164,108,0.5)] rounded-sm"
+                    className="btn-glow px-10 py-4 bg-white text-black text-[14px] tracking-[0.2em] uppercase font-bold hover:bg-[#c4a46c] hover:text-white transition-colors duration-300 rounded-sm"
                   >
                     VISIT OUR SHOPS
                   </button>
