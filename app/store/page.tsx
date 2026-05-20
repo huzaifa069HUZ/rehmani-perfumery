@@ -15,6 +15,16 @@ export default function StorePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [activeMap, setActiveMap] = useState<'phulwari' | 'sabzibagh'>('phulwari');
+  const [activeExclusiveIndex, setActiveExclusiveIndex] = useState(0);
+  
+  // Auto-rotate exclusive cards every 6 seconds
+  import { useEffect } from 'react';
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveExclusiveIndex((prev) => (prev + 1) % 4);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -206,7 +216,7 @@ export default function StorePage() {
 
       <main className="store-page min-h-screen">
         {/* ═══ Hero Video Section ═══ */}
-        <div className="relative w-full aspect-video h-auto bg-black flex flex-col items-center justify-center overflow-hidden">
+        <div className="relative w-full aspect-video h-auto bg-black flex flex-col items-center justify-center overflow-hidden mt-[70px] md:mt-0">
           <section className="absolute inset-0 w-full h-full flex flex-col items-center justify-center">
             <div className="absolute inset-0 bg-black/40 md:bg-black/20 z-[1]" />
             <video
@@ -220,7 +230,7 @@ export default function StorePage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-3xl sm:text-5xl md:text-7xl lg:text-[90px] font-normal text-white mb-2 sm:mb-6 tracking-tight leading-[1.1] drop-shadow-xl"
+                  className="hidden md:block text-3xl sm:text-5xl md:text-7xl lg:text-[90px] font-normal text-white mb-2 sm:mb-6 tracking-tight leading-[1.1] drop-shadow-xl"
                   style={{ fontFamily: 'var(--font-cormorant), "Cormorant Garamond", serif' }}
                 >
                   Experience the Essence
@@ -229,7 +239,7 @@ export default function StorePage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  className="text-xs sm:text-base md:text-xl text-white/90 leading-relaxed max-w-2xl font-light mb-4 sm:mb-12 drop-shadow-md"
+                  className="hidden md:block text-xs sm:text-base md:text-xl text-white/90 leading-relaxed max-w-2xl font-light mb-4 sm:mb-12 drop-shadow-md"
                 >
                   Visit any of our two stores in Patna to experience the true luxury of original attars.
                 </motion.p>
@@ -355,7 +365,7 @@ export default function StorePage() {
               >
                 {/* Left Side: Info */}
                 <div className="w-full lg:w-1/2 flex flex-col items-center text-center justify-center p-4 sm:p-8 md:p-10 lg:p-12 z-10">
-                  <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/70 border border-[#E0E8E2] mb-4 sm:mb-8 shadow-sm">
+                  <div className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/70 border border-[#E0E8E2] mb-4 sm:mb-8 shadow-sm">
                     <MapPin className="w-4 h-4 text-[#5C6E5C]" />
                   </div>
 
@@ -363,11 +373,11 @@ export default function StorePage() {
                     className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.08] mb-4 sm:mb-6"
                     style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", Georgia, serif', fontWeight: 600, color: '#1a2e20', letterSpacing: '-0.01em' }}
                   >
-                    Phulwari<br />Sharif
+                    Phulwari<br className="hidden md:block" /> Sharif
                   </h3>
 
-                  <p className="text-[#5a6b5c] text-sm sm:text-[15px] md:text-base leading-[1.85] mb-6 sm:mb-8 max-w-[340px] mx-auto">
-                    A serene destination where tradition meets timeless fragrance. Immerse yourself in our signature collections and bespoke blends.
+                  <p className="text-[#5a6b5c] text-[13px] sm:text-[15px] md:text-base leading-[1.6] md:leading-[1.85] mb-6 sm:mb-8 max-w-[340px] mx-auto">
+                    Where tradition meets timeless fragrance. Discover signature blends.
                   </p>
 
                   {/* Store Details */}
@@ -442,7 +452,7 @@ export default function StorePage() {
               >
                 {/* Left Side: Info */}
                 <div className="w-full lg:w-1/2 flex flex-col items-center text-center justify-center p-4 sm:p-8 md:p-10 lg:p-12 z-10">
-                  <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/70 border border-[#E0E8E2] mb-4 sm:mb-8 shadow-sm">
+                  <div className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/70 border border-[#E0E8E2] mb-4 sm:mb-8 shadow-sm">
                     <MapPin className="w-4 h-4 text-[#5C6E5C]" />
                   </div>
 
@@ -453,8 +463,8 @@ export default function StorePage() {
                     Sabzibagh
                   </h3>
 
-                  <p className="text-[#5a6070] text-sm sm:text-[15px] md:text-base leading-[1.85] mb-6 sm:mb-8 max-w-[340px] mx-auto">
-                    Experience handcrafted attars in a space designed for fragrance lovers. Discover exclusive collections and personalized recommendations.
+                  <p className="text-[#5a6070] text-[13px] sm:text-[15px] md:text-base leading-[1.6] md:leading-[1.85] mb-6 sm:mb-8 max-w-[340px] mx-auto">
+                    The heart of heritage perfumery. Step into a world of luxury.
                   </p>
 
                   {/* Store Details */}
@@ -534,129 +544,81 @@ export default function StorePage() {
               </h2>
             </motion.div>
 
-            {/* 4 Centered Symmetrical Cards (Always visible images with day/night hover effect) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 w-full">
+            {/* 3D Auto-Rotating Carousel */}
+            <div className="relative w-full h-[450px] sm:h-[500px] flex items-center justify-center [perspective:1200px]">
+              {[
+                { title: 'Experience First', desc: 'Unsure which fragrance matches your aura? Explore our complete collection in person.', img: '/assets/minimal-boutique.png', Icon: Eye },
+                { title: 'Exclusive Offers', desc: 'Enjoy special walk-in discounts and complimentary samples strictly reserved for physical store visitors.', img: '/assets/minimal-perfume.png', Icon: Tag },
+                { title: 'Premium Certified', desc: 'Every drop is 100% authentic and ethically sourced. We guarantee purely premium fragrance oils.', img: '/assets/minimal-oud.png', Icon: ShieldCheck },
+                { title: 'Test On Skin', desc: 'Test longevity and projection on your own skin to see exactly how notes evolve with your chemistry.', img: '/assets/minimal-skin.png', Icon: Droplet }
+              ].map((card, idx) => {
+                const total = 4;
+                let offset = (idx - activeExclusiveIndex) % total;
+                if (offset < -total / 2) offset += total;
+                if (offset > total / 2) offset -= total;
+                
+                const isCenter = offset === 0;
+                const zIndex = 10 - Math.abs(offset);
+                const absOffset = Math.abs(offset);
+                
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={false}
+                    animate={{
+                      x: \`\${offset * 75}%\`,
+                      scale: isCenter ? 1 : 0.8 - (absOffset * 0.05),
+                      rotateY: offset * -25,
+                      opacity: absOffset > 1.5 ? 0 : 1 - (absOffset * 0.4),
+                      zIndex
+                    }}
+                    transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
+                    className={\`absolute top-0 group w-full max-w-[280px] sm:max-w-[340px] h-full rounded-2xl overflow-hidden shadow-2xl transition-shadow \${isCenter ? 'cursor-default' : 'cursor-pointer hover:shadow-[0_0_30px_rgba(196,164,108,0.3)]'}\`}
+                    onClick={() => {
+                      if (!isCenter) setActiveExclusiveIndex(idx);
+                    }}
+                  >
+                    <div className="absolute inset-0 z-0">
+                      <img src={card.img} alt={card.title} className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#111]/90 via-[#111]/40 to-transparent transition-colors duration-700" />
+                      <div className="absolute inset-5 border border-[#c4a46c]/30 rounded-xl z-20 pointer-events-none" />
+                    </div>
+
+                    <div className="relative z-10 h-full flex flex-col p-6 sm:p-8 text-center items-center justify-between">
+                      <div className="w-full flex-1 flex items-center justify-center">
+                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border border-[#c4a46c]/40 bg-[#111]/60 backdrop-blur-md flex items-center justify-center">
+                           <card.Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#c4a46c]" />
+                        </div>
+                      </div>
+                      <div className="w-full">
+                        <h3 className="text-white text-[12px] sm:text-[13px] tracking-[0.25em] font-bold mb-3 sm:mb-4 uppercase">{card.title}</h3>
+                        <div className="w-8 h-[1px] bg-[#c4a46c]/50 mx-auto mb-3 sm:mb-4" />
+                        <p className="text-[#ccc] text-[12px] sm:text-[13px] leading-[1.6] sm:leading-[1.8]">
+                          {card.desc}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
               
-              {/* Card 1: Experience First */}
-              <motion.div 
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.1 }}
-                className="group relative h-[380px] sm:h-[400px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
-              >
-                <div className="absolute inset-0 z-0">
-                  <img src="/assets/minimal-boutique.png" alt="Experience First" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-[#111] group-hover:via-[#111]/80 group-hover:to-[#111]/30 transition-colors duration-700" />
-                  <div className="absolute inset-5 border border-[#c4a46c]/30 rounded-xl z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                </div>
-
-                <div className="relative z-10 h-full flex flex-col p-8 text-center items-center justify-between">
-                  <div className="w-full flex-1 flex items-center justify-center transform group-hover:-translate-y-4 transition-transform duration-700">
-                    <div className="w-16 h-16 rounded-full border border-[#d6c7b3] group-hover:border-[#c4a46c]/40 bg-white/60 group-hover:bg-[#111]/60 backdrop-blur-md flex items-center justify-center transition-colors duration-700">
-                       <Eye className="w-6 h-6 text-[#8b7355] group-hover:text-[#c4a46c] transition-colors duration-700" />
-                    </div>
-                  </div>
-                  <div className="w-full transform group-hover:-translate-y-2 transition-transform duration-700">
-                    <h3 className="text-[#1c1a18] group-hover:text-white text-[13px] tracking-[0.25em] font-bold mb-4 uppercase transition-colors duration-700">Experience First</h3>
-                    <div className="w-8 h-[1px] bg-[#d6c7b3] group-hover:bg-[#c4a46c]/50 mx-auto mb-4 transition-colors duration-700" />
-                    <p className="text-[#5c534b] group-hover:text-[#ccc] text-[13px] leading-[1.8] transition-colors duration-700">
-                      Unsure which fragrance matches your aura? Explore our complete collection in person before committing to your signature scent.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Card 2: Exclusive Offers */}
-              <motion.div 
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="group relative h-[380px] sm:h-[400px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
-              >
-                <div className="absolute inset-0 z-0">
-                  <img src="/assets/minimal-perfume.png" alt="Exclusive Offers" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-[#111] group-hover:via-[#111]/80 group-hover:to-[#111]/30 transition-colors duration-700" />
-                  <div className="absolute inset-5 border border-[#c4a46c]/30 rounded-xl z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                </div>
-
-                <div className="relative z-10 h-full flex flex-col p-8 text-center items-center justify-between">
-                  <div className="w-full flex-1 flex items-center justify-center transform group-hover:-translate-y-4 transition-transform duration-700">
-                    <div className="w-16 h-16 rounded-full border border-[#d6c7b3] group-hover:border-[#c4a46c]/40 bg-white/60 group-hover:bg-[#111]/60 backdrop-blur-md flex items-center justify-center transition-colors duration-700">
-                       <Tag className="w-6 h-6 text-[#8b7355] group-hover:text-[#c4a46c] transition-colors duration-700" />
-                    </div>
-                  </div>
-                  <div className="w-full transform group-hover:-translate-y-2 transition-transform duration-700">
-                    <h3 className="text-[#1c1a18] group-hover:text-white text-[13px] tracking-[0.25em] font-bold mb-4 uppercase transition-colors duration-700">Exclusive Offers</h3>
-                    <div className="w-8 h-[1px] bg-[#d6c7b3] group-hover:bg-[#c4a46c]/50 mx-auto mb-4 transition-colors duration-700" />
-                    <p className="text-[#5c534b] group-hover:text-[#ccc] text-[13px] leading-[1.8] transition-colors duration-700">
-                      Enjoy special walk-in discounts, bundle deals, and complimentary samples strictly reserved for physical store visitors.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Card 3: Premium Certified */}
-              <motion.div 
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="group relative h-[380px] sm:h-[400px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
-              >
-                <div className="absolute inset-0 z-0">
-                  <img src="/assets/minimal-oud.png" alt="Premium Certified" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-[#111] group-hover:via-[#111]/80 group-hover:to-[#111]/30 transition-colors duration-700" />
-                  <div className="absolute inset-5 border border-[#c4a46c]/30 rounded-xl z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                </div>
-
-                <div className="relative z-10 h-full flex flex-col p-8 text-center items-center justify-between">
-                  <div className="w-full flex-1 flex items-center justify-center transform group-hover:-translate-y-4 transition-transform duration-700">
-                    <div className="w-16 h-16 rounded-full border border-[#d6c7b3] group-hover:border-[#c4a46c]/40 bg-white/60 group-hover:bg-[#111]/60 backdrop-blur-md flex items-center justify-center transition-colors duration-700">
-                       <ShieldCheck className="w-6 h-6 text-[#8b7355] group-hover:text-[#c4a46c] transition-colors duration-700" />
-                    </div>
-                  </div>
-                  <div className="w-full transform group-hover:-translate-y-2 transition-transform duration-700">
-                    <h3 className="text-[#1c1a18] group-hover:text-white text-[13px] tracking-[0.25em] font-bold mb-4 uppercase transition-colors duration-700">Premium Certified</h3>
-                    <div className="w-8 h-[1px] bg-[#d6c7b3] group-hover:bg-[#c4a46c]/50 mx-auto mb-4 transition-colors duration-700" />
-                    <p className="text-[#5c534b] group-hover:text-[#ccc] text-[13px] leading-[1.8] transition-colors duration-700">
-                      Every drop of our oud and musk is 100% authentic and ethically sourced. We guarantee purely premium fragrance oils.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Card 4: Test On Skin */}
-              <motion.div 
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="group relative h-[380px] sm:h-[400px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
-              >
-                <div className="absolute inset-0 z-0">
-                  <img src="/assets/minimal-skin.png" alt="Test on Skin" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-[#111] group-hover:via-[#111]/80 group-hover:to-[#111]/30 transition-colors duration-700" />
-                  <div className="absolute inset-5 border border-[#c4a46c]/30 rounded-xl z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                </div>
-
-                <div className="relative z-10 h-full flex flex-col p-8 text-center items-center justify-between">
-                  <div className="w-full flex-1 flex items-center justify-center transform group-hover:-translate-y-4 transition-transform duration-700">
-                    <div className="w-16 h-16 rounded-full border border-[#d6c7b3] group-hover:border-[#c4a46c]/40 bg-white/60 group-hover:bg-[#111]/60 backdrop-blur-md flex items-center justify-center transition-colors duration-700">
-                       <Droplet className="w-6 h-6 text-[#8b7355] group-hover:text-[#c4a46c] transition-colors duration-700" />
-                    </div>
-                  </div>
-                  <div className="w-full transform group-hover:-translate-y-2 transition-transform duration-700">
-                    <h3 className="text-[#1c1a18] group-hover:text-white text-[13px] tracking-[0.25em] font-bold mb-4 uppercase transition-colors duration-700">Test On Skin</h3>
-                    <div className="w-8 h-[1px] bg-[#d6c7b3] group-hover:bg-[#c4a46c]/50 mx-auto mb-4 transition-colors duration-700" />
-                    <p className="text-[#5c534b] group-hover:text-[#ccc] text-[13px] leading-[1.8] transition-colors duration-700">
-                      Test the longevity and projection on your own skin. See exactly how the notes evolve with your unique body chemistry.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-
+              {/* Controls */}
+              <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between px-2 sm:px-8 pointer-events-none z-20 w-full max-w-[800px]">
+                <button 
+                  onClick={() => setActiveExclusiveIndex(p => (p - 1 + 4) % 4)}
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/80 backdrop-blur border border-[#d6c7b3] flex items-center justify-center text-[#8b7355] hover:bg-[#c4a46c] hover:text-white transition-colors pointer-events-auto shadow-lg"
+                  aria-label="Previous card"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button 
+                  onClick={() => setActiveExclusiveIndex(p => (p + 1) % 4)}
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/80 backdrop-blur border border-[#d6c7b3] flex items-center justify-center text-[#8b7355] hover:bg-[#c4a46c] hover:text-white transition-colors pointer-events-auto shadow-lg"
+                  aria-label="Next card"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+              </div>
             </div>
           </div>
         </section>
