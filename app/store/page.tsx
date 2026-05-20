@@ -14,6 +14,7 @@ import Footer from '@/components/Footer';
 export default function StorePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [activeMap, setActiveMap] = useState<'phulwari' | 'sabzibagh'>('phulwari');
 
   return (
     <>
@@ -183,6 +184,24 @@ export default function StorePage() {
         .btn-glow {
           animation: buttonGlow 2.5s ease-in-out infinite;
         }
+        @keyframes marqueeLeft {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes marqueeRight {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
+        }
+        .animate-marquee-left {
+          animation: marqueeLeft 40s linear infinite;
+        }
+        .animate-marquee-right {
+          animation: marqueeRight 40s linear infinite;
+        }
+        .text-stroke-transparent {
+          -webkit-text-stroke: 1.5px rgba(28, 31, 28, 0.8);
+          color: transparent;
+        }
       `}} />
 
       <main className="store-page min-h-screen">
@@ -219,19 +238,21 @@ export default function StorePage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.6 }}
                 >
-                  <button
-                    onClick={() => {
-                      const storesSection = document.getElementById('our-stores');
-                      if (storesSection) {
-                        storesSection.scrollIntoView({ behavior: 'smooth' });
-                      } else {
-                        window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-                      }
-                    }}
-                    className="btn-glow px-10 py-4 bg-white text-black text-[14px] tracking-[0.2em] uppercase font-bold hover:bg-[#c4a46c] hover:text-white transition-colors duration-300 rounded-sm"
-                  >
-                    VISIT OUR SHOPS
-                  </button>
+                  <div className="p-2 border border-white/40 rounded-lg bg-black/20 backdrop-blur-md shadow-2xl">
+                    <button
+                      onClick={() => {
+                        const storesSection = document.getElementById('our-stores');
+                        if (storesSection) {
+                          storesSection.scrollIntoView({ behavior: 'smooth' });
+                        } else {
+                          window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                        }
+                      }}
+                      className="btn-glow px-10 py-4 bg-white text-black text-[14px] tracking-[0.2em] uppercase font-bold hover:bg-[#c4a46c] hover:text-white transition-colors duration-300 rounded-md"
+                    >
+                      VISIT OUR SHOPS
+                    </button>
+                  </div>
                 </motion.div>
               </div>
             </div>
@@ -365,7 +386,7 @@ export default function StorePage() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-10 sm:mt-14">
+                  <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-16 sm:mt-24">
                     <Link href="#">
                       <button className="store-btn">
                         <span className="circle" aria-hidden="true">
@@ -452,7 +473,7 @@ export default function StorePage() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-10 sm:mt-14">
+                  <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-16 sm:mt-24">
                     <Link href="#">
                       <button className="store-btn">
                         <span className="circle" aria-hidden="true">
@@ -493,7 +514,7 @@ export default function StorePage() {
         </section>
 
         {/* ── Cream In-Store Exclusive Section ── */}
-        <section className="relative w-full bg-gradient-to-b from-[#FDFBF7] to-[#F1EBE1] py-24 sm:py-32 md:py-40 overflow-hidden flex flex-col items-center">
+        <section className="relative w-full bg-gradient-to-b from-[#FDFBF7] to-[#F1EBE1] py-32 sm:py-40 md:py-52 overflow-hidden flex flex-col items-center">
           
           <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             
@@ -503,7 +524,7 @@ export default function StorePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1 }}
-              className="flex justify-center text-center w-full mt-10 mb-24 sm:mb-32"
+              className="flex justify-center text-center w-full mt-10 mb-32 sm:mb-40"
             >
               <h2 
                 className="text-4xl sm:text-5xl md:text-[64px] text-[#1c1a18] w-full leading-tight uppercase tracking-widest font-bold"
@@ -635,6 +656,90 @@ export default function StorePage() {
                   </div>
                 </div>
               </motion.div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* ── Dual Marquee Section ── */}
+        <section className="relative w-full bg-[#1C1F1C] py-20 sm:py-28 overflow-hidden border-t border-b border-[#2A2D2A]">
+          <div className="flex flex-col gap-6 sm:gap-10 opacity-90">
+            {/* Marquee 1: Left to Right */}
+            <div className="w-full overflow-hidden whitespace-nowrap flex">
+              <div className="animate-marquee-left flex gap-8 items-center text-[5rem] sm:text-[7rem] md:text-[9rem] font-black uppercase tracking-tight" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
+                {Array(6).fill("SUPER OFFER IN-STORE • PURE ATTAR • ").map((text, i) => (
+                  <span key={i} className="text-[#F8F6F3]">{text}</span>
+                ))}
+              </div>
+            </div>
+            {/* Marquee 2: Right to Left */}
+            <div className="w-full overflow-hidden whitespace-nowrap flex">
+              <div className="animate-marquee-right flex gap-8 items-center text-[5rem] sm:text-[7rem] md:text-[9rem] font-black uppercase tracking-tight" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
+                {Array(6).fill("BEST EXPERIENCE ONLY IN STORE • ROYAL OUD • ").map((text, i) => (
+                  <span key={i} className="text-stroke-transparent">{text}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Dual Map Section ── */}
+        <section className="relative w-full bg-[#F8F6F3] py-24 sm:py-32 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+          <div className="w-full max-w-[1200px] flex flex-col items-center">
+            
+            <h2 
+              className="text-4xl sm:text-5xl text-[#1c1a18] text-center uppercase tracking-widest font-bold mb-12"
+              style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", serif' }}
+            >
+              Find Us In <span className="text-[#C62828]">Patna</span>
+            </h2>
+
+            {/* Premium Map Toggle */}
+            <div className="flex p-1.5 bg-[#E5E0D8] rounded-full mb-12 shadow-inner border border-[#D5CFC5]">
+              <button
+                onClick={() => setActiveMap('phulwari')}
+                className={`px-6 sm:px-10 py-3.5 rounded-full text-sm sm:text-base font-bold tracking-wider uppercase transition-all duration-300 ${activeMap === 'phulwari' ? 'bg-[#1C1F1C] text-white shadow-lg transform scale-[1.02]' : 'text-[#5C534B] hover:text-[#1C1F1C]'}`}
+              >
+                Phulwari Sharif
+              </button>
+              <button
+                onClick={() => setActiveMap('sabzibagh')}
+                className={`px-6 sm:px-10 py-3.5 rounded-full text-sm sm:text-base font-bold tracking-wider uppercase transition-all duration-300 ${activeMap === 'sabzibagh' ? 'bg-[#1C1F1C] text-white shadow-lg transform scale-[1.02]' : 'text-[#5C534B] hover:text-[#1C1F1C]'}`}
+              >
+                Sabzibagh
+              </button>
+            </div>
+
+            {/* Map Container */}
+            <div className="w-full h-[400px] sm:h-[500px] md:h-[600px] bg-[#EAE6DF] rounded-[24px] sm:rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] border-4 border-white relative">
+              
+              {/* Phulwari Map */}
+              <div className={`absolute inset-0 transition-opacity duration-700 ${activeMap === 'phulwari' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14392.434685324395!2d85.0664!3d25.5941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed579f18a24559%3A0xc48c41fb7cf79dc4!2sPhulwari%20Sharif%2C%20Patna%2C%20Bihar!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Phulwari Sharif Store Location"
+                />
+              </div>
+
+              {/* Sabzibagh Map */}
+              <div className={`absolute inset-0 transition-opacity duration-700 ${activeMap === 'sabzibagh' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14390.871131102946!2d85.1478!3d25.6186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed585ce0000000%3A0x8888888888888888!2sSabzibagh%2C%20Patna%2C%20Bihar!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Sabzibagh Store Location"
+                />
+              </div>
 
             </div>
           </div>
