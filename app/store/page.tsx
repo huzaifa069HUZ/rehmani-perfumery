@@ -662,85 +662,178 @@ export default function StorePage() {
         </section>
 
         {/* ── Dual Marquee Section ── */}
-        <section className="relative w-full bg-[#1C1F1C] py-20 sm:py-28 overflow-hidden border-t border-b border-[#2A2D2A]">
-          <div className="flex flex-col gap-6 sm:gap-10 opacity-90">
+        <section className="relative w-full bg-[#1C1F1C] py-16 sm:py-24 overflow-hidden border-t border-b border-[#2A2D2A]">
+          <div className="flex flex-col gap-4 sm:gap-8">
             {/* Marquee 1: Left to Right */}
-            <div className="w-full overflow-hidden whitespace-nowrap flex">
-              <div className="animate-marquee-left flex gap-8 items-center text-[5rem] sm:text-[7rem] md:text-[9rem] font-black uppercase tracking-tight" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
-                {Array(6).fill("SUPER OFFER IN-STORE • PURE ATTAR • ").map((text, i) => (
-                  <span key={i} className="text-[#F8F6F3]">{text}</span>
+            <div className="w-full overflow-hidden">
+              <div className="animate-marquee-left flex" style={{ width: 'max-content' }}>
+                {[...Array(2)].map((_, setIdx) => (
+                  <div key={setIdx} className="flex items-center shrink-0">
+                    {Array(4).fill(null).map((_, i) => (
+                      <span key={i} className="text-[#F8F6F3] text-[3rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem] font-black uppercase tracking-tight whitespace-nowrap mx-4 sm:mx-6" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
+                        SUPER OFFER IN-STORE &bull; PURE ATTAR &bull;&nbsp;
+                      </span>
+                    ))}
+                  </div>
                 ))}
               </div>
             </div>
             {/* Marquee 2: Right to Left */}
-            <div className="w-full overflow-hidden whitespace-nowrap flex">
-              <div className="animate-marquee-right flex gap-8 items-center text-[5rem] sm:text-[7rem] md:text-[9rem] font-black uppercase tracking-tight" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
-                {Array(6).fill("BEST EXPERIENCE ONLY IN STORE • ROYAL OUD • ").map((text, i) => (
-                  <span key={i} className="text-stroke-transparent">{text}</span>
+            <div className="w-full overflow-hidden">
+              <div className="animate-marquee-right flex" style={{ width: 'max-content' }}>
+                {[...Array(2)].map((_, setIdx) => (
+                  <div key={setIdx} className="flex items-center shrink-0">
+                    {Array(4).fill(null).map((_, i) => (
+                      <span key={i} className="text-stroke-transparent text-[3rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem] font-black uppercase tracking-tight whitespace-nowrap mx-4 sm:mx-6" style={{ fontFamily: 'ui-sans-serif, system-ui, sans-serif' }}>
+                        BEST EXPERIENCE ONLY IN STORE &bull; ROYAL OUD &bull;&nbsp;
+                      </span>
+                    ))}
+                  </div>
                 ))}
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── Dual Map Section ── */}
-        <section className="relative w-full bg-[#F8F6F3] py-24 sm:py-32 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-          <div className="w-full max-w-[1200px] flex flex-col items-center">
-            
-            <h2 
-              className="text-4xl sm:text-5xl text-[#1c1a18] text-center uppercase tracking-widest font-bold mb-12"
-              style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", serif' }}
-            >
-              Find Us In <span className="text-[#C62828]">Patna</span>
-            </h2>
+        {/* ── Dual Map Section (matching homepage dark design) ── */}
+        <section style={{
+          background: 'linear-gradient(135deg, #050011 0%, #0e0535 18%, #180850 32%, #0b1a55 48%, #081640 62%, #12063a 78%, #040010 100%)',
+          position: 'relative',
+          overflow: 'hidden',
+        }}>
+          {/* Background glows */}
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
+            background: [
+              'radial-gradient(ellipse 70% 55% at 15% 25%, rgba(120,40,210,0.18) 0%, transparent 65%)',
+              'radial-gradient(ellipse 55% 45% at 85% 60%, rgba(20,80,220,0.16) 0%, transparent 60%)',
+              'radial-gradient(ellipse 45% 35% at 50% 90%, rgba(0,160,200,0.10) 0%, transparent 55%)',
+            ].join(', '),
+          }} />
+          {/* Arabesque pattern */}
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, opacity: 0.07,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23d4af37' stroke-width='0.7'%3E%3Cpolygon points='40,4 76,22 76,58 40,76 4,58 4,22'/%3E%3Cpolygon points='40,14 66,28 66,52 40,66 14,52 14,28'/%3E%3Cpolygon points='40,24 56,32 56,48 40,56 24,48 24,32'/%3E%3Cline x1='40' y1='4' x2='40' y2='24'/%3E%3Cline x1='76' y1='22' x2='56' y2='32'/%3E%3Cline x1='76' y1='58' x2='56' y2='48'/%3E%3Cline x1='40' y1='76' x2='40' y2='56'/%3E%3Cline x1='4' y1='58' x2='24' y2='48'/%3E%3Cline x1='4' y1='22' x2='24' y2='32'/%3E%3Ccircle cx='40' cy='40' r='6'/%3E%3Ccircle cx='40' cy='40' r='2'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '80px 80px',
+          }} />
 
-            {/* Premium Map Toggle */}
-            <div className="flex p-1.5 bg-[#E5E0D8] rounded-full mb-12 shadow-inner border border-[#D5CFC5]">
-              <button
-                onClick={() => setActiveMap('phulwari')}
-                className={`px-6 sm:px-10 py-3.5 rounded-full text-sm sm:text-base font-bold tracking-wider uppercase transition-all duration-300 ${activeMap === 'phulwari' ? 'bg-[#1C1F1C] text-white shadow-lg transform scale-[1.02]' : 'text-[#5C534B] hover:text-[#1C1F1C]'}`}
-              >
-                Phulwari Sharif
-              </button>
-              <button
-                onClick={() => setActiveMap('sabzibagh')}
-                className={`px-6 sm:px-10 py-3.5 rounded-full text-sm sm:text-base font-bold tracking-wider uppercase transition-all duration-300 ${activeMap === 'sabzibagh' ? 'bg-[#1C1F1C] text-white shadow-lg transform scale-[1.02]' : 'text-[#5C534B] hover:text-[#1C1F1C]'}`}
-              >
-                Sabzibagh
-              </button>
+          <div className="relative z-10 py-20 sm:py-28 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+            <p style={{ color: 'rgba(255,255,255,0.75)', letterSpacing: '0.3em', fontSize: '0.8rem', fontWeight: 600, textTransform: 'uppercase', marginBottom: '12px' }}>
+              LOCATE OUR STORES
+            </p>
+            <h2 style={{
+              background: 'linear-gradient(135deg, #bf953f 0%, #fcf6ba 30%, #d4a843 55%, #fce38a 75%, #b8820a 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              filter: 'drop-shadow(0 0 18px rgba(212,175,55,0.55)) drop-shadow(0 0 40px rgba(212,175,55,0.25))',
+              fontSize: 'clamp(2rem, 4vw, 3rem)',
+              fontWeight: 700,
+              fontFamily: '"Playfair Display", "Cormorant Garamond", Georgia, serif',
+              marginBottom: '16px',
+              textAlign: 'center',
+            }}>
+              Find Us In Patna
+            </h2>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '40px' }}>
+              <span style={{ height: '1px', width: '50px', background: 'rgba(126,184,255,0.5)' }} />
+              <span style={{ color: '#7eb8ff', fontSize: '10px' }}>◆</span>
+              <span style={{ height: '1px', width: '50px', background: 'rgba(126,184,255,0.5)' }} />
             </div>
 
-            {/* Map Container */}
-            <div className="w-full h-[400px] sm:h-[500px] md:h-[600px] bg-[#EAE6DF] rounded-[24px] sm:rounded-[32px] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.08)] border-4 border-white relative">
-              
-              {/* Phulwari Map */}
-              <div className={`absolute inset-0 transition-opacity duration-700 ${activeMap === 'phulwari' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}>
+            {/* Map card with toggle */}
+            <div className="w-full max-w-[1200px]" style={{
+              borderRadius: '16px',
+              overflow: 'hidden',
+              boxShadow: '0 32px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)',
+              border: '1px solid rgba(212,175,55,0.18)',
+            }}>
+              <div style={{ position: 'relative', width: '100%', minHeight: '500px', background: '#060412' }}>
+                {/* Toggle overlay */}
+                <div style={{
+                  position: 'absolute', top: '20px', right: '20px',
+                  background: 'rgba(8,6,30,0.88)',
+                  backdropFilter: 'blur(16px)',
+                  WebkitBackdropFilter: 'blur(16px)',
+                  padding: '5px',
+                  borderRadius: '30px',
+                  boxShadow: '0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,175,55,0.2)',
+                  zIndex: 1000,
+                  display: 'flex', alignItems: 'center', gap: '2px',
+                }}>
+                  <button
+                    type="button"
+                    onClick={() => setActiveMap('phulwari')}
+                    style={{
+                      background: activeMap === 'phulwari' ? 'linear-gradient(135deg, #d4af37, #f5e27a)' : 'transparent',
+                      border: 'none',
+                      padding: '8px 18px',
+                      borderRadius: '24px',
+                      fontSize: '0.82rem',
+                      fontWeight: 600,
+                      color: activeMap === 'phulwari' ? '#0a0520' : 'rgba(255,255,255,0.5)',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s cubic-bezier(0.25, 1, 0.5, 1)',
+                      boxShadow: activeMap === 'phulwari' ? '0 2px 12px rgba(212,175,55,0.4)' : 'none',
+                    }}
+                  >
+                    Phulwari
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveMap('sabzibagh')}
+                    style={{
+                      background: activeMap === 'sabzibagh' ? 'linear-gradient(135deg, #d4af37, #f5e27a)' : 'transparent',
+                      border: 'none',
+                      padding: '8px 18px',
+                      borderRadius: '24px',
+                      fontSize: '0.82rem',
+                      fontWeight: 600,
+                      color: activeMap === 'sabzibagh' ? '#0a0520' : 'rgba(255,255,255,0.5)',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s cubic-bezier(0.25, 1, 0.5, 1)',
+                      boxShadow: activeMap === 'sabzibagh' ? '0 2px 12px rgba(212,175,55,0.4)' : 'none',
+                    }}
+                  >
+                    Sabzibagh
+                  </button>
+                </div>
+
+                {/* Map iframes */}
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14392.434685324395!2d85.0664!3d25.5941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed579f18a24559%3A0xc48c41fb7cf79dc4!2sPhulwari%20Sharif%2C%20Patna%2C%20Bihar!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                  key={activeMap}
+                  src={activeMap === 'phulwari'
+                    ? "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3598.866834206912!2d85.06393990077616!3d25.57609678791896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f2a9bcfa4d1d0b%3A0x6579f31439ab90f9!2sRahmani%20Perfumery!5e0!3m2!1sen!2sin!4v1776186526756!5m2!1sen!2sin"
+                    : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.642358292268!2d85.15491527517806!3d25.616797877443123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed59956165aef5%3A0xd5cbe379c9c2e72c!2sRahmani%20Perfumery!5e0!3m2!1sen!2sin!4v1776186560023!5m2!1sen!2sin"
+                  }
                   width="100%"
                   height="100%"
-                  style={{ border: 0 }}
+                  style={{ border: 0, position: 'absolute', top: 0, left: 0, filter: 'invert(0.92) hue-rotate(180deg) saturate(0.6) brightness(0.85)' }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Phulwari Sharif Store Location"
+                  title={`${activeMap === 'phulwari' ? 'Phulwari Sharif' : 'Sabzibagh'} Store Location`}
                 />
               </div>
+            </div>
 
-              {/* Sabzibagh Map */}
-              <div className={`absolute inset-0 transition-opacity duration-700 ${activeMap === 'sabzibagh' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}>
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14390.871131102946!2d85.1478!3d25.6186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed585ce0000000%3A0x8888888888888888!2sSabzibagh%2C%20Patna%2C%20Bihar!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Sabzibagh Store Location"
-                />
-              </div>
-
+            {/* Tagline below map */}
+            <div style={{ textAlign: 'center', padding: '36px 20px 0', maxWidth: '700px', margin: '0 auto' }}>
+              <p style={{
+                display: 'inline-flex', alignItems: 'center', gap: '8px',
+                fontSize: '0.7rem', letterSpacing: '0.25em', textTransform: 'uppercase',
+                fontWeight: 600, color: '#d4af37', marginBottom: '8px',
+              }}>
+                <span style={{ display: 'inline-block', width: '20px', height: '1px', background: 'rgba(212,175,55,0.5)' }} />
+                Free Unlimited Demo Testing
+                <span style={{ display: 'inline-block', width: '20px', height: '1px', background: 'rgba(212,175,55,0.5)' }} />
+              </p>
+              <p style={{
+                fontSize: 'clamp(0.88rem, 1.5vw, 1.05rem)',
+                color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, fontWeight: 400,
+              }}>
+                Walk into any of our outlets and explore our entire collection — smell, compare, and experience every attar as many times as you like, absolutely free.
+              </p>
             </div>
           </div>
         </section>
