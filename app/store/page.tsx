@@ -206,21 +206,21 @@ export default function StorePage() {
 
       <main className="store-page min-h-screen">
         {/* ═══ Hero Video Section ═══ */}
-        <div className="relative w-full h-[100svh] md:h-auto md:aspect-video bg-black flex flex-col items-center justify-center overflow-hidden">
+        <div className="relative w-full aspect-video h-auto bg-black flex flex-col items-center justify-center overflow-hidden">
           <section className="absolute inset-0 w-full h-full flex flex-col items-center justify-center">
             <div className="absolute inset-0 bg-black/40 md:bg-black/20 z-[1]" />
             <video
               autoPlay muted loop playsInline
-              className="absolute inset-0 w-full h-full object-contain md:object-cover z-0"
+              className="absolute inset-0 w-full h-full object-cover z-0"
               src="/assets/our_store_vid.mp4"
             />
-            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center pt-20 pb-10">
-              <div className="w-full flex flex-col items-center text-center max-w-5xl px-6">
+            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center pt-8 md:pt-20 pb-4 md:pb-10">
+              <div className="w-full flex flex-col items-center text-center max-w-5xl px-4 sm:px-6">
                 <motion.h1
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-5xl sm:text-6xl md:text-7xl lg:text-[90px] font-normal text-white mb-6 tracking-tight leading-[1.1] drop-shadow-xl"
+                  className="text-3xl sm:text-5xl md:text-7xl lg:text-[90px] font-normal text-white mb-2 sm:mb-6 tracking-tight leading-[1.1] drop-shadow-xl"
                   style={{ fontFamily: 'var(--font-cormorant), "Cormorant Garamond", serif' }}
                 >
                   Experience the Essence
@@ -229,7 +229,7 @@ export default function StorePage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  className="text-base sm:text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl font-light mb-12 drop-shadow-md"
+                  className="text-xs sm:text-base md:text-xl text-white/90 leading-relaxed max-w-2xl font-light mb-4 sm:mb-12 drop-shadow-md"
                 >
                   Visit any of our two stores in Patna to experience the true luxury of original attars.
                 </motion.p>
@@ -238,7 +238,7 @@ export default function StorePage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.6 }}
                 >
-                  <div className="p-2 sm:p-3 border border-white/50 rounded-xl bg-white/10 backdrop-blur-md shadow-2xl">
+                  <div className="p-1 sm:p-3 border border-white/50 rounded-xl bg-white/10 backdrop-blur-md shadow-2xl">
                     <button
                       onClick={() => {
                         const storesSection = document.getElementById('our-stores');
@@ -248,7 +248,7 @@ export default function StorePage() {
                           window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
                         }
                       }}
-                      className="btn-glow px-12 py-5 sm:px-14 sm:py-6 bg-white text-black text-[16px] sm:text-[18px] tracking-[0.25em] uppercase font-black hover:bg-[#c4a46c] hover:text-white transition-colors duration-300 rounded-lg shadow-[0_0_20px_rgba(255,255,255,0.8)]"
+                      className="btn-glow px-6 py-2.5 sm:px-14 sm:py-6 bg-white text-gray-800 text-[11px] sm:text-[18px] tracking-[0.25em] uppercase font-black hover:bg-[#c4a46c] hover:text-white transition-colors duration-300 rounded-lg shadow-[0_0_20px_rgba(255,255,255,0.8)]"
                     >
                       VISIT OUR SHOPS
                     </button>
@@ -516,7 +516,7 @@ export default function StorePage() {
         {/* ── Cream In-Store Exclusive Section ── */}
         <section className="relative w-full bg-gradient-to-b from-[#FDFBF7] to-[#F1EBE1] py-32 sm:py-40 md:py-52 overflow-hidden flex flex-col items-center">
           
-          <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             
             {/* Fully Centered Header */}
             <motion.div 
@@ -535,7 +535,7 @@ export default function StorePage() {
             </motion.div>
 
             {/* 4 Centered Symmetrical Cards (Always visible images with day/night hover effect) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 w-full">
               
               {/* Card 1: Experience First */}
               <motion.div 
@@ -543,7 +543,7 @@ export default function StorePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.1 }}
-                className="group relative h-[450px] sm:h-[500px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
+                className="group relative h-[380px] sm:h-[400px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
               >
                 <div className="absolute inset-0 z-0">
                   <img src="/assets/minimal-boutique.png" alt="Experience First" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
@@ -573,7 +573,7 @@ export default function StorePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="group relative h-[450px] sm:h-[500px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
+                className="group relative h-[380px] sm:h-[400px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
               >
                 <div className="absolute inset-0 z-0">
                   <img src="/assets/minimal-perfume.png" alt="Exclusive Offers" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
@@ -603,7 +603,7 @@ export default function StorePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="group relative h-[450px] sm:h-[500px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
+                className="group relative h-[380px] sm:h-[400px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
               >
                 <div className="absolute inset-0 z-0">
                   <img src="/assets/minimal-oud.png" alt="Premium Certified" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
@@ -633,7 +633,7 @@ export default function StorePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="group relative h-[450px] sm:h-[500px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
+                className="group relative h-[380px] sm:h-[400px] w-full rounded-2xl overflow-hidden cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:shadow-2xl transition-all duration-700"
               >
                 <div className="absolute inset-0 z-0">
                   <img src="/assets/minimal-skin.png" alt="Test on Skin" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
