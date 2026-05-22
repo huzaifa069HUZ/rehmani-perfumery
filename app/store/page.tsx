@@ -345,128 +345,174 @@ export default function StorePage() {
 
               {/* Card 1: Phulwari Sharif */}
               <motion.div
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="group relative flex flex-col lg:flex-row w-full max-w-[1200px] bg-white rounded-[20px] sm:rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:shadow-[0_20px_50px_rgb(0,0,0,0.06)] border border-gray-100 mx-auto"
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
+                whileHover={{
+                  y: -8,
+                  boxShadow: '0 32px 80px 0 rgba(30, 60, 35, 0.22), 0 12px 24px 0 rgba(30,60,35,0.08), inset 0 1px 2px 0 rgba(255,255,255,0.95)'
+                }}
+                style={{
+                  background: 'linear-gradient(145deg, rgba(240,250,243,0.9) 0%, rgba(255,255,255,0.6) 40%, rgba(230,248,238,0.45) 100%)',
+                  backdropFilter: 'blur(30px)',
+                  WebkitBackdropFilter: 'blur(30px)',
+                  boxShadow: '0 12px 40px 0 rgba(30,60,35,0.1), 0 4px 12px 0 rgba(30,60,35,0.05), inset 0 1.5px 1.5px 0 rgba(255,255,255,0.9)',
+                  border: '1.5px solid rgba(200, 230, 210, 0.7)'
+                }}
+                className="group relative flex flex-col-reverse lg:flex-row w-full max-w-[1200px] p-2 sm:p-4 md:p-6 lg:p-8 rounded-[24px] sm:rounded-[32px] lg:rounded-[40px] transition-all duration-500 mx-auto"
               >
                 {/* Left Side: Info */}
-                <div className="w-full lg:w-1/2 flex flex-col justify-center p-6 sm:p-10 lg:p-16 z-10 bg-white">
+                <div className="w-full lg:w-1/2 flex flex-col items-center text-center justify-center p-4 sm:p-8 md:p-10 lg:p-12 z-10">
+                  <div className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/70 border border-[#E0E8E2] mb-4 sm:mb-8 shadow-sm">
+                    <MapPin className="w-4 h-4 text-[#5C6E5C]" />
+                  </div>
+
                   <h3
-                    className="text-[28px] sm:text-4xl lg:text-[44px] leading-tight mb-2 text-gray-900"
-                    style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", Georgia, serif', fontWeight: 600, letterSpacing: '-0.01em' }}
+                    className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.08] mb-4 sm:mb-6"
+                    style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", Georgia, serif', fontWeight: 600, color: '#1a2e20', letterSpacing: '-0.01em' }}
                   >
-                    Phulwari Sharif
+                    Phulwari<br className="hidden md:block" /> Sharif
                   </h3>
 
-                  <p className="text-gray-500 text-[14px] sm:text-base leading-relaxed mb-8 max-w-md">
-                    Where tradition meets timeless fragrance. Discover signature blends crafted for connoisseurs.
+                  <p className="text-[#5a6b5c] text-[13px] sm:text-[15px] md:text-base leading-[1.6] md:leading-[1.85] mb-6 sm:mb-8 max-w-[340px] mx-auto">
+                    Where tradition meets timeless fragrance. Discover signature blends.
                   </p>
 
-                  {/* Minimalist Info List */}
-                  <div className="flex flex-col gap-5 mb-10 w-full max-w-md border-y border-gray-100 py-6">
-                    <div className="flex items-start gap-4 text-left">
-                      <MapPin className="w-[18px] h-[18px] text-gray-400 mt-0.5 flex-shrink-0" strokeWidth={1.5} />
-                      <span className="text-gray-700 text-[14px] sm:text-[15px] font-medium leading-snug tracking-wide">Phulwari Sharif, Patna, Bihar 801505</span>
+                  {/* Store Details */}
+                  <div className="flex flex-col gap-4 mb-8 sm:mb-10 w-full max-w-[340px] mx-auto">
+                    <div className="flex items-center gap-3.5 text-left">
+                      <MapPin className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
+                      <span className="text-[#3a4a3c] text-[13px] sm:text-sm font-semibold leading-snug">Phulwari Sharif, Patna, Bihar 801505</span>
                     </div>
-                    <div className="flex items-center gap-4 text-left">
-                      <Phone className="w-[18px] h-[18px] text-gray-400 flex-shrink-0" strokeWidth={1.5} />
-                      <span className="text-gray-700 text-[14px] sm:text-[15px] font-medium tracking-wide">+91 8340783679</span>
+                    <div className="flex items-center gap-3.5 text-left">
+                      <Phone className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
+                      <span className="text-[#3a4a3c] text-[13px] sm:text-sm font-semibold">+91 8340783679</span>
                     </div>
-                    <div className="flex items-center gap-4 text-left">
-                      <Clock className="w-[18px] h-[18px] text-gray-400 flex-shrink-0" strokeWidth={1.5} />
-                      <span className="text-gray-700 text-[14px] sm:text-[15px] font-medium tracking-wide">10:00 AM – 9:00 PM, Mon – Sat</span>
+                    <div className="flex items-center gap-3.5 text-left">
+                      <Clock className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
+                      <span className="text-[#3a4a3c] text-[13px] sm:text-sm font-semibold">10:00 AM – 9:00 PM, Mon – Sat</span>
                     </div>
                   </div>
 
-                  {/* Elegant CTAs */}
-                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center w-full max-w-md">
-                    <a href="tel:+918340783679" className="w-full sm:w-auto flex-1">
-                      <button className="w-full px-8 py-3.5 bg-gray-900 text-white text-[13px] font-semibold tracking-[0.1em] uppercase hover:bg-[#c4a46c] transition-colors duration-300 rounded-sm">
-                        Call Store
-                      </button>
-                    </a>
-                    <Link href="#" className="w-full sm:w-auto flex-1">
-                      <button className="w-full px-8 py-3.5 bg-transparent border border-gray-200 text-gray-900 text-[13px] font-semibold tracking-[0.1em] uppercase hover:border-gray-900 transition-colors duration-300 rounded-sm">
-                        Directions
+                  <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-16 sm:mt-24">
+                    <Link href="#">
+                      <button className="store-btn">
+                        <span className="circle" aria-hidden="true">
+                          <span className="icon arrow" />
+                        </span>
+                        <span className="btn-text">Explore Store</span>
                       </button>
                     </Link>
+                    <a href="tel:+918340783679">
+                      <button className="store-btn store-btn-green">
+                        <span className="circle" aria-hidden="true">
+                          <span className="icon arrow" />
+                        </span>
+                        <span className="btn-text">Call Now</span>
+                      </button>
+                    </a>
                   </div>
                 </div>
 
-                {/* Right Side: Image */}
-                <div className="w-full lg:w-1/2 h-[260px] sm:h-[400px] lg:h-auto relative overflow-hidden">
-                  <div className="absolute inset-0 w-full h-full transform transition-transform duration-700 ease-out group-hover:scale-105">
+                {/* Right Side: Image with Slant Cut */}
+                <div className="w-full lg:w-1/2 h-[220px] sm:h-[320px] lg:h-[500px] relative rounded-[18px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden mb-4 lg:mb-0">
+                  <div
+                    className="absolute inset-0 w-full h-full transform transition-transform duration-[1.2s] ease-[0.25,0.46,0.45,0.94] group-hover:scale-105 clip-slant-right"
+                  >
                     <img
                       src="/assets/phulwari%20interior.jpeg"
                       alt="Phulwari Sharif Store"
                       className="absolute inset-0 w-full h-full object-cover"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C1F1C]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
                 </div>
               </motion.div>
 
               {/* Card 2: Sabzibagh */}
               <motion.div
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-                className="group relative flex flex-col lg:flex-row w-full max-w-[1200px] bg-white rounded-[20px] sm:rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] sm:shadow-[0_20px_50px_rgb(0,0,0,0.06)] border border-gray-100 mx-auto"
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.9, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+                whileHover={{
+                  y: -8,
+                  boxShadow: '0 32px 80px 0 rgba(25, 50, 80, 0.22), 0 12px 24px 0 rgba(25,50,80,0.08), inset 0 1px 2px 0 rgba(255,255,255,0.95)'
+                }}
+                style={{
+                  background: 'linear-gradient(145deg, rgba(238,245,255,0.9) 0%, rgba(255,255,255,0.6) 40%, rgba(225,238,255,0.45) 100%)',
+                  backdropFilter: 'blur(30px)',
+                  WebkitBackdropFilter: 'blur(30px)',
+                  boxShadow: '0 12px 40px 0 rgba(25,50,80,0.1), 0 4px 12px 0 rgba(25,50,80,0.05), inset 0 1.5px 1.5px 0 rgba(255,255,255,0.9)',
+                  border: '1.5px solid rgba(180, 210, 240, 0.7)'
+                }}
+                className="group relative flex flex-col-reverse lg:flex-row w-full max-w-[1200px] p-2 sm:p-4 md:p-6 lg:p-8 rounded-[24px] sm:rounded-[32px] lg:rounded-[40px] transition-all duration-500 mx-auto"
               >
                 {/* Left Side: Info */}
-                <div className="w-full lg:w-1/2 flex flex-col justify-center p-6 sm:p-10 lg:p-16 z-10 bg-white">
+                <div className="w-full lg:w-1/2 flex flex-col items-center text-center justify-center p-4 sm:p-8 md:p-10 lg:p-12 z-10">
+                  <div className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/70 border border-[#E0E8E2] mb-4 sm:mb-8 shadow-sm">
+                    <MapPin className="w-4 h-4 text-[#5C6E5C]" />
+                  </div>
+
                   <h3
-                    className="text-[28px] sm:text-4xl lg:text-[44px] leading-tight mb-2 text-gray-900"
-                    style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", Georgia, serif', fontWeight: 600, letterSpacing: '-0.01em' }}
+                    className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.08] mb-4 sm:mb-6"
+                    style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", Georgia, serif', fontWeight: 600, color: '#1a2030', letterSpacing: '-0.01em' }}
                   >
                     Sabzibagh
                   </h3>
 
-                  <p className="text-gray-500 text-[14px] sm:text-base leading-relaxed mb-8 max-w-md">
-                    The heart of heritage perfumery. Step into a world of luxury and exclusive collections.
+                  <p className="text-[#5a6070] text-[13px] sm:text-[15px] md:text-base leading-[1.6] md:leading-[1.85] mb-6 sm:mb-8 max-w-[340px] mx-auto">
+                    The heart of heritage perfumery. Step into a world of luxury.
                   </p>
 
-                  {/* Minimalist Info List */}
-                  <div className="flex flex-col gap-5 mb-10 w-full max-w-md border-y border-gray-100 py-6">
-                    <div className="flex items-start gap-4 text-left">
-                      <MapPin className="w-[18px] h-[18px] text-gray-400 mt-0.5 flex-shrink-0" strokeWidth={1.5} />
-                      <span className="text-gray-700 text-[14px] sm:text-[15px] font-medium leading-snug tracking-wide">Sabzibagh, Patna, Bihar 800004</span>
+                  {/* Store Details */}
+                  <div className="flex flex-col gap-4 mb-8 sm:mb-10 w-full max-w-[340px] mx-auto">
+                    <div className="flex items-center gap-3.5 text-left">
+                      <MapPin className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
+                      <span className="text-[#3a4060] text-[13px] sm:text-sm font-semibold leading-snug">Sabzibagh, Patna, Bihar 800004</span>
                     </div>
-                    <div className="flex items-center gap-4 text-left">
-                      <Phone className="w-[18px] h-[18px] text-gray-400 flex-shrink-0" strokeWidth={1.5} />
-                      <span className="text-gray-700 text-[14px] sm:text-[15px] font-medium tracking-wide">+91 7484878288</span>
+                    <div className="flex items-center gap-3.5 text-left">
+                      <Phone className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
+                      <span className="text-[#3a4060] text-[13px] sm:text-sm font-semibold">+91 7484878288</span>
                     </div>
-                    <div className="flex items-center gap-4 text-left">
-                      <Clock className="w-[18px] h-[18px] text-gray-400 flex-shrink-0" strokeWidth={1.5} />
-                      <span className="text-gray-700 text-[14px] sm:text-[15px] font-medium tracking-wide">10:00 AM – 9:00 PM, Mon – Sat</span>
+                    <div className="flex items-center gap-3.5 text-left">
+                      <Clock className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
+                      <span className="text-[#3a4060] text-[13px] sm:text-sm font-semibold">10:00 AM – 9:00 PM, Mon – Sat</span>
                     </div>
                   </div>
 
-                  {/* Elegant CTAs */}
-                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center w-full max-w-md">
-                    <a href="tel:+917484878288" className="w-full sm:w-auto flex-1">
-                      <button className="w-full px-8 py-3.5 bg-gray-900 text-white text-[13px] font-semibold tracking-[0.1em] uppercase hover:bg-[#c4a46c] transition-colors duration-300 rounded-sm">
-                        Call Store
-                      </button>
-                    </a>
-                    <Link href="#" className="w-full sm:w-auto flex-1">
-                      <button className="w-full px-8 py-3.5 bg-transparent border border-gray-200 text-gray-900 text-[13px] font-semibold tracking-[0.1em] uppercase hover:border-gray-900 transition-colors duration-300 rounded-sm">
-                        Directions
+                  <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-16 sm:mt-24">
+                    <Link href="#">
+                      <button className="store-btn">
+                        <span className="circle" aria-hidden="true">
+                          <span className="icon arrow" />
+                        </span>
+                        <span className="btn-text">Explore Store</span>
                       </button>
                     </Link>
+                    <a href="tel:+917484878288">
+                      <button className="store-btn store-btn-green">
+                        <span className="circle" aria-hidden="true">
+                          <span className="icon arrow" />
+                        </span>
+                        <span className="btn-text">Call Now</span>
+                      </button>
+                    </a>
                   </div>
                 </div>
 
-                {/* Right Side: Image */}
-                <div className="w-full lg:w-1/2 h-[260px] sm:h-[400px] lg:h-auto relative overflow-hidden">
-                  <div className="absolute inset-0 w-full h-full transform transition-transform duration-700 ease-out group-hover:scale-105">
+                {/* Right Side: Image with Slant Cut */}
+                <div className="w-full lg:w-1/2 h-[220px] sm:h-[320px] lg:h-[500px] relative rounded-[18px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden mb-4 lg:mb-0">
+                  <div
+                    className="absolute inset-0 w-full h-full transform transition-transform duration-[1.2s] ease-[0.25,0.46,0.45,0.94] group-hover:scale-105 clip-slant-right"
+                  >
                     <img
                       src="/assets/sabjibagh%20interior.jpeg"
                       alt="Sabzibagh Store"
                       className="absolute inset-0 w-full h-full object-cover"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C1F1C]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
                 </div>
               </motion.div>
@@ -537,9 +583,11 @@ export default function StorePage() {
                       <div className="absolute inset-5 border border-[#c4a46c]/30 rounded-xl z-20 pointer-events-none" />
                     </div>
 
-                    <div className="relative z-10 h-full flex flex-col p-6 sm:p-8 text-center items-center justify-start">
-                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border border-[#c4a46c]/40 bg-[#111]/60 backdrop-blur-md flex items-center justify-center mb-6">
-                         <card.Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#c4a46c]" />
+                    <div className="relative z-10 h-full flex flex-col p-6 sm:p-8 text-center items-center justify-between">
+                      <div className="w-full flex-1 flex items-center justify-center">
+                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border border-[#c4a46c]/40 bg-[#111]/60 backdrop-blur-md flex items-center justify-center">
+                           <card.Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#c4a46c]" />
+                        </div>
                       </div>
                       <div className="w-full">
                         <h3 className="text-white text-[12px] sm:text-[13px] tracking-[0.25em] font-bold mb-3 sm:mb-4 uppercase">{card.title}</h3>
