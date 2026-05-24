@@ -175,8 +175,7 @@ export default function AddBannerPage() {
                   background: '#f8fafc', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
                 }}>
                    <CloudinaryUpload 
-                     onSuccess={(url) => setImage(url)} 
-                     buttonText="Upload Banner Image" 
+                     onUploadSuccess={(url) => setImage(url)} 
                    />
                    <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '12px', textAlign: 'center' }}>
                      Make sure important text is in the center so it doesn't get cut off on mobile devices.
