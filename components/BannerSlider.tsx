@@ -1,10 +1,12 @@
 'use client';
 import Image from 'next/image';
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { db } from '@/lib/firebase';
+import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 
-const banners = [
+const staticBanners = [
   {
-    id: 4,
+    id: 'static-4',
     image: '/assets/HAWAS SPECIAL.png',
     title: '',
     subtitle: '',
@@ -12,7 +14,7 @@ const banners = [
     hasOwnText: true,
   },
   {
-    id: 1,
+    id: 'static-1',
     image: '/assets/red sea banner.png',
     title: '',
     subtitle: '',
@@ -20,7 +22,7 @@ const banners = [
     hasOwnText: true,
   },
   {
-    id: 5,
+    id: 'static-5',
     image: '/assets/atlantis banner.png',
     title: '',
     subtitle: '',
@@ -28,7 +30,7 @@ const banners = [
     hasOwnText: true,
   },
   {
-    id: 2,
+    id: 'static-2',
     image: '/assets/red sea banner.png',
     title: 'PURE OUD EXTRACT',
     subtitle: 'Aged to perfection for true connoisseurs',
@@ -36,7 +38,7 @@ const banners = [
     hasOwnText: false,
   },
   {
-    id: 3,
+    id: 'static-3',
     image: '/assets/il.png',
     title: '',
     subtitle: '',
@@ -45,20 +47,65 @@ const banners = [
   }
 ];
 
+interface BannerItem {
+  id: string;
+  image: string;
+  title: string;
+  subtitle: string;
+  link: string;
+  hasOwnText: boolean;
+}
+
 export default function BannerSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [allBanners, setAllBanners] = useState<BannerItem[]>(staticBanners);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
   const autoSlideRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const minSwipeDistance = 50;
 
-  const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
+  // Fetch dynamic banners from Firestore
+  useEffect(() => {
+    const fetchDynamicBanners = async () => {
+      try {
+        const q = query(
+          collection(db, 'banners'),
+          where('isActive', '==', true),
+          orderBy('createdAt', 'desc')
+        );
+        const snapshot = await getDocs(q);
+        
+        const dynamicBanners: BannerItem[] = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            image: data.image,
+            title: '',
+            subtitle: '',
+            link: data.link || '#',
+            hasOwnText: true, // Assuming dynamic uploaded banners have burnt-in text
+          };
+        });
+
+        if (dynamicBanners.length > 0) {
+          // Merge dynamic banners with static banners (dynamic ones go first)
+          setAllBanners([...dynamicBanners, ...staticBanners]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch dynamic banners:', error);
+      }
+    };
+
+    fetchDynamicBanners();
   }, []);
 
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev === allBanners.length - 1 ? 0 : prev + 1));
+  }, [allBanners.length]);
+
   const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
-  }, []);
+    setCurrentSlide((prev) => (prev === 0 ? allBanners.length - 1 : prev - 1));
+  }, [allBanners.length]);
 
   // Start/restart auto-slide
   const startAutoSlide = useCallback(() => {
@@ -98,6 +145,8 @@ export default function BannerSlider() {
     touchEndX.current = null;
   };
 
+  if (!allBanners.length) return null;
+
   return (
     <section className="banner-slider-section">
       <div
@@ -112,7 +161,7 @@ export default function BannerSlider() {
           className="banner-track" 
           style={{ transform: `translateX(-${currentSlide * 100}%)` }}
         >
-          {banners.map((banner, index) => (
+          {allBanners.map((banner, index) => (
             <div className={`banner-slide ${banner.hasOwnText ? 'banner-slide-has-text' : ''}`} key={banner.id}>
               <Image
                 src={banner.image}
@@ -150,7 +199,7 @@ export default function BannerSlider() {
 
         {/* Dots Indicators */}
         <div className="banner-dots">
-          {banners.map((_, index) => (
+          {allBanners.map((_, index) => (
             <button
               key={index}
               className={`banner-dot ${currentSlide === index ? 'active' : ''}`}
