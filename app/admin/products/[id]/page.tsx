@@ -861,7 +861,7 @@ export default function EditProductPage() {
                 {productType !== 'incense' && (
                 <div className="field-group">
                   <label className="field-label">
-                    {productType === 'bakhoor' ? 'Weight Options' : productType === 'incense' ? 'Pack Sizes' : 'Active Bottle Sizes'}
+                    {productType === 'bakhoor' ? 'Weight Options' : 'Active Bottle Sizes'}
                     <span style={{ marginLeft: '6px', fontSize: '10px', fontWeight: '500', color: '#94a3b8', textTransform: 'none', letterSpacing: 0 }}>(select all that apply)</span>
                   </label>
                   <div style={{ display: 'flex', gap: '10px' }}>
