@@ -5,6 +5,7 @@ import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import styles from './auth.module.css';
+import Image from 'next/image';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -61,7 +62,7 @@ export default function AuthPage() {
   return (
     <div className={styles.authWrapper}>
       <div className={styles.authImagePanel}>
-        <img src="/herobg.jpg" alt="Luxury Perfumes" className={styles.authImage} />
+        <Image src="/herobg.jpg" alt="Luxury Perfumes" fill style={{ objectFit: 'cover' }} className={styles.authImage} priority />
         <div className={styles.authOverlay}></div>
         <div className={styles.authImagePanelContent}>
           <h1 className={styles.authHeading}>Welcome to rahmani</h1>

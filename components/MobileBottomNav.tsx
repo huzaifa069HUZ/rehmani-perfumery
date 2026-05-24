@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
 
 export default function MobileBottomNav() {
   const { totalItems, toggleCart } = useCart();
@@ -11,7 +12,7 @@ export default function MobileBottomNav() {
   return (
     <div className="mobile-bottom-nav">
       <Link href="/attars" className="bottom-nav-item">
-        <img src="/assets/home.png" alt="Shop" width="22" height="22" style={{ objectFit: 'contain' }} />
+        <Image src="/assets/home.png" alt="Shop" width={22} height={22} style={{ objectFit: 'contain' }} />
         <span>Shop</span>
       </Link>
       <Link href="/wishlist" className="bottom-nav-item">

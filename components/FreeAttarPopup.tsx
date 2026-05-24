@@ -7,6 +7,7 @@ import { collection, addDoc, serverTimestamp, doc, getDoc, setDoc } from 'fireba
 import { db } from '@/lib/firebase';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
 
 const STORAGE_KEY = 'rahmani_free_attar_claimed';
 const POPUP_DELAY = 8000; // 8 seconds
@@ -493,7 +494,7 @@ function FreeAttarPopupInner() {
 
           {/* Left — Image panel */}
           <div className="frp-left">
-            <img src="/popup.png" alt="Rahmani Perfumery — Free Mystery Attar Offer" />
+            <Image src="/popup.png" alt="Rahmani Perfumery — Free Mystery Attar Offer" fill style={{ objectFit: 'cover' }} loading="lazy" />
             <div className="frp-left-overlay" />
             <div className="frp-badge">✨ Exclusive Offer</div>
             <div className="frp-offer-tag">

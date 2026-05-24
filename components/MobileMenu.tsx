@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -35,7 +36,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             <div className="mm-inner">
               <div className="mm-header-row">
                 <Link href="/" onClick={onClose} className="mm-logo">
-                  <img src="/assets/logo with name removed bg.png" alt="Rahmani Perfumery" />
+                  <Image src="/assets/logo with name removed bg.png" alt="Rahmani Perfumery" width={120} height={44} style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(212, 175, 55, 0.3))' }} />
                 </Link>
                 <button className="mm-close-btn" onClick={onClose} aria-label="Close menu">
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">

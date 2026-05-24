@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight, ArrowRight, MapPin, Phone, Clock, Eye, Droplet, Tag, ShieldCheck } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import AnnouncementBar from '@/components/AnnouncementBar';
 import Header from '@/components/Header';
 import GlobalSearch from '@/components/GlobalSearch';
@@ -420,10 +421,12 @@ export default function StorePage() {
                   <div
                     className="absolute inset-0 w-full h-full transform transition-transform duration-[1.2s] ease-[0.25,0.46,0.45,0.94] group-hover:scale-105 clip-slant-right"
                   >
-                    <img
+                    <Image
                       src="/assets/phulwari%20interior.jpeg"
                       alt="Phulwari Sharif Store"
-                      className="absolute inset-0 w-full h-full object-cover"
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#1C1F1C]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
@@ -507,10 +510,12 @@ export default function StorePage() {
                   <div
                     className="absolute inset-0 w-full h-full transform transition-transform duration-[1.2s] ease-[0.25,0.46,0.45,0.94] group-hover:scale-105 clip-slant-right"
                   >
-                    <img
+                    <Image
                       src="/assets/sabjibagh%20interior.jpeg"
                       alt="Sabzibagh Store"
-                      className="absolute inset-0 w-full h-full object-cover"
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#1C1F1C]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
@@ -578,7 +583,7 @@ export default function StorePage() {
                     }}
                   >
                     <div className="absolute inset-0 z-0">
-                      <img src={card.img} alt={card.title} className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" />
+                      <Image src={card.img} alt={card.title} fill style={{ objectFit: 'cover' }} className="transform scale-110 group-hover:scale-100 transition-transform duration-[1.5s]" loading="lazy" />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#111]/90 via-[#111]/40 to-transparent transition-colors duration-700" />
                       <div className="absolute inset-5 border border-[#c4a46c]/30 rounded-xl z-20 pointer-events-none" />
                     </div>
