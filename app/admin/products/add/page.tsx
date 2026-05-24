@@ -80,7 +80,7 @@ export default function AddProductPage() {
     setSaveError('');
 
     try {
-      if (categories.length === 0) { alert('Please select at least one category.'); setLoading(false); return; }
+      if (productType !== 'bakhoor' && productType !== 'incense' && categories.length === 0) { alert('Please select at least one category.'); setLoading(false); return; }
       
       const sortedSizes = [...sizes].sort((a, b) => a - b);
       if (sortedSizes.length === 0) { alert('Please select at least one bottle size.'); setLoading(false); return; }
@@ -1042,10 +1042,12 @@ export default function AddProductPage() {
                 </div>
                 <div>
                   <h2>Organization</h2>
-                  <p>Category, gender &amp; tags</p>
+                   <p>Gender &amp; tags{(productType !== 'bakhoor' && productType !== 'incense') ? ', category' : ''}</p>
                 </div>
               </div>
               <div className="card-body">
+                {/* Category — only shown for attar / perfume */}
+                {(productType !== 'bakhoor' && productType !== 'incense') && (
                 <div className="field-group">
                   <label className="field-label" htmlFor="product-category">Category</label>
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -1089,6 +1091,7 @@ export default function AddProductPage() {
                     </div>
                   )}
                 </div>
+                )}
 
                 <div className="field-group">
                   <label className="field-label">Gender</label>

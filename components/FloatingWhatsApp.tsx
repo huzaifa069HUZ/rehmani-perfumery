@@ -12,7 +12,7 @@ export default function FloatingWhatsApp() {
   // Delay the popup so it grabs attention after initial load
   useEffect(() => {
     if (pathname !== '/') return;
-    const timer = setTimeout(() => setShowPopup(true), 3500);
+    const timer = setTimeout(() => setShowPopup(true), 16000);
     return () => clearTimeout(timer);
   }, [pathname]);
 
