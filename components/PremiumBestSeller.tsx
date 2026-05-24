@@ -14,15 +14,17 @@ const STATIC_PRODUCTS = [
     originalPrice: 4500,
     discount: '15% Off',
     image: '/assets/hawas-no-bg.png',
+    link: undefined as string | undefined,
   },
   {
-    id: 'oud-nadira-1',
-    category: 'WOODY, ORIENTAL',
-    title: 'Oud Nadira Perfume 50 ML',
+    id: 'khamrah-1',
+    category: 'ORIENTAL, WOODY',
+    title: 'KHAMRAH',
     price: 4800,
     originalPrice: 6000,
     discount: '20% Off',
-    image: '/assets/oud-nadira-no-bg.png',
+    image: '/assets/khamrah.png',
+    link: 'https://www.rahmaniperfumery.com/product/khamrah-VgOQjzR',
   },
   {
     id: 'hawas-2',
@@ -32,15 +34,17 @@ const STATIC_PRODUCTS = [
     originalPrice: 4500,
     discount: '15% Off',
     image: '/assets/hawas-no-bg.png',
+    link: undefined as string | undefined,
   },
   {
-    id: 'oud-nadira-2',
-    category: 'WOODY, ORIENTAL',
-    title: 'Oud Nadira Perfume 50 ML',
+    id: 'khamrah-2',
+    category: 'ORIENTAL, WOODY',
+    title: 'KHAMRAH',
     price: 4800,
     originalPrice: 6000,
     discount: '20% Off',
-    image: '/assets/oud-nadira-no-bg.png',
+    image: '/assets/khamrah.png',
+    link: 'https://www.rahmaniperfumery.com/product/khamrah-VgOQjzR',
   },
 ];
 
@@ -311,36 +315,44 @@ export default function PremiumBestSeller() {
       </div>
 
       <div className="pbs-grid">
-        {STATIC_PRODUCTS.map((p, i) => (
-          <div className="pbs-card" key={i}>
-            <div className="pbs-badge">NEW</div>
-            <div className="pbs-img-wrapper">
-              <Image
-                src={p.image}
-                alt={p.title}
-                fill
-                style={{ objectFit: 'contain', padding: '20px' }}
-                sizes="(max-width: 600px) 260px, 300px"
-              />
-            </div>
-            <div className="pbs-info-container">
-              <div className="pbs-category">{p.category}</div>
-              <div className="pbs-card-title">{p.title}</div>
-              <div className="pbs-price-row">
-                <span className="pbs-current-price">₹{p.price.toLocaleString('en-IN')}</span>
-                <span className="pbs-original-price">₹{p.originalPrice.toLocaleString('en-IN')}</span>
-                <span className="pbs-discount">{p.discount}</span>
+        {STATIC_PRODUCTS.map((p, i) => {
+          const cardContent = (
+            <div className="pbs-card" key={i}>
+              <div className="pbs-badge">NEW</div>
+              <div className="pbs-img-wrapper">
+                <Image
+                  src={p.image}
+                  alt={p.title}
+                  fill
+                  style={{ objectFit: 'contain', padding: '20px' }}
+                  sizes="(max-width: 600px) 260px, 300px"
+                />
               </div>
-              
-              <button 
-                className={`pbs-add-to-cart ${addedId === p.id ? 'added' : ''}`}
-                onClick={(e) => handleAddToCart(p, e)}
-              >
-                {addedId === p.id ? 'ADDED!' : 'ADD TO CART'}
-              </button>
+              <div className="pbs-info-container">
+                <div className="pbs-category">{p.category}</div>
+                <div className="pbs-card-title">{p.title}</div>
+                <div className="pbs-price-row">
+                  <span className="pbs-current-price">₹{p.price.toLocaleString('en-IN')}</span>
+                  <span className="pbs-original-price">₹{p.originalPrice.toLocaleString('en-IN')}</span>
+                  <span className="pbs-discount">{p.discount}</span>
+                </div>
+                
+                <button 
+                  className={`pbs-add-to-cart ${addedId === p.id ? 'added' : ''}`}
+                  onClick={(e) => handleAddToCart(p, e)}
+                >
+                  {addedId === p.id ? 'ADDED!' : 'ADD TO CART'}
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+
+          return p.link ? (
+            <a key={i} href={p.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'contents' }}>
+              {cardContent}
+            </a>
+          ) : cardContent;
+        })}
       </div>
     </section>
   );
