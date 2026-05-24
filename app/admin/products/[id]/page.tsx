@@ -33,7 +33,7 @@ export default function EditProductPage() {
   const [saveError, setSaveError] = useState('');
 
   const [name, setName] = useState('');
-  const [productType, setProductType] = useState<'attar'|'perfume'>('attar');
+  const [productType, setProductType] = useState<'attar'|'perfume'|'bakhoor'|'incense'>('attar');
   const [sizes, setSizes] = useState<number[]>([6, 12, 24]);
   const [availableSizes, setAvailableSizes] = useState<number[]>([6, 12, 24]);
   const [pricing, setPricing] = useState<Record<number, { price: string; originalPrice: string }>>({
@@ -81,6 +81,13 @@ export default function EditProductPage() {
           if (data.type === 'perfume') {
             setProductType('perfume');
             setAvailableSizes([30, 50, 100]);
+          } else if (data.type === 'bakhoor') {
+            setProductType('bakhoor');
+            setAvailableSizes([25, 40, 50, 100]);
+          } else if (data.type === 'incense') {
+            setProductType('incense');
+            setAvailableSizes([50]);
+            setSizes([50]);
           } else {
             setProductType('attar');
             setAvailableSizes([6, 12, 24]);
@@ -667,7 +674,7 @@ export default function EditProductPage() {
                 {/* ─── Type Segmented Control ─── */}
                 <div className="field-group">
                   <label className="field-label">Product Type</label>
-                  <div style={{ display: 'flex', gap: '8px', background: '#f8fafc', padding: '6px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ display: 'flex', gap: '8px', background: '#f8fafc', padding: '6px', borderRadius: '12px', border: '1px solid #e2e8f0', flexWrap: 'wrap' }}>
                     <button
                       type="button"
                       onClick={() => {
@@ -676,7 +683,7 @@ export default function EditProductPage() {
                         setAvailableSizes([6, 12, 24]);
                       }}
                       style={{ 
-                        flex: 1, padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
+                        flex: 1, minWidth: '70px', padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
                         background: productType === 'attar' ? '#fff' : 'transparent',
                         color: productType === 'attar' ? '#0f172a' : '#64748b',
                         boxShadow: productType === 'attar' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none', border: 'none', cursor: 'pointer'
@@ -691,12 +698,42 @@ export default function EditProductPage() {
                         setAvailableSizes([30, 50, 100]);
                       }}
                       style={{ 
-                        flex: 1, padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
+                        flex: 1, minWidth: '70px', padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
                         background: productType === 'perfume' ? '#fff' : 'transparent',
                         color: productType === 'perfume' ? '#0f172a' : '#64748b',
                         boxShadow: productType === 'perfume' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none', border: 'none', cursor: 'pointer'
                       }}>
                       Perfume
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProductType('bakhoor');
+                        setSizes([25, 40, 50, 100]);
+                        setAvailableSizes([25, 40, 50, 100]);
+                      }}
+                      style={{ 
+                        flex: 1, minWidth: '70px', padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
+                        background: productType === 'bakhoor' ? '#fff' : 'transparent',
+                        color: productType === 'bakhoor' ? '#0f172a' : '#64748b',
+                        boxShadow: productType === 'bakhoor' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none', border: 'none', cursor: 'pointer'
+                      }}>
+                      Bakhoor
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProductType('incense');
+                        setSizes([50]);
+                        setAvailableSizes([50]);
+                      }}
+                      style={{ 
+                        flex: 1, minWidth: '70px', padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
+                        background: productType === 'incense' ? '#fff' : 'transparent',
+                        color: productType === 'incense' ? '#0f172a' : '#64748b',
+                        boxShadow: productType === 'incense' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none', border: 'none', cursor: 'pointer'
+                      }}>
+                      Incense
                     </button>
                   </div>
                 </div>
@@ -821,9 +858,10 @@ export default function EditProductPage() {
               </div>
               <div className="card-body">
                 {/* ─── Bottle Sizes ─── */}
+                {productType !== 'incense' && (
                 <div className="field-group">
                   <label className="field-label">
-                    Active Bottle Sizes
+                    {productType === 'bakhoor' ? 'Weight Options' : productType === 'incense' ? 'Pack Sizes' : 'Active Bottle Sizes'}
                     <span style={{ marginLeft: '6px', fontSize: '10px', fontWeight: '500', color: '#94a3b8', textTransform: 'none', letterSpacing: 0 }}>(select all that apply)</span>
                   </label>
                   <div style={{ display: 'flex', gap: '10px' }}>
@@ -896,6 +934,7 @@ export default function EditProductPage() {
                     </div>
                   )}
                 </div>
+                )}
 
                 {/* ─── Size Specific Pricing ─── */}
                 <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -905,7 +944,9 @@ export default function EditProductPage() {
                     return (
                       <div key={size} style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                           <span style={{ fontWeight: '700', color: '#0f172a', fontSize: '15px' }}>{size}ml Pricing</span>
+                           <span style={{ fontWeight: '700', color: '#0f172a', fontSize: '15px' }}>
+                             {productType === 'incense' ? 'Piece (50g) Pricing' : `${size}${productType === 'bakhoor' ? 'g' : 'ml'} Pricing`}
+                           </span>
                         </div>
                         <div className="pricing-grid">
                           <div className="field-group">
@@ -1040,6 +1081,7 @@ export default function EditProductPage() {
                 </div>
               </div>
               <div className="card-body">
+                {(productType !== 'bakhoor' && productType !== 'incense') && (
                 <div className="field-group">
                   <label className="field-label" htmlFor="product-category">Category</label>
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -1083,7 +1125,9 @@ export default function EditProductPage() {
                     </div>
                   )}
                 </div>
+                )}
 
+                {productType !== 'incense' && (
                 <div className="field-group">
                   <label className="field-label">Gender</label>
                   <div style={{ display: 'flex', gap: '8px' }}>
@@ -1099,6 +1143,7 @@ export default function EditProductPage() {
                     ))}
                   </div>
                 </div>
+                )}
 
                 <div className="field-group">
                   <label className="field-label" htmlFor="product-tags">Occasion Tags</label>

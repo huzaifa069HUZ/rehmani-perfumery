@@ -247,6 +247,7 @@ export default function StorePage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.6 }}
+                  className="hidden md:block"
                 >
                   <div className="p-1 sm:p-3 border border-white/50 rounded-xl bg-white/10 backdrop-blur-md shadow-2xl">
                     <button
@@ -271,258 +272,294 @@ export default function StorePage() {
           </section>
         </div>
 
-        {/* ═══ Ultra Premium Stores Section ═══ */}
-        <section id="our-stores" className="relative py-24 sm:py-32 md:py-44 px-4 sm:px-6 lg:px-12 bg-[#F6F8F6] overflow-hidden flex flex-col items-center">
+        {/* ═══ OUR STORES — Exact Reference Layout ═══ */}
+        <section id="our-stores" className="relative w-full bg-[#F6F2EB] py-16 sm:py-20 lg:py-24 overflow-hidden">
+          <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10">
 
-          {/* Subtle glowing orbs in background */}
-          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-            <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[#E5ECE5]/60 blur-[120px]" />
-            <div className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[#E5ECE5]/50 blur-[120px]" />
+            {/* Section Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.7 }}
+              style={{ width: '100%', textAlign: 'center', margin: '0 auto', marginBottom: '4rem' }}
+            >
+              <p style={{ color: '#c4a46c', fontSize: '12px', letterSpacing: '0.35em', textTransform: 'uppercase', fontWeight: 600, marginBottom: '1rem', textAlign: 'center' }}>
+                Visit Our Stores
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1.25rem' }}>
+                {/* Left flourish */}
+                <svg width="60" height="24" viewBox="0 0 80 30" fill="none" style={{ color: 'rgba(196, 164, 108, 0.4)' }}>
+                  <path d="M78 15 C60 15, 50 5, 35 8 C20 11, 15 20, 2 15" stroke="currentColor" strokeWidth="1" />
+                  <circle cx="35" cy="8" r="2" fill="currentColor" opacity="0.5" />
+                  <path d="M35 8 C30 2, 22 3, 20 8" stroke="currentColor" strokeWidth="0.8" opacity="0.4" />
+                </svg>
+                <h2
+                  style={{ fontSize: 'clamp(2.2rem, 5vw, 3.6rem)', lineHeight: '1.1', fontFamily: '"Playfair Display", "Cormorant Garamond", Georgia, serif', fontWeight: 600, color: '#1a1f1a', textAlign: 'center', margin: 0 }}
+                >
+                  Our <span style={{ fontStyle: 'italic' }}>Stores</span>
+                </h2>
+                {/* Right flourish */}
+                <svg width="60" height="24" viewBox="0 0 80 30" fill="none" style={{ color: 'rgba(196, 164, 108, 0.4)', transform: 'scaleX(-1)' }}>
+                  <path d="M78 15 C60 15, 50 5, 35 8 C20 11, 15 20, 2 15" stroke="currentColor" strokeWidth="1" />
+                  <circle cx="35" cy="8" r="2" fill="currentColor" opacity="0.5" />
+                  <path d="M35 8 C30 2, 22 3, 20 8" stroke="currentColor" strokeWidth="0.8" opacity="0.4" />
+                </svg>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '0.75rem' }}>
+                <span style={{ color: 'rgba(196, 164, 108, 0.4)', fontSize: '10px' }}>✦ ✦ ✦</span>
+              </div>
+            </motion.div>
           </div>
 
-          <div className="w-full max-w-[1200px] mx-auto relative z-10 flex flex-col items-center">
+          {/* Store Cards Stack — FULL WIDTH EDGE TO EDGE */}
+          <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '2rem' }}>
 
-            {/* ── Section Title with Animated Florals ── */}
+            {/* ── CARD 1: Phulwari Sharif ── */}
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 35 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="flex items-center justify-center gap-4 sm:gap-8 md:gap-12 mb-16 sm:mb-20 md:mb-28 w-full py-6 relative"
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+              style={{ position: 'relative', width: '100%', overflow: 'hidden', minHeight: '640px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
             >
-              {/* Left Floral Ornament */}
-              <div className="relative w-16 sm:w-24 md:w-32 h-16 sm:h-24 md:h-32 flex-shrink-0">
-                {/* Main floral branch */}
-                <svg className="floral-left absolute inset-0 w-full h-full" viewBox="0 0 120 120" fill="none">
-                  <path d="M100 60 C85 45, 70 35, 55 40 C40 45, 35 55, 40 65 C45 75, 55 78, 65 72 C75 66, 72 56, 62 52" stroke="#c4a46c" strokeWidth="1.2" fill="none" opacity="0.5" />
-                  <circle cx="55" cy="40" r="6" fill="none" stroke="#c4a46c" strokeWidth="0.8" opacity="0.4" />
-                  <circle cx="40" cy="65" r="5" fill="none" stroke="#c4a46c" strokeWidth="0.8" opacity="0.35" />
-                  <circle cx="65" cy="72" r="4" fill="none" stroke="#c4a46c" strokeWidth="0.8" opacity="0.3" />
-                  <path d="M55 40 C50 30, 42 28, 38 33" stroke="#c4a46c" strokeWidth="0.8" fill="none" opacity="0.35" />
-                  <path d="M40 65 C30 62, 25 55, 28 48" stroke="#c4a46c" strokeWidth="0.8" fill="none" opacity="0.3" />
-                </svg>
-                {/* Accent petals */}
-                <svg className="floral-accent-left absolute inset-0 w-full h-full" viewBox="0 0 120 120" fill="none">
-                  <ellipse cx="50" cy="50" rx="8" ry="12" fill="#c4a46c" opacity="0.08" transform="rotate(-30 50 50)" />
-                  <ellipse cx="60" cy="65" rx="6" ry="10" fill="#c4a46c" opacity="0.06" transform="rotate(20 60 65)" />
-                  <ellipse cx="38" cy="55" rx="5" ry="9" fill="#c4a46c" opacity="0.07" transform="rotate(-45 38 55)" />
-                </svg>
-                {/* Glowing dot */}
-                <div className="floral-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#c4a46c]/20 blur-[2px]" />
+              {/* Background Image */}
+              <div style={{ position: 'absolute', inset: 0 }}>
+                <Image
+                  src="/assets/fullsizestore.png"
+                  alt="Phulwari Sharif Store Interior"
+                  fill
+                  style={{ objectFit: 'cover', objectPosition: 'center', transition: 'transform 3s' }}
+                  priority
+                />
+                <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.15)' }} />
               </div>
 
-              {/* Title */}
-              <h2
-                className="text-[2.8rem] sm:text-[3.5rem] md:text-[5.5rem] text-[#1C1F1C] leading-[1.15] tracking-[0.15em] uppercase text-center"
-                style={{ fontFamily: '"Didot", "Playfair Display", "Bodoni Moda", Georgia, serif', fontWeight: 400, letterSpacing: '0.18em' }}
-              >
-                OUR STORES
-              </h2>
+              {/* Glassmorphic Info Card — LEFT aligned */}
+              <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '1280px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', minHeight: '640px' }}>
+                <div
+                  style={{
+                    width: '90%',
+                    maxWidth: '550px',
+                    margin: '2rem',
+                    padding: '3rem',
+                    borderRadius: '24px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    textAlign: 'left',
+                    gap: '1.5rem',
+                    background: 'rgba(15, 20, 15, 0.65)',
+                    backdropFilter: 'blur(20px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 30px 60px rgba(0, 0, 0, 0.4)',
+                  }}
+                >
+                  {/* Store label */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <MapPin style={{ width: '18px', height: '18px', color: '#c4a46c' }} strokeWidth={2} />
+                    <span style={{ fontSize: '13px', letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 'bold', color: '#c4a46c' }}>Store 01</span>
+                  </div>
 
-              {/* Right Floral Ornament (mirrored) */}
-              <div className="relative w-16 sm:w-24 md:w-32 h-16 sm:h-24 md:h-32 flex-shrink-0">
-                {/* Main floral branch - mirrored */}
-                <svg className="floral-right absolute inset-0 w-full h-full" viewBox="0 0 120 120" fill="none">
-                  <path d="M100 60 C85 45, 70 35, 55 40 C40 45, 35 55, 40 65 C45 75, 55 78, 65 72 C75 66, 72 56, 62 52" stroke="#c4a46c" strokeWidth="1.2" fill="none" opacity="0.5" />
-                  <circle cx="55" cy="40" r="6" fill="none" stroke="#c4a46c" strokeWidth="0.8" opacity="0.4" />
-                  <circle cx="40" cy="65" r="5" fill="none" stroke="#c4a46c" strokeWidth="0.8" opacity="0.35" />
-                  <circle cx="65" cy="72" r="4" fill="none" stroke="#c4a46c" strokeWidth="0.8" opacity="0.3" />
-                  <path d="M55 40 C50 30, 42 28, 38 33" stroke="#c4a46c" strokeWidth="0.8" fill="none" opacity="0.35" />
-                  <path d="M40 65 C30 62, 25 55, 28 48" stroke="#c4a46c" strokeWidth="0.8" fill="none" opacity="0.3" />
-                </svg>
-                {/* Accent petals - mirrored */}
-                <svg className="floral-accent-right absolute inset-0 w-full h-full" viewBox="0 0 120 120" fill="none">
-                  <ellipse cx="50" cy="50" rx="8" ry="12" fill="#c4a46c" opacity="0.08" transform="rotate(-30 50 50)" />
-                  <ellipse cx="60" cy="65" rx="6" ry="10" fill="#c4a46c" opacity="0.06" transform="rotate(20 60 65)" />
-                  <ellipse cx="38" cy="55" rx="5" ry="9" fill="#c4a46c" opacity="0.07" transform="rotate(-45 38 55)" />
-                </svg>
-                {/* Glowing dot */}
-                <div className="floral-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#c4a46c]/20 blur-[2px]" />
+                  {/* Store name */}
+                  <div>
+                    <h3
+                      style={{ fontSize: 'clamp(2.2rem, 4vw, 3.2rem)', lineHeight: '1.1', color: '#ffffff', marginBottom: '12px', fontFamily: '"Playfair Display", Georgia, serif', fontWeight: 600 }}
+                    >
+                      Phulwari Sharif
+                    </h3>
+                    <p style={{ color: '#a0a5a0', fontSize: '15px', margin: 0 }}>Patna, Bihar 801505</p>
+                  </div>
+
+                  {/* Details */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', borderTop: '1px solid rgba(255,255,255,0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)', padding: '1.5rem 0', margin: '0.5rem 0' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <Phone style={{ width: '18px', height: '18px', color: '#c4a46c' }} strokeWidth={1.8} />
+                      <a href="tel:+918340783679" style={{ color: '#ffffff', fontSize: '15px', fontWeight: 500, textDecoration: 'none' }}>+91 8340783679</a>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <Clock style={{ width: '18px', height: '18px', color: '#c4a46c' }} strokeWidth={1.8} />
+                      <div style={{ color: '#e0e0e0', fontSize: '15px', fontWeight: 500 }}>
+                        10:00 AM – 9:00 PM <span style={{ color: '#8a9a8c', marginLeft: '8px', fontSize: '13px' }}>Mon – Sat</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CTAs */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1rem', width: '100%', paddingTop: '0.5rem' }}>
+                    <a href="tel:+918340783679" style={{ textDecoration: 'none' }}>
+                      <button style={{ 
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', 
+                        padding: '16px 32px', backgroundColor: '#c4a46c', color: '#ffffff', 
+                        fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', 
+                        fontWeight: 'bold', borderRadius: '12px', border: 'none', cursor: 'pointer',
+                        boxShadow: '0 10px 25px -5px rgba(196, 164, 108, 0.4)'
+                      }}>
+                        Call Store
+                        <Phone style={{ width: '16px', height: '16px' }} />
+                      </button>
+                    </a>
+                    <a
+                      href="https://maps.google.com/?q=Rehmani+Perfumery+Phulwari+Sharif+Patna"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <button style={{ 
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', 
+                        padding: '16px 32px', backgroundColor: 'transparent', color: '#ffffff', 
+                        fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', 
+                        fontWeight: 'bold', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer'
+                      }}>
+                        Directions
+                        <ArrowUpRight style={{ width: '16px', height: '16px' }} />
+                      </button>
+                    </a>
+                  </div>
+                </div>
               </div>
             </motion.div>
 
-            {/* ── Store Cards Container ── */}
-            <div className="flex flex-col items-center gap-12 md:gap-20 w-full">
+            {/* ── CARD 2: Sabzibagh ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+              style={{ position: 'relative', width: '100%', overflow: 'hidden', minHeight: '640px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
+            >
+              {/* Background Image */}
+              <div style={{ position: 'absolute', inset: 0 }}>
+                <Image
+                  src="/assets/sabzibaghshopinterior.png"
+                  alt="Sabzibagh Store Interior"
+                  fill
+                  style={{ objectFit: 'cover', objectPosition: 'center', transition: 'transform 3s' }}
+                  loading="lazy"
+                />
+                <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.15)' }} />
+              </div>
 
-              {/* Card 1: Phulwari Sharif */}
-              <motion.div
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-                whileHover={{
-                  y: -8,
-                  boxShadow: '0 32px 80px 0 rgba(30, 60, 35, 0.22), 0 12px 24px 0 rgba(30,60,35,0.08), inset 0 1px 2px 0 rgba(255,255,255,0.95)'
-                }}
-                style={{
-                  background: 'linear-gradient(145deg, rgba(240,250,243,0.9) 0%, rgba(255,255,255,0.6) 40%, rgba(230,248,238,0.45) 100%)',
-                  backdropFilter: 'blur(30px)',
-                  WebkitBackdropFilter: 'blur(30px)',
-                  boxShadow: '0 12px 40px 0 rgba(30,60,35,0.1), 0 4px 12px 0 rgba(30,60,35,0.05), inset 0 1.5px 1.5px 0 rgba(255,255,255,0.9)',
-                  border: '1.5px solid rgba(200, 230, 210, 0.7)'
-                }}
-                className="group relative flex flex-col-reverse lg:flex-row w-full max-w-[1200px] p-2 sm:p-4 md:p-6 lg:p-8 rounded-[24px] sm:rounded-[32px] lg:rounded-[40px] transition-all duration-500 mx-auto"
-              >
-                {/* Left Side: Info */}
-                <div className="w-full lg:w-1/2 flex flex-col items-center text-center justify-center p-4 sm:p-8 md:p-10 lg:p-12 z-10">
-                  <div className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/70 border border-[#E0E8E2] mb-4 sm:mb-8 shadow-sm">
-                    <MapPin className="w-4 h-4 text-[#5C6E5C]" />
+              {/* Glassmorphic Info Card — RIGHT aligned */}
+              <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '1280px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', minHeight: '640px' }}>
+                <div
+                  style={{
+                    width: '90%',
+                    maxWidth: '550px',
+                    margin: '2rem',
+                    padding: '3rem',
+                    borderRadius: '24px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    textAlign: 'left',
+                    gap: '1.5rem',
+                    background: 'rgba(15, 20, 15, 0.65)',
+                    backdropFilter: 'blur(20px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 30px 60px rgba(0, 0, 0, 0.4)',
+                  }}
+                >
+                  {/* Store label */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <MapPin style={{ width: '18px', height: '18px', color: '#c4a46c' }} strokeWidth={2} />
+                    <span style={{ fontSize: '13px', letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 'bold', color: '#c4a46c' }}>Store 02</span>
                   </div>
 
-                  <h3
-                    className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.08] mb-4 sm:mb-6"
-                    style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", Georgia, serif', fontWeight: 600, color: '#1a2e20', letterSpacing: '-0.01em' }}
-                  >
-                    Phulwari<br className="hidden md:block" /> Sharif
-                  </h3>
+                  {/* Store name */}
+                  <div>
+                    <h3
+                      style={{ fontSize: 'clamp(2.2rem, 4vw, 3.2rem)', lineHeight: '1.1', color: '#ffffff', marginBottom: '12px', fontFamily: '"Playfair Display", Georgia, serif', fontWeight: 600 }}
+                    >
+                      Sabzibagh
+                    </h3>
+                    <p style={{ color: '#a0a5a0', fontSize: '15px', margin: 0 }}>Patna, Bihar 800004</p>
+                  </div>
 
-                  <p className="text-[#5a6b5c] text-[13px] sm:text-[15px] md:text-base leading-[1.6] md:leading-[1.85] mb-6 sm:mb-8 max-w-[340px] mx-auto">
-                    Where tradition meets timeless fragrance. Discover signature blends.
-                  </p>
-
-                  {/* Store Details */}
-                  <div className="flex flex-col gap-4 mb-8 sm:mb-10 w-full max-w-[340px] mx-auto">
-                    <div className="flex items-center gap-3.5 text-left">
-                      <MapPin className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
-                      <span className="text-[#3a4a3c] text-[13px] sm:text-sm font-semibold leading-snug">Phulwari Sharif, Patna, Bihar 801505</span>
+                  {/* Details */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', borderTop: '1px solid rgba(255,255,255,0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)', padding: '1.5rem 0', margin: '0.5rem 0' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <Phone style={{ width: '18px', height: '18px', color: '#c4a46c' }} strokeWidth={1.8} />
+                      <a href="tel:+917484878288" style={{ color: '#ffffff', fontSize: '15px', fontWeight: 500, textDecoration: 'none' }}>+91 7484878288</a>
                     </div>
-                    <div className="flex items-center gap-3.5 text-left">
-                      <Phone className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
-                      <span className="text-[#3a4a3c] text-[13px] sm:text-sm font-semibold">+91 8340783679</span>
-                    </div>
-                    <div className="flex items-center gap-3.5 text-left">
-                      <Clock className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
-                      <span className="text-[#3a4a3c] text-[13px] sm:text-sm font-semibold">10:00 AM – 9:00 PM, Mon – Sat</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <Clock style={{ width: '18px', height: '18px', color: '#c4a46c' }} strokeWidth={1.8} />
+                      <div style={{ color: '#e0e0e0', fontSize: '15px', fontWeight: 500 }}>
+                        10:00 AM – 9:00 PM <span style={{ color: '#8a9a8c', marginLeft: '8px', fontSize: '13px' }}>Mon – Sat</span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-16 sm:mt-24">
-                    <Link href="#">
-                      <button className="store-btn">
-                        <span className="circle" aria-hidden="true">
-                          <span className="icon arrow" />
-                        </span>
-                        <span className="btn-text">Explore Store</span>
+                  {/* CTAs */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1rem', width: '100%', paddingTop: '0.5rem' }}>
+                    <a href="tel:+917484878288" style={{ textDecoration: 'none' }}>
+                      <button style={{ 
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', 
+                        padding: '16px 32px', backgroundColor: '#c4a46c', color: '#ffffff', 
+                        fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', 
+                        fontWeight: 'bold', borderRadius: '12px', border: 'none', cursor: 'pointer',
+                        boxShadow: '0 10px 25px -5px rgba(196, 164, 108, 0.4)'
+                      }}>
+                        Call Store
+                        <Phone style={{ width: '16px', height: '16px' }} />
                       </button>
-                    </Link>
-                    <a href="tel:+918340783679">
-                      <button className="store-btn store-btn-green">
-                        <span className="circle" aria-hidden="true">
-                          <span className="icon arrow" />
-                        </span>
-                        <span className="btn-text">Call Now</span>
+                    </a>
+                    <a
+                      href="https://maps.google.com/?q=Rehmani+Perfumery+Sabzibagh+Patna"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <button style={{ 
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', 
+                        padding: '16px 32px', backgroundColor: 'transparent', color: '#ffffff', 
+                        fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', 
+                        fontWeight: 'bold', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer'
+                      }}>
+                        Directions
+                        <ArrowUpRight style={{ width: '16px', height: '16px' }} />
                       </button>
                     </a>
                   </div>
                 </div>
+              </div>
+            </motion.div>
 
-                {/* Right Side: Image with Slant Cut */}
-                <div className="w-full lg:w-1/2 h-[220px] sm:h-[320px] lg:h-[500px] relative rounded-[18px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden mb-4 lg:mb-0">
-                  <div
-                    className="absolute inset-0 w-full h-full transform transition-transform duration-[1.2s] ease-[0.25,0.46,0.45,0.94] group-hover:scale-105 clip-slant-right"
-                  >
-                    <Image
-                      src="/assets/phulwari%20interior.jpeg"
-                      alt="Phulwari Sharif Store"
-                      fill
-                      style={{ objectFit: 'cover' }}
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C1F1C]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  </div>
+          </div>
+
+          <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10">
+            {/* ── Help / Contact Banner ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mt-12 sm:mt-16 lg:mt-20 w-full rounded-2xl px-6 sm:px-8 py-5 sm:py-6 flex flex-col sm:flex-row items-center justify-between gap-4"
+              style={{
+                background: 'rgba(255,255,255,0.7)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1px solid rgba(196,164,108,0.15)',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+              }}
+            >
+              <div className="flex items-center gap-3 text-center sm:text-left">
+                <div className="w-9 h-9 rounded-full bg-[#c4a46c]/10 flex items-center justify-center flex-shrink-0">
+                  <Phone className="w-4 h-4 text-[#c4a46c]" strokeWidth={2} />
                 </div>
-              </motion.div>
-
-              {/* Card 2: Sabzibagh */}
-              <motion.div
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.9, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
-                whileHover={{
-                  y: -8,
-                  boxShadow: '0 32px 80px 0 rgba(25, 50, 80, 0.22), 0 12px 24px 0 rgba(25,50,80,0.08), inset 0 1px 2px 0 rgba(255,255,255,0.95)'
-                }}
-                style={{
-                  background: 'linear-gradient(145deg, rgba(238,245,255,0.9) 0%, rgba(255,255,255,0.6) 40%, rgba(225,238,255,0.45) 100%)',
-                  backdropFilter: 'blur(30px)',
-                  WebkitBackdropFilter: 'blur(30px)',
-                  boxShadow: '0 12px 40px 0 rgba(25,50,80,0.1), 0 4px 12px 0 rgba(25,50,80,0.05), inset 0 1.5px 1.5px 0 rgba(255,255,255,0.9)',
-                  border: '1.5px solid rgba(180, 210, 240, 0.7)'
-                }}
-                className="group relative flex flex-col-reverse lg:flex-row w-full max-w-[1200px] p-2 sm:p-4 md:p-6 lg:p-8 rounded-[24px] sm:rounded-[32px] lg:rounded-[40px] transition-all duration-500 mx-auto"
-              >
-                {/* Left Side: Info */}
-                <div className="w-full lg:w-1/2 flex flex-col items-center text-center justify-center p-4 sm:p-8 md:p-10 lg:p-12 z-10">
-                  <div className="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/70 border border-[#E0E8E2] mb-4 sm:mb-8 shadow-sm">
-                    <MapPin className="w-4 h-4 text-[#5C6E5C]" />
-                  </div>
-
-                  <h3
-                    className="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-[1.08] mb-4 sm:mb-6"
-                    style={{ fontFamily: '"Playfair Display", "Cormorant Garamond", Georgia, serif', fontWeight: 600, color: '#1a2030', letterSpacing: '-0.01em' }}
-                  >
-                    Sabzibagh
-                  </h3>
-
-                  <p className="text-[#5a6070] text-[13px] sm:text-[15px] md:text-base leading-[1.6] md:leading-[1.85] mb-6 sm:mb-8 max-w-[340px] mx-auto">
-                    The heart of heritage perfumery. Step into a world of luxury.
-                  </p>
-
-                  {/* Store Details */}
-                  <div className="flex flex-col gap-4 mb-8 sm:mb-10 w-full max-w-[340px] mx-auto">
-                    <div className="flex items-center gap-3.5 text-left">
-                      <MapPin className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
-                      <span className="text-[#3a4060] text-[13px] sm:text-sm font-semibold leading-snug">Sabzibagh, Patna, Bihar 800004</span>
-                    </div>
-                    <div className="flex items-center gap-3.5 text-left">
-                      <Phone className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
-                      <span className="text-[#3a4060] text-[13px] sm:text-sm font-semibold">+91 7484878288</span>
-                    </div>
-                    <div className="flex items-center gap-3.5 text-left">
-                      <Clock className="w-[18px] h-[18px] text-[#b8955a] flex-shrink-0" strokeWidth={1.8} />
-                      <span className="text-[#3a4060] text-[13px] sm:text-sm font-semibold">10:00 AM – 9:00 PM, Mon – Sat</span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mt-16 sm:mt-24">
-                    <Link href="#">
-                      <button className="store-btn">
-                        <span className="circle" aria-hidden="true">
-                          <span className="icon arrow" />
-                        </span>
-                        <span className="btn-text">Explore Store</span>
-                      </button>
-                    </Link>
-                    <a href="tel:+917484878288">
-                      <button className="store-btn store-btn-green">
-                        <span className="circle" aria-hidden="true">
-                          <span className="icon arrow" />
-                        </span>
-                        <span className="btn-text">Call Now</span>
-                      </button>
-                    </a>
-                  </div>
-                </div>
-
-                {/* Right Side: Image with Slant Cut */}
-                <div className="w-full lg:w-1/2 h-[220px] sm:h-[320px] lg:h-[500px] relative rounded-[18px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden mb-4 lg:mb-0">
-                  <div
-                    className="absolute inset-0 w-full h-full transform transition-transform duration-[1.2s] ease-[0.25,0.46,0.45,0.94] group-hover:scale-105 clip-slant-right"
-                  >
-                    <Image
-                      src="/assets/sabjibagh%20interior.jpeg"
-                      alt="Sabzibagh Store"
-                      fill
-                      style={{ objectFit: 'cover' }}
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1C1F1C]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  </div>
-                </div>
-              </motion.div>
-
-            </div>
+                <p className="text-[#2a352c] text-[13px] sm:text-[14px] font-medium">
+                  <span className="font-bold">Need Help Choosing the Right Fragrance?</span>
+                  <span className="text-[#7a857c] ml-1.5">Our experts are here for you!</span>
+                </p>
+              </div>
+              <Link href="/about">
+                <button className="px-6 py-2.5 bg-[#c4a46c] text-white text-[11px] tracking-[0.2em] uppercase font-bold rounded-lg hover:bg-[#b08d50] transition-colors duration-300 whitespace-nowrap shadow-sm">
+                  Contact Us
+                </button>
+              </Link>
+            </motion.div>
 
           </div>
         </section>

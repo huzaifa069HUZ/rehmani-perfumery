@@ -14,15 +14,7 @@ import { buildProductSlug } from '@/lib/utils';
 /* ── Types ──────────────────────────────────────────── */
 type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'name-az' | 'discount';
 
-const CATEGORIES = [
-  { id: 'all',       label: 'All Bakhoor' },
-  { id: 'oud',       label: 'Oud' },
-  { id: 'floral',    label: 'Floral' },
-  { id: 'woody',     label: 'Woody' },
-  { id: 'musky',     label: 'Musky' },
-  { id: 'herbal',    label: 'Herbal' },
-  { id: 'fresh',     label: 'Fresh' },
-];
+
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: 'featured',   label: 'Featured' },
@@ -160,7 +152,7 @@ export default function BakhoorPage() {
   const [initialLoading, setInitialLoading] = useState(true);
   
   const [search, setSearch]   = useState('');
-  const [category, setCategory] = useState('all');
+
   const [sort, setSort]         = useState<SortOption>('featured');
   const [priceRange, setPriceRange] = useState(0);
   const [newOnly, setNewOnly]   = useState(false);
@@ -213,13 +205,7 @@ export default function BakhoorPage() {
       );
     }
 
-    // category filter
-    if (category !== 'all') {
-      list = list.filter(p => {
-        const cat = (p.category || '').toLowerCase().trim();
-        return cat === category || cat === 'all bakhoor' || cat === 'all';
-      });
-    }
+
 
     // price
     list = list.filter(p => p.price >= range.min && p.price < range.max);
@@ -236,11 +222,11 @@ export default function BakhoorPage() {
     }
 
     return list;
-  }, [dbProducts, search, category, sort, priceRange, newOnly, range.min, range.max]);
+  }, [dbProducts, search, sort, priceRange, newOnly, range.min, range.max]);
 
-  const activeFiltersCount = (category !== 'all' ? 1 : 0) + (priceRange !== 0 ? 1 : 0) + (newOnly ? 1 : 0);
+  const activeFiltersCount = (priceRange !== 0 ? 1 : 0) + (newOnly ? 1 : 0);
 
-  const resetFilters = () => { setCategory('all'); setPriceRange(0); setNewOnly(false); };
+  const resetFilters = () => { setPriceRange(0); setNewOnly(false); };
 
   return (
     <div className="al-root">
@@ -409,34 +395,6 @@ export default function BakhoorPage() {
       )}
 
       <div className="al-main">
-
-        {/* ── Category sidebar tabs ── */}
-        <aside className="al-sidebar">
-          <p className="al-sidebar-title">Categories</p>
-          {CATEGORIES.map(c => (
-            <button
-              key={c.id}
-              className={`al-cat-btn${category === c.id ? ' active' : ''}`}
-              onClick={() => setCategory(c.id)}
-            >
-              <span className="al-cat-label">{c.label}</span>
-              {category === c.id && <span className="al-cat-active-dot" />}
-            </button>
-          ))}
-        </aside>
-
-        {/* ── Category mobile strip ── */}
-        <div className="al-cat-strip">
-          {CATEGORIES.map(c => (
-            <button
-              key={c.id}
-              className={`al-cat-strip-btn${category === c.id ? ' active' : ''}`}
-              onClick={() => setCategory(c.id)}
-            >
-              <span>{c.label}</span>
-            </button>
-          ))}
-        </div>
 
         {/* ── Product grid ── */}
         <div className="al-content">
