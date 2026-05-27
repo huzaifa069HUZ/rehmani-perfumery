@@ -17,7 +17,31 @@ export default function StorePage() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [activeMap, setActiveMap] = useState<'phulwari' | 'sabzibagh'>('phulwari');
   const [activeExclusiveIndex, setActiveExclusiveIndex] = useState(0);
-  
+  const [heroSliderIdx, setHeroSliderIdx] = useState(0);
+  const [store1SliderIdx, setStore1SliderIdx] = useState(0);
+  const [store2SliderIdx, setStore2SliderIdx] = useState(0);
+
+  const HERO_SLIDES = [
+    '/assets/fullsizestore.png',
+    '/assets/phulwari interior.jpeg',
+    '/assets/sabzibaghshopinterior.png',
+    '/assets/sabzibagh shop out.jpeg',
+  ];
+
+  const STORE1_IMAGES = [
+    '/assets/fullsizestore.png',
+    '/assets/phulwari interior.jpeg',
+    '/assets/store-phulwari.png',
+    '/assets/visit-outlet.webp',
+  ];
+
+  const STORE2_IMAGES = [
+    '/assets/sabzibaghshopinterior.png',
+    '/assets/sabjibagh interior.jpeg',
+    '/assets/sabzibagh shop out.jpeg',
+    '/assets/store-sabzibagh.png',
+  ];
+
   // Auto-rotate exclusive cards every 6 seconds
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,6 +49,14 @@ export default function StorePage() {
     }, 6000);
     return () => clearInterval(interval);
   }, []);
+
+  // Auto-rotate hero slider every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroSliderIdx((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [HERO_SLIDES.length]);
 
   return (
     <>
@@ -247,23 +279,72 @@ export default function StorePage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.6 }}
-                  className="hidden md:block"
+                  className="hidden md:flex items-center gap-5"
                 >
-                  <div className="p-1 sm:p-3 border border-white/50 rounded-xl bg-white/10 backdrop-blur-md shadow-2xl">
+                  <button
+                    onClick={() => {
+                      const storesSection = document.getElementById('our-stores');
+                      if (storesSection) {
+                        storesSection.scrollIntoView({ behavior: 'smooth' });
+                      } else {
+                        window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                      }
+                    }}
+                    style={{
+                      padding: '18px 44px',
+                      background: 'linear-gradient(135deg, #c4a46c 0%, #e0c98a 100%)',
+                      color: '#1a1a1a',
+                      fontSize: '13px',
+                      letterSpacing: '0.25em',
+                      textTransform: 'uppercase' as const,
+                      fontWeight: 800,
+                      borderRadius: '14px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      boxShadow: '0 12px 40px rgba(196,164,108,0.45), 0 0 0 1px rgba(255,255,255,0.15)',
+                      transition: 'all 0.35s cubic-bezier(0.25, 1, 0.5, 1)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px) scale(1.03)'; e.currentTarget.style.boxShadow = '0 18px 50px rgba(196,164,108,0.55), 0 0 0 1px rgba(255,255,255,0.2)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0) scale(1)'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(196,164,108,0.45), 0 0 0 1px rgba(255,255,255,0.15)'; }}
+                  >
+                    Explore Stores
+                    <ArrowRight style={{ width: '16px', height: '16px' }} />
+                  </button>
+                  <a
+                    href="https://maps.google.com/?q=Rehmani+Perfumery+Patna"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none' }}
+                  >
                     <button
-                      onClick={() => {
-                        const storesSection = document.getElementById('our-stores');
-                        if (storesSection) {
-                          storesSection.scrollIntoView({ behavior: 'smooth' });
-                        } else {
-                          window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
-                        }
+                      style={{
+                        padding: '18px 36px',
+                        background: 'rgba(255,255,255,0.12)',
+                        backdropFilter: 'blur(20px)',
+                        WebkitBackdropFilter: 'blur(20px)',
+                        color: '#ffffff',
+                        fontSize: '13px',
+                        letterSpacing: '0.2em',
+                        textTransform: 'uppercase' as const,
+                        fontWeight: 700,
+                        borderRadius: '14px',
+                        border: '1.5px solid rgba(255,255,255,0.35)',
+                        cursor: 'pointer',
+                        transition: 'all 0.35s cubic-bezier(0.25, 1, 0.5, 1)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
                       }}
-                      className="btn-glow px-6 py-2.5 sm:px-14 sm:py-6 bg-white text-gray-800 text-[11px] sm:text-[18px] tracking-[0.25em] uppercase font-black hover:bg-[#c4a46c] hover:text-white transition-colors duration-300 rounded-lg shadow-[0_0_20px_rgba(255,255,255,0.8)]"
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.22)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.6)'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)'; e.currentTarget.style.transform = 'translateY(0)'; }}
                     >
-                      VISIT OUR SHOPS
+                      Get Directions
+                      <ArrowUpRight style={{ width: '16px', height: '16px' }} />
                     </button>
-                  </div>
+                  </a>
                 </motion.div>
               </div>
             </div>
@@ -282,7 +363,7 @@ export default function StorePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.7 }}
-              style={{ width: '100%', textAlign: 'center', margin: '0 auto', marginBottom: '4rem' }}
+              style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: '4rem' }}
             >
               <p style={{ color: '#c4a46c', fontSize: '12px', letterSpacing: '0.35em', textTransform: 'uppercase', fontWeight: 600, marginBottom: '1rem', textAlign: 'center' }}>
                 Visit Our Stores
@@ -335,13 +416,13 @@ export default function StorePage() {
                 <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.15)' }} />
               </div>
 
-              {/* Glassmorphic Info Card — LEFT aligned */}
-              <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '1280px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', minHeight: '640px' }}>
+              {/* Content: Info Card LEFT + Image Slider RIGHT (desktop only) */}
+              <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '1280px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: '640px', padding: '0 2rem' }}>
+                {/* Left: Glassmorphic Info Card */}
                 <div
                   style={{
                     width: '90%',
-                    maxWidth: '550px',
-                    margin: '2rem',
+                    maxWidth: '500px',
                     padding: '3rem',
                     borderRadius: '24px',
                     display: 'flex',
@@ -356,23 +437,16 @@ export default function StorePage() {
                     boxShadow: '0 30px 60px rgba(0, 0, 0, 0.4)',
                   }}
                 >
-                  {/* Store label */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <MapPin style={{ width: '18px', height: '18px', color: '#c4a46c' }} strokeWidth={2} />
                     <span style={{ fontSize: '13px', letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 'bold', color: '#c4a46c' }}>Store 01</span>
                   </div>
-
-                  {/* Store name */}
                   <div>
-                    <h3
-                      style={{ fontSize: 'clamp(2.2rem, 4vw, 3.2rem)', lineHeight: '1.1', color: '#ffffff', marginBottom: '12px', fontFamily: '"Playfair Display", Georgia, serif', fontWeight: 600 }}
-                    >
+                    <h3 style={{ fontSize: 'clamp(2.2rem, 4vw, 3.2rem)', lineHeight: '1.1', color: '#ffffff', marginBottom: '12px', fontFamily: '"Playfair Display", Georgia, serif', fontWeight: 600 }}>
                       Phulwari Sharif
                     </h3>
                     <p style={{ color: '#a0a5a0', fontSize: '15px', margin: 0 }}>Patna, Bihar 801505</p>
                   </div>
-
-                  {/* Details */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', borderTop: '1px solid rgba(255,255,255,0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)', padding: '1.5rem 0', margin: '0.5rem 0' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                       <Phone style={{ width: '18px', height: '18px', color: '#c4a46c' }} strokeWidth={1.8} />
@@ -385,38 +459,75 @@ export default function StorePage() {
                       </div>
                     </div>
                   </div>
-
-                  {/* CTAs */}
                   <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1rem', width: '100%', paddingTop: '0.5rem' }}>
                     <a href="tel:+918340783679" style={{ textDecoration: 'none' }}>
-                      <button style={{ 
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', 
-                        padding: '16px 32px', backgroundColor: '#c4a46c', color: '#ffffff', 
-                        fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', 
-                        fontWeight: 'bold', borderRadius: '12px', border: 'none', cursor: 'pointer',
-                        boxShadow: '0 10px 25px -5px rgba(196, 164, 108, 0.4)'
-                      }}>
+                      <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', padding: '16px 32px', backgroundColor: '#c4a46c', color: '#ffffff', fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 'bold', borderRadius: '12px', border: 'none', cursor: 'pointer', boxShadow: '0 10px 25px -5px rgba(196, 164, 108, 0.4)' }}>
                         Call Store
                         <Phone style={{ width: '16px', height: '16px' }} />
                       </button>
                     </a>
-                    <a
-                      href="https://maps.google.com/?q=Rehmani+Perfumery+Phulwari+Sharif+Patna"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ textDecoration: 'none' }}
-                    >
-                      <button style={{ 
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', 
-                        padding: '16px 32px', backgroundColor: 'transparent', color: '#ffffff', 
-                        fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', 
-                        fontWeight: 'bold', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer'
-                      }}>
+                    <a href="https://maps.google.com/?q=Rehmani+Perfumery+Phulwari+Sharif+Patna" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                      <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', padding: '16px 32px', backgroundColor: 'transparent', color: '#ffffff', fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 'bold', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer' }}>
                         Directions
                         <ArrowUpRight style={{ width: '16px', height: '16px' }} />
                       </button>
                     </a>
                   </div>
+                </div>
+
+                {/* Right: 4-Image Slider (Desktop only) */}
+                <div className="hidden lg:flex" style={{ alignItems: 'center', gap: '14px', maxWidth: '520px', height: '420px' }}>
+                  {/* Left Arrow */}
+                  <button
+                    onClick={() => setStore1SliderIdx(p => (p - 1 + STORE1_IMAGES.length) % STORE1_IMAGES.length)}
+                    style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.25)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.3s' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.3)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                  </button>
+
+                  {/* Slider Cards */}
+                  <div style={{ display: 'flex', gap: '12px', height: '100%', overflow: 'hidden', alignItems: 'center' }}>
+                    {/* Main large card */}
+                    <div style={{ width: '280px', height: '380px', borderRadius: '18px', overflow: 'hidden', flexShrink: 0, position: 'relative', border: '3px solid rgba(255,255,255,0.2)', boxShadow: '0 20px 50px rgba(0,0,0,0.35)', transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)' }}>
+                      <Image
+                        src={STORE1_IMAGES[store1SliderIdx]}
+                        alt="Phulwari Sharif Store"
+                        fill
+                        style={{ objectFit: 'cover', transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)' }}
+                      />
+                      {/* Location label */}
+                      <div style={{ position: 'absolute', bottom: '16px', left: '16px', right: '16px', background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(12px)', borderRadius: '12px', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div>
+                          <p style={{ color: '#fff', fontSize: '14px', fontWeight: 700, margin: 0 }}>Phulwari Sharif</p>
+                          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '11px', margin: 0 }}>Store Interior</p>
+                        </div>
+                        <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(196,164,108,0.3)', border: '1px solid rgba(196,164,108,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <MapPin style={{ width: '13px', height: '13px', color: '#c4a46c' }} />
+                        </div>
+                      </div>
+                    </div>
+                    {/* Secondary smaller card (peek) */}
+                    <div style={{ width: '140px', height: '320px', borderRadius: '16px', overflow: 'hidden', flexShrink: 0, position: 'relative', border: '2px solid rgba(255,255,255,0.12)', opacity: 0.7, transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)' }}>
+                      <Image
+                        src={STORE1_IMAGES[(store1SliderIdx + 1) % STORE1_IMAGES.length]}
+                        alt="Store view"
+                        fill
+                        style={{ objectFit: 'cover', transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)' }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Right Arrow */}
+                  <button
+                    onClick={() => setStore1SliderIdx(p => (p + 1) % STORE1_IMAGES.length)}
+                    style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.25)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.3s' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.3)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                  </button>
                 </div>
               </div>
             </motion.div>
@@ -441,13 +552,68 @@ export default function StorePage() {
                 <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.15)' }} />
               </div>
 
-              {/* Glassmorphic Info Card — RIGHT aligned */}
-              <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '1280px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', minHeight: '640px' }}>
+              {/* Content: Image Slider LEFT + Info Card RIGHT (desktop only) */}
+              <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '1280px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: '640px', padding: '0 2rem' }}>
+
+                {/* Left: 4-Image Slider (Desktop only) */}
+                <div className="hidden lg:flex" style={{ alignItems: 'center', gap: '14px', maxWidth: '520px', height: '420px' }}>
+                  {/* Left Arrow */}
+                  <button
+                    onClick={() => setStore2SliderIdx(p => (p - 1 + STORE2_IMAGES.length) % STORE2_IMAGES.length)}
+                    style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.25)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.3s' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.3)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                  </button>
+
+                  {/* Slider Cards */}
+                  <div style={{ display: 'flex', gap: '12px', height: '100%', overflow: 'hidden', alignItems: 'center' }}>
+                    {/* Secondary smaller card (peek) — left side */}
+                    <div style={{ width: '140px', height: '320px', borderRadius: '16px', overflow: 'hidden', flexShrink: 0, position: 'relative', border: '2px solid rgba(255,255,255,0.12)', opacity: 0.7, transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)' }}>
+                      <Image
+                        src={STORE2_IMAGES[(store2SliderIdx + 3) % STORE2_IMAGES.length]}
+                        alt="Store view"
+                        fill
+                        style={{ objectFit: 'cover', transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)' }}
+                      />
+                    </div>
+                    {/* Main large card */}
+                    <div style={{ width: '280px', height: '380px', borderRadius: '18px', overflow: 'hidden', flexShrink: 0, position: 'relative', border: '3px solid rgba(255,255,255,0.2)', boxShadow: '0 20px 50px rgba(0,0,0,0.35)', transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)' }}>
+                      <Image
+                        src={STORE2_IMAGES[store2SliderIdx]}
+                        alt="Sabzibagh Store"
+                        fill
+                        style={{ objectFit: 'cover', transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)' }}
+                      />
+                      <div style={{ position: 'absolute', bottom: '16px', left: '16px', right: '16px', background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(12px)', borderRadius: '12px', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div>
+                          <p style={{ color: '#fff', fontSize: '14px', fontWeight: 700, margin: 0 }}>Sabzibagh</p>
+                          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '11px', margin: 0 }}>Store Interior</p>
+                        </div>
+                        <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(196,164,108,0.3)', border: '1px solid rgba(196,164,108,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <MapPin style={{ width: '13px', height: '13px', color: '#c4a46c' }} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Arrow */}
+                  <button
+                    onClick={() => setStore2SliderIdx(p => (p + 1) % STORE2_IMAGES.length)}
+                    style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.25)', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.3s' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.3)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; }}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                  </button>
+                </div>
+
+                {/* Right: Glassmorphic Info Card */}
                 <div
                   style={{
                     width: '90%',
-                    maxWidth: '550px',
-                    margin: '2rem',
+                    maxWidth: '500px',
                     padding: '3rem',
                     borderRadius: '24px',
                     display: 'flex',
@@ -462,23 +628,16 @@ export default function StorePage() {
                     boxShadow: '0 30px 60px rgba(0, 0, 0, 0.4)',
                   }}
                 >
-                  {/* Store label */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <MapPin style={{ width: '18px', height: '18px', color: '#c4a46c' }} strokeWidth={2} />
                     <span style={{ fontSize: '13px', letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 'bold', color: '#c4a46c' }}>Store 02</span>
                   </div>
-
-                  {/* Store name */}
                   <div>
-                    <h3
-                      style={{ fontSize: 'clamp(2.2rem, 4vw, 3.2rem)', lineHeight: '1.1', color: '#ffffff', marginBottom: '12px', fontFamily: '"Playfair Display", Georgia, serif', fontWeight: 600 }}
-                    >
+                    <h3 style={{ fontSize: 'clamp(2.2rem, 4vw, 3.2rem)', lineHeight: '1.1', color: '#ffffff', marginBottom: '12px', fontFamily: '"Playfair Display", Georgia, serif', fontWeight: 600 }}>
                       Sabzibagh
                     </h3>
                     <p style={{ color: '#a0a5a0', fontSize: '15px', margin: 0 }}>Patna, Bihar 800004</p>
                   </div>
-
-                  {/* Details */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', borderTop: '1px solid rgba(255,255,255,0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)', padding: '1.5rem 0', margin: '0.5rem 0' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                       <Phone style={{ width: '18px', height: '18px', color: '#c4a46c' }} strokeWidth={1.8} />
@@ -491,33 +650,15 @@ export default function StorePage() {
                       </div>
                     </div>
                   </div>
-
-                  {/* CTAs */}
                   <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1rem', width: '100%', paddingTop: '0.5rem' }}>
                     <a href="tel:+917484878288" style={{ textDecoration: 'none' }}>
-                      <button style={{ 
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', 
-                        padding: '16px 32px', backgroundColor: '#c4a46c', color: '#ffffff', 
-                        fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', 
-                        fontWeight: 'bold', borderRadius: '12px', border: 'none', cursor: 'pointer',
-                        boxShadow: '0 10px 25px -5px rgba(196, 164, 108, 0.4)'
-                      }}>
+                      <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', padding: '16px 32px', backgroundColor: '#c4a46c', color: '#ffffff', fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 'bold', borderRadius: '12px', border: 'none', cursor: 'pointer', boxShadow: '0 10px 25px -5px rgba(196, 164, 108, 0.4)' }}>
                         Call Store
                         <Phone style={{ width: '16px', height: '16px' }} />
                       </button>
                     </a>
-                    <a
-                      href="https://maps.google.com/?q=Rehmani+Perfumery+Sabzibagh+Patna"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ textDecoration: 'none' }}
-                    >
-                      <button style={{ 
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', 
-                        padding: '16px 32px', backgroundColor: 'transparent', color: '#ffffff', 
-                        fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', 
-                        fontWeight: 'bold', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer'
-                      }}>
+                    <a href="https://maps.google.com/?q=Rehmani+Perfumery+Sabzibagh+Patna" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                      <button style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', padding: '16px 32px', backgroundColor: 'transparent', color: '#ffffff', fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 'bold', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer' }}>
                         Directions
                         <ArrowUpRight style={{ width: '16px', height: '16px' }} />
                       </button>
