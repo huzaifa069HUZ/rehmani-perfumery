@@ -60,12 +60,14 @@ function ShoppableVideoCard({
   videoSrc,
   fallbackName,
   fallbackPrice,
+  fallbackImage,
 }: {
   productId: string;
   href: string;
   videoSrc: string;
   fallbackName: string;
   fallbackPrice: number;
+  fallbackImage?: string;
 }) {
   const { addToCart } = useCart();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -144,7 +146,7 @@ function ShoppableVideoCard({
 
   const productName = product?.name ?? fallbackName;
   const productPrice = product?.price ?? fallbackPrice;
-  const productImage = product?.images?.[0] ?? '';
+  const productImage = product?.images?.[0] ?? fallbackImage ?? '';
   const productType = product?.type ?? 'attar';
 
   return (
@@ -378,6 +380,7 @@ export default function ReelsSection() {
             videoSrc="/videos/red-sea-video.mp4"
             fallbackName="Red Sea"
             fallbackPrice={599}
+            fallbackImage="/assets/red sea 2 nobg.png"
           />
           
           {/* Slot 2: Al Rajaal video */}
@@ -387,10 +390,31 @@ export default function ReelsSection() {
             videoSrc="/assets/Video-807.mp4"
             fallbackName="Al Rajaal"
             fallbackPrice={499}
+            fallbackImage="/assets/attar1 remove bg.png"
           />
 
-          {/* Slots 3–5: image reels */}
-          {IMAGE_REELS.map((reel, i) => (
+          {/* Slot 3: Oud Nadira video */}
+          <ShoppableVideoCard
+            productId="WgWGvlC"
+            href="/product/oud-nadira-WgWGvlC"
+            videoSrc="/videos/oud nadira video.mp4"
+            fallbackName="Oud Nadira"
+            fallbackPrice={599}
+            fallbackImage="/assets/oud-nadira-no-bg.png"
+          />
+
+          {/* Slot 4: Green Ajam video */}
+          <ShoppableVideoCard
+            productId="xnp8BPW"
+            href="/product/green-ajam-xnp8BPW"
+            videoSrc="/videos/green ajam vid.mp4"
+            fallbackName="Green Ajam"
+            fallbackPrice={599}
+            fallbackImage="/assets/green ajam.png"
+          />
+
+          {/* Slot 5: Image reel */}
+          {IMAGE_REELS.slice(0, 1).map((reel, i) => (
             <ImageReelCard key={i} reel={reel} />
           ))}
         </div>

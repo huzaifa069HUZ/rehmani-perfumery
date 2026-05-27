@@ -176,6 +176,7 @@ export default function AddBannerPage() {
                 }}>
                    <CloudinaryUpload 
                      onUploadSuccess={(url) => setImage(url)} 
+                     maxSizeMB={25}
                    />
                    <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '12px', textAlign: 'center' }}>
                      Make sure important text is in the center so it doesn't get cut off on mobile devices.

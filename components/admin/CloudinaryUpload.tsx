@@ -5,15 +5,16 @@ import { useState, useRef, useCallback } from 'react';
 interface CloudinaryUploadProps {
   onUploadSuccess: (url: string) => void;
   folder?: string;
+  maxSizeMB?: number;
 }
 
-const MAX_SIZE_MB = 8;
-const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
 export default function CloudinaryUpload({
   onUploadSuccess,
+  maxSizeMB = 8,
 }: CloudinaryUploadProps) {
+  const maxSizeBytes = maxSizeMB * 1024 * 1024;
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
@@ -24,7 +25,7 @@ export default function CloudinaryUpload({
 
   const validateFile = (file: File): string | null => {
     if (!ALLOWED_TYPES.includes(file.type)) return 'Only JPG, PNG, WEBP or GIF allowed.';
-    if (file.size > MAX_SIZE_BYTES) return `File too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Max ${MAX_SIZE_MB} MB.`;
+    if (file.size > maxSizeBytes) return `File too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Max ${maxSizeMB} MB.`;
     return null;
   };
 
@@ -223,7 +224,7 @@ export default function CloudinaryUpload({
                 <span style={{ fontWeight: '700', color: '#d4af5f' }}>Click to upload</span> or drag & drop
               </p>
               <p style={{ fontSize: '11.5px', color: '#94a3b8', margin: '4px 0 0' }}>
-                PNG, JPG, WEBP · Max {MAX_SIZE_MB} MB
+                PNG, JPG, WEBP · Max {maxSizeMB} MB
               </p>
             </div>
           </div>
