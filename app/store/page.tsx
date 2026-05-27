@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { ArrowUpRight, ArrowRight, MapPin, Phone, Clock, Eye, Droplet, Tag, ShieldCheck } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight, ArrowRight, MapPin, Phone, Clock, Eye, Droplet, Tag, ShieldCheck, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -20,6 +20,8 @@ export default function StorePage() {
   const [heroSliderIdx, setHeroSliderIdx] = useState(0);
   const [store1SliderIdx, setStore1SliderIdx] = useState(0);
   const [store2SliderIdx, setStore2SliderIdx] = useState(0);
+  const [dynamicIslandOpen, setDynamicIslandOpen] = useState(false);
+  const [activeStoreIsland, setActiveStoreIsland] = useState<0 | 1>(0);
 
   const HERO_SLIDES = [
     '/assets/fullsizestore.png',
@@ -363,7 +365,7 @@ export default function StorePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.7 }}
-              style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: '4rem' }}
+              className="w-full flex flex-col items-center justify-center mb-6 md:mb-16"
             >
               <p style={{ color: '#c4a46c', fontSize: '12px', letterSpacing: '0.35em', textTransform: 'uppercase', fontWeight: 600, marginBottom: '1rem', textAlign: 'center' }}>
                 Visit Our Stores
@@ -393,8 +395,8 @@ export default function StorePage() {
             </motion.div>
           </div>
 
-          {/* Store Cards Stack — FULL WIDTH EDGE TO EDGE */}
-          <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: '2rem' }}>
+          {/* Store Cards Stack — FULL WIDTH EDGE TO EDGE (hidden on mobile) */}
+          <div className="hidden md:flex flex-col w-full gap-8">
 
             {/* ── CARD 1: Phulwari Sharif ── */}
             <motion.div
@@ -490,7 +492,7 @@ export default function StorePage() {
                   {/* Slider Cards */}
                   <div style={{ display: 'flex', gap: '12px', height: '100%', overflow: 'hidden', alignItems: 'center' }}>
                     {/* Main large card */}
-                    <div style={{ width: '280px', height: '380px', borderRadius: '18px', overflow: 'hidden', flexShrink: 0, position: 'relative', border: '3px solid rgba(255,255,255,0.2)', boxShadow: '0 20px 50px rgba(0,0,0,0.35)', transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)' }}>
+                    <div style={{ width: '280px', height: '380px', borderRadius: '18px', overflow: 'hidden', flexShrink: 0, position: 'relative', border: '4px solid rgba(255,255,255,0.85)', boxShadow: '0 20px 50px rgba(0,0,0,0.35)', transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)' }}>
                       <Image
                         src={STORE1_IMAGES[store1SliderIdx]}
                         alt="Phulwari Sharif Store"
@@ -509,7 +511,7 @@ export default function StorePage() {
                       </div>
                     </div>
                     {/* Secondary smaller card (peek) */}
-                    <div style={{ width: '140px', height: '320px', borderRadius: '16px', overflow: 'hidden', flexShrink: 0, position: 'relative', border: '2px solid rgba(255,255,255,0.12)', opacity: 0.7, transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)' }}>
+                    <div style={{ width: '140px', height: '320px', borderRadius: '16px', overflow: 'hidden', flexShrink: 0, position: 'relative', border: '4px solid rgba(255,255,255,0.65)', opacity: 0.7, transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)' }}>
                       <Image
                         src={STORE1_IMAGES[(store1SliderIdx + 1) % STORE1_IMAGES.length]}
                         alt="Store view"
@@ -570,7 +572,7 @@ export default function StorePage() {
                   {/* Slider Cards */}
                   <div style={{ display: 'flex', gap: '12px', height: '100%', overflow: 'hidden', alignItems: 'center' }}>
                     {/* Secondary smaller card (peek) — left side */}
-                    <div style={{ width: '140px', height: '320px', borderRadius: '16px', overflow: 'hidden', flexShrink: 0, position: 'relative', border: '2px solid rgba(255,255,255,0.12)', opacity: 0.7, transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)' }}>
+                    <div style={{ width: '140px', height: '320px', borderRadius: '16px', overflow: 'hidden', flexShrink: 0, position: 'relative', border: '4px solid rgba(255,255,255,0.65)', opacity: 0.7, transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)' }}>
                       <Image
                         src={STORE2_IMAGES[(store2SliderIdx + 3) % STORE2_IMAGES.length]}
                         alt="Store view"
@@ -579,7 +581,7 @@ export default function StorePage() {
                       />
                     </div>
                     {/* Main large card */}
-                    <div style={{ width: '280px', height: '380px', borderRadius: '18px', overflow: 'hidden', flexShrink: 0, position: 'relative', border: '3px solid rgba(255,255,255,0.2)', boxShadow: '0 20px 50px rgba(0,0,0,0.35)', transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)' }}>
+                    <div style={{ width: '280px', height: '380px', borderRadius: '18px', overflow: 'hidden', flexShrink: 0, position: 'relative', border: '4px solid rgba(255,255,255,0.85)', boxShadow: '0 20px 50px rgba(0,0,0,0.35)', transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)' }}>
                       <Image
                         src={STORE2_IMAGES[store2SliderIdx]}
                         alt="Sabzibagh Store"
@@ -670,6 +672,172 @@ export default function StorePage() {
 
           </div>
 
+          {/* ═══ Mobile Store Card (always visible) ═══ */}
+          <div className="md:hidden flex justify-center px-4">
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '420px',
+                background: '#1a1a1a',
+                borderRadius: '28px',
+                overflow: 'hidden',
+                boxShadow: '0 25px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.06)',
+              }}
+            >
+              {/* Store Toggle Tabs */}
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '4px',
+                  padding: '16px 16px 0',
+                }}
+              >
+                {['Phulwari Sharif', 'Sabzibagh'].map((name, idx) => (
+                  <button
+                    key={name}
+                    onClick={() => setActiveStoreIsland(idx as 0 | 1)}
+                    style={{
+                      flex: 1,
+                      padding: '10px 0',
+                      borderRadius: '14px',
+                      border: 'none',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      letterSpacing: '0.08em',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s',
+                      background: activeStoreIsland === idx ? 'rgba(196,164,108,0.2)' : 'rgba(255,255,255,0.06)',
+                      color: activeStoreIsland === idx ? '#c4a46c' : 'rgba(255,255,255,0.45)',
+                    }}
+                  >
+                    {name}
+                  </button>
+                ))}
+              </div>
+
+              {/* Store Content */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeStoreIsland}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.25 }}
+                  style={{ padding: '20px 20px 24px' }}
+                >
+                  {/* Store Image */}
+                  <div style={{ position: 'relative', width: '100%', height: '180px', borderRadius: '16px', overflow: 'hidden', marginBottom: '20px', border: '3px solid rgba(255,255,255,0.1)' }}>
+                    <Image
+                      src={activeStoreIsland === 0 ? '/assets/fullsizestore.png' : '/assets/sabzibaghshopinterior.png'}
+                      alt={activeStoreIsland === 0 ? 'Phulwari Sharif' : 'Sabzibagh'}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                    />
+                    <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', borderRadius: '10px', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <MapPin style={{ width: '12px', height: '12px', color: '#c4a46c' }} />
+                      <span style={{ fontSize: '11px', color: '#c4a46c', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                        Store {activeStoreIsland === 0 ? '01' : '02'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Store Name */}
+                  <h3 style={{ fontSize: '24px', fontWeight: 700, color: '#fff', marginBottom: '4px', fontFamily: '"Playfair Display", Georgia, serif' }}>
+                    {activeStoreIsland === 0 ? 'Phulwari Sharif' : 'Sabzibagh'}
+                  </h3>
+                  <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px' }}>
+                    Patna, Bihar {activeStoreIsland === 0 ? '801505' : '800004'}
+                  </p>
+
+                  {/* Details */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', borderTop: '1px solid rgba(255,255,255,0.08)', borderBottom: '1px solid rgba(255,255,255,0.08)', padding: '14px 0', marginBottom: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <Phone style={{ width: '14px', height: '14px', color: '#c4a46c' }} strokeWidth={1.8} />
+                      <a
+                        href={`tel:${activeStoreIsland === 0 ? '+918340783679' : '+917484878288'}`}
+                        style={{ color: '#fff', fontSize: '14px', fontWeight: 500, textDecoration: 'none' }}
+                      >
+                        {activeStoreIsland === 0 ? '+91 8340783679' : '+91 7484878288'}
+                      </a>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <Clock style={{ width: '14px', height: '14px', color: '#c4a46c' }} strokeWidth={1.8} />
+                      <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '14px' }}>
+                        10 AM – 9 PM <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px', marginLeft: '4px' }}>Mon – Sat</span>
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* CTAs */}
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <a
+                      href={`tel:${activeStoreIsland === 0 ? '+918340783679' : '+917484878288'}`}
+                      style={{ flex: 1, textDecoration: 'none' }}
+                    >
+                      <button style={{
+                        width: '100%',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                        padding: '14px 0',
+                        background: 'linear-gradient(135deg, #c4a46c, #d4b87a)',
+                        color: '#fff', fontSize: '12px', letterSpacing: '0.15em', textTransform: 'uppercase',
+                        fontWeight: 700, borderRadius: '14px', border: 'none', cursor: 'pointer',
+                      }}>
+                        Call
+                        <Phone style={{ width: '13px', height: '13px' }} />
+                      </button>
+                    </a>
+                    <a
+                      href={`https://maps.google.com/?q=Rehmani+Perfumery+${activeStoreIsland === 0 ? 'Phulwari+Sharif' : 'Sabzibagh'}+Patna`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ flex: 1, textDecoration: 'none' }}
+                    >
+                      <button style={{
+                        width: '100%',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                        padding: '14px 0',
+                        background: 'transparent',
+                        color: '#fff', fontSize: '12px', letterSpacing: '0.15em', textTransform: 'uppercase',
+                        fontWeight: 700, borderRadius: '14px', border: '1px solid rgba(255,255,255,0.18)', cursor: 'pointer',
+                      }}>
+                        Directions
+                        <ArrowUpRight style={{ width: '13px', height: '13px' }} />
+                      </button>
+                    </a>
+                  </div>
+
+                  {/* Pagination dots */}
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px', marginTop: '16px' }}>
+                    <button
+                      onClick={() => setActiveStoreIsland(p => (p === 0 ? 1 : 0) as 0 | 1)}
+                      style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.3)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
+                    >
+                      <ChevronLeft style={{ width: '14px', height: '14px' }} />
+                    </button>
+                    {[0, 1].map(i => (
+                      <div
+                        key={i}
+                        style={{
+                          width: activeStoreIsland === i ? '20px' : '6px',
+                          height: '6px',
+                          borderRadius: '3px',
+                          background: activeStoreIsland === i ? '#c4a46c' : 'rgba(255,255,255,0.15)',
+                          transition: 'all 0.3s',
+                        }}
+                      />
+                    ))}
+                    <button
+                      onClick={() => setActiveStoreIsland(p => (p === 0 ? 1 : 0) as 0 | 1)}
+                      style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.3)', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
+                    >
+                      <ChevronRight style={{ width: '14px', height: '14px' }} />
+                    </button>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+
           <div className="w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10">
             {/* ── Help / Contact Banner ── */}
             <motion.div
@@ -696,7 +864,7 @@ export default function StorePage() {
                 </p>
               </div>
               <Link href="/about">
-                <button className="px-6 py-2.5 bg-[#c4a46c] text-white text-[11px] tracking-[0.2em] uppercase font-bold rounded-lg hover:bg-[#b08d50] transition-colors duration-300 whitespace-nowrap shadow-sm">
+                <button className="px-6 py-2.5 bg-[#c4a46c] text-[#0f2a4a] text-[11px] tracking-[0.2em] uppercase font-bold rounded-lg hover:bg-[#b08d50] hover:text-white transition-all duration-300 whitespace-nowrap shadow-md border border-[#c4a46c]">
                   Contact Us
                 </button>
               </Link>
