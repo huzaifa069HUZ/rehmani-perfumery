@@ -10,19 +10,43 @@ interface ScrollImageSequenceProps {
   frameCount: number;
   framePrefix: string;
   frameSuffix: string;
+  mobileFrameCount?: number;
+  mobileFramePrefix?: string;
 }
 
 export default function ScrollImageSequence({
   frameCount,
   framePrefix,
   frameSuffix,
+  mobileFrameCount,
+  mobileFramePrefix,
 }: ScrollImageSequenceProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [deviceConfig, setDeviceConfig] = useState<{ count: number; prefix: string } | null>(null);
 
+  // 1. Determine device type on mount
   useEffect(() => {
+    const checkDevice = () => {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile && mobileFrameCount && mobileFramePrefix) {
+        setDeviceConfig({ count: mobileFrameCount, prefix: mobileFramePrefix });
+      } else {
+        setDeviceConfig({ count: frameCount, prefix: framePrefix });
+      }
+    };
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, [frameCount, framePrefix, mobileFrameCount, mobileFramePrefix]);
+
+  // 2. Preload images once device is determined
+  useEffect(() => {
+    if (!deviceConfig) return;
+
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
@@ -30,50 +54,19 @@ export default function ScrollImageSequence({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // We keep track of the current frame in an object so GSAP can tween it
-    const scrollState = {
-      frame: 1
-    };
+    // Reset state when config changes (e.g., resizing across mobile breakpoint)
+    setIsReady(false);
+    setLoadingProgress(0);
 
-    // Preload all images
+    const scrollState = { frame: 1 };
     const images: HTMLImageElement[] = [];
     let loadedCount = 0;
 
-    const preloadImages = () => {
-      for (let i = 1; i <= frameCount; i++) {
-        const img = new Image();
-        // format: ezgif-frame-001.jpg
-        const paddedIndex = i.toString().padStart(3, '0');
-        img.src = `${framePrefix}${paddedIndex}${frameSuffix}`;
-        
-        img.onload = () => {
-          loadedCount++;
-          setLoadingProgress(Math.floor((loadedCount / frameCount) * 100));
-          
-          // Draw the very first frame immediately once it loads
-          if (i === 1) {
-            renderFrame(1);
-          }
-
-          if (loadedCount === frameCount) {
-            setIsReady(true);
-            initGSAP();
-          }
-        };
-        images.push(img);
-      }
-    };
-
-    // Draw a specific frame to the canvas, covering the whole area
     const renderFrame = (index: number) => {
       if (!canvas || !ctx || !images[index - 1]) return;
-      
       const img = images[index - 1];
-      
-      // Calculate aspect ratio to "object-fit: cover" the canvas
       const canvasRatio = canvas.width / canvas.height;
       const imgRatio = img.width / img.height;
-      
       let drawWidth, drawHeight, offsetX, offsetY;
 
       if (canvasRatio > imgRatio) {
@@ -92,6 +85,36 @@ export default function ScrollImageSequence({
       ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     };
 
+    const preloadImages = () => {
+      for (let i = 1; i <= deviceConfig.count; i++) {
+        const img = new Image();
+        const paddedIndex = i.toString().padStart(3, '0');
+        img.src = `${deviceConfig.prefix}${paddedIndex}${frameSuffix}`;
+        
+        img.onload = () => {
+          loadedCount++;
+          setLoadingProgress(Math.floor((loadedCount / deviceConfig.count) * 100));
+          
+          if (i === 1) renderFrame(1);
+
+          if (loadedCount === deviceConfig.count) {
+            setIsReady(true);
+            initGSAP();
+          }
+        };
+        img.onerror = () => {
+          console.warn(`Failed to load frame ${i}`);
+          loadedCount++;
+          setLoadingProgress(Math.floor((loadedCount / deviceConfig.count) * 100));
+          if (loadedCount === deviceConfig.count) {
+            setIsReady(true);
+            initGSAP();
+          }
+        };
+        images.push(img);
+      }
+    };
+
     let gsapCtx: gsap.Context;
 
     const initGSAP = () => {
@@ -108,17 +131,27 @@ export default function ScrollImageSequence({
           }
         });
 
-        // Animate the frame from 1 to frameCount. 
+        // Add a tween to fade out the title immediately as scrolling begins (first 10% of scroll)
+        if (titleRef.current) {
+          tl.to(titleRef.current, {
+            opacity: 0,
+            y: -50,
+            duration: 0.1,
+            ease: 'power2.inOut',
+          }, 0);
+        }
+
+        // Animate the frame from 1 to deviceConfig.count. 
         // We use duration: 0.75 so it finishes when the scroll is at 300% (75% of 400%)
         // The remaining 25% (100vh) keeps it pinned while the next section overlaps it.
         tl.to(scrollState, {
-          frame: frameCount,
+          frame: deviceConfig.count,
           ease: 'none',
           duration: 0.75,
           onUpdate: () => {
             requestAnimationFrame(() => renderFrame(Math.round(scrollState.frame)));
           }
-        });
+        }, 0); // start at time 0
       });
     };
 
@@ -145,7 +178,7 @@ export default function ScrollImageSequence({
       gsapCtx?.revert();
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, [frameCount, framePrefix, frameSuffix]);
+  }, [frameCount, framePrefix, frameSuffix, deviceConfig]);
 
   return (
     <div
@@ -185,6 +218,37 @@ export default function ScrollImageSequence({
           display: 'block'
         }}
       />
+
+      {/* Hero Title Overlay */}
+      <div 
+        ref={titleRef}
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 3,
+          textAlign: 'center',
+          width: '100%',
+          padding: '0 20px',
+          opacity: isReady ? 1 : 0,
+          transition: 'opacity 0.8s ease 0.5s',
+        }}
+      >
+        <h1 
+          className="font-['Tajam',sans-serif]" 
+          style={{ 
+            fontSize: 'clamp(2.5rem, 8vw, 5rem)', 
+            color: '#fff', 
+            textTransform: 'uppercase',
+            textShadow: '0 4px 20px rgba(0,0,0,0.5)',
+            lineHeight: 1.1
+          }}
+        >
+          RAHMANI PERFUMERY<br/>
+          <span style={{ color: '#c9a55a' }}>WE MAKE TIMELESS SCENTS</span>
+        </h1>
+      </div>
 
       <div style={{
         position: 'absolute', inset: 0,

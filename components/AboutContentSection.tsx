@@ -1,16 +1,66 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion } from 'framer-motion';
+import { Great_Vibes } from 'next/font/google';
+
+const greatVibes = Great_Vibes({ weight: '400', subsets: ['latin'] });
+
+gsap.registerPlugin(ScrollTrigger);
+
+function CountUpNumber({ end, duration = 2000 }: { end: number, duration?: number }) {
+  const [count, setCount] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+  const nodeRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasStarted) {
+          setHasStarted(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (nodeRef.current) observer.observe(nodeRef.current);
+    return () => observer.disconnect();
+  }, [hasStarted]);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+    let startTime: number | null = null;
+    let animationFrame: number;
+    
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      
+      const currentVal = Math.floor(easeOut * end);
+      setCount(currentVal);
+      
+      if (progress < 1) {
+        animationFrame = window.requestAnimationFrame(step);
+      } else {
+        setCount(end); // ensure exact finish
+      }
+    };
+    animationFrame = window.requestAnimationFrame(step);
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [hasStarted, end, duration]);
+
+  return <span ref={nodeRef} style={{ display: 'inline-block' }}>{count}</span>;
+}
 
 gsap.registerPlugin(ScrollTrigger);
 
 /* ── Design tokens ── */
 const GOLD = '#c9a55a';
-const HF = "font-['Impact','Arial_Black',sans-serif]";
+const HF = "font-['Tajam',sans-serif]";
 
 export default function AboutContentSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -19,6 +69,22 @@ export default function AboutContentSection() {
   const statsRef = useRef<HTMLDivElement>(null);
   const taglineRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+
+  // Auto-changing images for Card 2
+  const [attarSlideIndex, setAttarSlideIndex] = useState(0);
+  const attarImages = [
+    '/assets/category_attar.png',
+    '/assets/luxury_attar_bottle_1_1773444423078.png',
+    '/assets/luxury_attar_bottle_2_1773444458042.png',
+    '/assets/luxury_attar_bottle_3_1773444475959.png'
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAttarSlideIndex((prev) => (prev + 1) % attarImages.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -206,8 +272,7 @@ export default function AboutContentSection() {
           >
             {/* Background image */}
             <div style={{
-              position: 'absolute', top: 0, right: 0, width: '55%', height: '100%',
-              opacity: 0.15,
+              position: 'absolute', top: 0, right: 0, width: '45%', height: '100%',
             }}>
               <Image src="/assets/chrome-figure-v2nobg.png" alt="" fill style={{ objectFit: 'contain', objectPosition: 'right center' }} />
             </div>
@@ -247,10 +312,17 @@ export default function AboutContentSection() {
             }}
           >
             <div style={{
-              position: 'absolute', bottom: -10, right: -10, width: '70%', height: '60%',
-              opacity: 0.25,
+              position: 'absolute', bottom: 0, right: 0, width: '55%', height: '100%',
             }}>
-              <Image src="/assets/category_attar.png" alt="" fill style={{ objectFit: 'cover', borderRadius: '16px' }} />
+              {attarImages.map((src, index) => (
+                <div key={src} style={{
+                  position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                  opacity: attarSlideIndex === index ? 1 : 0,
+                  transition: 'opacity 1s ease-in-out'
+                }}>
+                  <Image src={src} alt="" fill style={{ objectFit: 'cover', borderRadius: '0 16px 16px 0' }} />
+                </div>
+              ))}
             </div>
             <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 700, color: GOLD, position: 'relative', zIndex: 1 }}>
               IMPORTED PERFUMES
@@ -276,10 +348,9 @@ export default function AboutContentSection() {
             }}
           >
             <div style={{
-              position: 'absolute', bottom: -10, right: -10, width: '65%', height: '55%',
-              opacity: 0.2,
+              position: 'absolute', bottom: 0, right: 0, width: '50%', height: '100%',
             }}>
-              <Image src="/assets/bakhoor.png" alt="" fill style={{ objectFit: 'cover', borderRadius: '16px' }} />
+              <Image src="/assets/minimal-oud.png" alt="" fill style={{ objectFit: 'cover', borderRadius: '0 16px 16px 0' }} />
             </div>
             <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 700, color: GOLD, position: 'relative', zIndex: 1 }}>
               BAKHOOR & OUD
@@ -306,9 +377,9 @@ export default function AboutContentSection() {
             }}
           >
             <div style={{
-              position: 'absolute', right: 0, top: 0, width: '40%', height: '100%', opacity: 0.15,
+              position: 'absolute', right: 0, top: 0, width: '40%', height: '100%',
             }}>
-              <Image src="/assets/giftbox.png" alt="" fill style={{ objectFit: 'cover' }} />
+              <Image src="/assets/giftbox.png" alt="" fill style={{ objectFit: 'cover', borderRadius: '0 16px 16px 0' }} />
             </div>
             <div style={{ position: 'relative', zIndex: 1, flex: 1 }}>
               <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 700, color: GOLD, marginBottom: 6 }}>
@@ -329,136 +400,246 @@ export default function AboutContentSection() {
         </div>
       </section>
 
-      {/* ── BLOCK 3: Stats ── */}
-      <section
-        ref={statsRef}
-        style={{
-          padding: '40px 24px',
-          display: 'flex',
-          justifyContent: 'center',
-          gap: 0,
-          borderTop: '1px solid #eee',
-          borderBottom: '1px solid #eee',
-        }}
-      >
-        {[
-          { value: '50+', label: 'YEARS OF\nHERITAGE' },
-          { value: '500+', label: 'HAPPY\nCUSTOMERS' },
-          { value: '100+', label: 'PREMIUM\nPRODUCTS' },
-          { value: '0%', label: 'ALCOHOL\nFORMULA' },
-        ].map((stat, i) => (
-          <div
-            key={i}
-            className="stat-item"
-            style={{
-              flex: 1,
-              textAlign: 'center',
-              borderRight: i < 3 ? '1px solid #eee' : 'none',
-              padding: '0 8px',
-            }}
-          >
-            <p className={HF} style={{
-              fontSize: 'clamp(1.5rem, 6vw, 2rem)',
-              color: GOLD,
-              lineHeight: 1,
-              marginBottom: 6,
-            }}>
-              {stat.value}
-            </p>
-            <p style={{
-              fontSize: 8,
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              color: '#999',
-              textTransform: 'uppercase',
-              lineHeight: 1.4,
-              whiteSpace: 'pre-line',
-            }}>
-              {stat.label}
-            </p>
-          </div>
-        ))}
-      </section>
-
-      {/* ── BLOCK 4: Tagline — "Wear confidence..." ── */}
+      {/* ── BLOCK 3 & 4 COMBINED: Tagline, Video, and Stats Cards ── */}
       <section
         ref={taglineRef}
         style={{
           padding: '60px 24px',
-          textAlign: 'center',
           background: '#faf9f7',
         }}
       >
-        <p style={{ fontSize: 22, color: GOLD, marginBottom: 16 }}>✨</p>
-        <h2
-          style={{
-            fontFamily: '"Playfair Display", Georgia, serif',
-            fontSize: 'clamp(1.5rem, 6vw, 2.2rem)',
-            fontWeight: 500,
-            lineHeight: 1.35,
-            color: '#1a1a1a',
-            maxWidth: 400,
-            margin: '0 auto',
-          }}
-        >
-          Wear confidence.<br />
-          Wear identity.<br />
-          <span style={{ color: GOLD }}>Wear memories.</span>
-        </h2>
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ fontSize: 22, color: GOLD, marginBottom: 16 }}>✨</p>
+          <h2
+            className={HF}
+            style={{
+              fontSize: 'clamp(1.5rem, 6vw, 2.2rem)',
+              fontWeight: 500,
+              lineHeight: 1.35,
+              color: '#1a1a1a',
+              maxWidth: 400,
+              margin: '0 auto',
+            }}
+          >
+            Wear confidence.<br />
+            Wear identity.<br />
+            <span style={{ color: GOLD }}>Wear memories.</span>
+          </h2>
+        </div>
+        
+        {/* Container for Video and Cards */}
+        <div className="flex flex-col lg:flex-row items-stretch justify-center gap-6 lg:gap-8 max-w-[1400px] mx-auto mt-12 px-4">
+          
+          {/* Video (Takes up 55% of the space on PC) */}
+          <div className="w-full lg:w-[55%] flex" style={{ borderRadius: '2.5rem', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)' }}>
+            <video 
+              src="/assets/kamrah-vid-about.mp4" 
+              autoPlay 
+              muted 
+              loop 
+              playsInline 
+              style={{ width: '100%', display: 'block', objectFit: 'cover', minHeight: '100%' }} 
+            />
+          </div>
+
+          {/* 3 Data Cards (Stacked vertically on the right for PC) */}
+          <div className="w-full lg:w-[40%] flex flex-col gap-6 lg:gap-8 justify-between" ref={statsRef}>
+            
+            {/* Card 1: White -> Black on hover */}
+            <div className="stat-item group flex-1 flex flex-col justify-center items-center text-center bg-white rounded-[2.5rem] p-6 lg:py-10 transition-all duration-500 hover:bg-[#0a0a0a] hover:-translate-y-2 cursor-default border border-gray-100/50" style={{ boxShadow: '0 15px 40px -10px rgba(0,0,0,0.05)' }}>
+              <h3 className={`${HF} text-4xl lg:text-[2.8rem] text-[#1a1a1a] group-hover:text-white transition-colors duration-500 mb-1 leading-none`}>
+                <CountUpNumber end={5} duration={2000} />+
+              </h3>
+              <p className="text-[9px] lg:text-[10px] font-bold tracking-[0.2em] text-[#888] group-hover:text-[#c9a55a] transition-colors duration-500 uppercase mt-1">
+                Years of Experience
+              </p>
+            </div>
+
+            {/* Card 2: White -> Black on hover */}
+            <div className="stat-item group flex-1 flex flex-col justify-center items-center text-center bg-white rounded-[2.5rem] p-6 lg:py-10 transition-all duration-500 hover:bg-[#0a0a0a] hover:-translate-y-2 cursor-default border border-gray-100/50" style={{ boxShadow: '0 15px 40px -10px rgba(0,0,0,0.05)' }}>
+              <h3 className={`${HF} text-4xl lg:text-[2.8rem] text-[#1a1a1a] group-hover:text-white transition-colors duration-500 mb-1 leading-none`}>
+                <CountUpNumber end={500} duration={2000} />+
+              </h3>
+              <p className="text-[9px] lg:text-[10px] font-bold tracking-[0.2em] text-[#888] group-hover:text-[#c9a55a] transition-colors duration-500 uppercase mt-1">
+                Happy Customers
+              </p>
+            </div>
+
+            {/* Card 3: White -> Black on hover */}
+            <div className="stat-item group flex-1 flex flex-col justify-center items-center text-center bg-white rounded-[2.5rem] p-6 lg:py-10 transition-all duration-500 hover:bg-[#0a0a0a] hover:-translate-y-2 cursor-default border border-gray-100/50" style={{ boxShadow: '0 15px 40px -10px rgba(0,0,0,0.05)' }}>
+              <h3 className={`${HF} text-4xl lg:text-[2.8rem] text-[#1a1a1a] group-hover:text-white transition-colors duration-500 mb-1 leading-none`}>
+                <CountUpNumber end={100} duration={2000} />+
+              </h3>
+              <p className="text-[9px] lg:text-[10px] font-bold tracking-[0.2em] text-[#888] group-hover:text-[#c9a55a] transition-colors duration-500 uppercase mt-1">
+                Premium Products
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
         <p style={{
           fontSize: 12,
           lineHeight: 1.8,
           color: '#999',
           maxWidth: 340,
-          margin: '20px auto 0',
+          margin: '32px auto 0',
+          textAlign: 'center'
         }}>
           Premium Alcohol-Free Attars • Long-Lasting Perfumes • Oud • Bakhoor • Eid Gift Packs
         </p>
       </section>
 
-      {/* ── BLOCK 5: Why Customers Love Us ── */}
-      <section style={{ padding: '40px 16px' }}>
-        <p style={{
-          fontSize: 10,
-          letterSpacing: '0.3em',
-          textTransform: 'uppercase',
-          fontWeight: 700,
-          color: GOLD,
-          textAlign: 'center',
-          marginBottom: 8,
-        }}>
-          💎 WHY CUSTOMERS LOVE US
-        </p>
-
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 10,
-          marginTop: 20,
-        }}>
-          {[
-            { icon: '✔️', title: 'Strong Projection & Long Lasting' },
-            { icon: '✔️', title: 'Premium Quality at Affordable Price' },
-            { icon: '✔️', title: 'Perfect for Gifting' },
-            { icon: '✔️', title: 'Trusted by Hundreds of Happy Customers' },
-          ].map((item, i) => (
-            <div
-              key={i}
-              style={{
-                background: '#f9f7f3',
-                borderRadius: 16,
-                padding: '18px 14px',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: 8,
-                border: '1px solid rgba(200,185,160,0.2)',
-              }}
-            >
-              <span style={{ fontSize: 16, flexShrink: 0 }}>{item.icon}</span>
-              <p style={{ fontSize: 11, fontWeight: 600, color: '#1a1a1a', lineHeight: 1.4 }}>{item.title}</p>
+      {/* ── BLOCK 3.5: Brand Details — Cards Left + Video Right ── */}
+      <section style={{ padding: '60px 24px', background: '#f5f3ef' }}>
+        <div className="flex flex-col-reverse lg:flex-row items-stretch justify-center gap-6 lg:gap-8 max-w-[1400px] mx-auto px-4">
+          
+          {/* Left: Brand Info Cards */}
+          <div className="w-full lg:w-[45%] flex flex-col gap-5 lg:gap-6">
+            
+            {/* Info Card 1 */}
+            <div className="group flex-1 flex flex-col justify-center items-center text-center bg-white rounded-[2rem] p-8 lg:py-10 transition-all duration-500 hover:bg-[#0a0a0a] hover:-translate-y-1 cursor-default border border-gray-100/50" style={{ boxShadow: '0 12px 30px -8px rgba(0,0,0,0.04)' }}>
+              <p className="text-[11px] font-bold tracking-[0.25em] text-[#c9a55a] uppercase mb-3">Our Heritage</p>
+              <h3 className={`${HF} text-xl lg:text-2xl text-[#1a1a1a] group-hover:text-white transition-colors duration-500 leading-tight`}>
+                Rooted in Tradition
+              </h3>
             </div>
-          ))}
+
+            {/* Info Card 2 */}
+            <div className="group flex-1 flex flex-col justify-center items-center text-center bg-white rounded-[2rem] p-8 lg:py-10 transition-all duration-500 hover:bg-[#0a0a0a] hover:-translate-y-1 cursor-default border border-gray-100/50" style={{ boxShadow: '0 12px 30px -8px rgba(0,0,0,0.04)' }}>
+              <p className="text-[11px] font-bold tracking-[0.25em] text-[#c9a55a] uppercase mb-3">100% Alcohol Free</p>
+              <h3 className={`${HF} text-xl lg:text-2xl text-[#1a1a1a] group-hover:text-white transition-colors duration-500 leading-tight`}>
+                Pure & Natural Oils
+              </h3>
+            </div>
+
+            {/* Info Card 3 */}
+            <div className="group flex-1 flex flex-col justify-center items-center text-center bg-white rounded-[2rem] p-8 lg:py-10 transition-all duration-500 hover:bg-[#0a0a0a] hover:-translate-y-1 cursor-default border border-gray-100/50" style={{ boxShadow: '0 12px 30px -8px rgba(0,0,0,0.04)' }}>
+              <p className="text-[11px] font-bold tracking-[0.25em] text-[#c9a55a] uppercase mb-3">Handcrafted</p>
+              <h3 className={`${HF} text-xl lg:text-2xl text-[#1a1a1a] group-hover:text-white transition-colors duration-500 leading-tight`}>
+                Made with Love
+              </h3>
+            </div>
+
+          </div>
+
+          {/* Right: Video */}
+          <div className="w-full lg:w-[50%] flex" style={{ borderRadius: '2.5rem', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)' }}>
+            <video 
+              src="/assets/about-us-bottle.mp4" 
+              autoPlay 
+              muted 
+              loop 
+              playsInline 
+              style={{ width: '100%', display: 'block', objectFit: 'cover', minHeight: '100%' }} 
+            />
+          </div>
+
         </div>
+      </section>
+
+      {/* ── BLOCK 5: Why Customers Love Us (Apple Glassmorphism Style) ── */}
+      <section className="relative overflow-hidden" style={{ padding: '100px 24px', background: '#fcfcfc' }}>
+        {/* Soft abstract background blobs to create the frosted glass effect */}
+        <div style={{
+          position: 'absolute', top: '10%', left: '15%',
+          width: '30vw', height: '30vw', minWidth: 300, minHeight: 300,
+          background: 'radial-gradient(circle, rgba(201,165,90,0.15) 0%, transparent 70%)',
+          filter: 'blur(60px)', pointerEvents: 'none',
+        }} />
+        <div style={{
+          position: 'absolute', bottom: '10%', right: '15%',
+          width: '30vw', height: '30vw', minWidth: 300, minHeight: 300,
+          background: 'radial-gradient(circle, rgba(220,210,200,0.6) 0%, transparent 70%)',
+          filter: 'blur(60px)', pointerEvents: 'none',
+        }} />
+
+        <div className="max-w-[1200px] mx-auto relative z-10 flex flex-col items-center">
+          {/* Section Header */}
+          <div className="w-full flex flex-col items-center justify-center text-center mb-16">
+            <p className="text-[11px] font-bold tracking-[0.35em] uppercase mb-4" style={{ color: GOLD }}>💎 WHY CUSTOMERS LOVE US</p>
+            <h2 className={`${HF} text-4xl md:text-5xl lg:text-6xl text-[#1a1a1a] leading-tight text-center`}>
+              The <span style={{ color: GOLD }}>Rahmani</span> Difference
+            </h2>
+          </div>
+
+          {/* Feature Grid */}
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {[
+              { icon: '🌿', number: '0%', label: 'Alcohol', desc: 'Pure natural oils' },
+              { icon: '⏳', number: '12h+', label: 'Lasting', desc: 'All day projection' },
+              { icon: '🎁', number: '50+', label: 'Gift Sets', desc: 'Perfect for occasions' },
+              { icon: '⭐', number: '500+', label: 'Reviews', desc: 'Happy customers' },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="group relative overflow-hidden text-center cursor-default flex flex-col items-center justify-center"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.65)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(255, 255, 255, 0.8)',
+                  boxShadow: '0 10px 40px -10px rgba(0,0,0,0.05)',
+                  borderRadius: '2rem',
+                  padding: '48px 24px',
+                  transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)';
+                  e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 20px 40px -10px rgba(0,0,0,0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.65)';
+                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                  e.currentTarget.style.boxShadow = '0 10px 40px -10px rgba(0,0,0,0.05)';
+                }}
+              >
+                <span className="text-4xl mb-5 block">{item.icon}</span>
+                <h3 className={`${HF} text-4xl lg:text-5xl text-[#1a1a1a] mb-2 leading-none`}>{item.number}</h3>
+                <p className="text-[12px] font-bold tracking-[0.25em] uppercase mb-3" style={{ color: GOLD }}>{item.label}</p>
+                <p className="text-[13px] text-[#777]">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom Trust Strip */}
+          <div className="flex flex-wrap justify-center gap-6 lg:gap-10 mt-20 pt-10 w-full" style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+            {[
+              '100% Natural Ingredients',
+              'Handcrafted with Care',
+              'Free Shipping Available',
+              'Easy Returns',
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <span style={{ color: GOLD, fontSize: 14 }}>✦</span>
+                <p className="text-[11px] font-semibold tracking-[0.15em] text-[#666] uppercase">{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BLOCK 5.5: CURSIVE TEXT BLOCK AND MARQUEE ── */}
+      <section className="relative w-full bg-white overflow-hidden pb-10">
+          <div className="relative w-full h-[60vh] flex items-center justify-center overflow-hidden bg-[#000] mt-20">
+              <h2 className={`${greatVibes.className} text-[#c9a55a] text-center`} style={{ fontSize: 'clamp(5rem, 12vw, 15rem)', transform: 'rotate(-4deg)', letterSpacing: '0.05em' }}>
+                  Strongest Projection
+              </h2>
+          </div>
+
+          <div className="relative z-10 max-w-[1600px] mx-auto px-4 md:px-8 mt-20">
+              <div className="border-y border-black overflow-hidden flex whitespace-nowrap py-4 my-10 bg-[#c9a55a]">
+                  <motion.h2
+                      animate={{ x: ["0%", "-50%"] }}
+                      transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+                      className={`${HF} text-8xl md:text-[12vw] leading-none text-black tracking-tighter`}
+                  >
+                      SCENT FORM • UNBOUNDED • SCENT FORM • UNBOUNDED • SCENT FORM • UNBOUNDED •&nbsp;
+                  </motion.h2>
+              </div>
+          </div>
       </section>
 
       {/* ── BLOCK 6: WhatsApp CTA ── */}

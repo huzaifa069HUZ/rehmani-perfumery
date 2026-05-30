@@ -38,7 +38,7 @@ export default function Footer() {
           <div className="footer-col">
             <h4 className="footer-heading">Help</h4>
             <ul className="footer-links">
-              <li><Link href="/about">About Us</Link></li>
+              <li><Link href="/about-us">About Us</Link></li>
               <li><Link href="/store">Our Stores</Link></li>
               <li><a href="https://wa.me/919835612345?text=Hello%20Rahmani%20Perfumery,%20I%20have%20a%20question." target="_blank" rel="noopener noreferrer">Contact Us</a></li>
               <li><Link href="/store">Shipping & Returns</Link></li>

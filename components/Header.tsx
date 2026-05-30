@@ -139,7 +139,7 @@ export default function Header({ onMenuOpen, onSearchOpen, forceTransparent }: H
             <Link href="/incense-sticks" className={`nav-link${pathname === '/incense-sticks' ? ' active' : ''} flex items-center`}>INCENSE STICKS</Link>
             <Link href="/bakhoor" className={`nav-link${pathname === '/bakhoor' ? ' active' : ''} flex items-center`}>BAKHOOR</Link>
             <Link href="/category/gifting" className={`nav-link${pathname === '/category/gifting' ? ' active' : ''} flex items-center`}>GIFTING</Link>
-            <Link href="/about" className={`nav-link${pathname === '/about' ? ' active' : ''} flex items-center`}>ABOUT</Link>
+            <Link href="/about-us" className={`nav-link${pathname === '/about-us' ? ' active' : ''} flex items-center`}>ABOUT</Link>
             <Link href="/store" className={`nav-link${pathname === '/store' ? ' active' : ''} flex items-center`}>OUR STORE</Link>
           </nav>
 

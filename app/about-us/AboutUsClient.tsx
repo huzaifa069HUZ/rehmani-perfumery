@@ -56,6 +56,8 @@ export default function AboutUsClient() {
           frameCount={192} 
           framePrefix="/assets/about-sequence/ezgif-frame-" 
           frameSuffix=".jpg" 
+          mobileFrameCount={300}
+          mobileFramePrefix="/assets/about-sequence-mobile/ezgif-frame-"
         />
 
         {/* SECTION 2: White Content — naturally stacks over sticky hero */}

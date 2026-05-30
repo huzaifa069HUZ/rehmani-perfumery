@@ -863,7 +863,7 @@ export default function StorePage() {
                   <span className="text-[#7a857c] ml-1.5">Our experts are here for you!</span>
                 </p>
               </div>
-              <Link href="/about">
+              <Link href="/about-us">
                 <button className="px-6 py-2.5 bg-[#c4a46c] text-[#0f2a4a] text-[11px] tracking-[0.2em] uppercase font-bold rounded-lg hover:bg-[#b08d50] hover:text-white transition-all duration-300 whitespace-nowrap shadow-md border border-[#c4a46c]">
                   Contact Us
                 </button>
