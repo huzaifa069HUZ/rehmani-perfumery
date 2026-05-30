@@ -3,6 +3,9 @@
 import { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Great_Vibes } from 'next/font/google';
+
+const greatVibes = Great_Vibes({ weight: '400', subsets: ['latin'] });
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -131,13 +134,14 @@ export default function ScrollImageSequence({
           }
         });
 
-        // Add a tween to fade out the title immediately as scrolling begins (first 10% of scroll)
+        // Add a tween to fade out the title immediately as scrolling begins
         if (titleRef.current) {
+          gsap.to(titleRef.current, { opacity: 1, duration: 1, delay: 0.5 }); // Fade in on load
           tl.to(titleRef.current, {
             opacity: 0,
             y: -50,
             duration: 0.1,
-            ease: 'power2.inOut',
+            ease: 'power1.inOut',
           }, 0);
         }
 
@@ -231,23 +235,32 @@ export default function ScrollImageSequence({
           textAlign: 'center',
           width: '100%',
           padding: '0 20px',
-          opacity: isReady ? 1 : 0,
-          transition: 'opacity 0.8s ease 0.5s',
+          opacity: 0, // Starts at 0, GSAP fades it in
         }}
       >
         <h1 
-          className="font-['Tajam',sans-serif]" 
+          className={greatVibes.className} 
           style={{ 
-            fontSize: 'clamp(2.5rem, 8vw, 5rem)', 
+            fontSize: 'clamp(4rem, 15vw, 8rem)', 
             color: '#fff', 
-            textTransform: 'uppercase',
             textShadow: '0 4px 20px rgba(0,0,0,0.5)',
-            lineHeight: 1.1
+            lineHeight: 1,
+            fontWeight: 400
           }}
         >
-          RAHMANI PERFUMERY<br/>
-          <span style={{ color: '#c9a55a' }}>WE MAKE TIMELESS SCENTS</span>
+          Rahmani
         </h1>
+        <p style={{ 
+          fontSize: 'clamp(1rem, 5vw, 1.8rem)', 
+          letterSpacing: '0.25em', 
+          textTransform: 'uppercase', 
+          color: '#eee',
+          marginTop: '0.5rem',
+          fontWeight: 300,
+          textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+        }}>
+          TIMELESS <span style={{ color: '#c9a55a', fontWeight: 600 }}>SCENTS</span>
+        </p>
       </div>
 
       <div style={{

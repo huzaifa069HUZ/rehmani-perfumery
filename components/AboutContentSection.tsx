@@ -1,8 +1,10 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Canvas } from '@react-three/fiber';
+import { Environment, useGLTF, Center, OrbitControls } from '@react-three/drei';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion } from 'framer-motion';
@@ -34,15 +36,15 @@ function CountUpNumber({ end, duration = 2000 }: { end: number, duration?: numbe
     if (!hasStarted) return;
     let startTime: number | null = null;
     let animationFrame: number;
-    
+
     const step = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
       const easeOut = 1 - Math.pow(1 - progress, 3);
-      
+
       const currentVal = Math.floor(easeOut * end);
       setCount(currentVal);
-      
+
       if (progress < 1) {
         animationFrame = window.requestAnimationFrame(step);
       } else {
@@ -55,6 +57,16 @@ function CountUpNumber({ end, duration = 2000 }: { end: number, duration?: numbe
 
   return <span ref={nodeRef} style={{ display: 'inline-block' }}>{count}</span>;
 }
+
+function InteractiveBottle() {
+  const { scene } = useGLTF('/assets/3dbottle.glb');
+  return (
+    <Center>
+      <primitive object={scene} scale={[1.6, 1.6, 1.6]} />
+    </Center>
+  );
+}
+useGLTF.preload('/assets/3dbottle.glb');
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -270,11 +282,19 @@ export default function AboutContentSection() {
               justifyContent: 'flex-end',
             }}
           >
-            {/* Background image */}
+            {/* Background image / 3D bottle */}
             <div style={{
-              position: 'absolute', top: 0, right: 0, width: '45%', height: '100%',
+              position: 'absolute', top: 0, right: 0, width: '55%', height: '100%', zIndex: 0,
             }}>
-              <Image src="/assets/chrome-figure-v2nobg.png" alt="" fill style={{ objectFit: 'contain', objectPosition: 'right center' }} />
+              <Canvas camera={{ position: [0, 0, 5], fov: 40 }} gl={{ antialias: true, alpha: true }}>
+                <ambientLight intensity={0.6} />
+                <spotLight position={[5, 10, 5]} intensity={5} color="#ffdcb4" />
+                <Environment preset="studio" />
+                <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={1.5} />
+                <Suspense fallback={null}>
+                  <InteractiveBottle />
+                </Suspense>
+              </Canvas>
             </div>
             <p style={{
               fontSize: 9,
@@ -297,7 +317,8 @@ export default function AboutContentSection() {
           </div>
 
           {/* Card 2 */}
-          <div
+          <Link
+            href="/perfumes"
             className="grid-card"
             style={{
               background: '#0a0a0a',
@@ -327,13 +348,14 @@ export default function AboutContentSection() {
             <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 700, color: GOLD, position: 'relative', zIndex: 1 }}>
               IMPORTED PERFUMES
             </p>
-            <h3 className={HF} style={{ fontSize: '1.2rem', lineHeight: 1.1, color: '#fff', textTransform: 'uppercase', marginTop: 'auto', position: 'relative', zIndex: 1 }}>
+            <h3 className={HF} style={{ fontSize: '1.2rem', lineHeight: 1.1, color: '#fff', textTransform: 'uppercase', marginTop: 'auto', position: 'relative', zIndex: 1, left: '-4px' }}>
               LONG LASTING<br /><span style={{ color: GOLD }}>PROJECTION</span>
             </h3>
-          </div>
+          </Link>
 
           {/* Card 3 */}
-          <div
+          <Link
+            href="/bakhoor"
             className="grid-card"
             style={{
               background: `linear-gradient(135deg, #f9f6f0, #efe9dd)`,
@@ -353,15 +375,16 @@ export default function AboutContentSection() {
               <Image src="/assets/minimal-oud.png" alt="" fill style={{ objectFit: 'cover', borderRadius: '0 16px 16px 0' }} />
             </div>
             <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 700, color: GOLD, position: 'relative', zIndex: 1 }}>
-              BAKHOOR & OUD
+              BAKHOOR <span style={{ color: '#0a0a0a' }}>&</span> <span style={{ color: '#fff' }}>OUD</span>
             </p>
-            <h3 className={HF} style={{ fontSize: '1.2rem', lineHeight: 1.1, color: '#0a0a0a', textTransform: 'uppercase', marginTop: 'auto', position: 'relative', zIndex: 1 }}>
-              HOME<br /><span style={{ color: GOLD }}>FRAGRANCE</span>
+            <h3 className={HF} style={{ fontSize: '1.2rem', lineHeight: 1.1, color: '#0a0a0a', textTransform: 'uppercase', marginTop: 'auto', position: 'relative', zIndex: 1, left: '-4px' }}>
+              HOME<br /><span style={{ color: GOLD }}>FRAG</span><span style={{ color: '#0a0a0a' }}>RANCE</span>
             </h3>
-          </div>
+          </Link>
 
           {/* Card 4 — Full width gift pack */}
-          <div
+          <Link
+            href="/category/gifting"
             className="grid-card"
             style={{
               gridColumn: '1 / -1',
@@ -396,7 +419,7 @@ export default function AboutContentSection() {
             }}>
               <span style={{ color: GOLD, fontSize: 20 }}>→</span>
             </div>
-          </div>
+          </Link>
         </div>
       </section>
 
@@ -426,29 +449,29 @@ export default function AboutContentSection() {
             <span style={{ color: GOLD }}>Wear memories.</span>
           </h2>
         </div>
-        
+
         {/* Container for Video and Cards */}
         <div className="flex flex-col lg:flex-row items-stretch justify-center gap-6 lg:gap-8 max-w-[1400px] mx-auto mt-12 px-4">
-          
+
           {/* Video (Takes up 55% of the space on PC) */}
           <div className="w-full lg:w-[55%] flex" style={{ borderRadius: '2.5rem', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)' }}>
-            <video 
-              src="/assets/kamrah-vid-about.mp4" 
-              autoPlay 
-              muted 
-              loop 
-              playsInline 
-              style={{ width: '100%', display: 'block', objectFit: 'cover', minHeight: '100%' }} 
+            <video
+              src="/assets/kamrah-vid-about.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{ width: '100%', display: 'block', objectFit: 'cover', minHeight: '100%' }}
             />
           </div>
 
           {/* 3 Data Cards (Stacked vertically on the right for PC) */}
           <div className="w-full lg:w-[40%] flex flex-col gap-6 lg:gap-8 justify-between" ref={statsRef}>
-            
+
             {/* Card 1: White -> Black on hover */}
             <div className="stat-item group flex-1 flex flex-col justify-center items-center text-center bg-white rounded-[2.5rem] p-6 lg:py-10 transition-all duration-500 hover:bg-[#0a0a0a] hover:-translate-y-2 cursor-default border border-gray-100/50" style={{ boxShadow: '0 15px 40px -10px rgba(0,0,0,0.05)' }}>
               <h3 className={`${HF} text-4xl lg:text-[2.8rem] text-[#1a1a1a] group-hover:text-white transition-colors duration-500 mb-1 leading-none`}>
-                <CountUpNumber end={5} duration={2000} />+
+                <CountUpNumber end={3} duration={2000} />+
               </h3>
               <p className="text-[9px] lg:text-[10px] font-bold tracking-[0.2em] text-[#888] group-hover:text-[#c9a55a] transition-colors duration-500 uppercase mt-1">
                 Years of Experience
@@ -458,7 +481,7 @@ export default function AboutContentSection() {
             {/* Card 2: White -> Black on hover */}
             <div className="stat-item group flex-1 flex flex-col justify-center items-center text-center bg-white rounded-[2.5rem] p-6 lg:py-10 transition-all duration-500 hover:bg-[#0a0a0a] hover:-translate-y-2 cursor-default border border-gray-100/50" style={{ boxShadow: '0 15px 40px -10px rgba(0,0,0,0.05)' }}>
               <h3 className={`${HF} text-4xl lg:text-[2.8rem] text-[#1a1a1a] group-hover:text-white transition-colors duration-500 mb-1 leading-none`}>
-                <CountUpNumber end={500} duration={2000} />+
+                <CountUpNumber end={1000} duration={2000} />+
               </h3>
               <p className="text-[9px] lg:text-[10px] font-bold tracking-[0.2em] text-[#888] group-hover:text-[#c9a55a] transition-colors duration-500 uppercase mt-1">
                 Happy Customers
@@ -494,10 +517,10 @@ export default function AboutContentSection() {
       {/* ── BLOCK 3.5: Brand Details — Cards Left + Video Right ── */}
       <section style={{ padding: '60px 24px', background: '#f5f3ef' }}>
         <div className="flex flex-col-reverse lg:flex-row items-stretch justify-center gap-6 lg:gap-8 max-w-[1400px] mx-auto px-4">
-          
+
           {/* Left: Brand Info Cards */}
           <div className="w-full lg:w-[45%] flex flex-col gap-5 lg:gap-6">
-            
+
             {/* Info Card 1 */}
             <div className="group flex-1 flex flex-col justify-center items-center text-center bg-white rounded-[2rem] p-8 lg:py-10 transition-all duration-500 hover:bg-[#0a0a0a] hover:-translate-y-1 cursor-default border border-gray-100/50" style={{ boxShadow: '0 12px 30px -8px rgba(0,0,0,0.04)' }}>
               <p className="text-[11px] font-bold tracking-[0.25em] text-[#c9a55a] uppercase mb-3">Our Heritage</p>
@@ -510,13 +533,13 @@ export default function AboutContentSection() {
             <div className="group flex-1 flex flex-col justify-center items-center text-center bg-white rounded-[2rem] p-8 lg:py-10 transition-all duration-500 hover:bg-[#0a0a0a] hover:-translate-y-1 cursor-default border border-gray-100/50" style={{ boxShadow: '0 12px 30px -8px rgba(0,0,0,0.04)' }}>
               <p className="text-[11px] font-bold tracking-[0.25em] text-[#c9a55a] uppercase mb-3">100% Alcohol Free</p>
               <h3 className={`${HF} text-xl lg:text-2xl text-[#1a1a1a] group-hover:text-white transition-colors duration-500 leading-tight`}>
-                Pure & Natural Oils
+                Pure & Premium Oils
               </h3>
             </div>
 
             {/* Info Card 3 */}
             <div className="group flex-1 flex flex-col justify-center items-center text-center bg-white rounded-[2rem] p-8 lg:py-10 transition-all duration-500 hover:bg-[#0a0a0a] hover:-translate-y-1 cursor-default border border-gray-100/50" style={{ boxShadow: '0 12px 30px -8px rgba(0,0,0,0.04)' }}>
-              <p className="text-[11px] font-bold tracking-[0.25em] text-[#c9a55a] uppercase mb-3">Handcrafted</p>
+              <p className="text-[11px] font-bold tracking-[0.25em] text-[#c9a55a] uppercase mb-3">Expertly Blended</p>
               <h3 className={`${HF} text-xl lg:text-2xl text-[#1a1a1a] group-hover:text-white transition-colors duration-500 leading-tight`}>
                 Made with Love
               </h3>
@@ -526,13 +549,13 @@ export default function AboutContentSection() {
 
           {/* Right: Video */}
           <div className="w-full lg:w-[50%] flex" style={{ borderRadius: '2.5rem', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)' }}>
-            <video 
-              src="/assets/about-us-bottle.mp4" 
-              autoPlay 
-              muted 
-              loop 
-              playsInline 
-              style={{ width: '100%', display: 'block', objectFit: 'cover', minHeight: '100%' }} 
+            <video
+              src="/assets/bro_this_is_the_logo.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{ width: '100%', display: 'block', objectFit: 'cover', minHeight: '100%' }}
             />
           </div>
 
@@ -567,10 +590,10 @@ export default function AboutContentSection() {
           {/* Feature Grid */}
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {[
-              { icon: '🌿', number: '0%', label: 'Alcohol', desc: 'Pure natural oils' },
+              { icon: '🌿', number: '0%', label: 'Alcohol', desc: 'Pure premium oils' },
               { icon: '⏳', number: '12h+', label: 'Lasting', desc: 'All day projection' },
               { icon: '🎁', number: '50+', label: 'Gift Sets', desc: 'Perfect for occasions' },
-              { icon: '⭐', number: '500+', label: 'Reviews', desc: 'Happy customers' },
+              { icon: '⭐', number: '5000+', label: 'Reviews', desc: 'Happy customers' },
             ].map((item, i) => (
               <div
                 key={i}
@@ -607,8 +630,8 @@ export default function AboutContentSection() {
           {/* Bottom Trust Strip */}
           <div className="flex flex-wrap justify-center gap-6 lg:gap-10 mt-20 pt-10 w-full" style={{ borderTop: '1px solid rgba(0,0,0,0.06)' }}>
             {[
-              '100% Natural Ingredients',
-              'Handcrafted with Care',
+              'Premium Ingredients',
+              'Blended with Care',
               'Free Shipping Available',
               'Easy Returns',
             ].map((item, i) => (
@@ -623,23 +646,23 @@ export default function AboutContentSection() {
 
       {/* ── BLOCK 5.5: CURSIVE TEXT BLOCK AND MARQUEE ── */}
       <section className="relative w-full bg-white overflow-hidden pb-10">
-          <div className="relative w-full h-[60vh] flex items-center justify-center overflow-hidden bg-[#000] mt-20">
-              <h2 className={`${greatVibes.className} text-[#c9a55a] text-center`} style={{ fontSize: 'clamp(5rem, 12vw, 15rem)', transform: 'rotate(-4deg)', letterSpacing: '0.05em' }}>
-                  Strongest Projection
-              </h2>
-          </div>
+        <div className="relative w-full h-[60vh] flex items-center justify-center overflow-hidden bg-[#000] mt-20">
+          <h2 className={`${greatVibes.className} text-[#c9a55a] text-center`} style={{ fontSize: 'clamp(5rem, 12vw, 15rem)', transform: 'rotate(-4deg)', letterSpacing: '0.05em' }}>
+            Strongest Projection
+          </h2>
+        </div>
 
-          <div className="relative z-10 max-w-[1600px] mx-auto px-4 md:px-8 mt-20">
-              <div className="border-y border-black overflow-hidden flex whitespace-nowrap py-4 my-10 bg-[#c9a55a]">
-                  <motion.h2
-                      animate={{ x: ["0%", "-50%"] }}
-                      transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
-                      className={`${HF} text-8xl md:text-[12vw] leading-none text-black tracking-tighter`}
-                  >
-                      SCENT FORM • UNBOUNDED • SCENT FORM • UNBOUNDED • SCENT FORM • UNBOUNDED •&nbsp;
-                  </motion.h2>
-              </div>
+        <div className="relative z-10 max-w-[1600px] mx-auto px-4 md:px-8 mt-20">
+          <div className="border-y border-black overflow-hidden flex whitespace-nowrap py-4 my-10 bg-[#c9a55a]">
+            <motion.h2
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+              className={`${HF} text-8xl md:text-[12vw] leading-none text-black tracking-tighter`}
+            >
+              SCENT FORM • UNBOUNDED • SCENT FORM • UNBOUNDED • SCENT FORM • UNBOUNDED •&nbsp;
+            </motion.h2>
           </div>
+        </div>
       </section>
 
       {/* ── BLOCK 6: WhatsApp CTA ── */}

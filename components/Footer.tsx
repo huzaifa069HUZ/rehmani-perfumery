@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="footer-grid">
           <div className="footer-col">
             <h3 className="footer-brand">Rahmani Perfumery</h3>
-            <p className="footer-text">Premium Arabian attars, oud, and perfumes crafted with pure concentrated oils since 2015. Recognized as one of the best attar shops in Patna, Bihar.</p>
+            <p className="footer-text">Premium Arabian attars, oud, and perfumes crafted with pure concentrated oils since 2023. Recognized as one of the best attar shops in Patna, Bihar.</p>
             <div className="footer-socials">
               {['instagram', 'facebook', 'twitter'].map(s => (
                 <a key={s} href={s === 'instagram' ? 'https://www.instagram.com/rahmaniperfumery/' : '#'} target={s === 'instagram' ? '_blank' : undefined} rel={s === 'instagram' ? 'noopener noreferrer' : undefined} aria-label={s} className="social-link">
@@ -57,9 +57,6 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <p>© {new Date().getFullYear()} Rahmani Perfumery. All rights reserved.</p>
-          <p className="footer-brand-alt" style={{ fontSize: '0.7rem', opacity: 0.5, marginTop: '0.25rem' }}>
-            Also known as Rehmani Perfumery | Best Attar Shop in Patna, Bihar
-          </p>
         </div>
       </div>
     </footer>

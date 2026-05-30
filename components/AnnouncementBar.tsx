@@ -2,7 +2,7 @@ export default function AnnouncementBar() {
   const announcements = [
     "Free shipping on orders above ₹999",
     "Fragrance that your soul desires",
-    "Pure Arabian Attars Since 2015",
+    "Pure Arabian Attars since 2023",
     "India's Best Original Attars",
     "Cash on Delivery Available"
   ];

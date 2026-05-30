@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 
 export default function FloatingWhatsApp() {
   const pathname = usePathname();
-  const phoneNumber = '918340783679';
+  const phoneNumber = '919234576090';
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=Hello%20Rahmani%20Perfumery,%20I%20have%20an%20inquiry%20from%20your%20website.`;
 
   const [showPopup, setShowPopup] = useState(false);

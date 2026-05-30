@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const features = [
   {
-    title: "crueltyfree\nandvegan",
+    title: "Cruelty-Free\n& Vegan",
     icon: (
       <svg width="48" height="48" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         {/* Bunny face/heart ears */}
@@ -18,19 +18,19 @@ const features = [
     )
   },
   {
-    title: "Sulphate\nfree",
+    title: "Sulphate\nFree",
     icon: (
       <Image src="/assets/no-chemical.png" alt="Sulphate free" width={48} height={48} style={{ objectFit: 'contain' }} />
     )
   },
   {
-    title: "Gentle to\nyour nose",
+    title: "Gentle on\nYour Nose",
     icon: (
       <Image src="/assets/nose.png" alt="Gentle to your nose" width={48} height={48} style={{ objectFit: 'contain' }} />
     )
   },
   {
-    title: "Non - Carcinogenic",
+    title: "Non-\nCarcinogenic",
     icon: (
       <svg width="48" height="48" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         {/* Person / Shield contour */}
@@ -43,7 +43,7 @@ const features = [
     )
   },
   {
-    title: "Long - Lasting",
+    title: "Long\nLasting",
     icon: (
       <svg width="48" height="48" viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
         {/* Top/Bottom Caps */}
@@ -111,6 +111,16 @@ export default function FeaturesStrip() {
           flex-direction: column;
           align-items: center;
           text-align: center;
+          background: #fff;
+          padding: 24px 16px;
+          border-radius: 16px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-item:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 25px rgba(0,0,0,0.06);
         }
 
         .feature-icon {
@@ -128,33 +138,36 @@ export default function FeaturesStrip() {
           line-height: 1.4;
           white-space: pre-line;
           margin: 0;
-          font-weight: 500;
+          font-weight: 600;
         }
 
         @media (max-width: 768px) {
           .features-strip {
-            padding: 2rem 0.5rem;
+            padding: 2rem 1rem;
           }
           .features-container {
-            gap: 0.25rem;
-            justify-content: space-between;
+            gap: 12px;
+            justify-content: flex-start;
             flex-wrap: nowrap;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+            padding-bottom: 16px; /* For scrollbar */
           }
           .feature-item {
-            flex: 1 1 0;
-            min-width: 0;
-            padding: 0 2px;
+            flex: 0 0 auto;
+            width: calc(38% - 12px); /* Show 2.5 items to hint scrolling */
+            min-width: 110px;
+            padding: 16px 8px;
+            border-radius: 12px;
           }
           .feature-title {
-            font-size: 0.65rem;
-            word-break: break-word;
+            font-size: 0.75rem;
+            word-break: normal;
             margin-top: 0.5rem;
           }
           .feature-icon svg, .feature-icon img {
-            width: 32px !important;
-            height: 32px !important;
+            width: 36px !important;
+            height: 36px !important;
           }
           
           /* Hide scrollbar for a cleaner look */
