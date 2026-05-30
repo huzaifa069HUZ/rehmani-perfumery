@@ -162,7 +162,7 @@ export default function HeroSection() {
           <a href="#collections" className="mobile-btn-primary">
             DISCOVER COLLECTION
           </a>
-          <a href="#story" className="mobile-btn-ghost">
+          <a href="/about-us" className="mobile-btn-ghost">
             OUR STORY
           </a>
         </div>
@@ -202,7 +202,7 @@ export default function HeroSection() {
 
           <div className="hero-actions fade-in" style={{ animationDelay: '0.9s' }}>
             <a href="#collections" className="btn-primary">DISCOVER COLLECTION →</a>
-            <a href="#story" className="btn-ghost">OUR STORY</a>
+            <a href="/about-us" className="btn-ghost">OUR STORY</a>
           </div>
 
           <div className="hero-stats fade-in" style={{ animationDelay: '1.1s' }}>

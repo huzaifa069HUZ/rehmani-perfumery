@@ -10,9 +10,10 @@ import { useAuth } from '@/context/AuthContext';
 interface HeaderProps {
   onMenuOpen: () => void;
   onSearchOpen: () => void;
+  forceTransparent?: boolean;
 }
 
-export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
+export default function Header({ onMenuOpen, onSearchOpen, forceTransparent }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const { toggleCart, totalItems } = useCart();
   const { totalWishlistItems } = useWishlist();
@@ -34,10 +35,13 @@ export default function Header({ onMenuOpen, onSearchOpen }: HeaderProps) {
   }, []);
 
   const isScrolled = !(isHome || isStore) || scrolled;
+  const headerClass = forceTransparent 
+    ? 'main-header force-transparent' 
+    : `main-header${isScrolled ? ' scrolled' : ''}`;
 
   return (
     <>
-      <header id="main-header" className={`main-header${isScrolled ? ' scrolled' : ''}`}>
+      <header id="main-header" className={headerClass} style={forceTransparent ? { background: 'transparent', borderBottom: 'none' } : {}}>
         <div className="header-inner">
           {/* Mobile Menu Button - Moved to front for flex ordering on mobile */}
           <button id="mobile-menu-btn" className="icon-btn mobile-only modern-menu-btn" onClick={onMenuOpen} aria-label="Menu" style={{ zIndex: 9999, position: 'relative' }}>

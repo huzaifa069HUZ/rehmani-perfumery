@@ -1,3 +1,4 @@
+// Dev server restart trigger
 import type { NextConfig } from 'next';
 
 const ContentSecurityPolicy = `

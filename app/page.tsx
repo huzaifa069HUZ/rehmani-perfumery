@@ -143,7 +143,7 @@ export default function Home() {
                   <Link href="/store">Visit Our Stores</Link> — Two locations in Patna: Phulwari Sharif & Sabzibagh
                 </li>
                 <li>
-                  <Link href="/about">Our Story</Link> — Learn about Rahmani Perfumery's heritage and craftsmanship
+                  <Link href="/about-us">Our Story</Link> — Learn about Rahmani Perfumery's heritage and craftsmanship
                 </li>
               </ul>
             </div>
