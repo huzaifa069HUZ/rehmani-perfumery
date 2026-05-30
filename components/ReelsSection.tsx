@@ -136,7 +136,7 @@ function ShoppableVideoCard({
         name: product?.name ?? fallbackName,
         size: 6,
         price: product?.price ?? fallbackPrice,
-        image: product?.images?.[0] ?? '',
+        image: product?.images?.[0] ?? fallbackImage ?? '',
       });
       setAdded(true);
       setTimeout(() => setAdded(false), 1800);
@@ -389,7 +389,7 @@ export default function ReelsSection() {
             href="/product/ar-rijaal-jAQ4G57"
             videoSrc="/assets/Video-807.mp4"
             fallbackName="Al Rajaal"
-            fallbackPrice={499}
+            fallbackPrice={350}
             fallbackImage="/assets/attar1 remove bg.png"
           />
 
@@ -399,7 +399,7 @@ export default function ReelsSection() {
             href="/product/oud-nadira-WgWGvlC"
             videoSrc="/videos/oud nadira video.mp4"
             fallbackName="Oud Nadira"
-            fallbackPrice={599}
+            fallbackPrice={400}
             fallbackImage="/assets/oud-nadira-no-bg.png"
           />
 
@@ -409,7 +409,7 @@ export default function ReelsSection() {
             href="/product/green-ajam-xnp8BPW"
             videoSrc="/videos/green ajam vid.mp4"
             fallbackName="Green Ajam"
-            fallbackPrice={599}
+            fallbackPrice={350}
             fallbackImage="/assets/green ajam.png"
           />
 
