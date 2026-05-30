@@ -377,7 +377,7 @@ export default function AboutContentSection() {
             <p style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 700, color: GOLD, position: 'relative', zIndex: 1 }}>
               BAKHOOR <span style={{ color: '#0a0a0a' }}>&</span> <span style={{ color: '#fff' }}>OUD</span>
             </p>
-            <h3 className={HF} style={{ fontSize: '1.2rem', lineHeight: 1.1, color: '#0a0a0a', textTransform: 'uppercase', marginTop: 'auto', position: 'relative', zIndex: 1, left: '-4px' }}>
+            <h3 className={HF} style={{ fontSize: 'clamp(0.95rem, 4vw, 1.2rem)', lineHeight: 1.1, color: '#0a0a0a', textTransform: 'uppercase', marginTop: 'auto', position: 'relative', zIndex: 1, left: '-4px' }}>
               HOME<br /><span style={{ color: GOLD }}>FRAG</span><span style={{ color: '#0a0a0a' }}>RANCE</span>
             </h3>
           </Link>
