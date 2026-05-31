@@ -111,10 +111,10 @@ export default function AboutContentSection() {
       if (headlineRef.current) {
         const words = headlineRef.current.querySelectorAll('.word');
         gsap.fromTo(words,
-          { y: 100, opacity: 0, rotateX: -40 },
+          { y: 60, opacity: 0 },
           {
-            y: 0, opacity: 1, rotateX: 0,
-            duration: 1,
+            y: 0, opacity: 1,
+            duration: 0.8,
             ease: 'power3.out',
             stagger: 0.12,
             scrollTrigger: {
@@ -244,12 +244,12 @@ export default function AboutContentSection() {
             margin: '0 auto',
           }}
         >
-          <span className="word" style={{ display: 'inline-block', marginRight: '0.2em' }}>BEYOND</span>
-          <span className="word" style={{ display: 'inline-block', marginRight: '0.2em', color: GOLD }}>ORDINARY</span>
+          <span className="word" style={{ display: 'inline-block', marginRight: '0.2em', willChange: 'transform, opacity' }}>BEYOND</span>
+          <span className="word" style={{ display: 'inline-block', marginRight: '0.2em', color: GOLD, willChange: 'transform, opacity' }}>ORDINARY</span>
           <br />
-          <span className="word" style={{ display: 'inline-block', marginRight: '0.2em' }}>FRAGRANCE.</span>
+          <span className="word" style={{ display: 'inline-block', marginRight: '0.2em', willChange: 'transform, opacity' }}>FRAGRANCE.</span>
           <br />
-          <span className="word" style={{ display: 'inline-block', marginRight: '0.2em', color: GOLD }}>ALWAYS.</span>
+          <span className="word" style={{ display: 'inline-block', marginRight: '0.2em', color: GOLD, willChange: 'transform, opacity' }}>ALWAYS.</span>
         </h2>
 
         <p style={{
