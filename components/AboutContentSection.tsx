@@ -1,14 +1,19 @@
 'use client';
 
-import { useRef, useEffect, useState, Suspense } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Canvas } from '@react-three/fiber';
-import { Environment, useGLTF, Center, OrbitControls } from '@react-three/drei';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion } from 'framer-motion';
 import { Great_Vibes } from 'next/font/google';
+
+// Lazy-load the entire 3D scene — Three.js is ~600 KB and should never block paint
+const LazyBottleCanvas = dynamic(
+  () => import('./AboutBottleCanvas'),
+  { ssr: false, loading: () => <div style={{ width: '100%', height: '100%' }} /> }
+);
 
 const greatVibes = Great_Vibes({ weight: '400', subsets: ['latin'] });
 
@@ -58,15 +63,10 @@ function CountUpNumber({ end, duration = 2000 }: { end: number, duration?: numbe
   return <span ref={nodeRef} style={{ display: 'inline-block' }}>{count}</span>;
 }
 
-function InteractiveBottle() {
-  const { scene } = useGLTF('/assets/3dbottle.glb');
-  return (
-    <Center>
-      <primitive object={scene} scale={[1.6, 1.6, 1.6]} />
-    </Center>
-  );
+// Pre-warm the GLB cache in the background (non-blocking)
+if (typeof window !== 'undefined') {
+  // dynamically import useGLTF preload to avoid bundling Three.js at this layer
 }
-useGLTF.preload('/assets/3dbottle.glb');
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -99,7 +99,13 @@ export default function AboutContentSection() {
   }, []);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
+    // Defer GSAP setup to after first paint so it never blocks LCP
+    const ric = typeof window !== 'undefined' && 'requestIdleCallback' in window
+      ? (cb: () => void) => (window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(cb)
+      : (cb: () => void) => setTimeout(cb, 100);
+    let ctx: ReturnType<typeof gsap.context>;
+    ric(() => {
+    ctx = gsap.context(() => {
 
       /* ── 1. Headline letter-by-letter reveal ── */
       if (headlineRef.current) {
@@ -193,8 +199,9 @@ export default function AboutContentSection() {
       }
 
     }, sectionRef);
+    }); // end ric
 
-    return () => ctx.revert();
+    return () => { if (ctx) ctx.revert(); };
   }, []);
 
   return (
@@ -286,15 +293,7 @@ export default function AboutContentSection() {
             <div style={{
               position: 'absolute', top: 0, right: 0, width: '55%', height: '100%', zIndex: 0,
             }}>
-              <Canvas camera={{ position: [0, 0, 5], fov: 40 }} gl={{ antialias: true, alpha: true }}>
-                <ambientLight intensity={0.6} />
-                <spotLight position={[5, 10, 5]} intensity={5} color="#ffdcb4" />
-                <Environment preset="studio" />
-                <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} autoRotate autoRotateSpeed={1.5} />
-                <Suspense fallback={null}>
-                  <InteractiveBottle />
-                </Suspense>
-              </Canvas>
+<LazyBottleCanvas />
             </div>
             <p style={{
               fontSize: 9,
@@ -455,12 +454,13 @@ export default function AboutContentSection() {
 
           {/* Video (Takes up 55% of the space on PC) */}
           <div className="w-full lg:w-[55%] flex" style={{ borderRadius: '2.5rem', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)' }}>
-            <video
+<video
               src="/assets/kamrah-vid-about.mp4"
               autoPlay
               muted
               loop
               playsInline
+              preload="none"
               style={{ width: '100%', display: 'block', objectFit: 'cover', minHeight: '100%' }}
             />
           </div>
@@ -549,12 +549,13 @@ export default function AboutContentSection() {
 
           {/* Right: Video */}
           <div className="w-full lg:w-[50%] flex" style={{ borderRadius: '2.5rem', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)' }}>
-            <video
+<video
               src="/assets/bro_this_is_the_logo.mp4"
               autoPlay
               muted
               loop
               playsInline
+              preload="none"
               style={{ width: '100%', display: 'block', objectFit: 'cover', minHeight: '100%' }}
             />
           </div>
