@@ -290,7 +290,7 @@ export default function AboutContentSection() {
                 <ambientLight intensity={0.6} />
                 <spotLight position={[5, 10, 5]} intensity={5} color="#ffdcb4" />
                 <Environment preset="studio" />
-                <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={1.5} />
+                <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} autoRotate autoRotateSpeed={1.5} />
                 <Suspense fallback={null}>
                   <InteractiveBottle />
                 </Suspense>
