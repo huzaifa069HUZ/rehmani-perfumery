@@ -765,8 +765,7 @@ button {
   gap: 1.2rem;
   padding: 20px 22px;
   border: 1px solid rgba(212, 175, 55, 0.18);
-  background: rgba(212, 175, 55, 0.04);
-  backdrop-filter: blur(8px);
+  background: rgba(15, 10, 3, 0.6);
   transition: all 0.35s;
 }
 
