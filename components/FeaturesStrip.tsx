@@ -63,21 +63,21 @@ const features = [
 
 export default function FeaturesStrip() {
   return (
-    <section className="features-strip">
-      <div className="features-container">
+    <section className="fstrip-section">
+      <div className="fstrip-container">
         {features.map((item, idx) => (
           <motion.div 
             key={idx} 
-            className="feature-item"
+            className="fstrip-item"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: idx * 0.1 }}
           >
-            <div className="feature-icon">
+            <div className="fstrip-icon">
               {item.icon}
             </div>
-            <p className="feature-title">
+            <p className="fstrip-title">
               {item.title}
             </p>
           </motion.div>
@@ -85,15 +85,15 @@ export default function FeaturesStrip() {
       </div>
 
       <style>{`
-        .features-strip {
-          background-color: #F4F4F4; /* Light clean grey/white matching the reference */
+        .fstrip-section {
+          background-color: #F4F4F4;
           padding: 3rem 1rem;
           width: 100%;
           border-top: 1px solid rgba(0,0,0,0.05);
           border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
-        .features-container {
+        .fstrip-container {
           max-width: 1200px;
           margin: 0 auto;
           display: flex;
@@ -104,7 +104,7 @@ export default function FeaturesStrip() {
           flex-wrap: wrap;
         }
 
-        .feature-item {
+        .fstrip-item {
           flex: 1;
           min-width: 140px;
           display: flex;
@@ -118,12 +118,12 @@ export default function FeaturesStrip() {
           transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .feature-item:hover {
+        .fstrip-item:hover {
           transform: translateY(-4px);
           box-shadow: 0 8px 25px rgba(0,0,0,0.06);
         }
 
-        .feature-icon {
+        .fstrip-icon {
           color: #111;
           margin-bottom: 1rem;
           display: flex;
@@ -131,9 +131,9 @@ export default function FeaturesStrip() {
           align-items: center;
         }
 
-        .feature-title {
+        .fstrip-title {
           color: #222;
-          font-family: inherit; /* Clean sans-serif */
+          font-family: inherit;
           font-size: 0.9rem;
           line-height: 1.4;
           white-space: pre-line;
@@ -142,41 +142,39 @@ export default function FeaturesStrip() {
         }
 
         @media (max-width: 768px) {
-          .features-strip {
+          .fstrip-section {
             padding: 2rem 1rem;
           }
-          .features-container {
+          .fstrip-container {
             gap: 12px;
             justify-content: flex-start;
             flex-wrap: nowrap;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            padding-bottom: 16px; /* For scrollbar */
+            padding-bottom: 16px;
           }
-          .feature-item {
+          .fstrip-item {
             flex: 0 0 auto;
-            width: calc(38% - 12px); /* Show 2.5 items to hint scrolling */
+            width: calc(38% - 12px);
             min-width: 110px;
             padding: 16px 8px;
             border-radius: 12px;
           }
-          .feature-title {
+          .fstrip-title {
             font-size: 0.75rem;
             word-break: normal;
             margin-top: 0.5rem;
           }
-          .feature-icon svg, .feature-icon img {
+          .fstrip-icon svg, .fstrip-icon img {
             width: 36px !important;
             height: 36px !important;
           }
-          
-          /* Hide scrollbar for a cleaner look */
-          .features-container::-webkit-scrollbar {
+          .fstrip-container::-webkit-scrollbar {
             display: none;
           }
-          .features-container {
-            -ms-overflow-style: none; /* IE and Edge */
-            scrollbar-width: none; /* Firefox */
+          .fstrip-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
           }
         }
       `}</style>
