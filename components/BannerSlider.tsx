@@ -23,7 +23,7 @@ const staticBanners = [
   },
   {
     id: 'static-5',
-    image: '/assets/atlantis banner.png',
+    image: '/assets/aquatic banner.png',
     title: '',
     subtitle: '',
     link: '/product/atlantis-aV6ian8',
@@ -31,7 +31,7 @@ const staticBanners = [
   },
   {
     id: 'static-2',
-    image: '/assets/beauty banner.png',
+    image: '/assets/beautiful banner.png',
     title: '',
     subtitle: '',
     link: '#collections',
@@ -43,6 +43,14 @@ const staticBanners = [
     title: '',
     subtitle: '',
     link: '/perfumes',
+    hasOwnText: true,
+  },
+  {
+    id: 'static-6',
+    image: '/assets/summer collection banner.png',
+    title: '',
+    subtitle: '',
+    link: '/attars',
     hasOwnText: true,
   }
 ];
