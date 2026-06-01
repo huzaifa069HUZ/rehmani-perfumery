@@ -6,6 +6,14 @@ import { collection, query, where, orderBy, getDocs } from 'firebase/firestore';
 
 const staticBanners = [
   {
+    id: 'static-gifting',
+    image: '/assets/gift banner.png',
+    title: '',
+    subtitle: '',
+    link: '/gifting',
+    hasOwnText: true,
+  },
+  {
     id: 'static-4',
     image: '/assets/HAWAS SPECIAL.png',
     title: '',

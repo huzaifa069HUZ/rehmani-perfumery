@@ -66,7 +66,21 @@ export default function GiftingSection() {
           {/* Left Text Navigation */}
           <div className="lg:col-span-8 flex flex-col gap-0 md:gap-0 w-full relative z-20 overflow-visible">
             {SLIDES.map((slide, index) => (
-              <div key={slide.id} className="w-full">
+              <div 
+                key={slide.id} 
+                className="w-full"
+                onClick={() => {
+                  const map: Record<string, string> = {
+                    "gifting-corporate": "corporate",
+                    "gifting-wedding": "wedding",
+                    "gifting-celebrations": "celebrations",
+                    "gifting-partners": "partner"
+                  };
+                  setTimeout(() => {
+                    window.location.href = `/gifting#${map[slide.id]}`;
+                  }, 2000);
+                }}
+              >
                 <TextStaggerHover
                   index={index}
                   // Mobile text shrunk elegantly to prevent viewport clipping. Added touch responsiveness.

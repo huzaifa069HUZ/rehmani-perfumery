@@ -237,6 +237,19 @@ export default function GiftingPage() {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const hash = window.location.hash.replace('#', '');
+      const validCategories = ['corporate', 'wedding', 'celebrations', 'partner'];
+      if (validCategories.includes(hash)) {
+        setCategory(hash);
+        setTimeout(() => {
+          document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
+      }
+    }
+  }, []);
+
   const range = PRICE_RANGES[priceRange];
 
   const filtered = useMemo(() => {

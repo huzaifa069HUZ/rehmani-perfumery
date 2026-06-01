@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 const SWIPER_IMAGES = [
@@ -26,7 +27,7 @@ export default function FeaturedCategories() {
       title: 'Gifts',
       desc: 'Exquisite fragrances wrapped in luxury — the gift they\'ll never forget',
       size: 'large',
-      href: '/attars',
+      href: '/gifting',
     },
     {
       img: '/assets/for him1.png',
@@ -52,7 +53,7 @@ export default function FeaturedCategories() {
         <div className="categories-grid">
           {/* Main 3 static categories */}
           {categories.map((cat, i) => (
-            <div key={i} className={`category-card${cat.size === 'large' ? ' category-large' : ''}`}>
+            <Link key={i} href={cat.href} className={`category-card${cat.size === 'large' ? ' category-large' : ''}`} style={{ textDecoration: 'none' }}>
               <div className="category-img-wrap">
                 {cat.desktopImg ? (
                   <>
@@ -86,9 +87,9 @@ export default function FeaturedCategories() {
                 {cat.label && <span className="category-label">{cat.label}</span>}
                 <h3 className={`category-title ${!cat.label ? 'luxury-text' : ''}`}>{cat.title}</h3>
                 {cat.desc && <p className="category-desc">{cat.desc}</p>}
-                <a href={cat.href} className="category-btn">Explore Now</a>
+                <span className="category-btn">Explore Now</span>
               </div>
-            </div>
+            </Link>
           ))}
 
           {/* Auto Image Swiper for the free space under Him & Her */}
