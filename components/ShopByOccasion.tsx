@@ -73,9 +73,14 @@ export default function ShopByOccasion() {
       const isBeast = beastTargetIds.some(id => pIdStr.includes(id)) || 
                        ['reeh al', 'al asma', 'oud nadira'].some(n => pName.includes(n));
 
-      const everydayTargetIds = ['tPZzRjq']; // ehsas-ul-abeer ID
-      const isEveryday = everydayTargetIds.some(id => pIdStr.includes(id)) || 
+      const everydayTargetIds = ['tPZzRjq', 'jAQ4G57']; // ehsas-ul-abeer, ar-rijaal
+      let isEveryday = everydayTargetIds.some(id => pIdStr.includes(id)) || 
                          ['ehsas ul abeer', 'ehsas', 'ar rijaal', 'ar rijal', 'red sea', 'green ajam'].some(n => pName.includes(n));
+
+      // Exclude the specific GREEN AJAM variant that has grape/fruity notes
+      if (isEveryday && pName.includes('green ajam') && (p.category || '').toLowerCase().includes('grape')) {
+        isEveryday = false;
+      }
 
       const isPartyWear = ['khamrah', 'phantom', '1 million lucky', 'one million lucky'].some(n => pName.includes(n));
       const isDate = ['khamrah', 'hawas special', 'musk rijali', 'sauvage', 'savauge'].some(n => pName.includes(n));
