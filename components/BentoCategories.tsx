@@ -52,7 +52,7 @@ export default function BentoCategories() {
             </Link>
 
             {/* Gift Set - Short */}
-            <Link href="/attars" className="bento-item bento-short" style={{ order: 4 }}>
+            <Link href="/gifting" className="bento-item bento-short" style={{ order: 4 }}>
               <Image 
                 src="/assets/giftset.png" 
                 alt="Gift Set Category" 
