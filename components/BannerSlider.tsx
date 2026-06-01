@@ -15,7 +15,7 @@ const staticBanners = [
   },
   {
     id: 'static-1',
-    image: '/assets/red sea banner.png',
+    image: '/assets/new red sea banner.png',
     title: '',
     subtitle: '',
     link: '/product/red-sea-HT0gv7H',
