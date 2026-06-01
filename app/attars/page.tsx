@@ -207,7 +207,7 @@ export default function AttarsPage() {
   const range = PRICE_RANGES[priceRange];
 
   const filtered = useMemo(() => {
-    let list = dbProducts.filter(p => p.type !== 'perfume');
+    let list = dbProducts.filter(p => !p.type || p.type === 'attar');
 
     // search
     if (search.trim()) {

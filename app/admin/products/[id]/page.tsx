@@ -64,11 +64,15 @@ export default function EditProductPage() {
           const fallbackPrice = data.price?.toString() || '';
           const fallbackOriginalPrice = data.originalPrice?.toString() || fallbackPrice;
           
-          setPricing({
-             6: { price: dbPricing['6']?.price?.toString() || fallbackPrice, originalPrice: dbPricing['6']?.originalPrice?.toString() || fallbackOriginalPrice },
-             12: { price: dbPricing['12']?.price?.toString() || fallbackPrice, originalPrice: dbPricing['12']?.originalPrice?.toString() || fallbackOriginalPrice },
-             24: { price: dbPricing['24']?.price?.toString() || fallbackPrice, originalPrice: dbPricing['24']?.originalPrice?.toString() || fallbackOriginalPrice },
+          const newPricing: Record<number, { price: string; originalPrice: string }> = {};
+          const allPossibleSizes = [6, 12, 24, 25, 30, 40, 50, 100];
+          allPossibleSizes.forEach(s => {
+             newPricing[s] = {
+               price: dbPricing[s.toString()]?.price?.toString() || (data.sizes?.includes(s) ? fallbackPrice : ''),
+               originalPrice: dbPricing[s.toString()]?.originalPrice?.toString() || (data.sizes?.includes(s) ? fallbackOriginalPrice : '')
+             };
           });
+          setPricing(newPricing);
           const rawCat = data.category || 'oud';
           setCategories(rawCat.split(',').map((c: string) => c.trim()).filter(Boolean));
           setGender(data.gender || 'Unisex');
