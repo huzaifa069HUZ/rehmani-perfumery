@@ -2,21 +2,21 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Premium Gifting — Luxury Attar Gift Sets for Every Occasion | Rahmani Perfumery',
-  description: 'Discover Rahmani Perfumery\'s premium gifting collection — luxury attar gift sets, corporate gifting solutions, wedding favours, and personalised fragrance gifts. The perfect present for every occasion, delivered pan-India from the best perfumery in Patna, Bihar.',
+  title: 'Premium Attar Giftset & Perfume Gifts in Patna | Rahmani Perfumery',
+  description: 'Looking for the perfect perfume gift or attar giftset near you? Explore Rahmani Perfumery\'s premium gifting collection in Patna. Find luxury attar gift sets, curated perfume combos, corporate gifting solutions, and wedding favours. Order online for pan-India delivery.',
   keywords: [
-    'Rahmani gifting', 'Rehmani gift set', 'attar gift set', 'perfume gift box',
+    'attar giftset', 'perfume gift', 'attar gifts in patna', 'perfume gifts in patna', 
+    'attar gifts near me', 'perfume gifts near me', 'best perfume gift set', 
+    'best attar gift box', 'Rahmani gifting', 'Rehmani gift set', 'perfume gift box',
     'corporate gifting perfume', 'wedding favour attar', 'luxury fragrance gift',
-    'premium gift set India', 'personalised attar gift', 'Rahmani Perfumery gift',
-    'bulk gifting perfume', 'custom fragrance gift', 'oud gift set', 'gift for partner',
-    'celebration gift attar', 'Patna gifting', 'Bihar premium gift',
+    'premium gift set India', 'Rahmani Perfumery gift', 'Patna premium gift'
   ],
   alternates: {
     canonical: 'https://www.rahmaniperfumery.com/gifting',
   },
   openGraph: {
-    title: 'Premium Gifting — Luxury Attar Gift Sets | Rahmani Perfumery',
-    description: 'Luxury attar gift sets, corporate gifting, and wedding favours from Rahmani Perfumery — the best perfumery in Patna, Bihar.',
+    title: 'Premium Attar Giftset & Perfume Gifts in Patna | Rahmani Perfumery',
+    description: 'Looking for the perfect perfume gift or attar giftset near you? Explore Rahmani Perfumery\'s premium gifting collection in Patna. Luxury attar gift sets, curated perfume combos, and corporate gifting.',
     url: 'https://www.rahmaniperfumery.com/gifting',
     siteName: 'Rahmani Perfumery',
     images: [
@@ -33,8 +33,8 @@ export const metadata: Metadata = {
 const giftingJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'Premium Gifting Collection — Rahmani Perfumery',
-  description: 'Luxury attar gift sets, corporate gifting, wedding favours, and personalised fragrance gifts from Rahmani Perfumery in Patna, Bihar.',
+  name: 'Premium Attar Giftset & Perfume Gifts in Patna | Rahmani Perfumery',
+  description: 'Looking for the perfect perfume gift or attar giftset near you? Explore Rahmani Perfumery\'s premium gifting collection in Patna. Luxury attar gift sets, curated perfume combos, corporate gifting, and wedding favours.',
   url: 'https://www.rahmaniperfumery.com/gifting',
   publisher: {
     '@type': 'Organization',
@@ -59,16 +59,16 @@ export default function GiftingLayout({ children }: { children: React.ReactNode 
       <section className="seo-content-island" aria-label="About Rahmani Gifting">
         <div className="seo-content-inner">
           <h2 className="seo-heading">
-            Premium Gifting — Luxury Attar Gift Sets for Every Occasion | Rahmani Perfumery
+            Premium Attar Giftset & Perfume Gifts in Patna | Rahmani Perfumery
           </h2>
           <div className="seo-columns">
             <div className="seo-col">
-              <h3 className="seo-subheading">The Art of Gifting by Rahmani Perfumery</h3>
+              <h3 className="seo-subheading">The Ultimate Perfume Gift Experience</h3>
               <p>
-                <strong>Rahmani Perfumery</strong> (also known as <strong>Rehmani Perfumery</strong>) offers the finest selection of <em>luxury attar gift sets</em> for every special occasion. From premium corporate gifting solutions to elegant wedding favours and heartfelt gifts for your loved ones — each gift box features handcrafted Arabian attars in our signature packaging.
+                <strong>Rahmani Perfumery</strong> (also known as <strong>Rehmani Perfumery</strong>) offers the finest <em>attar giftset</em> and <em>perfume gift</em> collections. If you are searching for premium <strong>attar gifts in Patna</strong> or the best <strong>perfume gifts near me</strong>, you have arrived at the perfect destination. Each luxury gift box features expertly curated Arabian attars and premium fragrances.
               </p>
               <p>
-                Whether you need <strong>bulk corporate gifts</strong>, <strong>personalised wedding favours</strong>, or a beautiful <strong>attar gift set</strong> for your partner — Rahmani Perfumery delivers premium fragrance gifts across India with customisable branding and luxury packaging.
+                Whether you need <strong>bulk corporate gifts</strong>, <strong>exquisite wedding favours</strong>, or a beautiful <strong>perfume gift box</strong> for your loved ones — Rahmani Perfumery delivers premium fragrance gifts across India with luxury packaging.
               </p>
             </div>
             <div className="seo-col">

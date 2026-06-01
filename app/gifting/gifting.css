@@ -71,6 +71,19 @@
   object-position: center;
 }
 
+.gf-hero-img.mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .gf-hero-img.desktop {
+    display: none;
+  }
+  .gf-hero-img.mobile {
+    display: block;
+  }
+}
+
 /* Gradient overlay for legibility */
 .gf-hero-overlay {
   position: absolute;

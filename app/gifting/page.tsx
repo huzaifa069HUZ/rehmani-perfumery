@@ -59,7 +59,7 @@ const CATEGORY_SHOWCASE = [
   {
     id: 'celebrations',
     title: 'Celebrations',
-    desc: 'Customised gift sets for Eid, birthdays & special occasions.',
+    desc: 'Handpicked gift sets for Eid, birthdays & special occasions.',
     image: '/assets/gift-poster-2.png',
     link: '#products',
   },
@@ -312,7 +312,16 @@ export default function GiftingPage() {
           alt="Premium Gifting — Rahmani Perfumery"
           fill
           priority
-          className="gf-hero-img"
+          className="gf-hero-img desktop"
+          sizes="100vw"
+          style={{ objectFit: 'cover' }}
+        />
+        <Image
+          src="/assets/gifting hero mobile.png"
+          alt="Premium Gifting — Rahmani Perfumery"
+          fill
+          priority
+          className="gf-hero-img mobile"
           sizes="100vw"
           style={{ objectFit: 'cover' }}
         />
@@ -386,8 +395,8 @@ export default function GiftingPage() {
                 <circle cx="12" cy="8" r="4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="12" cy="8" r="1"/>
               </svg>
             </div>
-            <span className="gf-feature-title">Customised Solutions</span>
-            <span className="gf-feature-desc">Personalised branding & messages</span>
+            <span className="gf-feature-title">Curated Combos</span>
+            <span className="gf-feature-desc">Expertly matched fragrance sets</span>
           </div>
           <div className="gf-feature-item">
             <div className="gf-feature-icon">
@@ -432,8 +441,8 @@ export default function GiftingPage() {
           </div>
           <div className="gf-how-step">
             <div className="gf-how-num">03</div>
-            <h3 className="gf-how-title">Customise</h3>
-            <p className="gf-how-desc">Add personalised messages, custom branding, and luxury packaging.</p>
+            <h3 className="gf-how-title">Choose Combo</h3>
+            <p className="gf-how-desc">Select from our expertly curated gift set combos and luxury packaging.</p>
           </div>
           <div className="gf-how-step">
             <div className="gf-how-num">04</div>
@@ -638,15 +647,15 @@ export default function GiftingPage() {
       <section className="gf-cta-banner" style={{ margin: '0 2.5rem 5rem' }}>
         <div className="gf-cta-inner">
           <div className="gf-cta-text">
-            <p className="gf-cta-tag">BULK ORDERS & CUSTOM GIFTS</p>
-            <h2 className="gf-cta-title">Need a Custom Gift Solution?</h2>
+            <p className="gf-cta-tag">BULK ORDERS & CURATED GIFTS</p>
+            <h2 className="gf-cta-title">Need a Special Gift Solution?</h2>
             <p className="gf-cta-desc">
-              For bulk corporate orders, personalised wedding favours, or bespoke gift sets — 
+              For bulk corporate orders, exquisite wedding favours, or premium gift sets — 
               reach out to our gifting experts on WhatsApp for instant assistance and exclusive pricing.
             </p>
           </div>
           <Link
-            href="https://wa.me/919304aborter?text=Hi%2C%20I%27m%20interested%20in%20your%20premium%20gifting%20collection."
+            href="https://wa.me/918340783679?text=Hi%2C%20I%27m%20interested%20in%20your%20premium%20gifting%20collection."
             target="_blank"
             rel="noopener noreferrer"
             className="gf-cta-btn"
