@@ -77,10 +77,16 @@ export default function ShopByOccasion() {
       const isEveryday = everydayTargetIds.some(id => pIdStr.includes(id)) || 
                          ['ehsas ul abeer', 'ehsas', 'ar rijaal', 'ar rijal', 'red sea', 'green ajam'].some(n => pName.includes(n));
 
+      const isPartyWear = ['khamrah', 'phantom', '1 million lucky', 'one million lucky'].some(n => pName.includes(n));
+      const isDate = ['khamrah', 'hawas special', 'musk rijali', 'sauvage', 'savauge'].some(n => pName.includes(n));
+
       if (activeFilter === 'beast mode') return isBeast;
       if (activeFilter === 'everyday') return isEveryday;
+      if (activeFilter === 'party wear') return isPartyWear;
+      if (activeFilter === 'date') return isDate;
 
-      if (isBeast || isEveryday) return false;
+      // Ensure forced products do not leak into fallback logic
+      if (isBeast || isEveryday || isPartyWear || isDate) return false;
 
       // 2. Otherwise, use backend assigned tags for other tabs:
       if (p.occasions && Array.isArray(p.occasions)) {
