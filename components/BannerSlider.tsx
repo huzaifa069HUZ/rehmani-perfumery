@@ -31,11 +31,11 @@ const staticBanners = [
   },
   {
     id: 'static-2',
-    image: '/assets/red sea banner.png',
-    title: 'PURE OUD EXTRACT',
-    subtitle: 'Aged to perfection for true connoisseurs',
+    image: '/assets/beauty banner.png',
+    title: '',
+    subtitle: '',
     link: '#collections',
-    hasOwnText: false,
+    hasOwnText: true,
   },
   {
     id: 'static-3',
