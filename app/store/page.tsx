@@ -897,10 +897,10 @@ export default function StorePage() {
             {/* 3D Auto-Rotating Carousel */}
             <div className="relative w-full h-[450px] sm:h-[500px] flex items-center justify-center [perspective:1200px]">
               {[
-                { title: 'Experience First', desc: 'Unsure which fragrance matches your aura? Explore our complete collection in person.', img: '/assets/minimal-boutique.png', Icon: Eye },
-                { title: 'Exclusive Offers', desc: 'Enjoy special walk-in discounts and complimentary samples strictly reserved for physical store visitors.', img: '/assets/minimal-perfume.png', Icon: Tag },
-                { title: 'Premium Certified', desc: 'Every drop is 100% authentic and ethically sourced. We guarantee purely premium fragrance oils.', img: '/assets/minimal-oud.png', Icon: ShieldCheck },
-                { title: 'Test On Skin', desc: 'Test longevity and projection on your own skin to see exactly how notes evolve with your chemistry.', img: '/assets/minimal-skin.png', Icon: Droplet }
+                { title: 'Experience First', desc: 'Unsure which fragrance matches your aura? Explore our complete collection in person.', img: '/assets/minimal-boutique.png' },
+                { title: 'Exclusive Offers', desc: 'Enjoy special walk-in discounts and complimentary samples strictly reserved for physical store visitors.', img: '/assets/minimal-perfume.png' },
+                { title: 'Premium Certified', desc: 'Every drop is 100% authentic and ethically sourced. We guarantee purely premium fragrance oils.', img: '/assets/minimal-oud.png' },
+                { title: 'Test On Skin', desc: 'Test longevity and projection on your own skin to see exactly how notes evolve with your chemistry.', img: '/assets/minimal-skin.png' }
               ].map((card, idx) => {
                 const total = 4;
                 let offset = (idx - activeExclusiveIndex) % total;
@@ -935,11 +935,7 @@ export default function StorePage() {
                     </div>
 
                     <div className="relative z-10 h-full flex flex-col p-6 sm:p-8 text-center items-center justify-between">
-                      <div className="w-full flex-1 flex items-center justify-center">
-                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border border-[#c4a46c]/40 bg-[#111]/60 backdrop-blur-md flex items-center justify-center">
-                           <card.Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#c4a46c]" />
-                        </div>
-                      </div>
+                      <div className="w-full flex-1" />
                       <div className="w-full">
                         <h3 className="text-white text-[12px] sm:text-[13px] tracking-[0.25em] font-bold mb-3 sm:mb-4 uppercase">{card.title}</h3>
                         <div className="w-8 h-[1px] bg-[#c4a46c]/50 mx-auto mb-3 sm:mb-4" />
