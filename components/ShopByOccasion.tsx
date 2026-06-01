@@ -66,22 +66,21 @@ export default function ShopByOccasion() {
 
   const getFilteredProducts = () => {
     return dbProducts.filter((p) => {
-      const targetIds = ['XNzj20q', 'DEI2FRm', 'WgWGvlC', 'jAQ4G57'];
       const pIdStr = String(p.id);
       const pName = (p.name || '').toLowerCase();
       
-      const isTarget = targetIds.some(id => pIdStr.includes(id)) || 
-                       ['reeh al', 'al asma', 'oud nadira', 'ar rijaal', 'ar rijal'].some(n => pName.includes(n));
+      const beastTargetIds = ['XNzj20q', 'DEI2FRm', 'WgWGvlC', 'jAQ4G57'];
+      const isBeast = beastTargetIds.some(id => pIdStr.includes(id)) || 
+                       ['reeh al', 'al asma', 'oud nadira'].some(n => pName.includes(n));
 
-      // 1. Force the 4 specific cards to ONLY show up in 'beast mode'
-      if (activeFilter === 'beast mode') {
-        return isTarget;
-      }
+      const everydayTargetIds = ['tPZzRjq']; // ehsas-ul-abeer ID
+      const isEveryday = everydayTargetIds.some(id => pIdStr.includes(id)) || 
+                         ['ehsas ul abeer', 'ehsas', 'ar rijaal', 'ar rijal', 'red sea', 'green ajam'].some(n => pName.includes(n));
 
-      // If we are on any other tab (like 'date'), specifically exclude those 4 so they don't leak
-      if (isTarget) {
-        return false;
-      }
+      if (activeFilter === 'beast mode') return isBeast;
+      if (activeFilter === 'everyday') return isEveryday;
+
+      if (isBeast || isEveryday) return false;
 
       // 2. Otherwise, use backend assigned tags for other tabs:
       if (p.occasions && Array.isArray(p.occasions)) {
