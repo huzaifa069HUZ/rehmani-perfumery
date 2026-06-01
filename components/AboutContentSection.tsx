@@ -9,11 +9,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion } from 'framer-motion';
 import { Great_Vibes } from 'next/font/google';
 
-// Lazy-load the entire 3D scene — Three.js is ~600 KB and should never block paint
-const LazyBottleCanvas = dynamic(
-  () => import('./AboutBottleCanvas'),
-  { ssr: false, loading: () => <div style={{ width: '100%', height: '100%' }} /> }
-);
+// 3D Scene removed to eliminate mobile lag; using pre-rendered video instead
 
 const greatVibes = Great_Vibes({ weight: '400', subsets: ['latin'] });
 
@@ -293,7 +289,14 @@ export default function AboutContentSection() {
             <div style={{
               position: 'absolute', top: 0, right: 0, width: '55%', height: '100%', zIndex: 0,
             }}>
-<LazyBottleCanvas />
+<video
+              src="/assets/about us 3d vid.webm"
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }}
+            />
             </div>
             <p style={{
               fontSize: 9,
