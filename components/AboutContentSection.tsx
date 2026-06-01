@@ -386,7 +386,7 @@ export default function AboutContentSection() {
 
           {/* Card 4 — Full width gift pack */}
           <Link
-            href="/category/gifting"
+            href="/gifting"
             className="grid-card"
             style={{
               gridColumn: '1 / -1',

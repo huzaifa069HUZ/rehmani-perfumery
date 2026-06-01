@@ -130,7 +130,7 @@ export default function CartDrawer() {
                 </div>
                 <div className="cart-item-info">
                   <h4>{item.name}</h4>
-                  <p>Size: {item.size}ml</p>
+                  <p>Size: {item.size === 1 ? '1 Box' : `${item.size}ml`}</p>
                   <div className="cart-item-footer">
                     {item.id === MYSTERY_ATTAR_ID ? (
                       /* Mystery attar: locked at qty 1, no +/- controls */

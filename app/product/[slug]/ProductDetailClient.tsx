@@ -31,7 +31,7 @@ interface ProductData {
   price: number;
   originalPrice: number;
   images: string[];
-  type?: 'attar' | 'perfume';
+  type?: 'attar' | 'perfume' | 'bakhoor' | 'incense' | 'giftset';
   sizes?: number[];
   pricing?: Record<string, { price: number; originalPrice: number }>;
   occasions?: string[];
@@ -62,7 +62,7 @@ interface FirestoreProduct {
   images: string[];
   isNew: boolean;
   occasions: string[];
-  type?: 'attar' | 'perfume';
+  type?: 'attar' | 'perfume' | 'bakhoor' | 'incense' | 'giftset';
   inStock?: boolean;
 }
 
@@ -455,7 +455,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
             {product.sizes && product.sizes.length > 0 && (
               <>
                 <div className="pp-selection-label">
-                  Size: <strong>{selectedSize} ML</strong>
+                  Size: <strong>{selectedSize} {product.type === 'incense' ? 'Piece (50g)' : product.type === 'bakhoor' ? 'g' : product.type === 'giftset' ? 'Box' : 'ML'}</strong>
                 </div>
                 <div className="pp-sizes-grid">
                   {product.sizes.map((s) => (
@@ -464,7 +464,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
                       className={`pp-size-pill ${selectedSize === s ? 'active' : ''}`}
                       onClick={() => setSelectedSize(s)}
                     >
-                      {s}ML
+                      {s}{product.type === 'incense' ? ' Piece' : product.type === 'bakhoor' ? 'g' : product.type === 'giftset' ? ' Box' : 'ML'}
                     </button>
                   ))}
                 </div>

@@ -20,6 +20,12 @@ const CATEGORIES = [
   { label: 'Citrus', value: 'citrus' },
   { label: 'Fruity', value: 'fruity' },
 ];
+const GIFT_CATEGORIES = [
+  { label: 'Corporate', value: 'corporate' },
+  { label: 'Wedding', value: 'wedding' },
+  { label: 'Celebrations', value: 'celebrations' },
+  { label: 'For Partners', value: 'partner' },
+];
 const GENDERS = ['Unisex', 'Him', 'Her'];
 
 export default function EditProductPage() {
@@ -33,7 +39,7 @@ export default function EditProductPage() {
   const [saveError, setSaveError] = useState('');
 
   const [name, setName] = useState('');
-  const [productType, setProductType] = useState<'attar'|'perfume'|'bakhoor'|'incense'>('attar');
+  const [productType, setProductType] = useState<'attar'|'perfume'|'bakhoor'|'incense'|'giftset'>('attar');
   const [sizes, setSizes] = useState<number[]>([6, 12, 24]);
   const [availableSizes, setAvailableSizes] = useState<number[]>([6, 12, 24]);
   const [pricing, setPricing] = useState<Record<number, { price: string; originalPrice: string }>>({
@@ -64,8 +70,9 @@ export default function EditProductPage() {
           const fallbackPrice = data.price?.toString() || '';
           const fallbackOriginalPrice = data.originalPrice?.toString() || fallbackPrice;
           
+          
           const newPricing: Record<number, { price: string; originalPrice: string }> = {};
-          const allPossibleSizes = [6, 12, 24, 25, 30, 40, 50, 100];
+          const allPossibleSizes = [1, 6, 12, 24, 25, 30, 40, 50, 100];
           allPossibleSizes.forEach(s => {
              newPricing[s] = {
                price: dbPricing[s.toString()]?.price?.toString() || (data.sizes?.includes(s) ? fallbackPrice : ''),
@@ -92,6 +99,10 @@ export default function EditProductPage() {
             setProductType('incense');
             setAvailableSizes([50]);
             setSizes([50]);
+          } else if (data.type === 'giftset') {
+            setProductType('giftset');
+            setAvailableSizes([1]);
+            setSizes([1]);
           } else {
             setProductType('attar');
             setAvailableSizes([6, 12, 24]);
@@ -117,9 +128,9 @@ export default function EditProductPage() {
     if (images.length === 0) { alert("Please ensure at least one product image remains."); return; }
     setLoading(true);
     try {
-      if (categories.length === 0) { alert('Please select at least one category.'); setLoading(false); return; }
+      if (productType !== 'bakhoor' && productType !== 'incense' && categories.length === 0) { alert('Please select at least one category.'); setLoading(false); return; }
       const sortedSizes = [...sizes].sort((a, b) => a - b);
-      if (sortedSizes.length === 0) { alert('Please select at least one bottle size.'); setLoading(false); return; }
+      if (productType !== 'giftset' && sortedSizes.length === 0) { alert('Please select at least one bottle size.'); setLoading(false); return; }
       
       const parsedPricing: Record<string, { price: number; originalPrice: number }> = {};
       for (const size of sortedSizes) {
@@ -739,6 +750,23 @@ export default function EditProductPage() {
                       }}>
                       Incense
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProductType('giftset');
+                        setSizes([1]);
+                        setAvailableSizes([1]);
+                        setPricing({ 1: { price: '', originalPrice: '' } });
+                        setCategories([GIFT_CATEGORIES[0].value]);
+                      }}
+                      style={{ 
+                        flex: 1, minWidth: '70px', padding: '10px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', transition: 'all 0.2s',
+                        background: productType === 'giftset' ? '#fff' : 'transparent',
+                        color: productType === 'giftset' ? '#0f172a' : '#64748b',
+                        boxShadow: productType === 'giftset' ? '0 2px 8px rgba(0,0,0,0.06)' : 'none', border: 'none', cursor: 'pointer'
+                      }}>
+                      Gift Set
+                    </button>
                   </div>
                 </div>
 
@@ -857,12 +885,12 @@ export default function EditProductPage() {
                 </div>
                 <div>
                   <h2>Bottle Sizes & Pricing</h2>
-                  <p>Configure options and their prices</p>
+                  <p>{productType === 'bakhoor' ? 'Configure weight options' : productType === 'incense' ? 'Configure pack sizes' : productType === 'giftset' ? 'Configure gift set pricing' : 'Configure options and their prices'}</p>
                 </div>
               </div>
               <div className="card-body">
                 {/* ─── Bottle Sizes ─── */}
-                {productType !== 'incense' && (
+                {(productType !== 'incense' && productType !== 'giftset') && (
                 <div className="field-group">
                   <label className="field-label">
                     {productType === 'bakhoor' ? 'Weight Options' : 'Active Bottle Sizes'}
@@ -949,7 +977,7 @@ export default function EditProductPage() {
                       <div key={size} style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
                            <span style={{ fontWeight: '700', color: '#0f172a', fontSize: '15px' }}>
-                             {productType === 'incense' ? 'Piece (50g) Pricing' : `${size}${productType === 'bakhoor' ? 'g' : 'ml'} Pricing`}
+                             {productType === 'incense' ? 'Piece (50g) Pricing' : productType === 'giftset' ? 'Gift Set Pricing' : `${size}${productType === 'bakhoor' ? 'g' : 'ml'} Pricing`}
                            </span>
                         </div>
                         <div className="pricing-grid">
@@ -1089,7 +1117,7 @@ export default function EditProductPage() {
                 <div className="field-group">
                   <label className="field-label" htmlFor="product-category">Category</label>
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    {CATEGORIES.map(c => {
+                    {(productType === 'giftset' ? GIFT_CATEGORIES : CATEGORIES).map(c => {
                       const isActive = categories.includes(c.value);
                       return (
                         <button
@@ -1113,7 +1141,7 @@ export default function EditProductPage() {
                             transition: 'all 0.2s',
                           }}
                         >
-                          {c.label.split(' ')[0]}
+                          {productType === 'giftset' ? c.label : c.label.split(' ')[0]}
                           {isActive && (
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />

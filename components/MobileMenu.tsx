@@ -128,7 +128,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
                 <div className="mm-group">
                   <div className="mm-group-header">
-                    <Link href="/category/gifting" className="mm-link" onClick={onClose}>GIFTING</Link>
+                    <Link href="/gifting" className="mm-link" onClick={onClose}>GIFTING</Link>
                   </div>
                 </div>
 

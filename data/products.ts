@@ -10,7 +10,7 @@ export interface Product {
   images: string[];
   isNew: boolean;
   occasions: string[];
-  type?: 'attar' | 'perfume';
+  type?: 'attar' | 'perfume' | 'bakhoor' | 'incense' | 'giftset';
   inStock?: boolean;
 }
 
