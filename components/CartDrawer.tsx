@@ -3,6 +3,7 @@ import { useCart } from '@/context/CartContext';
 import Image from 'next/image';
 import { useMemo } from 'react';
 import { MYSTERY_ATTAR_ID } from '@/components/FreeAttarPopup';
+import Link from 'next/link';
 
 const FREE_SHIPPING_THRESHOLD = 999;
 
@@ -178,7 +179,7 @@ export default function CartDrawer() {
               <span>Total</span>
               <span>₹{totalPrice}</span>
             </div>
-            <button className="checkout-btn">CHECKOUT</button>
+            <Link href="/checkout" onClick={toggleCart} className="checkout-btn" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', textDecoration: 'none' }}>CHECKOUT</Link>
             <button className="continue-btn" onClick={toggleCart}>Continue Shopping</button>
           </div>
         )}
