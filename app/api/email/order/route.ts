@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { adminDb, adminMessaging } from '@/lib/firebase-admin';
 
 export async function POST(req: NextRequest) {
   try {
@@ -153,6 +154,34 @@ export async function POST(req: NextRequest) {
     ]);
 
     console.log("Email dispatch results:", results);
+
+    // ─── Push FCM Notification to Admins ───
+    try {
+      if (adminDb && adminMessaging) {
+        const tokenSnap = await adminDb.collection('admin_tokens').get();
+        const tokens: string[] = [];
+        tokenSnap.forEach((doc) => {
+          if (doc.data().token) tokens.push(doc.data().token);
+        });
+
+        if (tokens.length > 0) {
+          const payload = {
+            notification: {
+              title: 'New Order Received! 🛍️',
+              body: `Order #${orderId} for ₹${finalTotal} has been placed.`,
+            },
+            data: {
+              orderId,
+              click_action: '/admin/orders',
+            }
+          };
+          const response = await adminMessaging.sendEachForMulticast({ tokens, ...payload });
+          console.log('FCM Push Notification Sent:', response.successCount, 'successes,', response.failureCount, 'failures');
+        }
+      }
+    } catch (fcmError) {
+      console.error('FCM Push Error:', fcmError);
+    }
 
     return NextResponse.json({ success: true });
 

@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { collection, onSnapshot, query, orderBy, limit } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { collection, onSnapshot, query, orderBy, limit, setDoc, doc } from 'firebase/firestore';
+import { getMessaging, getToken } from 'firebase/messaging';
+import { db, app } from '@/lib/firebase';
 import { Bell, BellOff, X, ShoppingBag } from 'lucide-react';
 
 export default function AdminNotificationManager() {
@@ -59,7 +60,21 @@ export default function AdminNotificationManager() {
     try {
       // Request native notification permission
       if ('Notification' in window) {
-        await Notification.requestPermission();
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+          try {
+            const messaging = getMessaging(app);
+            const currentToken = await getToken(messaging, {
+              vapidKey: process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY
+            });
+            if (currentToken) {
+              await setDoc(doc(db, 'admin_tokens', 'primary_admin'), {
+                token: currentToken,
+                updatedAt: new Date()
+              });
+            }
+          } catch(e) { console.error("FCM Token error", e); }
+        }
       }
       
       // We must play a silent sound or standard sound immediately to unlock Web Audio on mobile
@@ -215,10 +230,17 @@ const CSS = `
 }
 @media (max-width: 600px) {
   .admin-notif-prompt {
-    bottom: 0; right: 0; left: 0; max-width: 100%;
-    border-radius: 20px 20px 0 0; border: none;
-    border-top: 1px solid #E2E8F0;
+    bottom: 50%; right: 50%; left: auto; 
+    transform: translate(50%, 50%);
+    width: 90%; max-width: 400px;
+    border-radius: 16px; border: 1px solid #E2E8F0;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: anp-fade-in 0.3s ease-out;
   }
+}
+@keyframes anp-fade-in {
+  from { opacity: 0; transform: translate(50%, 45%); }
+  to { opacity: 1; transform: translate(50%, 50%); }
 }
 @keyframes anp-slide-up {
   from { transform: translateY(100%); opacity: 0; }

@@ -119,7 +119,15 @@ export default function AdminBannersPage() {
             flex-direction: column;
             align-items: stretch;
             padding: 16px;
+            gap: 12px;
           }
+          .banner-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+          }
+          .banner-header { display: none !important; }
         }
 
         .banner-row:hover {
@@ -233,7 +241,7 @@ export default function AdminBannersPage() {
            </div>
         ) : (
           <div>
-            <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr 100px 72px', gap: '16px', padding: '12px 20px', borderBottom: '1px solid #f1f5f9', background: '#fafbff', fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+            <div className="banner-header" style={{ display: 'grid', gridTemplateColumns: '200px 1fr 100px 72px', gap: '16px', padding: '12px 20px', borderBottom: '1px solid #f1f5f9', background: '#fafbff', fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
               <span>Image</span>
               <span>Link</span>
               <span>Status</span>

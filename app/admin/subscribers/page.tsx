@@ -147,10 +147,21 @@ export default function SubscribersPage() {
         </div>
       </div>
 
+      <style>{`
+        @media (max-width: 600px) {
+          .subs-table thead { display: none; }
+          .subs-table, .subs-table tbody, .subs-table tr, .subs-table td { display: block; width: 100%; }
+          .subs-table tr { border-bottom: 6px solid #f8fafc; padding-bottom: 4px; }
+          .subs-table td { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; text-align: right; border: none; border-bottom: 1px solid #f1f5f9; }
+          .subs-table td:last-child { border-bottom: none; }
+          .subs-table td::before { content: attr(data-label); font-size: 0.7rem; color: #64748b; text-transform: uppercase; font-weight: 700; }
+          .subs-table-wrap { min-width: 0 !important; }
+        }
+      `}</style>
       {/* Main Table Card */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[600px]">
+        <div>
+          <table className="subs-table subs-table-wrap w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Email Address</th>
@@ -161,20 +172,20 @@ export default function SubscribersPage() {
             <tbody className="divide-y divide-gray-100">
               {subscribers.map((sub) => (
                 <tr key={sub.id} className="hover:bg-gray-50 transition-colors duration-150">
-                  <td className="px-6 py-4">
+                  <td data-label="Email Address" className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+                      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 flex-shrink-0">
                         <Mail size={14} />
                       </div>
-                      <span className="font-medium text-gray-900">{sub.email}</span>
+                      <span className="font-medium text-gray-900 break-all text-left">{sub.email}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-gray-500 text-sm">
+                  <td data-label="Date Subscribed" className="px-6 py-4 text-gray-500 text-sm">
                     {sub.subscribedAt?.toDate?.()?.toLocaleDateString('en-US', {
                       year: 'numeric', month: 'short', day: 'numeric'
                     }) || 'Just now'}
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td data-label="Action" className="px-6 py-4 text-right">
                     <a 
                       href={`mailto:${sub.email}`}
                       className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors"

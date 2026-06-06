@@ -286,6 +286,19 @@ export default function AnalyticsPage() {
 
         .two-col { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; margin-bottom: 22px; }
         @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { 
+          .an-page { padding: 12px; }
+          .an-panel { padding: 16px; }
+          .kpi-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+          
+          /* Table to Cards */
+          .lb-table thead { display: none; }
+          .lb-table, .lb-table tbody, .lb-table tr, .lb-table td { display: block; width: 100%; }
+          .lb-table tr { margin-bottom: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; }
+          .lb-table td { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border: none; text-align: right; }
+          .lb-table td::before { content: attr(data-label); font-size: 0.7rem; color: #64748b; text-transform: uppercase; font-weight: 700; }
+          .lb-table td > div { text-align: right; }
+        }
       `}</style>
 
       <div className="an-page">
@@ -359,14 +372,14 @@ export default function AnalyticsPage() {
                   const m = medals[idx] || { bg: '#f8fafc', color: '#94a3b8' };
                   return (
                     <tr key={p.id}>
-                      <td>
+                      <td data-label="#">
                         <span className="rank-ball" style={{ background: m.bg, color: m.color }}>
                           {idx + 1}
                         </span>
                       </td>
-                      <td style={{ fontWeight: 700, color: '#0f172a' }}>{p.name}</td>
-                      <td style={{ color: '#94a3b8', fontSize: '0.8rem' }}>{p.category || '—'}</td>
-                      <td style={{ textAlign: 'right' }}>
+                      <td data-label="Product" style={{ fontWeight: 700, color: '#0f172a' }}>{p.name}</td>
+                      <td data-label="Category" style={{ color: '#94a3b8', fontSize: '0.8rem' }}>{p.category || '—'}</td>
+                      <td data-label="Hearts" style={{ textAlign: 'right' }}>
                         <span style={{ color: p.wishlistCount > 0 ? '#d4af37' : '#cbd5e1', fontWeight: 800 }}>
                           {p.wishlistCount > 0 ? `♥ ${p.wishlistCount}` : '—'}
                         </span>
@@ -442,10 +455,10 @@ export default function AnalyticsPage() {
                 <tbody>
                   {cartUsers.map((cu, idx) => (
                     <tr key={cu.uid}>
-                      <td>
+                      <td data-label="#">
                         <span className="rank-ball" style={{ background: '#fee2e2', color: '#dc2626' }}>{idx + 1}</span>
                       </td>
-                      <td>
+                      <td data-label="User">
                         <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.88rem' }}>
                           {cu.name || cu.googleName || <span style={{ color: '#94a3b8', fontStyle: 'italic', fontWeight: 400 }}>—</span>}
                         </div>
@@ -454,7 +467,7 @@ export default function AnalyticsPage() {
                         )}
                         <div style={{ fontSize: '0.68rem', color: '#cbd5e1', fontFamily: 'monospace', marginTop: '1px' }}>{cu.uid.slice(0, 14)}&hellip;</div>
                       </td>
-                      <td>
+                      <td data-label="Email">
                         {cu.email ? (
                           <div>
                             <a href={`mailto:${cu.email}`} style={{ color: '#2563eb', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}>
@@ -465,14 +478,14 @@ export default function AnalyticsPage() {
                           <span style={{ color: '#ef4444', fontSize: '0.8rem', fontWeight: 600 }}>Missing — ask user to re-login</span>
                         )}
                       </td>
-                      <td>
+                      <td data-label="Phone">
                         {/* Show popup-form phone first, then profile phone as fallback */}
                         {(() => {
                           const lead = popupLeadByUid.get(cu.uid);
                           const popupPhone = lead?.phone;
                           const profilePhone = cu.phone;
                           if (popupPhone) return (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', alignItems: 'flex-end' }}>
                               <a href={`tel:+91${popupPhone}`} style={{ color: '#0f172a', fontSize: '0.88rem', fontWeight: 700, textDecoration: 'none' }}>
                                 +91 {popupPhone}
                               </a>
@@ -489,18 +502,18 @@ export default function AnalyticsPage() {
                           return <span style={{ color: '#cbd5e1', fontSize: '0.82rem', fontStyle: 'italic' }}>Not provided</span>;
                         })()}
                       </td>
-                      <td style={{ textAlign: 'center' }}>
+                      <td data-label="Items" style={{ textAlign: 'center' }}>
                         <span style={{ background: '#eff6ff', color: '#2563eb', padding: '3px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 800 }}>
                           {cu.cartItemCount}
                         </span>
                       </td>
-                      <td style={{ textAlign: 'right', fontWeight: 800, color: '#16a34a', fontSize: '0.95rem' }}>
+                      <td data-label="Cart Value" style={{ textAlign: 'right', fontWeight: 800, color: '#16a34a', fontSize: '0.95rem' }}>
                         &#8377;{cu.cartTotal.toLocaleString('en-IN')}
                       </td>
-                      <td>
+                      <td data-label="Products">
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                           {cu.cart.slice(0, 3).map((item, i) => (
-                            <div key={i} style={{ fontSize: '0.75rem', color: '#475569', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <div key={i} style={{ fontSize: '0.75rem', color: '#475569', display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'flex-end' }}>
                               <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#d4af37', flexShrink: 0, display: 'inline-block' }} />
                               {item.name} ({item.size}ml) &times; {item.quantity}
                             </div>
@@ -557,24 +570,24 @@ export default function AnalyticsPage() {
                     }
                     return (
                       <tr key={lead.id}>
-                        <td>
+                        <td data-label="#">
                           <span className="rank-ball" style={{ background: '#fef9c3', color: '#b45309' }}>{idx + 1}</span>
                         </td>
-                        <td style={{ fontWeight: 700, color: '#0f172a' }}>{lead.name || '—'}</td>
-                        <td>
+                        <td data-label="Name" style={{ fontWeight: 700, color: '#0f172a' }}>{lead.name || '—'}</td>
+                        <td data-label="Phone">
                           {lead.phone ? (
                             <a href={`tel:+91${lead.phone}`} style={{ color: '#0f172a', fontWeight: 600, textDecoration: 'none', fontSize: '0.88rem' }}>
                               +91 {lead.phone}
                             </a>
                           ) : <span style={{ color: '#cbd5e1', fontStyle: 'italic' }}>—</span>}
                         </td>
-                        <td style={{ fontSize: '0.8rem', color: '#475569', maxWidth: '220px' }}>{lead.address || '—'}</td>
-                        <td>
+                        <td data-label="Address" style={{ fontSize: '0.8rem', color: '#475569', maxWidth: '220px', textAlign: 'right' }}>{lead.address || '—'}</td>
+                        <td data-label="Offer">
                           <span style={{ background: '#fef9c3', color: '#b45309', padding: '3px 10px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 800 }}>
                             {lead.offer || '2ml Free Attar'}
                           </span>
                         </td>
-                        <td style={{ textAlign: 'right', fontSize: '0.78rem', color: '#64748b' }}>
+                        <td data-label="Claimed" style={{ textAlign: 'right', fontSize: '0.78rem', color: '#64748b' }}>
                           {claimedDate || '—'}
                         </td>
                       </tr>

@@ -425,8 +425,10 @@ export default function AdminProductsPage() {
           .stats-grid {
             grid-template-columns: 1fr 1fr;
           }
-          .stats-grid > div:last-child {
-            grid-column: 1 / -1;
+          @media (max-width: 480px) {
+            .stats-grid {
+              grid-template-columns: 1fr;
+            }
           }
           .table-header {
             display: none !important;
