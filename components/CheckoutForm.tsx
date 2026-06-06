@@ -127,7 +127,24 @@ export default function CheckoutForm() {
         createdAt: serverTimestamp(),
         userId: user?.uid || 'guest',
       });
+      
       setConfirmedOrderId(orderId);
+
+      // Trigger Email Notification (non-blocking for UI if we don't await, but let's fire and forget)
+      fetch('/api/email/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId,
+          customerInfo: { name, email, phone },
+          shippingAddress: { pincode, city, state, house, area },
+          items: cart,
+          finalTotal,
+          shippingFee,
+          paymentMethod: payMethod === 'cod' ? 'COD' : 'Razorpay',
+        }),
+      }).catch(err => console.error("Email API failed:", err));
+
       clearCart();
       setStep('success');
       window.scrollTo({ top: 0, behavior: 'smooth' });

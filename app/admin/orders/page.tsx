@@ -31,9 +31,9 @@ interface Order {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; dot: string }> = {
-  Pending:   { label: 'Pending',   bg: '#FEF9C3', text: '#854D0E', dot: '#EAB308' },
+  Pending: { label: 'Pending', bg: '#FEF9C3', text: '#854D0E', dot: '#EAB308' },
   Confirmed: { label: 'Confirmed', bg: '#DCFCE7', text: '#166534', dot: '#16A34A' },
-  Shipped:   { label: 'Shipped',   bg: '#DBEAFE', text: '#1E40AF', dot: '#3B82F6' },
+  Shipped: { label: 'Shipped', bg: '#DBEAFE', text: '#1E40AF', dot: '#3B82F6' },
   Delivered: { label: 'Delivered', bg: '#D1FAE5', text: '#065F46', dot: '#10B981' },
   Cancelled: { label: 'Cancelled', bg: '#FEE2E2', text: '#991B1B', dot: '#EF4444' },
 };
@@ -184,7 +184,7 @@ export default function AdminOrdersPage() {
                 </div>
 
                 <div className="ao-col ao-col-customer">
-                  <p className="ao-name">{order.customerInfo?.name || 'Guest'} <span style={{fontSize: '0.7rem', color: '#94A3B8', marginLeft: 4}}>#{displayOrderId}</span></p>
+                  <p className="ao-name">{order.customerInfo?.name || 'Guest'} <span style={{ fontSize: '0.7rem', color: '#94A3B8', marginLeft: 4 }}>#{displayOrderId}</span></p>
                   <p className="ao-sub">{order.customerInfo?.phone}</p>
                 </div>
 
@@ -296,17 +296,16 @@ export default function AdminOrdersPage() {
                             key={s}
                             disabled={isActive || isLoading}
                             onClick={() => updateStatus(order.id, s)}
-                            className={`ao-status-btn ${
-                              s === 'Delivered' ? 'ao-btn-green' :
-                              s === 'Cancelled' ? 'ao-btn-red' :
-                              s === 'Shipped'   ? 'ao-btn-blue' :
-                              'ao-btn-yellow'
-                            } ${isActive ? 'ao-btn-active' : ''}`}
+                            className={`ao-status-btn ${s === 'Delivered' ? 'ao-btn-green' :
+                                s === 'Cancelled' ? 'ao-btn-red' :
+                                  s === 'Shipped' ? 'ao-btn-blue' :
+                                    'ao-btn-yellow'
+                              } ${isActive ? 'ao-btn-active' : ''}`}
                           >
-                            {isLoading ? '…' : s === 'Delivered' ? <><CheckCircle size={12}/>{s}</> :
-                              s === 'Cancelled' ? <><XCircle size={12}/>{s}</> :
-                              s === 'Shipped' ? <><Truck size={12}/>{s}</> :
-                              <><AlertCircle size={12}/>{s}</>}
+                            {isLoading ? '…' : s === 'Delivered' ? <><CheckCircle size={12} />{s}</> :
+                              s === 'Cancelled' ? <><XCircle size={12} />{s}</> :
+                                s === 'Shipped' ? <><Truck size={12} />{s}</> :
+                                  <><AlertCircle size={12} />{s}</>}
                           </button>
                         );
                       })}
@@ -314,7 +313,7 @@ export default function AdminOrdersPage() {
 
                     <a
                       href={`https://wa.me/91${order.customerInfo?.phone}?text=${encodeURIComponent(
-                        `Hi ${order.customerInfo?.name}! 👋\n\nWe've received your order at *Rahmani Perfumery* for *₹${order.finalTotal}*.\n\nPlease confirm your order for COD processing. Thank you! 🌹`
+                        `Hi ${order.customerInfo?.name}! 👋\n\nWe've received your order at *Rahmani Perfumery* for *₹${order.finalTotal}*.\n\nPlease confirm your order for COD or do you want to pay here?. Thank you! 🌹`
                       )}`}
                       target="_blank"
                       rel="noreferrer"
