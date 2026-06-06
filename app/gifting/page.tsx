@@ -312,7 +312,7 @@ export default function GiftingPage() {
   return (
     <div className="gf-root">
 
-      <div className="top-bar-overlay" style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 9999 }}>
+      <div className="top-bar-overlay" style={{ position: 'sticky', top: 0, left: 0, width: '100%', zIndex: 9999 }}>
         <AnnouncementBar />
         <Header 
           onMenuOpen={() => setMobileMenuOpen(true)} 

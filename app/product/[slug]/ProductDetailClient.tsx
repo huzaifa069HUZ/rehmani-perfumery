@@ -330,7 +330,7 @@ export default function ProductDetailClient({ product }: { product: ProductData 
 
   return (
     <>
-      <div className="top-bar-overlay" style={{ position: 'fixed', width: '100%', top: 0, zIndex: 100 }}>
+      <div className="top-bar-overlay" style={{ position: 'sticky', width: '100%', top: 0, zIndex: 100 }}>
         <AnnouncementBar />
         <Header
           onMenuOpen={() => setMobileMenuOpen(true)}
