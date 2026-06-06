@@ -70,7 +70,7 @@ interface FirestoreProduct {
 const ACCORDION_DATA = [
   {
     title: 'Benefits',
-    content: `• Highly concentrated — a single drop lasts 8–12 hours\n• Alcohol-free formulation, gentle on skin\n• Deepens and evolves throughout the day\n• Natural projection without being overpowering\n• Long-lasting sillage trail that leaves an impression`,
+    content: `• Highly concentrated — a single drop lasts 8–12 hours\n• Premium formulation, gentle on skin\n• Deepens and evolves throughout the day\n• Natural projection without being overpowering\n• Long-lasting sillage trail that leaves an impression`,
   },
   {
     title: 'Clean Ingredients',

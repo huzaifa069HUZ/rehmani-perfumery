@@ -171,6 +171,8 @@ export default function ProfilePage() {
           margin-bottom: 40px;
           border-bottom: 1px solid rgba(0,0,0,0.06);
           padding-bottom: 20px;
+          flex-wrap: wrap;
+          gap: 16px;
         }
         .profile-title {
           font-family: var(--font-serif);
@@ -238,6 +240,9 @@ export default function ProfilePage() {
           padding: 40px;
           border: 1px solid rgba(0,0,0,0.05);
           box-shadow: 0 10px 40px rgba(0,0,0,0.02);
+          overflow: hidden;
+          width: 100%;
+          box-sizing: border-box;
         }
         @media (max-width: 600px) {
           .content-col { padding: 24px; }
@@ -373,8 +378,8 @@ export default function ProfilePage() {
           padding: 16px 20px; cursor: pointer; background: #fafafa;
         }
         .order-header:hover { background: #f5f5f5; }
-        .order-main-info { display: flex; flex-direction: column; gap: 4px; }
-        .order-id { font-weight: 700; font-family: monospace; font-size: 1.1rem; }
+        .order-main-info { display: flex; flex-direction: column; gap: 4px; overflow: hidden; }
+        .order-id { font-weight: 700; font-family: monospace; font-size: 1.1rem; word-break: break-all; }
         .order-date { font-size: 0.8rem; color: var(--text-muted); }
         .order-status-wrap { display: flex; align-items: center; gap: 12px; }
         .order-status {

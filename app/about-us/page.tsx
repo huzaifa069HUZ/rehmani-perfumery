@@ -4,17 +4,17 @@ import AboutUsClient from './AboutUsClient';
 export const metadata: Metadata = {
   title: 'About Us — Rahmani Perfumery | Premium Attars, Oud & Bakhoor in Patna',
   description:
-    'Discover Rahmani Perfumery — your trusted source for premium alcohol-free attars, long-lasting perfumes, oud, bakhoor, and exclusive Eid gift packs in Patna, Bihar. Wear confidence. Wear identity. Wear memories.',
+    'Discover Rahmani Perfumery — your trusted source for premium long-lasting attars, exquisite perfumes, oud, bakhoor, and exclusive Eid gift packs in Patna, Bihar. Wear confidence. Wear identity. Wear memories.',
   keywords: [
     'about Rahmani Perfumery', 'Rahmani Perfumery story', 'Rehmani Perfumery',
     'best attar shop in Patna', 'best attar shop in Bihar',
-    'alcohol-free attar', 'oud perfume India', 'top fragrance store in Patna',
+    'long-lasting attar', 'oud perfume India', 'top fragrance store in Patna',
     'bakhoor', 'Eid gift pack', 'premium perfume', 'Arabian fragrance brand',
   ],
   alternates: { canonical: 'https://www.rahmaniperfumery.com/about-us' },
   openGraph: {
     title: 'About Us — Rahmani Perfumery',
-    description: 'Premium alcohol-free attars, oud, bakhoor and Eid gift packs — handcrafted with love in Patna.',
+    description: 'Premium long-lasting attars, oud, bakhoor and Eid gift packs — handcrafted with love in Patna.',
     url: 'https://www.rahmaniperfumery.com/about-us',
     siteName: 'Rahmani Perfumery',
     images: [
@@ -45,7 +45,7 @@ const aboutUsJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AboutPage',
   name: 'About Rahmani Perfumery',
-  description: 'Rahmani Perfumery — premium alcohol-free attars, oud, bakhoor and Eid gift packs, handcrafted in Patna, Bihar.',
+  description: 'Rahmani Perfumery — premium long-lasting attars, oud, bakhoor and Eid gift packs, handcrafted in Patna, Bihar.',
   url: 'https://www.rahmaniperfumery.com/about-us',
   publisher: {
     '@type': 'Organization',

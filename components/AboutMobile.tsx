@@ -110,7 +110,7 @@ export default function AboutMobile() {
               <motion.p variants={staggerItem} style={{
                 fontSize: 11, lineHeight: 1.85, color: C.textMuted, maxWidth: 200,
               }}>
-                Premium Alcohol-Free Attars &bull; Long-Lasting Perfumes &bull; Oud &bull; Bakhoor &bull; Eid Gift Packs
+                Premium Long-Lasting Attars &bull; Exquisite Perfumes &bull; Oud &bull; Bakhoor &bull; Eid Gift Packs
               </motion.p>
             </div>
 
@@ -169,7 +169,7 @@ export default function AboutMobile() {
           style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}
         >
           {[
-            { icon: '🌟', title: 'Premium Alcohol-Free Attars', desc: 'Pure, potent & crafted with heritage techniques' },
+            { icon: '🌟', title: 'Premium Long-Lasting Attars', desc: 'Pure, potent & crafted with heritage techniques' },
             { icon: '🌟', title: 'Long-Lasting Imported Perfumes', desc: 'International fragrances that project & endure' },
             { icon: '🌟', title: 'Exclusive Ramadan & Eid Gift Packs', desc: 'Curated luxury sets for special occasions' },
             { icon: '🌟', title: 'Bakhoor & Home Fragrance', desc: 'Fill your space with captivating aromas' },
@@ -263,7 +263,7 @@ export default function AboutMobile() {
           {[
             { title: 'PURE & NATURAL', desc: 'Sourced with care',
               path: 'M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z M9 16c1.5 1.5 4.5 1.5 6 0' },
-            { title: 'ALCOHOL FREE', desc: '100% alcohol free',
+            { title: 'LONG LASTING', desc: '100% long-lasting fragrance',
               path: 'M12 2C8 6 4 10 4 14a8 8 0 0016 0c0-4-4-8-8-12z M8 14h8 M12 10v8' },
             { title: 'HERITAGE CRAFTED', desc: 'Traditional methods',
               path: 'M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2v-7 M12 3l8 9H4l8-9z M9 16h6' },
@@ -415,7 +415,7 @@ export default function AboutMobile() {
         >
           {[
             { emoji: '🌹', label: 'Hand-Picked\nIngredients' },
-            { emoji: '💧', label: 'Zero Alcohol\nFormulation' },
+            { emoji: '💧', label: 'Long Lasting\nFormulation' },
             { emoji: '✨', label: 'Long Lasting\nProjection' },
           ].map((v, i) => (
             <motion.div key={i} variants={staggerItem} style={{

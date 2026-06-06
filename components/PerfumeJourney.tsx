@@ -64,7 +64,7 @@ import { EtheralShadow } from '@/components/ui/etheral-shadow';
 
 const REVEAL_TEXT =
   "Rahmani Perfumery — Patna's finest attar house. " +
-  "We craft pure, alcohol-free attars and long-lasting perfumes " +
+  "We craft premium, long-lasting attars and exquisite perfumes " +
   "from the rarest oud, musk, rose and saffron oils. " +
   "Every drop carries the soul of Arabian perfumery, " +
   "bottled with heritage and delivered to your door.";

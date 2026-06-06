@@ -39,7 +39,7 @@ export default function BentoCategories() {
             {/* Perfume - Tall */}
             <Link href="/perfumes" className="bento-item bento-tall" style={{ order: 1 }}>
               <Image 
-                src="/assets/ringlight.png" 
+                src="/assets/perfume banner.png" 
                 alt="Perfume Category" 
                 fill 
                 className="bento-img" 
@@ -47,7 +47,7 @@ export default function BentoCategories() {
               <div className="absolute inset-0 bg-black/20 pointer-events-none" style={{ zIndex: 1 }}></div>
               <div className="bento-content">
                 <h3 className="bento-item-title">Perfume</h3>
-                <p className="bento-item-desc">Connoisseurs of perfumery —<br/>heritage, held in a bottle.</p>
+                <p className="bento-item-desc">explore the vast collection of best perfumes<br/>by RAHMANI PERFUMERY</p>
               </div>
             </Link>
 

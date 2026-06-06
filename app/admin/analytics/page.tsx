@@ -294,10 +294,13 @@ export default function AnalyticsPage() {
           /* Table to Cards */
           .lb-table thead { display: none; }
           .lb-table, .lb-table tbody, .lb-table tr, .lb-table td { display: block; width: 100% !important; min-width: 0 !important; }
-          .lb-table tr { margin-bottom: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; }
-          .lb-table td { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border: none; text-align: right; }
-          .lb-table td::before { content: attr(data-label); font-size: 0.7rem; color: #64748b; text-transform: uppercase; font-weight: 700; }
-          .lb-table td > div { text-align: right; }
+          .lb-table tr { margin-bottom: 16px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+          .lb-table td { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0; border: none; text-align: right; gap: 12px; border-bottom: 1px dashed #f1f5f9; }
+          .lb-table td:last-child { border-bottom: none; padding-bottom: 0; }
+          .lb-table td::before { content: attr(data-label); font-size: 0.7rem; color: #64748b; text-transform: uppercase; font-weight: 800; flex-shrink: 0; padding-top: 2px; }
+          .lb-table td span, .lb-table td div { word-break: break-word; text-align: right; }
+          
+          .kpi-card { padding: 20px; border-radius: 16px; }
         }
       `}</style>
 

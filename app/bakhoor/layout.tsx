@@ -88,7 +88,7 @@ export default function BakhoorLayout({ children }: { children: React.ReactNode 
               <h3 className="seo-subheading">Browse Our Collections</h3>
               <ul className="seo-links">
                 <li><Link href="/bakhoor">All Bakhoor</Link> — Complete Arabian incense and oud muattar collection</li>
-                <li><Link href="/attars">Premium Attars</Link> — Pure, alcohol-free concentrated perfume oils</li>
+                <li><Link href="/attars">Premium Attars</Link> — Pure, long-lasting concentrated perfume oils</li>
                 <li><Link href="/incense-sticks">Incense Sticks</Link> — Premium aggarbatti for meditation and prayer</li>
                 <li><Link href="/store">Visit Our Stores</Link> — Experience our fragrances in person in Patna</li>
               </ul>

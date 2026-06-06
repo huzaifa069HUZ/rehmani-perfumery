@@ -76,7 +76,7 @@ export default function IncenseLayout({ children }: { children: React.ReactNode 
               <ul className="seo-links">
                 <li><Link href="/incense-sticks">All Incense Sticks</Link> — Browse our complete aggarbatti collection</li>
                 <li><Link href="/bakhoor">Bakhoor & Oud Muattar</Link> — Authentic Arabian incense chips</li>
-                <li><Link href="/attars">Premium Attars</Link> — Pure, alcohol-free concentrated perfume oils</li>
+                <li><Link href="/attars">Premium Attars</Link> — Pure, long-lasting concentrated perfume oils</li>
                 <li><Link href="/store">Visit Our Stores</Link> — Experience our fragrances in person in Patna</li>
               </ul>
             </div>

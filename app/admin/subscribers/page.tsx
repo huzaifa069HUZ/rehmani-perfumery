@@ -149,28 +149,55 @@ export default function SubscribersPage() {
 
       <style>{`
         @media (max-width: 600px) {
-          .header-actions { flex-direction: column; width: 100%; }
-          .header-actions button { width: 100%; }
+          .header-actions { flex-direction: column; width: 100%; gap: 12px; }
+          .header-actions button { width: 100%; padding: 14px; border-radius: 12px; }
           .subs-table thead { display: none; }
           .subs-table, .subs-table tbody, .subs-table tr, .subs-table td { display: block; width: 100%; }
           
-          /* Modern Inbox-Style List for Mobile */
-          .subs-table tr { 
-            display: flex; flex-wrap: wrap; align-items: center; 
-            padding: 16px; border-bottom: 1px solid #f1f5f9; position: relative;
-          }
-          .subs-table td { padding: 0; border: none; text-align: left; }
-          .subs-table td::before { display: none; }
+          .subs-table { background: transparent; }
           
-          .email-col { width: 100%; display: flex; align-items: center; margin-bottom: 8px; }
-          .date-col { width: 50%; font-size: 0.75rem; color: #94a3b8; padding-left: 44px !important; }
-          .action-col { width: 50%; text-align: right !important; }
+          /* Apple-esque Cards for Mobile */
+          .subs-table tr { 
+            display: flex; flex-direction: column; align-items: flex-start;
+            padding: 20px; 
+            margin-bottom: 12px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 1px solid #f1f5f9;
+            position: relative;
+          }
+          .subs-table td { padding: 0; border: none; text-align: left; width: 100%; }
+          
+          .email-col { display: flex; align-items: center; margin-bottom: 12px; }
+          .email-col > div { width: 100%; }
+          
+          .date-col { font-size: 0.8rem; color: #64748b; margin-bottom: 16px; padding-left: 44px !important; }
+          
+          .action-col { 
+            width: 100%; 
+            display: flex; 
+            justify-content: flex-end; 
+            padding-top: 12px !important;
+            border-top: 1px dashed #e2e8f0;
+          }
+          .action-col a {
+            background: #eff6ff;
+            color: #2563eb;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+          }
           
           .subs-table-wrap { min-width: 0 !important; }
         }
       `}</style>
       {/* Main Table Card */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-transparent sm:bg-white sm:rounded-2xl sm:shadow-sm sm:border sm:border-gray-200 overflow-hidden">
         <div>
           <table className="subs-table subs-table-wrap w-full text-left border-collapse">
             <thead>
@@ -180,7 +207,7 @@ export default function SubscribersPage() {
                 <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="sm:divide-y sm:divide-gray-100">
               {subscribers.map((sub) => (
                 <tr key={sub.id} className="hover:bg-gray-50 transition-colors duration-150">
                   <td data-label="Email Address" className="px-6 py-4 email-col">
@@ -207,7 +234,7 @@ export default function SubscribersPage() {
                 </tr>
               ))}
               {subscribers.length === 0 && (
-                <tr>
+                <tr className="bg-white rounded-2xl border border-gray-100">
                   <td colSpan={3} className="px-6 py-16 text-center">
                     <div className="flex flex-col items-center justify-center text-gray-400">
                       <Users size={32} className="mb-3 text-gray-300" />

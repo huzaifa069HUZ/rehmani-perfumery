@@ -55,7 +55,7 @@ const faqJsonLd = {
       name: 'What is Rahmani Perfumery?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Rahmani Perfumery (also known as Rehmani Perfumery) is a premium Arabian attar and perfume brand based in Patna, Bihar. Established in 2015, we are recognized as one of the best attar shops in Patna, offering handcrafted alcohol-free attars, luxury oud, musk, bakhoor, and imported perfumes delivered across India.',
+        text: 'Rahmani Perfumery (also known as Rehmani Perfumery) is a premium Arabian attar and perfume brand based in Patna, Bihar. Established in 2015, we are recognized as one of the best attar shops in Patna, offering handcrafted long-lasting attars, luxury oud, musk, bakhoor, and imported perfumes delivered across India.',
       },
     },
     {
@@ -87,7 +87,7 @@ const faqJsonLd = {
       name: 'What products does Rahmani Perfumery offer?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Rahmani Perfumery offers premium Arabian attars (concentrated perfume oils), luxury oud, musk, floral attars, imported spray perfumes for men and women, bakhoor (Arabian incense chips), and premium incense sticks (agarbatti). All attars are alcohol-free and long-lasting.',
+        text: 'Rahmani Perfumery offers premium Arabian attars (concentrated perfume oils), luxury oud, musk, floral attars, imported spray perfumes for men and women, bakhoor (Arabian incense chips), and premium incense sticks (agarbatti). All attars are crafted to be rich and exceptionally long-lasting.',
       },
     },
   ],
@@ -120,7 +120,7 @@ export default function Home() {
                 <strong>Rahmani Perfumery</strong> (also known as <strong>Rehmani Perfumery</strong>) is Patna's most trusted destination for premium Arabian attars, luxury oud, musk, and handcrafted perfume oils. Established in 2015, we have earned a reputation as the <em>best attar shop in Patna, Bihar</em>, serving thousands of fragrance enthusiasts across India.
               </p>
               <p>
-                Our curated collection features pure, alcohol-free attars sourced from the finest distilleries in Arabia, alongside imported long-lasting spray perfumes for men and women. Whether you're searching for <strong>Rahmani attar</strong>, <strong>Rahmani oud</strong>, or the perfect <strong>bakhoor</strong> for your home — we have it all.
+                Our curated collection features pure, long-lasting attars sourced from the finest distilleries in Arabia, alongside imported long-lasting spray perfumes for men and women. Whether you're searching for <strong>Rahmani attar</strong>, <strong>Rahmani oud</strong>, or the perfect <strong>bakhoor</strong> for your home — we have it all.
               </p>
             </div>
             

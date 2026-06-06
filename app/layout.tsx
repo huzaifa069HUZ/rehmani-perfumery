@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     // Product queries
     'buy attar online', 'buy oud online India', 'best oud India', 'oud attar',
     'Arabian perfume', 'musk perfume', 'floral attar', 'luxury fragrance',
-    'concentrated perfume oil', 'natural attar', 'alcohol-free attar', 'ittar',
+    'concentrated perfume oil', 'natural attar', 'long-lasting attar', 'ittar',
     'premium attar brand', 'best perfumes in Patna', 'imported perfumes Patna',
     // Specific products
     'Oud Nadira', 'Shamamatul Amber', 'Ruh Khus', 'best oud in India',

@@ -255,7 +255,7 @@ export default function AboutContentSection() {
           maxWidth: 380,
           margin: '28px auto 0',
         }}>
-          Rethinking Arabian formulation techniques to forge uncompromised, hyper-durable profiles. Bottled strictly without alcohol.
+          Rethinking Arabian formulation techniques to forge uncompromised, hyper-durable profiles. Crafted for an unforgettable, long-lasting sillage.
         </p>
       </section>
 
@@ -306,7 +306,7 @@ export default function AboutContentSection() {
               color: GOLD,
               marginBottom: 8,
               position: 'relative', zIndex: 1,
-            }}>ALCOHOL-FREE ATTARS</p>
+            }}>LONG-LASTING ATTARS</p>
             <h3 className={HF} style={{
               fontSize: 'clamp(1.5rem, 6vw, 2.2rem)',
               lineHeight: 1,
@@ -513,7 +513,7 @@ export default function AboutContentSection() {
           margin: '32px auto 0',
           textAlign: 'center'
         }}>
-          Premium Alcohol-Free Attars • Long-Lasting Perfumes • Oud • Bakhoor • Eid Gift Packs
+          Premium Long-Lasting Attars • Exquisite Perfumes • Oud • Bakhoor • Eid Gift Packs
         </p>
       </section>
 
@@ -534,7 +534,7 @@ export default function AboutContentSection() {
 
             {/* Info Card 2 */}
             <div className="group flex-1 flex flex-col justify-center items-center text-center bg-white rounded-[2rem] p-8 lg:py-10 transition-all duration-500 hover:bg-[#0a0a0a] hover:-translate-y-1 cursor-default border border-gray-100/50" style={{ boxShadow: '0 12px 30px -8px rgba(0,0,0,0.04)' }}>
-              <p className="text-[11px] font-bold tracking-[0.25em] text-[#c9a55a] uppercase mb-3">100% Alcohol Free</p>
+              <p className="text-[11px] font-bold tracking-[0.25em] text-[#c9a55a] uppercase mb-3">100% Long Lasting</p>
               <h3 className={`${HF} text-xl lg:text-2xl text-[#1a1a1a] group-hover:text-white transition-colors duration-500 leading-tight`}>
                 Pure & Premium Oils
               </h3>
@@ -594,7 +594,7 @@ export default function AboutContentSection() {
           {/* Feature Grid */}
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {[
-              { icon: '🌿', number: '0%', label: 'Alcohol', desc: 'Pure premium oils' },
+              { icon: '🌿', number: '100%', label: 'Long Lasting', desc: 'Pure premium oils' },
               { icon: '⏳', number: '12h+', label: 'Lasting', desc: 'All day projection' },
               { icon: '🎁', number: '50+', label: 'Gift Sets', desc: 'Perfect for occasions' },
               { icon: '⭐', number: '5000+', label: 'Reviews', desc: 'Happy customers' },

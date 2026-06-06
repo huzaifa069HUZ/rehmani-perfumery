@@ -10,6 +10,10 @@ import { collection, getDocs } from 'firebase/firestore';
 import { useCart } from '@/context/CartContext';
 import QuickViewModal from '@/components/QuickViewModal';
 import { buildProductSlug } from '@/lib/utils';
+import AnnouncementBar from '@/components/AnnouncementBar';
+import Header from '@/components/Header';
+import GlobalSearch from '@/components/GlobalSearch';
+import MobileMenu from '@/components/MobileMenu';
 
 /* ── Types ──────────────────────────────────────────── */
 type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'name-az' | 'discount';
@@ -182,6 +186,8 @@ export default function AttarsPage() {
   const [sortOpen,   setSortOpen]   = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -254,17 +260,15 @@ export default function AttarsPage() {
   return (
     <div className="al-root">
 
-      {/* ── Back bar ── */}
-      <div className="al-topbar">
-        <button className="al-back-btn" onClick={() => router.back()}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/>
-          </svg>
-          Back
-        </button>
-        <span className="al-topbar-brand">REHMANI PERFUMERY</span>
-        <span />
+      <div className="top-bar-overlay" style={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 9999 }}>
+        <AnnouncementBar />
+        <Header 
+          onMenuOpen={() => setMobileMenuOpen(true)} 
+          onSearchOpen={() => setIsSearchOpen(true)}
+        />
       </div>
+      <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
 
       {/* ── Hero banner ── */}
       <div className="al-hero">
