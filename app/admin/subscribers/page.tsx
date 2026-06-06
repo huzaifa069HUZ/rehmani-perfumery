@@ -117,7 +117,7 @@ export default function SubscribersPage() {
           </p>
         </div>
         
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+        <div className="header-actions flex flex-wrap items-center gap-3 w-full md:w-auto">
           <button 
             onClick={() => setIsModalOpen(true)}
             style={{ backgroundColor: '#d4af37', color: '#ffffff' }}
@@ -149,12 +149,23 @@ export default function SubscribersPage() {
 
       <style>{`
         @media (max-width: 600px) {
+          .header-actions { flex-direction: column; width: 100%; }
+          .header-actions button { width: 100%; }
           .subs-table thead { display: none; }
           .subs-table, .subs-table tbody, .subs-table tr, .subs-table td { display: block; width: 100%; }
-          .subs-table tr { border-bottom: 6px solid #f8fafc; padding-bottom: 4px; }
-          .subs-table td { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; text-align: right; border: none; border-bottom: 1px solid #f1f5f9; }
-          .subs-table td:last-child { border-bottom: none; }
-          .subs-table td::before { content: attr(data-label); font-size: 0.7rem; color: #64748b; text-transform: uppercase; font-weight: 700; }
+          
+          /* Modern Inbox-Style List for Mobile */
+          .subs-table tr { 
+            display: flex; flex-wrap: wrap; align-items: center; 
+            padding: 16px; border-bottom: 1px solid #f1f5f9; position: relative;
+          }
+          .subs-table td { padding: 0; border: none; text-align: left; }
+          .subs-table td::before { display: none; }
+          
+          .email-col { width: 100%; display: flex; align-items: center; margin-bottom: 8px; }
+          .date-col { width: 50%; font-size: 0.75rem; color: #94a3b8; padding-left: 44px !important; }
+          .action-col { width: 50%; text-align: right !important; }
+          
           .subs-table-wrap { min-width: 0 !important; }
         }
       `}</style>
@@ -172,7 +183,7 @@ export default function SubscribersPage() {
             <tbody className="divide-y divide-gray-100">
               {subscribers.map((sub) => (
                 <tr key={sub.id} className="hover:bg-gray-50 transition-colors duration-150">
-                  <td data-label="Email Address" className="px-6 py-4">
+                  <td data-label="Email Address" className="px-6 py-4 email-col">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 flex-shrink-0">
                         <Mail size={14} />
@@ -180,12 +191,12 @@ export default function SubscribersPage() {
                       <span className="font-medium text-gray-900 break-all text-left">{sub.email}</span>
                     </div>
                   </td>
-                  <td data-label="Date Subscribed" className="px-6 py-4 text-gray-500 text-sm">
+                  <td data-label="Date Subscribed" className="px-6 py-4 text-gray-500 text-sm date-col">
                     {sub.subscribedAt?.toDate?.()?.toLocaleDateString('en-US', {
                       year: 'numeric', month: 'short', day: 'numeric'
                     }) || 'Just now'}
                   </td>
-                  <td data-label="Action" className="px-6 py-4 text-right">
+                  <td data-label="Action" className="px-6 py-4 text-right action-col">
                     <a 
                       href={`mailto:${sub.email}`}
                       className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors"

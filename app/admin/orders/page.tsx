@@ -109,8 +109,15 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <div style={{ fontFamily: "'Inter',system-ui,sans-serif", WebkitFontSmoothing: 'antialiased' }}>
+    <div className="ao-page" style={{ fontFamily: "'Inter',system-ui,sans-serif", WebkitFontSmoothing: 'antialiased' }}>
       <style>{adminCSS}</style>
+
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
+        <div>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', margin: '0 0 4px 0' }}>Orders</h1>
+          <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0 }}>Manage your customer orders</p>
+        </div>
+      </div>
 
       {/* ── Stats Bar ── */}
       <div className="ao-stats">
@@ -333,6 +340,9 @@ export default function AdminOrdersPage() {
 }
 
 const adminCSS = `
+.ao-page { padding: 32px; max-width: 1200px; margin: 0 auto; }
+@media (max-width: 768px) { .ao-page { padding: 12px; } }
+
 /* ── Stats ── */
 .ao-stats {
   display: grid;
@@ -438,6 +448,7 @@ const adminCSS = `
   border: 1px solid #F1F5F9;
   border-radius: 12px;
   overflow: hidden;
+  position: relative;
   box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   transition: box-shadow 0.2s, border-color 0.2s;
 }
@@ -490,21 +501,26 @@ const adminCSS = `
 
 @media (max-width: 768px) {
   .ao-row {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 0.75rem 0.5rem;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    padding: 1rem;
+    text-align: center;
+    gap: 12px;
+    padding: 24px 16px 20px;
   }
   .ao-avatar {
-    grid-column: 1; grid-row: 1 / 3;
-    width: 44px; height: 44px; font-size: 1.1rem;
+    width: 48px; height: 48px; font-size: 1.2rem;
+    margin-bottom: 4px;
   }
-  .ao-col-customer { grid-column: 2; grid-row: 1; }
-  .ao-col-status   { grid-column: 3; grid-row: 1; justify-self: end; }
-  .ao-col-amount   { grid-column: 2; grid-row: 2; }
-  .ao-col-amount .ao-amount { font-size: 1rem; }
-  .ao-chevron      { grid-column: 3; grid-row: 2; justify-self: end; }
+  .ao-col { align-items: center; }
+  .ao-name { white-space: normal; text-align: center; }
+  .ao-col-amount .ao-amount { font-size: 1.15rem; margin-top: 4px; }
+  .ao-col-status { margin-top: 4px; }
+  .ao-chevron {
+    position: absolute; right: 12px; top: 12px;
+    background: #f8fafc; border-radius: 50%;
+    padding: 6px;
+  }
   .ao-col-date, .ao-col-items { display: none; }
 }
 
