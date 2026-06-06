@@ -405,6 +405,16 @@ export default function ProfilePage() {
         .os-row { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-muted); }
         .os-total { display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 700; margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(0,0,0,0.1); }
         .os-method { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; text-align: right; }
+
+        @media (max-width: 600px) {
+          .profile-container { padding: 0 16px; }
+          .content-col { padding: 20px 16px; }
+          .order-header { padding: 16px; flex-direction: column; align-items: flex-start; gap: 12px; }
+          .order-status-wrap { width: 100%; justify-content: space-between; }
+          .order-details { padding: 16px; }
+          .oi-main { flex: 1; min-width: 0; padding-right: 12px; }
+          .oi-name { white-space: normal; word-break: break-word; }
+        }
       `}</style>
 
       <Header onMenuOpen={() => {}} onSearchOpen={() => setIsSearchOpen(true)} />
