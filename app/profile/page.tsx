@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { doc, getDoc, setDoc, collection, query, where, getDocs, DocumentData } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { useWishlist } from '@/context/WishlistContext';
@@ -11,11 +11,31 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import GlobalSearch from '@/components/GlobalSearch';
 
+interface OrderItem { name: string; size: number; price: number; quantity: number; }
+interface UserOrder {
+  id: string;
+  items: OrderItem[];
+  finalTotal: number;
+  shippingFee: number;
+  paymentMethod: string;
+  status: string;
+  createdAt: any;
+  shippingAddress: { city: string; state: string; };
+}
+
+const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> = {
+  Pending:   { bg: '#FEF9C3', text: '#854D0E', dot: '#EAB308' },
+  Confirmed: { bg: '#DCFCE7', text: '#166534', dot: '#16A34A' },
+  Shipped:   { bg: '#DBEAFE', text: '#1E40AF', dot: '#3B82F6' },
+  Delivered: { bg: '#D1FAE5', text: '#065F46', dot: '#10B981' },
+  Cancelled: { bg: '#FEE2E2', text: '#991B1B', dot: '#EF4444' },
+};
+
 export default function ProfilePage() {
   const { user, loading: authLoading, logout } = useAuth();
   const router = useRouter();
 
-  const [activeTab, setActiveTab] = useState<'details' | 'wishlist'>('details');
+  const [activeTab, setActiveTab] = useState<'details' | 'orders' | 'wishlist'>('details');
   const [profileLoading, setProfileLoading] = useState(true);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   
@@ -26,6 +46,11 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
 
+  // Orders
+  const [orders, setOrders] = useState<UserOrder[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+
   // Wishlist Context Data
   const { wishlist: contextWishlist, removeFromWishlist } = useWishlist();
 
@@ -34,6 +59,32 @@ export default function ProfilePage() {
       router.push('/auth');
     }
   }, [user, authLoading, router]);
+
+  // Fetch orders
+  useEffect(() => {
+    if (!user || activeTab !== 'orders') return;
+    const fetchOrders = async () => {
+      setOrdersLoading(true);
+      try {
+        const q = query(collection(db, 'orders'), where('userId', '==', user.uid));
+        const snap = await getDocs(q);
+        const data: UserOrder[] = snap.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as UserOrder)).sort((a, b) => {
+          const timeA = a.createdAt?.toMillis?.() || 0;
+          const timeB = b.createdAt?.toMillis?.() || 0;
+          return timeB - timeA;
+        });
+        setOrders(data);
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+      } finally {
+        setOrdersLoading(false);
+      }
+    };
+    fetchOrders();
+  }, [user, activeTab]);
 
   useEffect(() => {
     if (!user) return;
@@ -307,6 +358,53 @@ export default function ProfilePage() {
           padding: 40px 20px;
           color: var(--text-muted);
         }
+
+        /* Orders */
+        .orders-list { display: flex; flex-direction: column; gap: 16px; }
+        .order-card {
+          border: 1px solid rgba(0,0,0,0.06);
+          border-radius: 8px;
+          overflow: hidden;
+          background: #fff;
+          transition: border-color 0.2s;
+        }
+        .order-header {
+          display: flex; justify-content: space-between; align-items: center;
+          padding: 16px 20px; cursor: pointer; background: #fafafa;
+        }
+        .order-header:hover { background: #f5f5f5; }
+        .order-main-info { display: flex; flex-direction: column; gap: 4px; }
+        .order-id { font-weight: 700; font-family: monospace; font-size: 1.1rem; }
+        .order-date { font-size: 0.8rem; color: var(--text-muted); }
+        .order-status-wrap { display: flex; align-items: center; gap: 12px; }
+        .order-status {
+          display: inline-flex; align-items: center; gap: 6px;
+          padding: 4px 10px; border-radius: 20px;
+          font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .order-dot { width: 6px; height: 6px; border-radius: 50%; }
+        
+        .order-details {
+          padding: 20px;
+          border-top: 1px solid rgba(0,0,0,0.06);
+          animation: fadein 0.3s ease-out forwards;
+        }
+        @keyframes fadein { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .order-items { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .order-item-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.04); }
+        .order-item-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .oi-name { font-weight: 600; font-size: 0.95rem; }
+        .oi-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+        .oi-price { font-weight: 700; }
+        
+        .order-summary {
+          background: #fafafa; padding: 16px; border-radius: 6px;
+          display: flex; flex-direction: column; gap: 8px;
+        }
+        .os-row { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-muted); }
+        .os-total { display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 700; margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(0,0,0,0.1); }
+        .os-method { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; text-align: right; }
       `}</style>
 
       <Header onMenuOpen={() => {}} onSearchOpen={() => setIsSearchOpen(true)} />
@@ -330,6 +428,12 @@ export default function ProfilePage() {
                 onClick={() => setActiveTab('details')}
               >
                 Personal Details
+              </button>
+              <button 
+                className={`tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
+                onClick={() => setActiveTab('orders')}
+              >
+                My Orders
               </button>
               <button 
                 className={`tab-btn ${activeTab === 'wishlist' ? 'active' : ''}`}
@@ -372,6 +476,85 @@ export default function ProfilePage() {
                     </button>
                     {saveMsg && <div className="sys-msg">{saveMsg}</div>}
                   </form>
+                </div>
+              )}
+
+              {activeTab === 'orders' && (
+                <div className="form-animation-fade">
+                  <h2 className="section-title">Order History</h2>
+                  <p className="section-desc">View and track your recent orders.</p>
+
+                  {ordersLoading ? (
+                    <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>Loading orders...</div>
+                  ) : orders.length === 0 ? (
+                    <div className="empty-state">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" style={{ margin: '0 auto 16px', opacity: 0.3 }}><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                      <p>You haven't placed any orders yet.</p>
+                      <button onClick={() => router.push('/store')} style={{ marginTop: 16, color: 'var(--gold)', fontWeight: 600, textDecoration: 'underline' }}>Shop our collection.</button>
+                    </div>
+                  ) : (
+                    <div className="orders-list">
+                      {orders.map(order => {
+                        const isExpanded = expandedOrder === order.id;
+                        const sc = STATUS_COLORS[order.status] || STATUS_COLORS.Pending;
+                        const dateStr = order.createdAt?.toDate?.()?.toLocaleDateString('en-IN', {
+                          day: '2-digit', month: 'short', year: 'numeric'
+                        }) || '—';
+                        const displayOrderId = (order as any).orderId || order.id;
+
+                        return (
+                          <div key={order.id} className="order-card" style={{ borderColor: isExpanded ? 'rgba(0,0,0,0.15)' : 'rgba(0,0,0,0.06)' }}>
+                            <div className="order-header" onClick={() => setExpandedOrder(isExpanded ? null : order.id)}>
+                              <div className="order-main-info">
+                                <span className="order-id">#{displayOrderId}</span>
+                                <span className="order-date">{dateStr}</span>
+                              </div>
+                              <div className="order-status-wrap">
+                                <span className="order-status" style={{ background: sc.bg, color: sc.text }}>
+                                  <span className="order-dot" style={{ background: sc.dot }} />
+                                  {order.status}
+                                </span>
+                                <span style={{ transform: isExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', display: 'flex' }}>
+                                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                </span>
+                              </div>
+                            </div>
+
+                            {isExpanded && (
+                              <div className="order-details">
+                                <div className="order-items">
+                                  {order.items.map((item, i) => (
+                                    <div key={i} className="order-item-row">
+                                      <div className="oi-main">
+                                        <div className="oi-name">{item.name}</div>
+                                        <div className="oi-meta">{item.size === 1 ? '1 Box' : `${item.size}ml`} &times; {item.quantity}</div>
+                                      </div>
+                                      <div className="oi-price">{item.price === 0 ? 'FREE' : `₹${item.price * item.quantity}`}</div>
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="order-summary">
+                                  <div className="os-row">
+                                    <span>Subtotal</span>
+                                    <span>₹{order.finalTotal - order.shippingFee}</span>
+                                  </div>
+                                  <div className="os-row">
+                                    <span>Shipping</span>
+                                    <span>{order.shippingFee === 0 ? 'FREE' : `₹${order.shippingFee}`}</span>
+                                  </div>
+                                  <div className="os-total">
+                                    <span>Total</span>
+                                    <span>₹{order.finalTotal}</span>
+                                  </div>
+                                  <div className="os-method">Paid via: {order.paymentMethod}</div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
 
