@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, query, orderBy, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import {
   Package, ChevronDown, ChevronUp, MapPin, Truck, Phone,
   Mail, Clock, CheckCircle, XCircle, AlertCircle, Search,
-  RefreshCw, MessageCircle, Filter
+  RefreshCw, MessageCircle, Filter, Trash2
 } from 'lucide-react';
 
 interface OrderItem {
@@ -86,6 +86,21 @@ export default function AdminOrdersPage() {
       setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
     } catch (e) {
       console.error(e);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const deleteOrder = async (orderId: string) => {
+    if (!confirm('Are you sure you want to completely delete this order? This cannot be undone.')) return;
+    setUpdatingId(orderId);
+    try {
+      await deleteDoc(doc(db, 'orders', orderId));
+      setOrders(prev => prev.filter(o => o.id !== orderId));
+      setFiltered(prev => prev.filter(o => o.id !== orderId));
+    } catch (e) {
+      console.error(e);
+      alert('Failed to delete order.');
     } finally {
       setUpdatingId(null);
     }
@@ -318,16 +333,27 @@ export default function AdminOrdersPage() {
                       })}
                     </div>
 
-                    <a
-                      href={`https://wa.me/91${order.customerInfo?.phone}?text=${encodeURIComponent(
-                        `Hi ${order.customerInfo?.name}! 👋\n\nWe've received your order at *Rahmani Perfumery* for *₹${order.finalTotal}*.\n\nPlease confirm your order for COD or do you want to pay here?. Thank you! 🌹`
-                      )}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="ao-wa-btn"
-                    >
-                      <MessageCircle size={14} /> WhatsApp
-                    </a>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                      <button
+                        onClick={() => deleteOrder(order.id)}
+                        disabled={updatingId === order.id}
+                        className="ao-del-btn"
+                        title="Delete Order"
+                      >
+                        <Trash2 size={14} /> Delete
+                      </button>
+
+                      <a
+                        href={`https://wa.me/91${order.customerInfo?.phone}?text=${encodeURIComponent(
+                          `Hi ${order.customerInfo?.name}! 👋\n\nWe've received your order at *Rahmani Perfumery* for *₹${order.finalTotal}*.\n\nPlease confirm your order for COD or do you want to pay here?. Thank you! 🌹`
+                        )}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="ao-wa-btn"
+                      >
+                        <MessageCircle size={14} /> WhatsApp
+                      </a>
+                    </div>
                   </div>
                 </div>
               )}
@@ -482,6 +508,38 @@ const adminCSS = `
 .ao-sub  { font-size: 0.72rem; color: #94A3B8; margin: 0; font-weight: 500; }
 .ao-amount { font-size: 0.92rem; font-weight: 800; color: #0F172A; margin: 0; font-family: system-ui; }
 .ao-email-val { font-size: 0.75rem !important; }
+
+.ao-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #25D366;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.ao-wa-btn:hover { background: #128C7E; transform: translateY(-1px); }
+
+.ao-del-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ao-del-btn:hover { background: #FEE2E2; border-color: #F87171; }
+.ao-del-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .ao-badge {
   display: inline-flex; align-items: center; gap: 5px;
