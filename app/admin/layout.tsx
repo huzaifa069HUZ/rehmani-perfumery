@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
+import AdminNotificationManager from '@/components/admin/AdminNotificationManager';
 
 const ADMIN_EMAIL = 'rahmaniperfumerypatna@gmail.com';
 
@@ -96,6 +97,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div style={{ minHeight: '100vh', background: '#f0f2f8', display: 'flex', fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
+      <AdminNotificationManager />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
