@@ -1,8 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import GlobalSearch from '@/components/GlobalSearch';
@@ -54,53 +52,25 @@ export default function TrackOrderPage() {
 
     setLoading(true);
     try {
-      // Query by orderId field
-      const q = query(collection(db, 'orders'), where('orderId', '==', orderId.trim().toUpperCase()));
-      const snap = await getDocs(q);
+      const res = await fetch('/api/track-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId: orderId.trim(),
+          contact: contact.trim(),
+        }),
+      });
 
-      if (snap.empty) {
-        setError('No order found with this Order ID. Please check and try again.');
-        setLoading(false);
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || 'Something went wrong. Please try again.');
         return;
       }
 
-      // Find matching order by phone or email
-      let matchedOrder: TrackedOrder | null = null;
-      snap.docs.forEach(doc => {
-        const data = doc.data() as any;
-        const customerPhone = data.customerInfo?.phone || '';
-        const customerEmail = (data.customerInfo?.email || '').toLowerCase();
-        const inputContact = contact.trim().toLowerCase();
-
-        // Match by phone (last 10 digits) or email
-        const phoneDigits = customerPhone.replace(/\D/g, '').slice(-10);
-        const inputDigits = inputContact.replace(/\D/g, '').slice(-10);
-
-        if (
-          (inputDigits.length >= 10 && phoneDigits === inputDigits) ||
-          (inputContact.includes('@') && customerEmail === inputContact)
-        ) {
-          matchedOrder = {
-            id: doc.id,
-            orderId: data.orderId,
-            customerInfo: data.customerInfo,
-            shippingAddress: data.shippingAddress,
-            items: data.items || [],
-            totalPrice: data.totalPrice || 0,
-            shippingFee: data.shippingFee || 0,
-            finalTotal: data.finalTotal || 0,
-            paymentMethod: data.paymentMethod || 'COD',
-            status: data.status || 'Pending',
-            createdAt: data.createdAt,
-          };
-        }
-      });
-
-      if (matchedOrder) {
-        setOrder(matchedOrder);
-      } else {
-        setError('Order found, but the phone number or email does not match our records.');
-      }
+      setOrder(data.order);
     } catch (err) {
       console.error('Track order error:', err);
       setError('Something went wrong. Please try again later.');
@@ -116,7 +86,7 @@ export default function TrackOrderPage() {
 
   const formatDate = (ts: any) => {
     if (!ts) return '—';
-    const date = ts.toDate ? ts.toDate() : new Date(ts);
+    const date = new Date(ts);
     return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   };
 
