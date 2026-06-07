@@ -309,7 +309,7 @@ export default function PremiumBestSeller() {
           <h2 className="pbs-title">SIGNATURE COLLECTION</h2>
           <div className="pbs-title-underline"></div>
         </div>
-        <Link href="/perfume" className="pbs-view-more">
+        <Link href="/perfumes" className="pbs-view-more">
           View More
         </Link>
       </div>

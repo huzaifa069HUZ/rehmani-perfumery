@@ -183,6 +183,7 @@ export default function BannerSlider() {
                 src={banner.image}
                 alt={banner.title || 'Banner'}
                 fill
+                sizes="100vw"
                 priority={index === 0}
                 className="banner-img"
               />

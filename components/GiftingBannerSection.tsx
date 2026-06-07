@@ -14,6 +14,8 @@ export default function GiftingBannerSection() {
             src={giftboxImg}
             alt="Exclusive Gifting Collection"
             className="w-full h-auto"
+            sizes="100vw"
+            loading="lazy"
             priority={false}
           />
           <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10 z-10 pointer-events-none" />

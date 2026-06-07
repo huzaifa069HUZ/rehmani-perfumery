@@ -123,6 +123,7 @@ export default function HeroSection() {
         fill
         priority
         quality={95}
+        sizes="100vw"
         className="hero-desktop-bg"
         style={{ objectFit: 'cover', objectPosition: 'center', zIndex: 1 }}
       />
@@ -142,6 +143,7 @@ export default function HeroSection() {
                 fill
                 priority={i === 0}
                 quality={95}
+                sizes="(max-width: 768px) 100vw, 1px"
                 style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
             ) : (

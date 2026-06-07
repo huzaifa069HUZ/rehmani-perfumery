@@ -100,6 +100,7 @@ export default function FeaturedCategories() {
                 src={src}
                 alt={`Feature Banner ${i + 1}`}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className={`swiper-img ${i === currentSlide ? 'opacity-100' : 'opacity-0'}`}
                 style={{ transition: 'opacity 0.8s ease-in-out', objectFit: 'cover' }}
               />

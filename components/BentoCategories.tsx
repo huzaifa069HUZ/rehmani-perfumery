@@ -42,6 +42,7 @@ export default function BentoCategories() {
                 src="/assets/perfume banner.png" 
                 alt="Perfume Category" 
                 fill 
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="bento-img" 
               />
               <div className="absolute inset-0 bg-black/20 pointer-events-none" style={{ zIndex: 1 }}></div>
@@ -57,6 +58,7 @@ export default function BentoCategories() {
                 src="/assets/giftset.png" 
                 alt="Gift Set Category" 
                 fill 
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="bento-img" 
               />
               <div className="absolute inset-0 bg-black/20 pointer-events-none" style={{ zIndex: 1 }}></div>
@@ -75,6 +77,7 @@ export default function BentoCategories() {
                 src="/assets/attar banner.png" 
                 alt="Attar Category" 
                 fill 
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="bento-img" 
               />
               <div className="absolute inset-0 bg-black/20 pointer-events-none" style={{ zIndex: 1 }}></div>
@@ -90,6 +93,7 @@ export default function BentoCategories() {
                 src="/assets/bakhoor.png" 
                 alt="Bakhoor Category" 
                 fill 
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="bento-img" 
               />
               <div className="bento-content">
