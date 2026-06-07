@@ -456,6 +456,13 @@ export default function ProfilePage() {
               >
                 My Wishlist ({contextWishlist.length})
               </button>
+              <a 
+                href="/track-order"
+                className="tab-btn"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                Track Order →
+              </a>
             </div>
 
             <div className="content-col">

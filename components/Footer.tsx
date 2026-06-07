@@ -41,6 +41,7 @@ export default function Footer() {
               <li><Link href="/about-us">About Us</Link></li>
               <li><Link href="/store">Our Stores</Link></li>
               <li><a href="https://wa.me/919835612345?text=Hello%20Rahmani%20Perfumery,%20I%20have%20a%20question." target="_blank" rel="noopener noreferrer">Contact Us</a></li>
+              <li><Link href="/track-order">Track Order</Link></li>
               <li><Link href="/store">Shipping & Returns</Link></li>
             </ul>
           </div>
