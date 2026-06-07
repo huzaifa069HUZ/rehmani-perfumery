@@ -10,41 +10,41 @@ const STATIC_PRODUCTS = [
     id: 'hawas-1',
     category: 'AQUATIC, FRESH SPICY',
     title: 'Hawas for Him Perfume 100 ML',
-    price: 3800,
-    originalPrice: 4500,
-    discount: '15% Off',
+    price: 900,
+    originalPrice: 1200,
+    discount: '25% Off',
     image: '/assets/hawas-no-bg.png',
     link: undefined as string | undefined,
   },
   {
-    id: 'jAQ4G57',
-    category: 'PREMIUM BLEND',
-    title: 'AR RIJAAL',
-    price: 3200,
-    originalPrice: 4000,
-    discount: '20% Off',
-    image: '/assets/luxury_attar_bottle_2_1773444458042.png',
-    link: '/product/ar-rijaal-jAQ4G57',
+    id: 'atlantis',
+    category: 'MARINE, FRESH, AQUATIC',
+    title: 'ATLANTIS 100 ML',
+    price: 900,
+    originalPrice: 1200,
+    discount: '25% Off',
+    image: '/assets/atlantis.png',
+    link: undefined as string | undefined,
   },
   {
-    id: 'hawas-2',
-    category: 'AQUATIC, FRESH SPICY',
-    title: 'Hawas for Him Perfume 100 ML',
-    price: 3800,
-    originalPrice: 4500,
-    discount: '15% Off',
-    image: '/assets/hawas-no-bg.png',
+    id: 'tropical-waves',
+    category: 'PINEAPPLE, CITRUS, WOODY',
+    title: 'TROPICAL WAVES 100 ML',
+    price: 750,
+    originalPrice: 1000,
+    discount: '25% Off',
+    image: '/assets/tropical waves.png',
     link: undefined as string | undefined,
   },
   {
     id: 'khamrah-2',
-    category: 'ORIENTAL, WOODY',
-    title: 'KHAMRAH',
-    price: 4800,
-    originalPrice: 6000,
-    discount: '20% Off',
+    category: 'WARM, SPICY, VANILLA',
+    title: 'KHAMRAH 100 ML',
+    price: 850,
+    originalPrice: 1100,
+    discount: '22% Off',
     image: '/assets/khamrah.png',
-    link: 'https://www.rahmaniperfumery.com/product/khamrah-VgOQjzR',
+    link: undefined as string | undefined,
   },
 ];
 
@@ -309,7 +309,7 @@ export default function PremiumBestSeller() {
           <h2 className="pbs-title">SIGNATURE COLLECTION</h2>
           <div className="pbs-title-underline"></div>
         </div>
-        <Link href="/perfumes" className="pbs-view-more">
+        <Link href="/perfume" className="pbs-view-more">
           View More
         </Link>
       </div>
