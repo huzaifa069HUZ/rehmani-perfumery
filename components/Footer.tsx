@@ -88,45 +88,43 @@ export default function Footer() {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 6px;
-          padding: 8px 16px;
+          gap: 8px;
+          padding: 8px 20px;
           border-radius: 100px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           text-decoration: none;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          margin-bottom: 8px;
+          transition: all 0.3s ease;
+          margin-bottom: 12px;
         }
 
         .dev-signature:hover {
-          background: rgba(255, 255, 255, 0.1);
-          border-color: rgba(211, 169, 88, 0.5);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(212, 175, 55, 0.4);
         }
 
         .dev-text {
-          font-family: 'Inter', system-ui, sans-serif;
-          font-size: 0.65rem;
-          font-weight: 600;
-          letter-spacing: 0.15em;
-          color: #94a3b8;
+          font-family: var(--font-poppins), 'Inter', sans-serif;
+          font-size: 0.6rem;
+          font-weight: 500;
+          letter-spacing: 0.2em;
+          color: #a1a1aa;
+          text-transform: uppercase;
         }
 
         .dev-name {
-          font-family: 'Playfair Display', Georgia, serif;
-          font-size: 0.85rem;
-          font-weight: 700;
+          font-family: var(--font-serif), 'Playfair Display', serif;
+          font-size: 0.95rem;
+          font-weight: 600;
           font-style: italic;
           letter-spacing: 0.05em;
-          background: linear-gradient(135deg, #d4af5f 0%, #f9e596 50%, #d4af5f 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+          color: #d4af37;
         }
 
         .dev-arrow {
-          color: #d4af5f;
+          color: #d4af37;
           transition: transform 0.3s ease;
+          margin-bottom: 2px;
         }
 
         .dev-signature:hover .dev-arrow {

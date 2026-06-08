@@ -67,35 +67,6 @@ export default function BakhoorLayout({ children }: { children: React.ReactNode 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(bakhoorJsonLd) }}
       />
       {children}
-
-      {/* ── SSR SEO Content — Crawlable by Google ── */}
-      <section className="seo-content-island" aria-label="About Rahmani Bakhoor">
-        <div className="seo-content-inner">
-          <h2 className="seo-heading">
-            Premium Bakhoor & Oud Muattar — Buy Authentic Arabian Incense Online
-          </h2>
-          <div className="seo-columns">
-            <div className="seo-col">
-              <h3 className="seo-subheading">Authentic Arabian Bakhoor in Patna</h3>
-              <p>
-                <strong>Rahmani Perfumery</strong> (also known as <strong>Rehmani Perfumery</strong>) offers the finest collection of <em>premium bakhoor and oud muattar</em> in Patna, Bihar. Our Arabian incense chips are sourced from the best producers in the Middle East, delivering rich, aromatic smoke that fills every corner of your home with luxury.
-              </p>
-              <p>
-                Whether you&apos;re looking for traditional <strong>oud bakhoor</strong>, floral bakhoor blends, or <strong>premium oud muattar</strong>, Rahmani Perfumery has the perfect home fragrance for every occasion — from daily use to special gatherings and festivals.
-              </p>
-            </div>
-            <div className="seo-col">
-              <h3 className="seo-subheading">Browse Our Collections</h3>
-              <ul className="seo-links">
-                <li><Link href="/bakhoor">All Bakhoor</Link> — Complete Arabian incense and oud muattar collection</li>
-                <li><Link href="/attars">Premium Attars</Link> — Pure, long-lasting concentrated perfume oils</li>
-                <li><Link href="/incense-sticks">Incense Sticks</Link> — Premium aggarbatti for meditation and prayer</li>
-                <li><Link href="/store">Visit Our Stores</Link> — Experience our fragrances in person in Patna</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

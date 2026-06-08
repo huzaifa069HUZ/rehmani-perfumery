@@ -105,57 +105,6 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <HomeClient />
-      
-      {/* ── SSR SEO Content Island — Crawlable by Google ── */}
-      <section className="seo-content-island" aria-label="About Rahmani Perfumery">
-        <div className="seo-content-inner">
-          <h2 className="seo-heading">
-            Rahmani Perfumery — Premium Arabian Attars, Oud & Perfumes in Patna, Bihar
-          </h2>
-          
-          <div className="seo-columns">
-            <div className="seo-col">
-              <h3 className="seo-subheading">The Best Attar & Oud Shop in Patna</h3>
-              <p>
-                <strong>Rahmani Perfumery</strong> (also known as <strong>Rehmani Perfumery</strong>) is Patna's most trusted destination for premium Arabian attars, luxury oud, musk, and handcrafted perfume oils. Established in 2015, we have earned a reputation as the <em>best attar shop in Patna, Bihar</em>, serving thousands of fragrance enthusiasts across India.
-              </p>
-              <p>
-                Our curated collection features pure, long-lasting attars sourced from the finest distilleries in Arabia, alongside imported long-lasting spray perfumes for men and women. Whether you're searching for <strong>Rahmani attar</strong>, <strong>Rahmani oud</strong>, or the perfect <strong>bakhoor</strong> for your home — we have it all.
-              </p>
-            </div>
-            
-            <div className="seo-col">
-              <h3 className="seo-subheading">Explore Our Collections</h3>
-              <ul className="seo-links">
-                <li>
-                  <Link href="/attars">Premium Attars</Link> — Handcrafted Arabian attars including oud, musk, floral, and spicy fragrances
-                </li>
-                <li>
-                  <Link href="/perfumes">Luxury Perfumes</Link> — Long-lasting imported spray perfumes for men and women
-                </li>
-                <li>
-                  <Link href="/bakhoor">Bakhoor & Oud Muattar</Link> — Authentic Arabian incense chips for home fragrance
-                </li>
-                <li>
-                  <Link href="/incense-sticks">Incense Sticks</Link> — Premium aggarbatti for meditation, prayer, and ambiance
-                </li>
-                <li>
-                  <Link href="/store">Visit Our Stores</Link> — Two locations in Patna: Phulwari Sharif & Sabzibagh
-                </li>
-                <li>
-                  <Link href="/about-us">Our Story</Link> — Learn about Rahmani Perfumery's heritage and craftsmanship
-                </li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="seo-bottom-text">
-            <p>
-              Looking for the <strong>best oud in India</strong>? Rahmani Perfumery offers authentic Cambodian oud, Indian oud attar, and exclusive oud-based blends you won't find anywhere else. We ship <strong>premium attars and perfumes across India</strong> with secure packaging and fast delivery. Visit us at our Patna stores or shop online at <strong>rahmaniperfumery.com</strong>.
-            </p>
-          </div>
-        </div>
-      </section>
     </>
   );
 }
