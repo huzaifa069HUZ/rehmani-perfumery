@@ -168,7 +168,7 @@ export default function LuxuryVideoSection() {
       <div className="luxury-video-overlay" />
 
       {/* Top badge */}
-      <div className="luxury-video-badge">Rehmani Perfumery — The Art of Fragrance</div>
+      <div className="luxury-video-badge">Rahmani Perfumery — The Art of Fragrance</div>
 
       {/* Video */}
       <video

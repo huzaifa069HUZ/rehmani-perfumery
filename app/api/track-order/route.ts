@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     // Query Firestore securely from the server (bypasses security rules)
     const snapshot = await adminDb
       .collection('orders')
-      .where('orderId', '==', orderId.trim().toUpperCase())
+      .where('orderId', '==', orderId.replace(/^#/, '').trim().toUpperCase())
       .get();
 
     if (snapshot.empty) {

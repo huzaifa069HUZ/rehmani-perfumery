@@ -51,7 +51,7 @@ function CountUpNumber({ end, suffix = '', prefix = '', duration = 2000 }: { end
 
 /* ── Mobile slides ──────────────────────────────────────────────────────── */
 const MOBILE_SLIDES: { type: 'image' | 'video'; src: string; alt?: string }[] = [
-  { type: 'video', src: '/assets/Video-16.mp4', alt: 'Rehmani Perfumery Hero' },
+  { type: 'video', src: '/assets/Video-16.mp4', alt: 'Rahmani Perfumery Hero' },
   { type: 'image', src: '/assets/SMELL THAT DEFINES YOU (4).png', alt: 'Smell That Defines You' },
   { type: 'video', src: '/assets/hero mobile bg 2.mp4', alt: 'Hero Mobile Background 2' },
   { type: 'video', src: '/assets/herosection bg vid mobile.mp4' },

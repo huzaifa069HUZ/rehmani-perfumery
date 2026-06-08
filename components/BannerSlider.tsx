@@ -84,24 +84,20 @@ export default function BannerSlider() {
   useEffect(() => {
     const fetchDynamicBanners = async () => {
       try {
-        const q = query(
-          collection(db, 'banners'),
-          where('isActive', '==', true),
-          orderBy('createdAt', 'desc')
-        );
-        const snapshot = await getDocs(q);
+        const snapshot = await getDocs(collection(db, 'banners'));
         
-        const dynamicBanners: BannerItem[] = snapshot.docs.map(doc => {
-          const data = doc.data();
-          return {
-            id: doc.id,
+        const dynamicBanners: BannerItem[] = snapshot.docs
+          .map(doc => ({ id: doc.id, ...doc.data() } as any))
+          .filter(data => data.isActive === true)
+          .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+          .map(data => ({
+            id: data.id,
             image: data.image,
             title: '',
             subtitle: '',
             link: data.link || '#',
             hasOwnText: true, // Assuming dynamic uploaded banners have burnt-in text
-          };
-        });
+          }));
 
         if (dynamicBanners.length > 0) {
           // Merge dynamic banners with static banners (dynamic ones go first)

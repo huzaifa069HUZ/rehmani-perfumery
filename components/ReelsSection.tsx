@@ -388,9 +388,9 @@ export default function ReelsSection() {
             productId="jAQ4G57"
             href="/product/ar-rijaal-jAQ4G57"
             videoSrc="/assets/Video-807.mp4"
-            fallbackName="Al Rajaal"
+            fallbackName="AR-RIJAAL"
             fallbackPrice={350}
-            fallbackImage="/assets/attar1 remove bg.png"
+            fallbackImage="/assets/ar rijaal.avif"
           />
 
           {/* Slot 3: Oud Nadira video */}
@@ -413,10 +413,15 @@ export default function ReelsSection() {
             fallbackImage="/assets/green ajam.png"
           />
 
-          {/* Slot 5: Image reel */}
-          {IMAGE_REELS.slice(0, 1).map((reel, i) => (
-            <ImageReelCard key={i} reel={reel} />
-          ))}
+          {/* Slot 5: Beauty and the Beast video */}
+          <ShoppableVideoCard
+            productId="um3aZGz"
+            href="https://www.rahmaniperfumery.com/product/beauty-and-the-beast-um3aZGz"
+            videoSrc="https://res.cloudinary.com/dcsxa09da/video/upload/v1780960484/WhatsApp_Video_2026-06-07_at_8.18.36_PM_mprkd9.mp4"
+            fallbackName="BEAUTY AND THE BEAST"
+            fallbackPrice={350}
+            fallbackImage="/assets/beautynbeast.png"
+          />
         </div>
       </div>
     </section>
