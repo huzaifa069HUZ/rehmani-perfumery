@@ -92,8 +92,8 @@ export default function GiftingSection() {
           </div>
           
           {/* Right Imagery Viewer - Rich shadow and border for light backgrounds */}
-          <div className="lg:col-span-4 w-full flex justify-center lg:justify-end relative z-10 mt-10 lg:mt-0">
-            <HoverSliderImageWrap className="w-full max-w-[280px] sm:max-w-xs lg:max-w-full aspect-[4/5] lg:aspect-[3/4] object-cover rounded-xl shadow-[0_25px_60px_rgba(43,31,19,0.15)] border-[3px] border-[#e8dfcf] ml-auto">
+          <div className="lg:col-span-4 w-full flex justify-center lg:justify-end lg:pr-10 xl:pr-16 relative z-10 mt-10 lg:mt-0">
+            <HoverSliderImageWrap className="w-full max-w-[280px] sm:max-w-xs lg:max-w-[320px] xl:max-w-[360px] aspect-[4/5] lg:aspect-[3/4] object-cover rounded-xl shadow-[0_25px_60px_rgba(43,31,19,0.15)] border-[3px] border-[#e8dfcf] ml-auto">
               {SLIDES.map((slide, index) => (
                 <div key={slide.id} className="relative w-full h-full">
                   <HoverSliderImage

@@ -10,7 +10,7 @@ export default function LuxuryVideoSection() {
   useEffect(() => {
     if (!videoRef.current) return;
     if (isVideoInView) {
-      videoRef.current.play().catch(() => {});
+      videoRef.current.play().catch(() => { });
     } else {
       videoRef.current.pause();
     }

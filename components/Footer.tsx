@@ -14,7 +14,7 @@ export default function Footer() {
                 if (s === 'instagram') href = 'https://www.instagram.com/rahmaniperfumery/';
                 if (s === 'facebook') href = 'https://www.facebook.com/p/Rahmani-Perfumery-100092158337982/';
                 if (s === 'youtube') href = 'https://www.youtube.com/@rahmaniperfumery1';
-                
+
                 return (
                   <a key={s} href={href} target="_blank" rel="noopener noreferrer" aria-label={s} className="social-link">
                     {s === 'instagram' && (
@@ -57,7 +57,7 @@ export default function Footer() {
             <h4 className="footer-heading">Contact</h4>
             <ul className="footer-links">
               <li>Khagaul Rd, Fiya Colony, Maulana Azad Nagar, Phulwari Sharif, Patna, Bihar 801505</li>
-              <li><a href="tel:+919835612345">+91 98356 12345</a></li>
+              <li><a href="tel:+919835612345">+91 83407 83679</a></li>
               <li><a href="mailto:rahmaniperfumerypatna@gmail.com">rahmaniperfumerypatna@gmail.com</a></li>
             </ul>
           </div>
@@ -65,11 +65,11 @@ export default function Footer() {
 
         <div className="footer-bottom" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
           <p>© {new Date().getFullYear()} Rahmani Perfumery. All rights reserved.</p>
-          
+
           {/* Developer Signature */}
-          <a 
-            href="https://wa.me/917488100344?text=hi%20i%20want%20to%20work%20with%20you%20for%20my%20website%20development" 
-            target="_blank" 
+          <a
+            href="https://wa.me/917488100344?text=hi%20i%20want%20to%20work%20with%20you%20for%20my%20website%20development"
+            target="_blank"
             rel="noopener noreferrer"
             className="dev-signature"
           >

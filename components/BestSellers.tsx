@@ -294,7 +294,7 @@ export default function BestSellers() {
         }
         .bs-price {
           font-size: 1.5rem;
-          font-weight: 500;
+          font-weight: 800;
           color: #1a1a1a;
           line-height: 1;
         }

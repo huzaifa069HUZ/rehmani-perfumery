@@ -24,6 +24,7 @@ export default function Header({ onMenuOpen, onSearchOpen, forceTransparent }: H
   
   const [homeHover, setHomeHover] = useState(false);
   const [attarsHover, setAttarsHover] = useState(false);
+  const [perfumesHover, setPerfumesHover] = useState(false);
 
   const logoSrc = '/assets/logo with name removed bg.png';
 
@@ -127,15 +128,45 @@ export default function Header({ onMenuOpen, onSearchOpen, forceTransparent }: H
                     className="nav-dropdown"
                   >
                     <span className="nav-dropdown-category">Categories</span>
-                    <Link href="/attars?filter=men" className="nav-dropdown-item">Men&apos;s Collection</Link>
-                    <Link href="/attars?filter=women" className="nav-dropdown-item">Women&apos;s Collection</Link>
-                    <Link href="/attars?filter=unisex" className="nav-dropdown-item">Unisex Favorites</Link>
+                    <Link href="/attars#him" className="nav-dropdown-item">Men&apos;s Collection</Link>
+                    <Link href="/attars#her" className="nav-dropdown-item">Women&apos;s Collection</Link>
+                    <Link href="/attars#unisex" className="nav-dropdown-item">Unisex Favorites</Link>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            <Link href="/perfumes" className={`nav-link${pathname === '/perfumes' ? ' active' : ''} flex items-center`}>PERFUMES</Link>
+            <div 
+              className="nav-item group"
+              onMouseEnter={() => setPerfumesHover(true)}
+              onMouseLeave={() => setPerfumesHover(false)}
+            >
+              <Link href="/perfumes" className={`nav-link${pathname === '/perfumes' ? ' active' : ''} flex items-center`}>
+                PERFUMES
+                <svg className="nav-chevron transition-transform duration-300" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '4px', marginTop: '1px' }}>
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </Link>
+              <AnimatePresence>
+                {perfumesHover && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 15 }}
+                    transition={{ duration: 0.2, ease: 'easeOut' }}
+                    className="nav-dropdown"
+                  >
+                    <span className="nav-dropdown-category">Categories</span>
+                    <Link href="/perfumes#oud" className="nav-dropdown-item">Oud</Link>
+                    <Link href="/perfumes#fresh" className="nav-dropdown-item">Fresh</Link>
+                    <Link href="/perfumes#him" className="nav-dropdown-item">Men</Link>
+                    <Link href="/perfumes#her" className="nav-dropdown-item">Women</Link>
+                    <Link href="/perfumes#unisex" className="nav-dropdown-item">Unisex</Link>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             <Link href="/incense-sticks" className={`nav-link${pathname === '/incense-sticks' ? ' active' : ''} flex items-center`}>INCENSE STICKS</Link>
             <Link href="/bakhoor" className={`nav-link${pathname === '/bakhoor' ? ' active' : ''} flex items-center`}>BAKHOOR</Link>
             <Link href="/gifting" className={`nav-link${pathname === '/gifting' ? ' active' : ''} flex items-center`}>GIFTING</Link>

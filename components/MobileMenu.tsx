@@ -12,6 +12,7 @@ interface MobileMenuProps {
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const [homeOpen, setHomeOpen] = useState(false);
   const [attarsOpen, setAttarsOpen] = useState(false);
+  const [perfumesOpen, setPerfumesOpen] = useState(false);
 
   return (
     <AnimatePresence>
@@ -106,18 +107,40 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                         className="mm-submenu"
                       >
                         <span className="mm-sublabel">Categories</span>
-                        <Link href="/attars?filter=men" className="mm-sublink" onClick={onClose}>Men&apos;s Collection</Link>
-                        <Link href="/attars?filter=women" className="mm-sublink" onClick={onClose}>Women&apos;s Collection</Link>
-                        <Link href="/attars?filter=unisex" className="mm-sublink" onClick={onClose}>Unisex Favorites</Link>
+                        <Link href="/attars#him" className="mm-sublink" onClick={onClose}>Men&apos;s Collection</Link>
+                        <Link href="/attars#her" className="mm-sublink" onClick={onClose}>Women&apos;s Collection</Link>
+                        <Link href="/attars#unisex" className="mm-sublink" onClick={onClose}>Unisex Favorites</Link>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </div>
 
                 <div className="mm-group">
-                  <div className="mm-group-header">
+                  <div className="mm-group-header" onClick={() => setPerfumesOpen(!perfumesOpen)}>
                     <Link href="/perfumes" className="mm-link" onClick={onClose}>PERFUMES</Link>
+                    <button className={`mm-toggle ${perfumesOpen ? 'open' : ''}`} aria-label="Toggle Perfumes menu">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </button>
                   </div>
+                  <AnimatePresence>
+                    {perfumesOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="mm-submenu"
+                      >
+                        <span className="mm-sublabel">Categories</span>
+                        <Link href="/perfumes#oud" className="mm-sublink" onClick={onClose}>Oud</Link>
+                        <Link href="/perfumes#fresh" className="mm-sublink" onClick={onClose}>Fresh</Link>
+                        <Link href="/perfumes#him" className="mm-sublink" onClick={onClose}>Men</Link>
+                        <Link href="/perfumes#her" className="mm-sublink" onClick={onClose}>Women</Link>
+                        <Link href="/perfumes#unisex" className="mm-sublink" onClick={onClose}>Unisex</Link>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
 
                 <div className="mm-group">

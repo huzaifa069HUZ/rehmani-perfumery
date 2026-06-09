@@ -194,7 +194,7 @@ export default function GlobalSearch({ isOpen, onClose }: GlobalSearchProps) {
             <div className="global-search-suggestions-modern">
               <div className="search-section-label">Trending Searches</div>
               <div className="search-tag-cloud">
-                {['Royal Oud', 'White Musk', 'Luxury Rose', 'Nishat Blend', 'Premium Attars', 'Fresh Citrus'].map((tag) => (
+                {['OUD NADIRA', 'GREEN AJAM', 'WHITE OUD', 'SHAHI DARBAR', 'ROSEWOOD', 'MUSK RIJALI'].map((tag) => (
                   <button key={tag} className="modern-search-tag" onClick={() => setQuery(tag)}>
                     {tag}
                   </button>
@@ -204,14 +204,22 @@ export default function GlobalSearch({ isOpen, onClose }: GlobalSearchProps) {
               <div className="search-section-label" style={{marginTop: '2.5rem'}}>Quick Links</div>
               <div className="search-quick-links">
                 <button className="quick-link-item" onClick={() => { router.push('/attars'); onClose(); }}>
-                  <span className="ql-icon">🪔</span>
+                  <span className="ql-icon flex items-center justify-center bg-[#c4a46c]/10 rounded-full w-10 h-10">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4a46c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path>
+                    </svg>
+                  </span>
                   <div className="ql-text">
                     <span className="ql-title">Pure Attars</span>
                     <span className="ql-sub">Traditional concentrated oils</span>
                   </div>
                 </button>
                 <button className="quick-link-item" onClick={() => { router.push('/perfumes'); onClose(); }}>
-                  <span className="ql-icon">✨</span>
+                  <span className="ql-icon flex items-center justify-center bg-[#c4a46c]/10 rounded-full w-10 h-10">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4a46c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M10 4h4M12 4v4M10 8h4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2zM12 4V2M15 6h1a2 2 0 0 1 2 2v2M8 6H7a2 2 0 0 0-2 2v2"></path>
+                    </svg>
+                  </span>
                   <div className="ql-text">
                     <span className="ql-title">Fine Perfumes</span>
                     <span className="ql-sub">Luxury spray fragrances</span>

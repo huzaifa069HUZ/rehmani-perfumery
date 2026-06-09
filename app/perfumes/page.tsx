@@ -20,6 +20,9 @@ type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'name-az' | 'discoun
 
 const CATEGORIES = [
   { id: 'all',    label: 'All Perfumes' },
+  { id: 'him',    label: 'For Him' },
+  { id: 'her',    label: 'For Her' },
+  { id: 'unisex', label: 'Unisex' },
   { id: 'oud',    label: 'Oud' },
   { id: 'musk',   label: 'Musk' },
   { id: 'floral', label: 'Floral' },
@@ -205,6 +208,17 @@ export default function PerfumesPage() {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    // Check if there is a hash in the URL to pre-select a category
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.replace('#', '');
+      const validCategories = CATEGORIES.map(c => c.id);
+      if (validCategories.includes(hash)) {
+        setCategory(hash);
+      }
+    }
+  }, []);
+
   const range = PRICE_RANGES[priceRange];
 
   const filtered = useMemo(() => {
@@ -226,7 +240,11 @@ export default function PerfumesPage() {
     if (category !== 'all') {
       list = list.filter(p => {
         const cat = (p.category || '').toLowerCase().trim();
-        return cat === category || cat === 'all perfumes' || cat === 'all';
+        const gen = (p.gender || '').toLowerCase().trim();
+        if (category === 'him' || category === 'her' || category === 'unisex') {
+           return gen === category;
+        }
+        return cat.includes(category) || cat === 'all perfumes' || cat === 'all';
       });
     }
     // When category === 'all': skip the filter entirely — show everything

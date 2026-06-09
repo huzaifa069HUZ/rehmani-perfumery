@@ -391,9 +391,10 @@ function FreeAttarPopupInner() {
         .frp-eyebrow::after { background: linear-gradient(to left, transparent, #d4af37aa); }
 
         .frp-heading {
-          font-family: 'Playfair Display', serif;
-          font-size: 1.7rem; font-weight: 800; color: #0f172a;
-          line-height: 1.2; margin: 0 0 6px;
+          font-family: 'Inter', system-ui, sans-serif;
+          font-size: 2.2rem; font-weight: 900; color: #000;
+          line-height: 1.1; margin: 0 0 10px;
+          text-transform: uppercase;
         }
         .frp-subheading { font-size: 0.82rem; color: #64748b; margin-bottom: 24px; line-height: 1.6; }
         .frp-form { display: flex; flex-direction: column; gap: 14px; }

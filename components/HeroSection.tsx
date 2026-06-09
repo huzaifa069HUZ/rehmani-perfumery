@@ -26,16 +26,16 @@ function CountUpNumber({ end, suffix = '', prefix = '', duration = 2000 }: { end
     if (!hasStarted) return;
     let startTime: number | null = null;
     let animationFrame: number;
-    
+
     const step = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
       // easeOutCubic
       const easeOut = 1 - Math.pow(1 - progress, 3);
-      
+
       const currentVal = Math.floor(startValue + (easeOut * (end - startValue)));
       setCount(currentVal);
-      
+
       if (progress < 1) {
         animationFrame = window.requestAnimationFrame(step);
       } else {
@@ -189,12 +189,12 @@ export default function HeroSection() {
       <div className="hero-content hero-desktop-content">
         <div className="hero-right-block">
           <div className="hero-title-block fade-in" style={{ animationDelay: '0.1s' }}>
-            <span className="hero-badge-text">PREMIUM ARABIAN ATTARS</span>
+            <span className="hero-badge-text">FRAGRANCE THAT YOUR SOUL DESIRES</span>
             <h1 className="hero-title-main">RAHMANI<br />PERFUMERY</h1>
           </div>
 
           <div className="hero-arabic fade-in" style={{ animationDelay: '0.5s' }} dir="rtl">
-            عطر رحماني
+            رحماني عطر
           </div>
 
           <p className="hero-tagline fade-in" style={{ animationDelay: '0.7s' }}>
@@ -209,7 +209,7 @@ export default function HeroSection() {
 
           <div className="hero-stats fade-in" style={{ animationDelay: '1.1s' }}>
             <div className="hero-stat">
-              <span className="stat-value"><CountUpNumber end={25} suffix="+" /></span>
+              <span className="stat-value"><CountUpNumber end={50} suffix="+" /></span>
               <span className="stat-label">SIGNATURE ATTARS</span>
             </div>
             <div className="stat-divider" />

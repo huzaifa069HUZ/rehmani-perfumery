@@ -134,7 +134,7 @@ export default function ProductGrid() {
     <section id="collections" className="collections-section">
       <div className="section-container">
         <div className="section-header">
-          <h2 className="section-title">Shop Our Collection</h2>
+          <h2 className="section-title shop-collection-title">Shop Our Collection</h2>
           
           {/* Filter dropdown button — right side */}
           <div className="filter-dropdown-wrap" ref={dropdownRef}>
