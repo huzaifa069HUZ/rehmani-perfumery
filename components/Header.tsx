@@ -158,7 +158,6 @@ export default function Header({ onMenuOpen, onSearchOpen, forceTransparent }: H
                   >
                     <span className="nav-dropdown-category">Categories</span>
                     <Link href="/perfumes#oud" className="nav-dropdown-item">Oud</Link>
-                    <Link href="/perfumes#fresh" className="nav-dropdown-item">Fresh</Link>
                     <Link href="/perfumes#him" className="nav-dropdown-item">Men</Link>
                     <Link href="/perfumes#her" className="nav-dropdown-item">Women</Link>
                     <Link href="/perfumes#unisex" className="nav-dropdown-item">Unisex</Link>

@@ -134,7 +134,6 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                       >
                         <span className="mm-sublabel">Categories</span>
                         <Link href="/perfumes#oud" className="mm-sublink" onClick={onClose}>Oud</Link>
-                        <Link href="/perfumes#fresh" className="mm-sublink" onClick={onClose}>Fresh</Link>
                         <Link href="/perfumes#him" className="mm-sublink" onClick={onClose}>Men</Link>
                         <Link href="/perfumes#her" className="mm-sublink" onClick={onClose}>Women</Link>
                         <Link href="/perfumes#unisex" className="mm-sublink" onClick={onClose}>Unisex</Link>

@@ -47,18 +47,16 @@ export default function ContactSection() {
   return (
     <>
       <div id="contact" style={{
-        background: 'linear-gradient(135deg, #050011 0%, #0e0535 18%, #180850 32%, #0b1a55 48%, #081640 62%, #12063a 78%, #040010 100%)',
+        background: 'linear-gradient(135deg, #FDFBF7 0%, #F8F5F0 30%, #F1EBE1 70%, #EAE2D6 100%)',
         position: 'relative',
         overflow: 'hidden',
       }}>
-        {/* Multi-layer radial bloom glows */}
+        {/* Subtle cream radial blooms */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
           background: [
-            'radial-gradient(ellipse 70% 55% at 15% 25%, rgba(120,40,210,0.18) 0%, transparent 65%)',
-            'radial-gradient(ellipse 55% 45% at 85% 60%, rgba(20,80,220,0.16) 0%, transparent 60%)',
-            'radial-gradient(ellipse 45% 35% at 50% 90%, rgba(0,160,200,0.10) 0%, transparent 55%)',
-            'radial-gradient(ellipse 30% 25% at 70% 10%, rgba(180,100,255,0.08) 0%, transparent 50%)',
+            'radial-gradient(ellipse 70% 55% at 15% 25%, rgba(212,175,55,0.05) 0%, transparent 65%)',
+            'radial-gradient(ellipse 55% 45% at 85% 60%, rgba(138,124,106,0.05) 0%, transparent 60%)',
           ].join(', '),
         }} />
         {/* Arabic geometric / arabesque pattern — low opacity */}
@@ -72,19 +70,18 @@ export default function ContactSection() {
         <section className="contact-section" style={{ paddingBottom: 0, position: 'relative', zIndex: 1 }}>
           <div className="contact-container">
             <div className="contact-header">
-              <p className="contact-subtitle" style={{ color: 'rgba(255,255,255,0.75)', letterSpacing: '0.3em' }}>VISIT US OR GET IN TOUCH</p>
+              <p className="contact-subtitle" style={{ color: '#8a7c6a', letterSpacing: '0.3em' }}>VISIT US OR GET IN TOUCH</p>
               <h2 className="contact-title" style={{
-                background: 'linear-gradient(135deg, #bf953f 0%, #fcf6ba 30%, #d4a843 55%, #fce38a 75%, #b8820a 100%)',
+                background: 'linear-gradient(135deg, #2a2420 0%, #4a4036 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
                 textShadow: 'none',
-                filter: 'drop-shadow(0 0 18px rgba(212,175,55,0.55)) drop-shadow(0 0 40px rgba(212,175,55,0.25))',
               }}>Experiencing True Luxury</h2>
               <div className="title-divider">
-                <span className="line" style={{ background: 'rgba(126,184,255,0.5)' }} />
-                <span className="diamond" style={{ color: '#7eb8ff' }}>◆</span>
-                <span className="line" style={{ background: 'rgba(126,184,255,0.5)' }} />
+                <span className="line" style={{ background: 'rgba(212,175,55,0.5)' }} />
+                <span className="diamond" style={{ color: '#d4af37' }}>◆</span>
+                <span className="line" style={{ background: 'rgba(212,175,55,0.5)' }} />
               </div>
             </div>
           </div>
@@ -177,7 +174,7 @@ export default function ContactSection() {
               src={maps[activeMap]}
               width="100%"
               height="100%"
-              style={{ border: 0, position: 'absolute', top: 0, left: 0, filter: 'invert(0.92) hue-rotate(180deg) saturate(0.6) brightness(0.85)' }}
+              style={{ border: 0, position: 'absolute', top: 0, left: 0, filter: 'grayscale(0.4) contrast(1.1) opacity(0.9)' }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -201,7 +198,7 @@ export default function ContactSection() {
             letterSpacing: '0.25em',
             textTransform: 'uppercase',
             fontWeight: 600,
-            color: '#d4af37',
+            color: '#b8860b',
             marginBottom: '8px',
           }}>
             <span style={{ display: 'inline-block', width: '20px', height: '1px', background: 'rgba(212,175,55,0.5)' }} />
@@ -210,7 +207,7 @@ export default function ContactSection() {
           </p>
           <p style={{
             fontSize: 'clamp(0.88rem, 1.5vw, 1.05rem)',
-            color: 'rgba(255,255,255,0.6)',
+            color: '#4a4036',
             lineHeight: 1.7,
             fontWeight: 400,
           }}>

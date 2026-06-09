@@ -943,7 +943,7 @@ export default function AddProductPage() {
                       <div key={size} style={{ padding: '16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
                            <span style={{ fontWeight: '700', color: '#0f172a', fontSize: '15px' }}>
-                             {productType === 'incense' ? 'Piece (50g) Pricing' : productType === 'giftset' ? 'Gift Set Pricing' : `${size}${productType === 'bakhoor' ? 'g' : 'ml'} Pricing`}
+                             {productType === 'incense' ? `${size} Pieces Pricing` : productType === 'giftset' ? 'Gift Set Pricing' : `${size}${productType === 'bakhoor' ? 'g' : 'ml'} Pricing`}
                            </span>
                         </div>
                         <div className="pricing-grid">
