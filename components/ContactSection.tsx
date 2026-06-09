@@ -47,16 +47,17 @@ export default function ContactSection() {
   return (
     <>
       <div id="contact" style={{
-        background: 'linear-gradient(135deg, #FDFBF7 0%, #F8F5F0 30%, #F1EBE1 70%, #EAE2D6 100%)',
+        background: '#FDFBF7',
         position: 'relative',
         overflow: 'hidden',
       }}>
-        {/* Subtle cream radial blooms */}
+        {/* Soft glowing ambient blooms for glassmorphism backdrop */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
           background: [
-            'radial-gradient(ellipse 70% 55% at 15% 25%, rgba(212,175,55,0.05) 0%, transparent 65%)',
-            'radial-gradient(ellipse 55% 45% at 85% 60%, rgba(138,124,106,0.05) 0%, transparent 60%)',
+            'radial-gradient(circle at 15% 30%, rgba(212,175,55,0.08) 0%, transparent 50%)',
+            'radial-gradient(circle at 85% 60%, rgba(138,124,106,0.08) 0%, transparent 50%)',
+            'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.6) 0%, transparent 70%)'
           ].join(', '),
         }} />
         {/* Arabic geometric / arabesque pattern — low opacity */}
@@ -274,12 +275,14 @@ export default function ContactSection() {
         .contact-grid {
           display: grid;
           grid-template-columns: 1fr 1.2fr;
-          gap: 2px;
-          background: rgba(212,175,55,0.12);
-          border-radius: 16px;
+          gap: 0;
+          background: rgba(255, 255, 255, 0.45);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-radius: 20px;
           overflow: hidden;
-          box-shadow: 0 32px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
-          border: 1px solid rgba(212,175,55,0.18);
+          box-shadow: 0 20px 60px rgba(138,124,106,0.15), inset 0 1px 0 rgba(255,255,255,0.8);
+          border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
         .contact-content {
@@ -287,7 +290,8 @@ export default function ContactSection() {
           display: flex;
           flex-direction: column;
           gap: 40px;
-          background: #f7f3ec;
+          background: rgba(255, 255, 255, 0.3);
+          border-right: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         .info-cards {
@@ -433,7 +437,7 @@ export default function ContactSection() {
           position: relative;
           width: 100%;
           min-height: 500px;
-          background: #060412;
+          background: rgba(255,255,255,0.1);
         }
 
         .map-overlay {
