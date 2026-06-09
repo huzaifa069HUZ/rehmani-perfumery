@@ -660,6 +660,13 @@
   flex-shrink: 0;
 }
 
+/* ── Product Card Overrides for Gifting ── */
+.gf-root .al-card-name {
+  font-family: var(--font-montserrat), 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .gf-cta-btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 40px rgba(37,211,102,0.4);
