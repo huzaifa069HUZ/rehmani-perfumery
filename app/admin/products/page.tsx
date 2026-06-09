@@ -425,11 +425,6 @@ export default function AdminProductsPage() {
           .stats-grid {
             grid-template-columns: 1fr 1fr;
           }
-          @media (max-width: 480px) {
-            .stats-grid {
-              grid-template-columns: 1fr;
-            }
-          }
           .table-header {
             display: none !important;
           }
@@ -509,6 +504,12 @@ export default function AdminProductsPage() {
             padding: 16px 24px;
             font-size: 16px;
             border-radius: 16px;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .stats-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>

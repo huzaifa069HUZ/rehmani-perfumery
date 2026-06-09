@@ -47,7 +47,7 @@ export default function ContactSection() {
   return (
     <>
       <div id="contact" style={{
-        background: '#FDFBF7',
+        background: 'linear-gradient(135deg, #FFFDF9 0%, #F4EFE6 50%, #E6DBC9 100%)',
         position: 'relative',
         overflow: 'hidden',
       }}>
@@ -55,9 +55,9 @@ export default function ContactSection() {
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
           background: [
-            'radial-gradient(circle at 15% 30%, rgba(212,175,55,0.08) 0%, transparent 50%)',
-            'radial-gradient(circle at 85% 60%, rgba(138,124,106,0.08) 0%, transparent 50%)',
-            'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.6) 0%, transparent 70%)'
+            'radial-gradient(circle at 10% 20%, rgba(212,175,55,0.15) 0%, transparent 60%)',
+            'radial-gradient(circle at 90% 80%, rgba(255,255,255,0.9) 0%, transparent 60%)',
+            'radial-gradient(circle at 50% 50%, rgba(138,124,106,0.1) 0%, transparent 70%)'
           ].join(', '),
         }} />
         {/* Arabic geometric / arabesque pattern — low opacity */}
@@ -276,13 +276,16 @@ export default function ContactSection() {
           display: grid;
           grid-template-columns: 1fr 1.2fr;
           gap: 0;
-          background: rgba(255, 255, 255, 0.45);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-radius: 20px;
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(40px) saturate(150%);
+          -webkit-backdrop-filter: blur(40px) saturate(150%);
+          border-radius: 24px;
           overflow: hidden;
-          box-shadow: 0 20px 60px rgba(138,124,106,0.15), inset 0 1px 0 rgba(255,255,255,0.8);
-          border: 1px solid rgba(255, 255, 255, 0.6);
+          box-shadow: 0 30px 80px rgba(0,0,0,0.08), 
+                      inset 0 1px 0 rgba(255,255,255,0.9), 
+                      inset 1px 0 0 rgba(255,255,255,0.4),
+                      inset -1px -1px 0 rgba(255,255,255,0.2);
+          border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         .contact-content {
@@ -290,8 +293,8 @@ export default function ContactSection() {
           display: flex;
           flex-direction: column;
           gap: 40px;
-          background: rgba(255, 255, 255, 0.3);
-          border-right: 1px solid rgba(255, 255, 255, 0.4);
+          background: rgba(255, 255, 255, 0.15);
+          border-right: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .info-cards {

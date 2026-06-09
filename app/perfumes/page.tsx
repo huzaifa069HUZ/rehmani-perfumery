@@ -240,7 +240,7 @@ export default function PerfumesPage() {
     if (category !== 'all') {
       list = list.filter(p => {
         const cat = (p.category || '').toLowerCase().trim();
-        const gen = (p.gender || '').toLowerCase().trim();
+        const gen = ((p as any).gender || '').toLowerCase().trim();
         if (category === 'him' || category === 'her' || category === 'unisex') {
            return gen === category;
         }
