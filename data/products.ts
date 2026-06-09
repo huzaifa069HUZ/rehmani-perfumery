@@ -12,6 +12,7 @@ export interface Product {
   occasions: string[];
   type?: 'attar' | 'perfume' | 'bakhoor' | 'incense' | 'giftset';
   inStock?: boolean;
+  gender?: string;
 }
 
 const MOCKUP2 = '/assets/mockup2.png';
