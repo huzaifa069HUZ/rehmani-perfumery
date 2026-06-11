@@ -23,9 +23,11 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
     ...style,
   };
 
+  const hasPosition = className.includes("fixed") || className.includes("absolute") || className.includes("relative") || className.includes("sticky");
+
   const content = (
     <div
-      className={`relative overflow-hidden transition-all duration-700 ${className}`}
+      className={`${hasPosition ? "" : "relative "}overflow-hidden transition-all duration-700 ${className}`}
       style={glassStyle}
     >
       {/* Glass Layers */}
@@ -54,7 +56,7 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
       />
 
       {/* Content */}
-      <div className="relative z-30">{children}</div>
+      <div className="relative z-30 flex items-center justify-between w-full h-full">{children}</div>
     </div>
   );
 
@@ -68,7 +70,7 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
 };
 
 export const GlassFilter: React.FC = () => (
-  <svg style={{ display: "none" }}>
+  <svg style={{ position: "absolute", width: 0, height: 0, pointerEvents: "none" }}>
     <filter
       id="glass-distortion"
       x="0%"
