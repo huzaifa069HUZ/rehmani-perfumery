@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef, useEffect, Suspense } from 'react';
+import { useRef, useEffect, Suspense, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, useGLTF, Center, Sparkles } from '@react-three/drei';
+import { Environment, useGLTF, Center, Sparkles, PerformanceMonitor, Preload } from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -71,6 +71,7 @@ const REVEAL_TEXT =
 
 // ─── Main Section ───────────────────────────────────────────────────────────────
 export default function PerfumeJourney() {
+  const [dpr, setDpr] = useState(1.5);
   const pinnedRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const blurRef = useRef<HTMLDivElement>(null);
@@ -158,8 +159,7 @@ export default function PerfumeJourney() {
             right: 0,
             zIndex: 5,
             padding: '0 40px',
-            opacity: 0.75, // Keeps it subtly in the background
-            mixBlendMode: 'screen',
+            opacity: 0.85, // Keeps it subtly in the background without blend modes
             pointerEvents: 'none'
           }}>
             <TextRevealByWord
@@ -168,11 +168,11 @@ export default function PerfumeJourney() {
             />
           </div>
 
-          {/* Depth blur plate */}
+          {/* Depth blur plate - replaced expensive backdrop-filter with solid gradient overlay */}
           <div
             ref={blurRef}
             className="absolute inset-0 z-10 hidden md:block"
-            style={{ opacity: 0, backdropFilter: 'blur(5px)', WebkitBackdropFilter: 'blur(5px)', background: 'rgba(0,0,0,0.12)' }}
+            style={{ opacity: 0, background: 'radial-gradient(circle, rgba(6,4,2,0.1) 0%, rgba(6,4,2,0.85) 100%)' }}
           />
 
           {/* WebGL Canvas — GPU composited layer */}
@@ -187,21 +187,23 @@ export default function PerfumeJourney() {
             {isCanvasInView && (
               <Canvas
                 camera={{ position: [0, 0, 5], fov: 35 }}
-                // Cap pixel ratio to 2 - prevents excessive GPU load on retina screens
-                dpr={[1, 2]}
-                // Use offscreen rendering for better perf on modern browsers
-                gl={{ antialias: true, powerPreference: 'high-performance', alpha: true }}
+                // Dynamic pixel ratio based on device performance
+                dpr={dpr}
+                // Turn off antialiasing on mobile/high-density to save massive GPU load
+                gl={{ antialias: false, powerPreference: 'high-performance', alpha: true }}
                 className="w-full h-full"
               >
+                <PerformanceMonitor onDecline={() => setDpr(1)} onIncline={() => setDpr(1.5)} />
                 <ambientLight intensity={0.6} />
                 <spotLight position={[5, 10, 5]} intensity={6} angle={0.4} penumbra={1} color="#ffdcb4" />
                 <directionalLight position={[-5, 5, -5]} intensity={1.2} color="#b0caff" />
                 <pointLight position={[0, -2, 3]} intensity={4} color="#ffedd5" />
-                <Environment preset="studio" />
+                <Environment preset="studio" resolution={256} />
                 {/* Reduced sparkle count for mobile perf */}
-                <Sparkles count={50} scale={6} size={2} speed={0.15} opacity={0.22} color="#f5c97a" />
+                <Sparkles count={40} scale={6} size={2} speed={0.15} opacity={0.22} color="#f5c97a" />
                 <Suspense fallback={null}>
                   <Bottle3D progress={progress} />
+                  <Preload all />
                 </Suspense>
               </Canvas>
             )}
