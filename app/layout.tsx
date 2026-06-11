@@ -9,6 +9,7 @@ import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import FreeAttarPopup from '@/components/FreeAttarPopup';
 import CartDrawer from '@/components/CartDrawer';
 import MobileBottomNav from '@/components/MobileBottomNav';
+import ChatbaseWidget from '@/components/ChatbaseWidget';
 
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap', style: ['normal', 'italic'], weight: ['400','500','600','700','800','900'] });
 const amiri = Amiri({ subsets: ['arabic', 'latin'], variable: '--font-arabic', display: 'swap', weight: ['400', '700'] });
@@ -233,6 +234,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </CartProvider>
         </AuthProvider>
         <FloatingWhatsApp />
+        <ChatbaseWidget />
       </body>
     </html>
   );
