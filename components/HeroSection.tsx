@@ -203,7 +203,7 @@ export default function HeroSection() {
           </p>
 
           <div className="hero-actions fade-in" style={{ animationDelay: '0.9s' }}>
-            <a href="#collections" className="btn-primary">DISCOVER COLLECTION →</a>
+            <a href="/attars" className="btn-primary">DISCOVER COLLECTION →</a>
             <a href="/about-us" className="btn-ghost">OUR STORY</a>
           </div>
 

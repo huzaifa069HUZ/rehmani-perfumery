@@ -20,7 +20,7 @@ export default function MobileBottomNav() {
       <GlassFilter />
       <GlassEffect className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center justify-between p-2 w-[94%] max-w-[420px] md:hidden rounded-[100px]">
         {/* Home */}
-        <Link href="/" className={`flex flex-col items-center justify-center gap-1 w-[72px] h-14 rounded-full transition-all duration-300 ${isHomeActive ? 'bg-red-500/15 text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}>
+        <Link href="/" className={`flex flex-col items-center justify-center gap-1 w-[72px] h-14 rounded-full transition-all duration-300 ${isHomeActive ? 'bg-red-500/15 text-red-600 dark:text-red-400' : 'text-black/80 hover:text-black'}`}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill={isHomeActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={isHomeActive ? '0' : '2'} strokeLinecap="round" strokeLinejoin="round">
             {isHomeActive ? (
                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
@@ -35,7 +35,7 @@ export default function MobileBottomNav() {
         </Link>
 
         {/* Wishlist */}
-        <Link href="/wishlist" className={`flex flex-col items-center justify-center gap-1 w-[72px] h-14 rounded-full transition-all duration-300 ${isWishlistActive ? 'bg-red-500/15 text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}>
+        <Link href="/wishlist" className={`flex flex-col items-center justify-center gap-1 w-[72px] h-14 rounded-full transition-all duration-300 ${isWishlistActive ? 'bg-red-500/15 text-red-600 dark:text-red-400' : 'text-black/80 hover:text-black'}`}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill={isWishlistActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={isWishlistActive ? '0' : '2'} strokeLinecap="round" strokeLinejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
           </svg>
@@ -43,7 +43,7 @@ export default function MobileBottomNav() {
         </Link>
 
         {/* Cart */}
-        <button onClick={toggleCart} className="flex flex-col items-center justify-center gap-1 w-[72px] h-14 rounded-full transition-all duration-300 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 relative">
+        <button onClick={toggleCart} className="flex flex-col items-center justify-center gap-1 w-[72px] h-14 rounded-full transition-all duration-300 text-black/80 hover:text-black relative">
           <div className="relative">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -56,7 +56,7 @@ export default function MobileBottomNav() {
         </button>
 
         {/* Account */}
-        <Link href={user ? "/profile" : "/auth"} className={`flex flex-col items-center justify-center gap-1 w-[72px] h-14 rounded-full transition-all duration-300 ${isAccountActive ? 'bg-red-500/15 text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200'}`}>
+        <Link href={user ? "/profile" : "/auth"} className={`flex flex-col items-center justify-center gap-1 w-[72px] h-14 rounded-full transition-all duration-300 ${isAccountActive ? 'bg-red-500/15 text-red-600 dark:text-red-400' : 'text-black/80 hover:text-black'}`}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill={isAccountActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={isAccountActive ? '0' : '2'} strokeLinecap="round" strokeLinejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
