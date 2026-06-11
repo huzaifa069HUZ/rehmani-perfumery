@@ -3,13 +3,13 @@ import type { NextConfig } from 'next';
 
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://apis.google.com https://*.firebaseapp.com;
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://apis.google.com https://*.firebaseapp.com https://www.chatbase.co;
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   font-src 'self' https://fonts.gstatic.com;
   img-src 'self' data: blob: https:;
   media-src 'self' https:;
   connect-src 'self' data: blob: https: wss:;
-  frame-src 'self' https://www.google.com https://*.firebaseapp.com https://accounts.google.com;
+  frame-src 'self' https://www.google.com https://*.firebaseapp.com https://accounts.google.com https://www.chatbase.co;
   object-src 'none';
   base-uri 'self';
   form-action 'self';
@@ -38,7 +38,7 @@ const securityHeaders = [
   },
   {
     key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+    value: 'camera=(), microphone=(self "https://www.chatbase.co"), geolocation=(), interest-cohort=()',
   },
   {
     key: 'Strict-Transport-Security',
