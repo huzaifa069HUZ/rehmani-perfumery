@@ -29,24 +29,19 @@ export default function ChatbaseWidget() {
           </div>
         )}
 
-        <div className="chatbase-trigger">
-          {!isOpen && (
-            <span className="chatbase-glowing-text">ASK RAHMANI AI</span>
+        <button 
+          className="chatbase-btn" 
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle AI Chatbot"
+        >
+          {isOpen ? (
+            <div className="chatbase-btn-close-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </div>
+          ) : (
+            <Image src="/assets/ai icon.png" alt="AI Chatbot" width={60} height={60} className="object-contain" />
           )}
-          <button 
-            className="chatbase-btn" 
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle AI Chatbot"
-          >
-            {isOpen ? (
-              <div className="chatbase-btn-close-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-              </div>
-            ) : (
-              <Image src="/assets/ai icon.png" alt="AI Chatbot" width={60} height={60} className="object-contain" />
-            )}
-          </button>
-        </div>
+        </button>
       </div>
 
       <style>{`
@@ -80,41 +75,6 @@ export default function ChatbaseWidget() {
           to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        .chatbase-trigger {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-        }
-
-        .chatbase-glowing-text {
-          font-family: var(--font-sans, system-ui), sans-serif;
-          font-size: 0.85rem;
-          font-weight: 700;
-          letter-spacing: 0.05em;
-          color: #D4AF37;
-          text-transform: uppercase;
-          text-shadow: 0 0 8px rgba(212,175,55,0.6), 0 0 16px rgba(212,175,55,0.4);
-          animation: pulse-glow 2.5s ease-in-out infinite;
-          white-space: nowrap;
-          pointer-events: none;
-          background: rgba(26, 23, 20, 0.7);
-          padding: 8px 16px;
-          border-radius: 30px;
-          border: 1px solid rgba(212, 175, 55, 0.3);
-          backdrop-filter: blur(4px);
-          -webkit-backdrop-filter: blur(4px);
-        }
-
-        @keyframes pulse-glow {
-          0%, 100% { 
-            text-shadow: 0 0 8px rgba(212,175,55,0.6), 0 0 16px rgba(212,175,55,0.4);
-            box-shadow: 0 0 8px rgba(212,175,55,0.1);
-          }
-          50% { 
-            text-shadow: 0 0 12px rgba(212,175,55,0.9), 0 0 24px rgba(212,175,55,0.7);
-            box-shadow: 0 0 16px rgba(212,175,55,0.3);
-          }
-        }
 
         .chatbase-btn {
           width: 60px;
