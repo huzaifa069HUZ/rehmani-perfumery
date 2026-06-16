@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Amiri, Poppins, Montserrat, Bebas_Neue, Cormorant_Garamond } from 'next/font/google';
+import { Playfair_Display, Amiri, Poppins, Montserrat, Bebas_Neue, Cormorant_Garamond, Geist } from 'next/font/google';
 import localFont from 'next/font/local';
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
@@ -10,6 +10,9 @@ import FreeAttarPopup from '@/components/FreeAttarPopup';
 import CartDrawer from '@/components/CartDrawer';
 import MobileBottomNav from '@/components/MobileBottomNav';
 import ChatbaseWidget from '@/components/ChatbaseWidget';
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap', style: ['normal', 'italic'], weight: ['400','500','600','700','800','900'] });
 const amiri = Amiri({ subsets: ['arabic', 'latin'], variable: '--font-arabic', display: 'swap', weight: ['400', '700'] });
@@ -209,7 +212,7 @@ const localBusinessJsonLd = [
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${amiri.variable} ${poppins.variable} ${montserrat.variable} ${bebasNeue.variable} ${cormorant.variable}`}>
+    <html lang="en" className={cn(playfair.variable, amiri.variable, poppins.variable, montserrat.variable, bebasNeue.variable, cormorant.variable, "font-sans", geist.variable)}>
       <body>
         <script
           type="application/ld+json"

@@ -1,8 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { RefreshCcw, Package, Users, Heart, BarChart3, Gift, ShoppingCart, TrendingUp, CircleDollarSign, Repeat, MapPin, Search } from "lucide-react"
 
 interface PopupLead {
   id: string;
@@ -45,6 +51,13 @@ interface CartUser {
   cartItemCount: number;
 }
 
+const chartConfig = {
+  wishlistCount: {
+    label: "Hearts",
+    color: "#3b82f6",
+  },
+}
+
 export default function AnalyticsPage() {
   const [products, setProducts] = useState<ProductStat[]>([]);
   const [users, setUsers] = useState<{ id: string; wishlist?: string[] }[]>([]);
@@ -58,7 +71,6 @@ export default function AnalyticsPage() {
     setLoading(true);
     const fetchData = async () => {
       try {
-        // Force fresh read from Firestore server (bypass local SDK cache)
         const { getDocsFromServer } = await import('firebase/firestore');
 
         const prodSnap = await getDocsFromServer(collection(db, 'products'));
@@ -72,7 +84,6 @@ export default function AnalyticsPage() {
         const userSnap = await getDocsFromServer(collection(db, 'users'));
         const userList = userSnap.docs.map(d => ({ id: d.id, ...(d.data() as { wishlist?: any[] }) }));
 
-        // Build cart users list — users who have at least one item in their cart
         const cartUsersList: CartUser[] = [];
         userSnap.docs.forEach(d => {
           const data = d.data() as {
@@ -100,7 +111,6 @@ export default function AnalyticsPage() {
         userList.forEach(u => {
           if (u.wishlist && Array.isArray(u.wishlist)) {
             u.wishlist.forEach((item: any) => {
-              // Wishlist items are stored as objects { id, name, price, ... }, so extract the id
               const pid = typeof item === 'object' && item !== null && 'id' in item ? item.id : item;
               const prod = prodList.find(p => p.id === pid);
               if (prod) prod.wishlistCount++;
@@ -108,13 +118,11 @@ export default function AnalyticsPage() {
           }
         });
 
-        // Fetch popup leads
         const leadsSnap = await getDocsFromServer(collection(db, 'popup_leads'));
         const leadsList: PopupLead[] = leadsSnap.docs.map(d => ({
           id: d.id,
           ...(d.data() as Omit<PopupLead, 'id'>),
         }));
-        // Sort newest first
         leadsList.sort((a, b) => {
           const aTime = a.claimedAt?.seconds ?? 0;
           const bTime = b.claimedAt?.seconds ?? 0;
@@ -133,7 +141,7 @@ export default function AnalyticsPage() {
       }
     };
     fetchData();
-  }, [refreshKey]); // re-runs every time refreshKey changes
+  }, [refreshKey]);
 
   const totalProducts = products.length;
   const totalUsers = users.length;
@@ -142,513 +150,409 @@ export default function AnalyticsPage() {
   const wishlistRate = totalUsers > 0 ? Math.round((usersWithWishlist / totalUsers) * 100) : 0;
   const avgWishlistPerUser = totalUsers > 0 ? (totalWishlisted / totalUsers).toFixed(1) : '0';
   const sortedByWishlist = [...products].sort((a, b) => b.wishlistCount - a.wishlistCount);
-  const maxWish = sortedByWishlist[0]?.wishlistCount || 1;
+  const chartData = sortedByWishlist.slice(0, 7).map(p => ({
+    name: p.name.length > 15 ? p.name.slice(0, 15) + '...' : p.name,
+    wishlistCount: p.wishlistCount,
+    fullName: p.name
+  }));
 
   const kpis = [
-    { label: 'Total Products', value: totalProducts, sub: 'In catalogue', color: '#1e3a5f', accent: '#2563eb', icon: '📦' },
-    { label: 'Registered Users', value: totalUsers, sub: 'Unique accounts', color: '#14302a', accent: '#16a34a', icon: '👤' },
-    { label: 'Total Hearts', value: totalWishlisted, sub: 'Across all users', color: '#3b1f0a', accent: '#d4af37', icon: '❤️' },
-    { label: 'Wishlist Rate', value: `${wishlistRate}%`, sub: 'Users who engaged', color: '#1f1040', accent: '#7c3aed', icon: '📊' },
-    { label: 'Free Attar Leads', value: popupLeads.length, sub: 'Popup submissions', color: '#2d1515', accent: '#dc2626', icon: '🎁' },
+    { label: 'Total Products', value: totalProducts, sub: 'In catalogue', icon: Package },
+    { label: 'Registered Users', value: totalUsers, sub: 'Unique accounts', icon: Users },
+    { label: 'Total Hearts', value: totalWishlisted, sub: 'Across all users', icon: Heart },
+    { label: 'Wishlist Rate', value: `${wishlistRate}%`, sub: 'Users who engaged', icon: BarChart3 },
+    { label: 'Free Attar Leads', value: popupLeads.length, sub: 'Popup submissions', icon: Gift },
   ];
 
-  // uid → popup lead map (for cross-referencing in Active Carts)
   const popupLeadByUid = new Map(popupLeads.filter(l => l.uid).map(l => [l.uid!, l]));
 
   const suggestions = [
-    { icon: '🛒', title: 'Cart Abandonment', desc: 'Track users who added to cart but never purchased. Industry avg: 70%. Key lever for recovery.', tag: 'HIGH IMPACT', tc: '#dc2626', bg: '#fef2f2' },
-    { icon: '💰', title: 'Revenue by Product', desc: 'Identify top revenue-generating products vs underperformers to focus inventory.', tag: 'CRITICAL', tc: '#16a34a', bg: '#f0fdf4' },
-    { icon: '📈', title: 'Sales Over Time', desc: 'Weekly/monthly line chart — spot seasonal peaks like Eid or Diwali to stock ahead.', tag: 'RECOMMENDED', tc: '#2563eb', bg: '#eff6ff' },
-    { icon: '🔁', title: 'Repeat Buyer Rate', desc: 'Percentage of customers who ordered 2+ times. Higher = stronger brand loyalty.', tag: 'LOYALTY', tc: '#d97706', bg: '#fffbeb' },
-    { icon: '🌍', title: 'Geographic Demand', desc: 'Detect top cities/regions to optimize delivery partners and COD availability.', tag: 'GROWTH', tc: '#0891b2', bg: '#ecfeff' },
-    { icon: '🔍', title: 'Search Behavior', desc: 'What customers search for most reveals gaps in your product catalogue.', tag: 'PRODUCT', tc: '#7c3aed', bg: '#f5f3ff' },
+    { icon: ShoppingCart, title: 'Cart Abandonment', desc: 'Track users who added to cart but never purchased. Industry avg: 70%. Key lever for recovery.', tag: 'HIGH IMPACT', variant: 'destructive' as const },
+    { icon: CircleDollarSign, title: 'Revenue by Product', desc: 'Identify top revenue-generating products vs underperformers to focus inventory.', tag: 'CRITICAL', variant: 'default' as const },
+    { icon: TrendingUp, title: 'Sales Over Time', desc: 'Weekly/monthly line chart — spot seasonal peaks like Eid or Diwali to stock ahead.', tag: 'RECOMMENDED', variant: 'outline' as const },
+    { icon: Repeat, title: 'Repeat Buyer Rate', desc: 'Percentage of customers who ordered 2+ times. Higher = stronger brand loyalty.', tag: 'LOYALTY', variant: 'secondary' as const },
+    { icon: MapPin, title: 'Geographic Demand', desc: 'Detect top cities/regions to optimize delivery partners and COD availability.', tag: 'GROWTH', variant: 'default' as const },
+    { icon: Search, title: 'Search Behavior', desc: 'What customers search for most reveals gaps in your product catalogue.', tag: 'PRODUCT', variant: 'outline' as const },
   ];
 
-  if (loading) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: '14px' }}>
-        <div style={{ width: '36px', height: '36px', borderRadius: '50%', border: '3px solid #e5e7eb', borderTopColor: '#d4af37', animation: 'spin 0.8s linear infinite' }} />
-        <span style={{ color: '#6b7280', fontSize: '0.9rem', fontFamily: 'Inter, system-ui, sans-serif' }}>Loading analytics...</span>
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      </div>
-    );
-  }
-
   return (
-    <>
-      <style>{`
-        .an-page { padding: 32px; max-width: 1200px; margin: 0 auto; font-family: 'Inter', system-ui, sans-serif; }
-        @media (max-width: 768px) { .an-page { padding: 16px; } }
-
-        /* Page heading */
-        .an-h1 { font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
-        .an-sub { font-size: 0.85rem; color: #64748b; margin-bottom: 32px; }
-
-        /* KPI Cards */
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; margin-bottom: 32px; }
-        .kpi-card {
-          border-radius: 14px;
-          padding: 24px;
-          color: #fff;
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-          position: relative;
-          overflow: hidden;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-        }
-        .kpi-icon { font-size: 1.6rem; margin-bottom: 4px; }
-        .kpi-val { font-size: 2.2rem; font-weight: 800; line-height: 1; color: #fff; }
-        .kpi-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; opacity: 0.75; }
-        .kpi-foot { font-size: 0.75rem; opacity: 0.55; margin-top: 2px; }
-
-        /* Panels */
-        .an-panel {
-          background: #fff;
-          border: 1px solid #e2e8f0;
-          border-radius: 14px;
-          padding: 26px;
-          margin-bottom: 22px;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-        }
-        .an-panel-title {
-          font-size: 1rem;
-          font-weight: 700;
-          color: #0f172a;
-          margin-bottom: 20px;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-        .live-badge {
-          font-size: 0.65rem;
-          padding: 2px 8px;
-          border-radius: 20px;
-          background: #dcfce7;
-          color: #16a34a;
-          font-weight: 700;
-          letter-spacing: 0.06em;
-          border: 1px solid #bbf7d0;
-        }
-
-        /* Leaderboard Table */
-        .lb-table { width: 100%; border-collapse: collapse; }
-        .lb-table th { 
-          text-align: left; font-size: 0.68rem; text-transform: uppercase; 
-          letter-spacing: 0.1em; color: #94a3b8; font-weight: 700;
-          padding: 10px 12px; border-bottom: 2px solid #f1f5f9;
-        }
-        .lb-table td { 
-          padding: 14px 12px; font-size: 0.88rem; color: #1e293b; 
-          border-bottom: 1px solid #f8fafc; vertical-align: middle;
-        }
-        .lb-table tr:last-child td { border-bottom: none; }
-        .lb-table tr:hover td { background: #f8fafc; }
-
-        .rank-ball {
-          width: 28px; height: 28px; border-radius: 50%;
-          display: inline-flex; align-items: center; justify-content: center;
-          font-size: 0.72rem; font-weight: 800;
-        }
-
-        /* Bar chart */
-        .bar-row { display: flex; flex-direction: column; gap: 14px; }
-        .bar-item { display: flex; align-items: center; gap: 12px; }
-        .bar-name { font-size: 0.82rem; color: #374151; width: 150px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
-        .bar-track { flex: 1; height: 9px; background: #f1f5f9; border-radius: 6px; overflow: hidden; }
-        .bar-fill { height: 100%; border-radius: 6px; transition: width 0.8s ease; }
-        .bar-count { font-size: 0.78rem; color: #6b7280; width: 28px; text-align: right; font-weight: 700; flex-shrink: 0; }
-
-        /* Engagement Row */
-        .eng-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 14px; }
-        .eng-tile {
-          background: #f8fafc; border: 1px solid #e2e8f0;
-          border-radius: 10px; padding: 18px;
-        }
-        .eng-val { font-size: 2rem; font-weight: 800; line-height: 1; }
-        .eng-label { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; margin-top: 8px; }
-
-        /* Suggestions */
-        .sug-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
-        .sug-card {
-          background: #f8fafc; border: 1px solid #e2e8f0;
-          border-radius: 12px; padding: 18px;
-          display: flex; gap: 14px; align-items: flex-start;
-        }
-        .sug-ico { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
-        .sug-title { font-size: 0.9rem; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
-        .sug-desc { font-size: 0.78rem; color: #64748b; line-height: 1.55; }
-        .sug-tag {
-          display: inline-block; margin-top: 10px;
-          font-size: 0.65rem; padding: 3px 8px; border-radius: 4px;
-          font-weight: 800; letter-spacing: 0.07em;
-        }
-
-        .two-col { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; margin-bottom: 22px; }
-        @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
-        @media (max-width: 768px) { 
-          .an-page { padding: 12px; }
-          .an-panel { padding: 16px; }
-          .kpi-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-          
-          /* Table to Cards */
-          .lb-table thead { display: none; }
-          .lb-table, .lb-table tbody, .lb-table tr, .lb-table td { display: block; width: 100% !important; min-width: 0 !important; }
-          .lb-table tr { margin-bottom: 16px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
-          .lb-table td { display: flex; justify-content: space-between; align-items: flex-start; padding: 8px 0; border: none; text-align: right; gap: 12px; border-bottom: 1px dashed #f1f5f9; }
-          .lb-table td:last-child { border-bottom: none; padding-bottom: 0; }
-          .lb-table td::before { content: attr(data-label); font-size: 0.7rem; color: #64748b; text-transform: uppercase; font-weight: 800; flex-shrink: 0; padding-top: 2px; }
-          .lb-table td span, .lb-table td div { word-break: break-word; text-align: right; }
-          
-          .kpi-card { padding: 20px; border-radius: 16px; }
-        }
-      `}</style>
-
-      <div className="an-page">
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '4px', flexWrap: 'wrap', gap: '12px' }}>
-          <div>
-            <h1 className="an-h1">Analytics</h1>
-            <p className="an-sub" style={{ marginBottom: 0 }}>
-              Live from Firestore
-              {lastUpdated && <span style={{ marginLeft: '8px', color: '#16a34a', fontWeight: 600 }}>· Last updated {lastUpdated}</span>}
-            </p>
-          </div>
-          <button
-            onClick={() => setRefreshKey(k => k + 1)}
-            disabled={loading}
-            style={{
-              display: 'flex', alignItems: 'center', gap: '8px',
-              padding: '10px 18px', borderRadius: '8px',
-              background: loading ? '#f1f5f9' : '#0f172a',
-              color: loading ? '#94a3b8' : '#fff',
-              border: 'none', cursor: loading ? 'wait' : 'pointer',
-              fontSize: '0.85rem', fontWeight: 700, fontFamily: 'Inter, system-ui, sans-serif',
-              transition: 'all 0.2s', marginTop: '4px',
-            }}
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-              style={{ animation: loading ? 'spin 0.8s linear infinite' : 'none' }}>
-              <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
-              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-            </svg>
-            {loading ? 'Fetching...' : 'Refresh'}
-          </button>
+    <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-8 font-sans">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Analytics Dashboard</h1>
+          <p className="text-muted-foreground mt-1 flex items-center gap-2">
+            Live from Firestore 
+            {lastUpdated && <Badge variant="secondary" className="font-mono text-xs">Last updated: {lastUpdated}</Badge>}
+          </p>
         </div>
-        <div style={{ marginBottom: '28px' }} />
+        <button
+          onClick={() => setRefreshKey(k => k + 1)}
+          disabled={loading}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-md text-sm font-medium transition-colors disabled:opacity-50"
+        >
+          <RefreshCcw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+          {loading ? 'Fetching...' : 'Refresh Data'}
+        </button>
+      </div>
 
-        {/* KPI Cards — each with its own deep colored bg */}
-        <div className="kpi-grid">
-          {kpis.map((k, i) => (
-            <div className="kpi-card" key={i} style={{ background: `linear-gradient(135deg, ${k.color} 0%, ${k.accent}cc 100%)` }}>
-              <div className="kpi-icon">{k.icon}</div>
-              <div className="kpi-val">{k.value}</div>
-              <div className="kpi-label">{k.label}</div>
-              <div className="kpi-foot">{k.sub}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Leaderboard + Bar Chart */}
-        <div className="two-col">
-          <div className="an-panel">
-            <div className="an-panel-title">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d4af37" strokeWidth="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-              Most Wished Products
-              <span className="live-badge">LIVE</span>
-            </div>
-            <table className="lb-table">
-              <thead>
-                <tr>
-                  <th style={{ width: 44 }}>#</th>
-                  <th>Product</th>
-                  <th>Category</th>
-                  <th style={{ textAlign: 'right' }}>Hearts</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortedByWishlist.slice(0, 8).map((p, idx) => {
-                  const medals = [
-                    { bg: '#fef9c3', color: '#ca8a04' },
-                    { bg: '#f1f5f9', color: '#64748b' },
-                    { bg: '#fff7ed', color: '#c2410c' },
-                  ];
-                  const m = medals[idx] || { bg: '#f8fafc', color: '#94a3b8' };
-                  return (
-                    <tr key={p.id}>
-                      <td data-label="#">
-                        <span className="rank-ball" style={{ background: m.bg, color: m.color }}>
-                          {idx + 1}
-                        </span>
-                      </td>
-                      <td data-label="Product" style={{ fontWeight: 700, color: '#0f172a' }}>{p.name}</td>
-                      <td data-label="Category" style={{ color: '#94a3b8', fontSize: '0.8rem' }}>{p.category || '—'}</td>
-                      <td data-label="Hearts" style={{ textAlign: 'right' }}>
-                        <span style={{ color: p.wishlistCount > 0 ? '#d4af37' : '#cbd5e1', fontWeight: 800 }}>
-                          {p.wishlistCount > 0 ? `♥ ${p.wishlistCount}` : '—'}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-                {products.length === 0 && (
-                  <tr>
-                    <td colSpan={4} style={{ textAlign: 'center', color: '#94a3b8', padding: '28px', fontSize: '0.85rem' }}>
-                      No products yet.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+      {loading ? (
+         <div className="flex flex-col items-center justify-center h-64 gap-4">
+           <RefreshCcw className="w-8 h-8 animate-spin text-slate-400" />
+           <p className="text-muted-foreground text-sm">Loading analytics...</p>
+         </div>
+      ) : (
+        <>
+          {/* KPI Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {kpis.map((kpi, i) => {
+              const Icon = kpi.icon;
+              return (
+                <Card key={i} className="border-slate-200 shadow-sm">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                    <CardTitle className="text-sm font-medium text-slate-600">{kpi.label}</CardTitle>
+                    <Icon className="w-4 h-4 text-slate-400" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-slate-900">{kpi.value}</div>
+                    <p className="text-xs text-slate-500 mt-1">{kpi.sub}</p>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
-          <div className="an-panel">
-            <div className="an-panel-title">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-              Wishlist Distribution
-            </div>
-            <div className="bar-row">
-              {sortedByWishlist.slice(0, 7).map(p => {
-                const pct = maxWish > 0 ? (p.wishlistCount / maxWish) * 100 : 0;
-                const barColor = pct > 60 ? '#d4af37' : pct > 30 ? '#2563eb' : '#64748b';
-                return (
-                  <div className="bar-item" key={p.id}>
-                    <div className="bar-name" title={p.name}>{p.name}</div>
-                    <div className="bar-track">
-                      <div className="bar-fill" style={{ width: `${Math.max(pct, 4)}%`, background: barColor }} />
-                    </div>
-                    <div className="bar-count">{p.wishlistCount}</div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Leaderboard Table */}
+            <Card className="shadow-sm">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Heart className="w-5 h-5 text-red-500" />
+                      Most Wished Products
+                    </CardTitle>
+                    <CardDescription>Top products saved by users</CardDescription>
                   </div>
-                );
-              })}
-              {products.length === 0 && (
-                <p style={{ color: '#94a3b8', fontSize: '0.85rem', textAlign: 'center', padding: '20px 0' }}>No data yet.</p>
-              )}
-            </div>
-          </div>
-        </div>
+                  <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-200">LIVE</Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-12">#</TableHead>
+                      <TableHead>Product</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead className="text-right">Hearts</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sortedByWishlist.slice(0, 8).map((p, idx) => (
+                      <TableRow key={p.id}>
+                        <TableCell className="font-medium text-slate-500">{idx + 1}</TableCell>
+                        <TableCell className="font-medium text-slate-900">{p.name}</TableCell>
+                        <TableCell className="text-slate-500 text-sm">{p.category || '—'}</TableCell>
+                        <TableCell className="text-right font-semibold text-slate-700">
+                          {p.wishlistCount > 0 ? (
+                            <span className="flex items-center justify-end gap-1 text-red-500">
+                              <Heart className="w-3 h-3 fill-current" /> {p.wishlistCount}
+                            </span>
+                          ) : '—'}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                    {products.length === 0 && (
+                      <TableRow>
+                        <TableCell colSpan={4} className="h-24 text-center text-slate-500">
+                          No products found.
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
 
-        {/* Active Carts Panel */}
-        <div className="an-panel">
-          <div className="an-panel-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-            Active Carts
-            <span className="live-badge" style={{ background: '#fee2e2', color: '#dc2626', borderColor: '#fca5a5' }}>REAL-TIME</span>
-            <span style={{ marginLeft: 'auto', fontSize: '0.78rem', color: '#64748b', fontWeight: 500 }}>
-              {cartUsers.length} user{cartUsers.length !== 1 ? 's' : ''} with items in cart
-            </span>
+            {/* Bar Chart */}
+            <Card className="shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-blue-500" />
+                  Wishlist Distribution
+                </CardTitle>
+                <CardDescription>Visual breakdown of top 7 saved products</CardDescription>
+              </CardHeader>
+              <CardContent className="h-[350px] w-full pt-4">
+                {chartData.length > 0 ? (
+                  <ChartContainer config={chartConfig} className="h-full w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                        <XAxis 
+                          dataKey="name" 
+                          stroke="#64748b" 
+                          fontSize={12} 
+                          tickLine={false} 
+                          axisLine={false}
+                        />
+                        <YAxis 
+                          stroke="#64748b" 
+                          fontSize={12} 
+                          tickLine={false} 
+                          axisLine={false} 
+                          tickFormatter={(value) => `${value}`}
+                        />
+                        <ChartTooltip cursor={{ fill: '#f1f5f9' }} content={<ChartTooltipContent />} />
+                        <Bar dataKey="wishlistCount" fill="var(--color-wishlistCount)" radius={[4, 4, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                ) : (
+                  <div className="flex h-full items-center justify-center text-sm text-slate-500">No data available to display chart.</div>
+                )}
+              </CardContent>
+            </Card>
           </div>
-          {cartUsers.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '32px 20px', color: '#94a3b8', fontSize: '0.88rem' }}>
-              No logged-in users have items in their cart right now.
-            </div>
-          ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table className="lb-table" style={{ minWidth: '750px' }}>
-                <thead>
-                  <tr>
-                    <th style={{ width: 36 }}>#</th>
-                    <th>User</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th style={{ textAlign: 'center' }}>Items</th>
-                    <th style={{ textAlign: 'right' }}>Cart Value</th>
-                    <th>Products in Cart</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cartUsers.map((cu, idx) => (
-                    <tr key={cu.uid}>
-                      <td data-label="#">
-                        <span className="rank-ball" style={{ background: '#fee2e2', color: '#dc2626' }}>{idx + 1}</span>
-                      </td>
-                      <td data-label="User">
-                        <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '0.88rem' }}>
-                          {cu.name || cu.googleName || <span style={{ color: '#94a3b8', fontStyle: 'italic', fontWeight: 400 }}>—</span>}
-                        </div>
-                        {cu.googleName && !cu.name && (
-                          <div style={{ fontSize: '0.68rem', color: '#94a3b8', marginTop: '1px' }}>via Google</div>
-                        )}
-                        <div style={{ fontSize: '0.68rem', color: '#cbd5e1', fontFamily: 'monospace', marginTop: '1px' }}>{cu.uid.slice(0, 14)}&hellip;</div>
-                      </td>
-                      <td data-label="Email">
-                        {cu.email ? (
-                          <div>
-                            <a href={`mailto:${cu.email}`} style={{ color: '#2563eb', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}>
-                              {cu.email}
-                            </a>
-                          </div>
-                        ) : (
-                          <span style={{ color: '#ef4444', fontSize: '0.8rem', fontWeight: 600 }}>Missing — ask user to re-login</span>
-                        )}
-                      </td>
-                      <td data-label="Phone">
-                        {/* Show popup-form phone first, then profile phone as fallback */}
-                        {(() => {
-                          const lead = popupLeadByUid.get(cu.uid);
-                          const popupPhone = lead?.phone;
-                          const profilePhone = cu.phone;
-                          if (popupPhone) return (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', alignItems: 'flex-end' }}>
-                              <a href={`tel:+91${popupPhone}`} style={{ color: '#0f172a', fontSize: '0.88rem', fontWeight: 700, textDecoration: 'none' }}>
-                                +91 {popupPhone}
-                              </a>
-                              <span style={{
-                                display: 'inline-flex', alignItems: 'center', gap: '3px',
-                                background: 'linear-gradient(135deg,#d4af37,#b8902a)',
-                                color: '#fff', fontSize: '0.58rem', fontWeight: 800,
-                                padding: '2px 7px', borderRadius: '20px', letterSpacing: '0.06em',
-                                width: 'fit-content',
-                              }}>🎁 Offer Claim</span>
-                            </div>
-                          );
-                          if (profilePhone) return <span style={{ color: '#0f172a', fontSize: '0.88rem', fontWeight: 600 }}>{profilePhone}</span>;
-                          return <span style={{ color: '#cbd5e1', fontSize: '0.82rem', fontStyle: 'italic' }}>Not provided</span>;
-                        })()}
-                      </td>
-                      <td data-label="Items" style={{ textAlign: 'center' }}>
-                        <span style={{ background: '#eff6ff', color: '#2563eb', padding: '3px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 800 }}>
-                          {cu.cartItemCount}
-                        </span>
-                      </td>
-                      <td data-label="Cart Value" style={{ textAlign: 'right', fontWeight: 800, color: '#16a34a', fontSize: '0.95rem' }}>
-                        &#8377;{cu.cartTotal.toLocaleString('en-IN')}
-                      </td>
-                      <td data-label="Products">
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                          {cu.cart.slice(0, 3).map((item, i) => (
-                            <div key={i} style={{ fontSize: '0.75rem', color: '#475569', display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'flex-end' }}>
-                              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#d4af37', flexShrink: 0, display: 'inline-block' }} />
-                              {item.name} ({item.size}ml) &times; {item.quantity}
-                            </div>
-                          ))}
-                          {cu.cart.length > 3 && (
-                            <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>+{cu.cart.length - 3} more</div>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
 
-        {/* Free Attar Popup Leads */}
-        <div className="an-panel">
-          <div className="an-panel-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d4af37" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
-            🎁 Free 2ml Attar — Popup Leads
-            <span className="live-badge" style={{ background: '#fef9c3', color: '#b45309', borderColor: '#fde68a' }}>FREE OFFER</span>
-            <span style={{ marginLeft: 'auto', fontSize: '0.78rem', color: '#64748b', fontWeight: 500 }}>
-              {popupLeads.length} claim{popupLeads.length !== 1 ? 's' : ''} collected
-            </span>
-          </div>
-          {popupLeads.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '32px 20px', color: '#94a3b8', fontSize: '0.88rem' }}>
-              No popup leads yet — the offer will appear to visitors after 8 seconds on the site.
-            </div>
-          ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table className="lb-table" style={{ minWidth: '640px' }}>
-                <thead>
-                  <tr>
-                    <th style={{ width: 36 }}>#</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Delivery Address</th>
-                    <th>Offer</th>
-                    <th style={{ textAlign: 'right' }}>Claimed At</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {popupLeads.map((lead, idx) => {
-                    let claimedDate = '';
-                    if (lead.claimedAt) {
-                      if (lead.claimedAt.toDate) {
-                        claimedDate = lead.claimedAt.toDate().toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-                      } else if (lead.claimedAt.seconds) {
-                        claimedDate = new Date(lead.claimedAt.seconds * 1000).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-                      }
-                    }
-                    return (
-                      <tr key={lead.id}>
-                        <td data-label="#">
-                          <span className="rank-ball" style={{ background: '#fef9c3', color: '#b45309' }}>{idx + 1}</span>
-                        </td>
-                        <td data-label="Name" style={{ fontWeight: 700, color: '#0f172a' }}>{lead.name || '—'}</td>
-                        <td data-label="Phone">
-                          {lead.phone ? (
-                            <a href={`tel:+91${lead.phone}`} style={{ color: '#0f172a', fontWeight: 600, textDecoration: 'none', fontSize: '0.88rem' }}>
-                              +91 {lead.phone}
-                            </a>
-                          ) : <span style={{ color: '#cbd5e1', fontStyle: 'italic' }}>—</span>}
-                        </td>
-                        <td data-label="Address" style={{ fontSize: '0.8rem', color: '#475569', maxWidth: '220px', textAlign: 'right' }}>{lead.address || '—'}</td>
-                        <td data-label="Offer">
-                          <span style={{ background: '#fef9c3', color: '#b45309', padding: '3px 10px', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 800 }}>
-                            {lead.offer || '2ml Free Attar'}
-                          </span>
-                        </td>
-                        <td data-label="Claimed" style={{ textAlign: 'right', fontSize: '0.78rem', color: '#64748b' }}>
-                          {claimedDate || '—'}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-
-        {/* User Engagement */}
-        <div className="an-panel">
-          <div className="an-panel-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            User Engagement Breakdown
-          </div>
-          <div className="eng-grid">
-            {[
-              { v: totalUsers, l: 'Total Accounts', c: '#2563eb' },
-              { v: usersWithWishlist, l: 'Active Wishlists', c: '#d4af37' },
-              { v: totalUsers - usersWithWishlist, l: 'No Wishlist Yet', c: '#ef4444' },
-              { v: `${wishlistRate}%`, l: 'Wishlist Rate', c: '#7c3aed' },
-              { v: avgWishlistPerUser, l: 'Avg Per User', c: '#0891b2' },
-              { v: cartUsers.length, l: 'Active Carts Now', c: '#ef4444' },
-            ].map((e, i) => (
-              <div className="eng-tile" key={i}>
-                <div className="eng-val" style={{ color: e.c }}>{e.v}</div>
-                <div className="eng-label">{e.l}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Analytics Suggestions */}
-        <div className="an-panel">
-          <div className="an-panel-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            Recommended Analytics to Add
-          </div>
-          <div className="sug-grid">
-            {suggestions.map((s, i) => (
-              <div className="sug-card" key={i} style={{ borderLeft: `3px solid ${s.tc}` }}>
-                <div className="sug-ico">{s.icon}</div>
+          {/* Active Carts Panel */}
+          <Card className="shadow-sm border-red-100">
+            <CardHeader className="bg-red-50/50 rounded-t-xl border-b border-red-50">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <div className="sug-title">{s.title}</div>
-                  <div className="sug-desc">{s.desc}</div>
-                  <span className="sug-tag" style={{ background: s.bg, color: s.tc }}>{s.tag}</span>
+                  <CardTitle className="text-lg flex items-center gap-2 text-red-700">
+                    <ShoppingCart className="w-5 h-5" />
+                    Active Carts
+                    <Badge variant="outline" className="bg-red-100 text-red-700 border-red-200 ml-2">REAL-TIME</Badge>
+                  </CardTitle>
+                  <CardDescription className="text-red-600/80 mt-1">
+                    Users with unpurchased items in their cart right now.
+                  </CardDescription>
+                </div>
+                <div className="text-sm font-medium text-red-700 bg-red-100 px-3 py-1 rounded-full">
+                  {cartUsers.length} active cart{cartUsers.length !== 1 ? 's' : ''}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              {cartUsers.length === 0 ? (
+                <div className="text-center py-12 text-slate-500 text-sm">
+                  No logged-in users have items in their cart right now.
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader className="bg-slate-50/50">
+                    <TableRow>
+                      <TableHead className="pl-6 w-12">#</TableHead>
+                      <TableHead>User Details</TableHead>
+                      <TableHead>Contact</TableHead>
+                      <TableHead className="text-center">Items</TableHead>
+                      <TableHead className="text-right">Value</TableHead>
+                      <TableHead className="pr-6">Contents</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {cartUsers.map((cu, idx) => (
+                      <TableRow key={cu.uid} className="hover:bg-slate-50/50">
+                        <TableCell className="pl-6 font-medium text-slate-400">{idx + 1}</TableCell>
+                        <TableCell>
+                          <div className="font-semibold text-slate-900">
+                            {cu.name || cu.googleName || <span className="text-slate-400 font-normal italic">Unknown</span>}
+                          </div>
+                          {cu.googleName && !cu.name && (
+                            <div className="text-[10px] text-slate-500 mt-0.5 font-medium uppercase tracking-wider">via Google</div>
+                          )}
+                          <div className="text-xs text-slate-400 font-mono mt-1">{cu.uid.slice(0, 14)}...</div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            {cu.email ? (
+                              <a href={`mailto:${cu.email}`} className="text-blue-600 text-sm font-medium hover:underline block">
+                                {cu.email}
+                              </a>
+                            ) : (
+                              <span className="text-red-500 text-xs font-semibold block">Missing Email</span>
+                            )}
+                            
+                            {(() => {
+                              const lead = popupLeadByUid.get(cu.uid);
+                              const popupPhone = lead?.phone;
+                              const profilePhone = cu.phone;
+                              if (popupPhone) return (
+                                <div className="flex items-center gap-2">
+                                  <a href={`tel:+91${popupPhone}`} className="text-slate-700 text-sm font-medium hover:underline block">
+                                    +91 {popupPhone}
+                                  </a>
+                                  <Badge variant="secondary" className="bg-amber-100 text-amber-700 hover:bg-amber-100 text-[10px] px-1.5 py-0">Lead</Badge>
+                                </div>
+                              );
+                              if (profilePhone) return <span className="text-slate-700 text-sm font-medium block">{profilePhone}</span>;
+                              return null;
+                            })()}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Badge variant="secondary">{cu.cartItemCount}</Badge>
+                        </TableCell>
+                        <TableCell className="text-right font-bold text-emerald-600">
+                          ₹{cu.cartTotal.toLocaleString('en-IN')}
+                        </TableCell>
+                        <TableCell className="pr-6">
+                          <div className="flex flex-col gap-1">
+                            {cu.cart.slice(0, 3).map((item, i) => (
+                              <div key={i} className="text-xs text-slate-600 flex items-center gap-1.5">
+                                <div className="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0" />
+                                <span className="font-medium truncate max-w-[120px]" title={item.name}>{item.name}</span>
+                                <span className="text-slate-400">({item.size}ml)</span>
+                                <span className="text-slate-400 ml-1">×{item.quantity}</span>
+                              </div>
+                            ))}
+                            {cu.cart.length > 3 && (
+                              <div className="text-[10px] text-slate-400 font-medium mt-1">+{cu.cart.length - 3} more items</div>
+                            )}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </CardContent>
+          </Card>
 
-        <p style={{ fontSize: '0.73rem', color: '#94a3b8', textAlign: 'center', marginTop: '8px' }}>
-          Data pulled live from Firestore · Cart & Revenue analytics require Orders collection (coming after payment integration)
-        </p>
-      </div>
-    </>
+          {/* Free Attar Leads Panel */}
+          <Card className="shadow-sm border-amber-100">
+            <CardHeader className="bg-amber-50/30 rounded-t-xl border-b border-amber-50">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <CardTitle className="text-lg flex items-center gap-2 text-amber-700">
+                    <Gift className="w-5 h-5" />
+                    Free 2ml Attar Leads
+                    <Badge variant="outline" className="bg-amber-100 text-amber-700 border-amber-200 ml-2">PROMO</Badge>
+                  </CardTitle>
+                  <CardDescription className="text-amber-600/80 mt-1">
+                    Users who submitted the popup form.
+                  </CardDescription>
+                </div>
+                <div className="text-sm font-medium text-amber-700 bg-amber-100 px-3 py-1 rounded-full">
+                  {popupLeads.length} leads
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              {popupLeads.length === 0 ? (
+                <div className="text-center py-12 text-slate-500 text-sm">
+                  No popup leads yet.
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader className="bg-slate-50/50">
+                    <TableRow>
+                      <TableHead className="pl-6 w-12">#</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead>Address</TableHead>
+                      <TableHead>Offer</TableHead>
+                      <TableHead className="text-right pr-6">Claimed At</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {popupLeads.map((lead, idx) => {
+                      let claimedDate = '—';
+                      if (lead.claimedAt) {
+                        if (lead.claimedAt.toDate) {
+                          claimedDate = lead.claimedAt.toDate().toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                        } else if (lead.claimedAt.seconds) {
+                          claimedDate = new Date(lead.claimedAt.seconds * 1000).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                        }
+                      }
+                      return (
+                        <TableRow key={lead.id} className="hover:bg-slate-50/50">
+                          <TableCell className="pl-6 font-medium text-slate-400">{idx + 1}</TableCell>
+                          <TableCell className="font-semibold text-slate-900">{lead.name || '—'}</TableCell>
+                          <TableCell>
+                            {lead.phone ? (
+                              <a href={`tel:+91${lead.phone}`} className="text-slate-700 font-medium hover:underline text-sm">
+                                +91 {lead.phone}
+                              </a>
+                            ) : <span className="text-slate-400 italic text-sm">—</span>}
+                          </TableCell>
+                          <TableCell className="text-xs text-slate-600 max-w-[200px] truncate" title={lead.address}>
+                            {lead.address || '—'}
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="secondary" className="bg-amber-100 text-amber-700 hover:bg-amber-100">{lead.offer || '2ml Free Attar'}</Badge>
+                          </TableCell>
+                          <TableCell className="text-right text-xs text-slate-500 pr-6">
+                            {claimedDate}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* User Engagement Breakdown */}
+          <Card className="shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Users className="w-5 h-5 text-emerald-500" />
+                User Engagement Breakdown
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {[
+                  { v: totalUsers, l: 'Total Accounts' },
+                  { v: usersWithWishlist, l: 'Active Wishlists' },
+                  { v: totalUsers - usersWithWishlist, l: 'No Wishlist Yet' },
+                  { v: `${wishlistRate}%`, l: 'Wishlist Rate' },
+                  { v: avgWishlistPerUser, l: 'Avg Per User' },
+                  { v: cartUsers.length, l: 'Active Carts Now' },
+                ].map((e, i) => (
+                  <div key={i} className="bg-slate-50 rounded-lg p-4 border border-slate-100 flex flex-col items-center text-center justify-center">
+                    <div className="text-2xl font-bold text-slate-900">{e.v}</div>
+                    <div className="text-[10px] uppercase tracking-wider font-semibold text-slate-500 mt-1">{e.l}</div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Suggestions */}
+          <div className="pt-4">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-indigo-500" />
+              Recommended Analytics Modules
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {suggestions.map((s, i) => {
+                const SIcon = s.icon;
+                return (
+                  <Card key={i} className="shadow-none border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-colors">
+                    <CardHeader className="p-4 pb-2">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-white rounded-md shadow-sm border border-slate-100">
+                          <SIcon className="w-5 h-5 text-slate-700" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-sm font-semibold">{s.title}</CardTitle>
+                          <Badge variant={s.variant} className="mt-1.5 text-[9px] px-1.5 py-0">{s.tag}</Badge>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="p-4 pt-2">
+                      <p className="text-xs text-slate-500 leading-relaxed">{s.desc}</p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
