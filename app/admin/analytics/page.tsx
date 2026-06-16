@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Bar, BarChart, ResponsiveContainer, Area, AreaChart } from "recharts"
-import { RefreshCcw, Heart, Gift, ShoppingCart } from "lucide-react"
+import { RefreshCcw, Heart, Gift, ShoppingCart, TrendingUp } from "lucide-react"
 
 interface PopupLead {
   id: string;
@@ -72,7 +72,6 @@ export default function AnalyticsPage() {
   const [sparklineData2, setSparklineData2] = useState<{v: number}[]>([]);
 
   useEffect(() => {
-    // Generate charts once on mount to avoid hydration mismatch
     setMainChartData(generateSparkData(20));
     setSparklineData1(generateSparkData(10));
     setSparklineData2(generateSparkData(15));
@@ -180,210 +179,191 @@ export default function AnalyticsPage() {
   const sortedByWishlist = [...products].sort((a, b) => b.wishlistCount - a.wishlistCount);
 
   return (
-    <div className="min-h-screen bg-[#0e1015] text-white p-4 md:p-8 font-sans w-full max-w-[100vw] overflow-x-hidden">
+    // Transparent background lets the admin layout's #f0f2f8 shine through perfectly.
+    <div className="w-full bg-transparent text-slate-900 font-sans animate-in fade-in duration-500">
       
-      {/* 
-        CRITICAL FIX: Override the parent layout padding and background.
-        This allows the dark background to reach edge-to-edge seamlessly.
-      */}
-      <style dangerouslySetInnerHTML={{__html: `
-        .page-content {
-          padding: 0 !important;
-          background: #0e1015 !important;
-        }
-      `}} />
-
-      <div className="w-full max-w-5xl mx-auto space-y-10">
+      <div className="w-full max-w-[1200px] mx-auto space-y-8">
         
-        {/* Header */}
-        <div className="flex justify-between items-center px-2 pt-4">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-[#2dd4bf] rounded-lg flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(45,212,191,0.3)]">
-              <span className="text-[#0e1015] font-bold text-xl font-serif">R</span>
-            </div>
-            <span className="font-semibold tracking-wide text-sm text-slate-200">Store Analytics</span>
+        {/* Header Actions */}
+        <div className="flex justify-between items-end pb-2">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Store Analytics</h1>
+            <p className="text-sm text-slate-500 mt-1 font-medium flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              Live data as of {lastUpdated || '--:--'}
+            </p>
           </div>
           <button
             onClick={() => setRefreshKey(k => k + 1)}
             disabled={loading}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1c1f26] border border-[#2a2d36] text-slate-300 hover:text-white hover:bg-[#2a2d36] transition-colors ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            <RefreshCcw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-            <span className="text-xs font-medium">Sync Data</span>
+            <RefreshCcw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <span className="text-sm font-semibold">Refresh</span>
           </button>
         </div>
 
-        {/* MAIN SHOPIFY WIDGET CARD */}
-        <Card className="bg-white text-slate-900 border-none shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] rounded-[28px] overflow-hidden w-full relative z-10">
-          <div className="p-6 sm:p-8 md:p-10">
+        {/* MAIN METRICS CARD (Shopify Style) */}
+        <Card className="bg-white border border-slate-200 shadow-sm rounded-2xl overflow-hidden w-full">
+          <div className="p-6 md:p-8">
             
-            <div className="flex justify-between items-start mb-8">
-              <div>
-                <h2 className="text-[1.4rem] font-bold tracking-tight text-slate-900">Rahmani Perfumery</h2>
-                <p className="text-[0.8rem] text-slate-500 mt-1 font-medium">as of {lastUpdated || '--:--'}</p>
-              </div>
-            </div>
-            
-            {/* Top row: Total Sales + Bar Chart */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6 w-full">
-              <div className="w-full md:w-auto shrink-0">
-                <h3 className="text-[0.95rem] font-semibold text-slate-500 mb-1">Total sales</h3>
-                <div className="text-[2.8rem] sm:text-[3.2rem] font-extrabold tracking-tighter leading-none text-slate-900">
+            {/* Top row: Total Sales + Main Bar Chart */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10 w-full items-end">
+              <div className="w-full min-w-0">
+                <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">Total sales</h3>
+                <div className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">
                   ₹{totalSales.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </div>
-                <p className="text-[0.85rem] text-slate-400 mt-2 font-medium">-</p>
+                <div className="flex items-center gap-2 mt-3">
+                  <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-none px-2 py-0.5 shadow-none flex items-center gap-1">
+                    <TrendingUp className="w-3 h-3" />
+                    Stable
+                  </Badge>
+                  <p className="text-xs text-slate-400 font-medium">vs previous period</p>
+                </div>
               </div>
               
-              {/* Responsive container wrapped in a min-w-0 to prevent flexbox blowout */}
-              <div className="w-full md:w-[280px] h-[65px] shrink-0 min-w-0 self-end">
+              {/* Strict w-full min-w-0 bounds for Recharts */}
+              <div className="w-full h-[80px] min-w-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={mainChartData}>
                     <defs>
-                      <linearGradient id="colorSales" x1="0" y1="1" x2="0" y2="0">
+                      <linearGradient id="colorSalesLight" x1="0" y1="1" x2="0" y2="0">
                         <stop offset="0%" stopColor="#8b5cf6" />
                         <stop offset="100%" stopColor="#2dd4bf" />
                       </linearGradient>
                     </defs>
-                    <Bar dataKey="v" fill="url(#colorSales)" radius={[6, 6, 6, 6]} barSize={6} />
+                    <Bar dataKey="v" fill="url(#colorSalesLight)" radius={[4, 4, 0, 0]} barSize={8} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            {/* Sub Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-6 border-t border-slate-100 pt-8 w-full">
+            {/* Sub Grid (3 columns on large, 2 on med, 1 on small) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-8 border-t border-slate-100 pt-8 w-full">
               
               {/* Sessions */}
               <div className="w-full min-w-0">
-                <div className="flex justify-between items-end mb-2 gap-2">
+                <div className="flex justify-between items-end mb-2 gap-4">
                   <div className="shrink-0">
-                    <h3 className="text-[0.85rem] font-semibold text-slate-500 mb-1">Sessions</h3>
-                    <div className="text-[1.3rem] font-bold text-slate-900 leading-none">{cartUsers.length}</div>
+                    <h3 className="text-sm font-medium text-slate-500 mb-1">Sessions</h3>
+                    <div className="text-2xl font-bold text-slate-900 leading-none">{cartUsers.length}</div>
                   </div>
-                  <div className="w-[60px] h-[28px] shrink-0 min-w-0">
+                  <div className="w-[80px] h-[35px] shrink-0 min-w-0">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={sparklineData1}>
                         <defs>
                           <linearGradient id="colorSpark1" x1="0" y1="1" x2="0" y2="0">
-                            <stop offset="0%" stopColor="#8b5cf6" />
-                            <stop offset="100%" stopColor="#2dd4bf" />
+                            <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.8}/>
+                            <stop offset="100%" stopColor="#2dd4bf" stopOpacity={0.8}/>
                           </linearGradient>
                         </defs>
-                        <Area type="monotone" dataKey="v" stroke="url(#colorSpark1)" strokeWidth={2.5} fill="transparent" isAnimationActive={false} />
+                        <Area type="monotone" dataKey="v" stroke="url(#colorSpark1)" strokeWidth={3} fill="transparent" isAnimationActive={false} />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
                 </div>
-                <p className="text-[0.8rem] text-slate-400 mt-1">-</p>
               </div>
 
               {/* Avg Order Value */}
               <div className="w-full min-w-0">
-                <div className="flex justify-between items-end mb-2 gap-2">
+                <div className="flex justify-between items-end mb-2 gap-4">
                   <div className="shrink-0">
-                    <h3 className="text-[0.85rem] font-semibold text-slate-500 mb-1">Avg order value</h3>
-                    <div className="text-[1.3rem] font-bold text-slate-900 leading-none">
+                    <h3 className="text-sm font-medium text-slate-500 mb-1">Avg order value</h3>
+                    <div className="text-2xl font-bold text-slate-900 leading-none">
                       ₹{avgOrderValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
                   </div>
-                  <div className="w-[60px] h-[28px] shrink-0 min-w-0">
+                  <div className="w-[80px] h-[35px] shrink-0 min-w-0">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={sparklineData2}>
                         <defs>
                           <linearGradient id="colorSpark2" x1="0" y1="1" x2="0" y2="0">
-                            <stop offset="0%" stopColor="#8b5cf6" />
-                            <stop offset="100%" stopColor="#2dd4bf" />
+                            <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.8}/>
+                            <stop offset="100%" stopColor="#2dd4bf" stopOpacity={0.8}/>
                           </linearGradient>
                         </defs>
-                        <Area type="monotone" dataKey="v" stroke="url(#colorSpark2)" strokeWidth={2.5} fill="transparent" isAnimationActive={false} />
+                        <Area type="monotone" dataKey="v" stroke="url(#colorSpark2)" strokeWidth={3} fill="transparent" isAnimationActive={false} />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
                 </div>
-                <p className="text-[0.8rem] text-slate-400 mt-1">-</p>
               </div>
 
               {/* Conversion Rate */}
-              <div className="w-full">
-                <h3 className="text-[0.85rem] font-semibold text-slate-500 mb-1">Conversion rate</h3>
-                <div className="text-[1.3rem] font-bold text-slate-900 leading-none">{wishlistRate}%</div>
-                <p className="text-[0.8rem] text-slate-400 mt-2">-</p>
+              <div className="w-full min-w-0">
+                <h3 className="text-sm font-medium text-slate-500 mb-1">Conversion rate</h3>
+                <div className="text-2xl font-bold text-slate-900 leading-none">{wishlistRate}%</div>
               </div>
 
               {/* Total Orders */}
-              <div className="w-full">
-                <h3 className="text-[0.85rem] font-semibold text-slate-500 mb-1">Total orders</h3>
-                <div className="text-[1.3rem] font-bold text-slate-900 leading-none">{totalOrders}</div>
-                <p className="text-[0.8rem] text-slate-400 mt-2">-</p>
+              <div className="w-full min-w-0">
+                <h3 className="text-sm font-medium text-slate-500 mb-1">Total orders</h3>
+                <div className="text-2xl font-bold text-slate-900 leading-none">{totalOrders}</div>
               </div>
 
               {/* Net Sales */}
-              <div className="w-full">
-                <h3 className="text-[0.85rem] font-semibold text-slate-500 mb-1">Net sales</h3>
-                <div className="text-[1.3rem] font-bold text-slate-900 leading-none">
+              <div className="w-full min-w-0">
+                <h3 className="text-sm font-medium text-slate-500 mb-1">Net sales</h3>
+                <div className="text-2xl font-bold text-slate-900 leading-none">
                   ₹{netSales.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </div>
-                <p className="text-[0.8rem] text-slate-400 mt-2">-</p>
               </div>
 
               {/* Visitors */}
-              <div className="w-full">
-                <h3 className="text-[0.85rem] font-semibold text-slate-500 mb-1">Visitors</h3>
-                <div className="text-[1.3rem] font-bold text-slate-900 leading-none">{users.length}</div>
-                <p className="text-[0.8rem] text-slate-400 mt-2">-</p>
+              <div className="w-full min-w-0">
+                <h3 className="text-sm font-medium text-slate-500 mb-1">Visitors</h3>
+                <div className="text-2xl font-bold text-slate-900 leading-none">{users.length}</div>
               </div>
 
             </div>
           </div>
         </Card>
 
-        <div className="flex justify-center mt-4 mb-12">
-          <Badge variant="outline" className="bg-[#1c1f26] text-slate-400 border-[#2a2d36] uppercase tracking-widest text-[10px] px-3 py-1 font-semibold">
-            Shopify Engine
-          </Badge>
-        </div>
-
-        {/* --- ADDITIONAL DATA TABLES STYLED FOR PREMIUM DARK SAAS --- */}
-        <div className="space-y-8">
+        {/* --- SPACIOUS DATA TABLES (White Theme) --- */}
+        <div className="grid grid-cols-1 gap-8 w-full">
           
           {/* Active Carts */}
-          <Card className="bg-[#1c1f26] border border-[#2a2d36] shadow-xl text-white rounded-[24px] overflow-hidden w-full">
-            <CardHeader className="border-b border-[#2a2d36] px-6 md:px-8 py-6 bg-[#181a20]">
+          <Card className="bg-white border border-slate-200 shadow-sm rounded-2xl overflow-hidden w-full">
+            <CardHeader className="border-b border-slate-100 px-6 py-5 bg-slate-50/50">
               <div className="flex justify-between items-center">
-                <CardTitle className="text-base font-semibold flex items-center gap-2 text-slate-100">
-                  <ShoppingCart className="w-4 h-4 text-[#2dd4bf]" />
+                <CardTitle className="text-base font-bold flex items-center gap-2 text-slate-800">
+                  <ShoppingCart className="w-4 h-4 text-emerald-500" />
                   Active Checkouts
                 </CardTitle>
-                <Badge className="bg-[#2dd4bf]/15 text-[#2dd4bf] hover:bg-[#2dd4bf]/20 border-none font-semibold uppercase text-[10px] tracking-wider px-2.5 py-0.5">Live</Badge>
+                <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-none font-bold uppercase text-[10px] tracking-wider px-2.5 py-0.5 shadow-none">Live</Badge>
               </div>
             </CardHeader>
             <CardContent className="p-0">
               {cartUsers.length === 0 ? (
                 <div className="text-center py-12 text-slate-500 text-sm">No active checkouts currently.</div>
               ) : (
-                <div className="overflow-x-auto w-full">
+                <div className="w-full overflow-x-auto">
                   <Table className="w-full min-w-[600px]">
-                    <TableHeader className="bg-[#1c1f26]">
-                      <TableRow className="border-[#2a2d36] hover:bg-transparent">
-                        <TableHead className="text-slate-400 font-medium pl-6 md:pl-8 py-4">Customer</TableHead>
-                        <TableHead className="text-slate-400 font-medium text-right pr-6 py-4 w-[150px]">Value</TableHead>
-                        <TableHead className="text-slate-400 font-medium text-left pl-6 py-4">Details</TableHead>
+                    <TableHeader className="bg-white">
+                      <TableRow className="border-slate-100 hover:bg-transparent">
+                        <TableHead className="w-[40%] text-slate-500 font-semibold pl-8 py-4">Customer</TableHead>
+                        <TableHead className="w-[20%] text-slate-500 font-semibold text-right pr-8 py-4">Value</TableHead>
+                        <TableHead className="w-[40%] text-slate-500 font-semibold text-left pl-8 py-4">Details</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {cartUsers.map((cu) => (
-                        <TableRow key={cu.uid} className="border-[#2a2d36] hover:bg-[#22252d] transition-colors">
-                          <TableCell className="pl-6 md:pl-8 py-4">
-                            <div className="font-semibold text-sm text-slate-200">{cu.name || cu.googleName || cu.email || 'Guest User'}</div>
+                        <TableRow key={cu.uid} className="border-slate-100 hover:bg-slate-50 transition-colors">
+                          <TableCell className="w-[40%] pl-8 py-4">
+                            <div className="font-bold text-sm text-slate-900">{cu.name || cu.googleName || cu.email || 'Guest User'}</div>
                             <div className="text-xs text-slate-500 mt-1">{cu.phone || cu.email || 'No contact info'}</div>
                           </TableCell>
-                          <TableCell className="text-right font-bold text-[#2dd4bf] pr-6 py-4 align-top pt-5">
+                          <TableCell className="w-[20%] text-right font-black text-emerald-600 pr-8 py-4 align-top pt-5">
                             ₹{cu.cartTotal.toLocaleString('en-IN')}
                           </TableCell>
-                          <TableCell className="text-left pl-6 py-4 align-top pt-5">
-                            <div className="text-xs text-slate-400">
-                              <span className="text-slate-300 font-medium">{cu.cartItemCount} item(s)</span> • {cu.cart[0]?.name}
-                              {cu.cart.length > 1 && <span className="text-slate-500 ml-1">+{cu.cart.length - 1} more</span>}
+                          <TableCell className="w-[40%] text-left pl-8 py-4 align-top pt-5">
+                            <div className="text-xs text-slate-600">
+                              <span className="font-bold text-slate-900">{cu.cartItemCount} item(s)</span> • {cu.cart[0]?.name}
+                              {cu.cart.length > 1 && <span className="text-slate-400 ml-1">+{cu.cart.length - 1} more</span>}
                             </div>
                           </TableCell>
                         </TableRow>
@@ -397,22 +377,29 @@ export default function AnalyticsPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
             {/* Popular Products Leaderboard */}
-            <Card className="bg-[#1c1f26] border border-[#2a2d36] shadow-xl text-white rounded-[24px] overflow-hidden w-full">
-              <CardHeader className="border-b border-[#2a2d36] px-6 py-6 bg-[#181a20]">
-                <CardTitle className="text-base font-semibold flex items-center gap-2 text-slate-100">
-                  <Heart className="w-4 h-4 text-[#8b5cf6]" />
+            <Card className="bg-white border border-slate-200 shadow-sm rounded-2xl overflow-hidden w-full">
+              <CardHeader className="border-b border-slate-100 px-6 py-5 bg-slate-50/50">
+                <CardTitle className="text-base font-bold flex items-center gap-2 text-slate-800">
+                  <Heart className="w-4 h-4 text-rose-500" />
                   Most Wished Products
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="overflow-x-auto w-full">
-                  <Table className="w-full min-w-[300px]">
+                <div className="w-full overflow-x-auto">
+                  <Table className="w-full min-w-[400px]">
+                    <TableHeader className="bg-white hidden">
+                      <TableRow>
+                        <TableHead className="w-[15%]"></TableHead>
+                        <TableHead className="w-[55%]"></TableHead>
+                        <TableHead className="w-[30%]"></TableHead>
+                      </TableRow>
+                    </TableHeader>
                     <TableBody>
                       {sortedByWishlist.slice(0, 5).map((p, idx) => (
-                        <TableRow key={p.id} className="border-[#2a2d36] hover:bg-[#22252d] transition-colors">
-                          <TableCell className="pl-6 font-medium text-slate-500 w-12 py-4">{idx + 1}</TableCell>
-                          <TableCell className="font-semibold text-sm text-slate-200 py-4">{p.name}</TableCell>
-                          <TableCell className="text-right pr-6 font-bold text-[#8b5cf6] py-4">
+                        <TableRow key={p.id} className="border-slate-100 hover:bg-slate-50 transition-colors">
+                          <TableCell className="w-[15%] pl-6 font-bold text-slate-400 py-4 text-center">{idx + 1}</TableCell>
+                          <TableCell className="w-[55%] font-bold text-sm text-slate-900 py-4">{p.name}</TableCell>
+                          <TableCell className="w-[30%] text-right pr-6 font-bold text-rose-500 py-4">
                             {p.wishlistCount > 0 ? `${p.wishlistCount} Hearts` : '0'}
                           </TableCell>
                         </TableRow>
@@ -424,32 +411,41 @@ export default function AnalyticsPage() {
             </Card>
 
             {/* Popup Leads */}
-            <Card className="bg-[#1c1f26] border border-[#2a2d36] shadow-xl text-white rounded-[24px] overflow-hidden w-full">
-              <CardHeader className="border-b border-[#2a2d36] px-6 py-6 bg-[#181a20]">
+            <Card className="bg-white border border-slate-200 shadow-sm rounded-2xl overflow-hidden w-full">
+              <CardHeader className="border-b border-slate-100 px-6 py-5 bg-slate-50/50">
                 <div className="flex justify-between items-center">
-                  <CardTitle className="text-base font-semibold flex items-center gap-2 text-slate-100">
-                    <Gift className="w-4 h-4 text-amber-400" />
+                  <CardTitle className="text-base font-bold flex items-center gap-2 text-slate-800">
+                    <Gift className="w-4 h-4 text-indigo-500" />
                     Free Attar Leads
                   </CardTitle>
-                  <span className="text-[10px] font-bold uppercase tracking-wider bg-amber-400/10 text-amber-400 px-2.5 py-1 rounded-full">{popupLeads.length} leads</span>
+                  <Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-200 border-none font-bold uppercase text-[10px] tracking-wider px-2.5 py-0.5 shadow-none">
+                    {popupLeads.length} leads
+                  </Badge>
                 </div>
               </CardHeader>
               <CardContent className="p-0">
                 {popupLeads.length === 0 ? (
                   <div className="text-center py-10 text-slate-500 text-sm">No leads captured yet.</div>
                 ) : (
-                  <div className="overflow-x-auto w-full">
-                    <Table className="w-full min-w-[300px]">
+                  <div className="w-full overflow-x-auto">
+                    <Table className="w-full min-w-[400px]">
+                       <TableHeader className="bg-white hidden">
+                        <TableRow>
+                          <TableHead className="w-[40%]"></TableHead>
+                          <TableHead className="w-[35%]"></TableHead>
+                          <TableHead className="w-[25%]"></TableHead>
+                        </TableRow>
+                      </TableHeader>
                       <TableBody>
                         {popupLeads.slice(0, 5).map((lead) => (
-                          <TableRow key={lead.id} className="border-[#2a2d36] hover:bg-[#22252d] transition-colors">
-                            <TableCell className="pl-6 py-4">
-                              <div className="font-semibold text-sm text-slate-200">{lead.name || 'Anonymous'}</div>
+                          <TableRow key={lead.id} className="border-slate-100 hover:bg-slate-50 transition-colors">
+                            <TableCell className="w-[40%] pl-6 py-4">
+                              <div className="font-bold text-sm text-slate-900">{lead.name || 'Anonymous'}</div>
                             </TableCell>
-                            <TableCell className="text-slate-400 text-sm py-4">
+                            <TableCell className="w-[35%] text-slate-600 text-sm font-medium py-4">
                               +91 {lead.phone}
                             </TableCell>
-                            <TableCell className="text-right pr-6 text-xs text-slate-500 py-4">
+                            <TableCell className="w-[25%] text-right pr-6 text-xs font-semibold text-slate-400 py-4">
                               {lead.offer}
                             </TableCell>
                           </TableRow>
