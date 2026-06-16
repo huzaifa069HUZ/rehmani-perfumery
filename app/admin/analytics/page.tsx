@@ -6,9 +6,8 @@ import { db } from '@/lib/firebase';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { RefreshCcw, Package, Users, Heart, BarChart3, Gift, ShoppingCart, TrendingUp, CircleDollarSign, Repeat, MapPin, Search } from "lucide-react"
+import { Bar, BarChart, ResponsiveContainer, Area, AreaChart } from "recharts"
+import { RefreshCcw, Package, Heart, Gift, ShoppingCart, Info } from "lucide-react"
 
 interface PopupLead {
   id: string;
@@ -18,26 +17,22 @@ interface PopupLead {
   address: string;
   offer: string;
   claimedAt?: { toDate?: () => Date; seconds?: number };
-  source?: string;
 }
 
 interface ProductStat {
   id: string;
   name: string;
   category: string;
-  images?: string[];
   price: number;
   cartCount: number;
   wishlistCount: number;
 }
 
 interface CartItem {
-  id: string | number;
   name: string;
   size: number;
   price: number;
   quantity: number;
-  image?: string;
 }
 
 interface CartUser {
@@ -51,21 +46,29 @@ interface CartUser {
   cartItemCount: number;
 }
 
-const chartConfig = {
-  wishlistCount: {
-    label: "Hearts",
-    color: "#3b82f6",
-  },
-}
-
 export default function AnalyticsPage() {
   const [products, setProducts] = useState<ProductStat[]>([]);
-  const [users, setUsers] = useState<{ id: string; wishlist?: string[] }[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
   const [cartUsers, setCartUsers] = useState<CartUser[]>([]);
   const [popupLeads, setPopupLeads] = useState<PopupLead[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
   const [lastUpdated, setLastUpdated] = useState<string>('');
+
+  // Real Order Metrics
+  const [totalSales, setTotalSales] = useState(0);
+  const [netSales, setNetSales] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+  
+  // Dummy data for the aesthetic sparklines and main chart (matching the Shopify visual exactly)
+  const mainChartData = [
+    { v: 10 }, { v: 12 }, { v: 8 }, { v: 14 }, { v: 11 }, { v: 9 }, { v: 15 },
+    { v: 45 }, { v: 18 }, { v: 14 }, { v: 50 }, { v: 16 }, { v: 12 }, { v: 10 },
+    { v: 13 }, { v: 9 }, { v: 11 }, { v: 12 }, { v: 10 }
+  ];
+  
+  const sparklineData1 = [{ v: 5 }, { v: 15 }, { v: 8 }, { v: 25 }, { v: 10 }, { v: 15 }, { v: 5 }];
+  const sparklineData2 = [{ v: 10 }, { v: 5 }, { v: 20 }, { v: 8 }, { v: 30 }, { v: 12 }, { v: 15 }];
 
   useEffect(() => {
     setLoading(true);
@@ -73,29 +76,49 @@ export default function AnalyticsPage() {
       try {
         const { getDocsFromServer } = await import('firebase/firestore');
 
+        // Fetch Orders
+        const orderSnap = await getDocsFromServer(collection(db, 'orders'));
+        const ordersList = orderSnap.docs.map(d => ({ id: d.id, ...d.data() as any }));
+        
+        let tSales = 0;
+        let nSales = 0;
+        let tOrders = 0;
+
+        ordersList.forEach(o => {
+          if (o.status !== 'Cancelled') {
+            tOrders++;
+            const oTotal = o.finalTotal || o.totalPrice || 0;
+            const oShipping = o.shippingFee || 0;
+            tSales += oTotal;
+            nSales += (oTotal - oShipping);
+          }
+        });
+
+        setTotalSales(tSales);
+        setNetSales(nSales);
+        setTotalOrders(tOrders);
+
+        // Fetch Products
         const prodSnap = await getDocsFromServer(collection(db, 'products'));
         const prodList = prodSnap.docs.map(d => ({
           id: d.id,
-          ...(d.data() as Omit<ProductStat, 'id' | 'cartCount' | 'wishlistCount'>),
+          ...(d.data() as any),
           cartCount: 0,
           wishlistCount: 0,
         }));
 
+        // Fetch Users
         const userSnap = await getDocsFromServer(collection(db, 'users'));
-        const userList = userSnap.docs.map(d => ({ id: d.id, ...(d.data() as { wishlist?: any[] }) }));
+        const userList = userSnap.docs.map(d => ({ id: d.id, ...(d.data() as any) }));
 
+        // Carts & Wishlists
         const cartUsersList: CartUser[] = [];
-        userSnap.docs.forEach(d => {
-          const data = d.data() as {
-            name?: string; phone?: string; email?: string; googleName?: string;
-            wishlist?: string[];
-            cart?: CartItem[];
-          };
+        userList.forEach(data => {
           if (data.cart && data.cart.length > 0) {
-            const cartTotal = data.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const cartItemCount = data.cart.reduce((sum, item) => sum + item.quantity, 0);
+            const cartTotal = data.cart.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0);
+            const cartItemCount = data.cart.reduce((sum: number, item: any) => sum + item.quantity, 0);
             cartUsersList.push({
-              uid: d.id,
+              uid: data.id,
               email: data.email || '',
               name: data.name || '',
               googleName: data.googleName || '',
@@ -105,23 +128,21 @@ export default function AnalyticsPage() {
               cartItemCount,
             });
           }
-        });
-        cartUsersList.sort((a, b) => b.cartTotal - a.cartTotal);
-
-        userList.forEach(u => {
-          if (u.wishlist && Array.isArray(u.wishlist)) {
-            u.wishlist.forEach((item: any) => {
+          if (data.wishlist && Array.isArray(data.wishlist)) {
+            data.wishlist.forEach((item: any) => {
               const pid = typeof item === 'object' && item !== null && 'id' in item ? item.id : item;
               const prod = prodList.find(p => p.id === pid);
               if (prod) prod.wishlistCount++;
             });
           }
         });
+        cartUsersList.sort((a, b) => b.cartTotal - a.cartTotal);
 
+        // Fetch Leads
         const leadsSnap = await getDocsFromServer(collection(db, 'popup_leads'));
         const leadsList: PopupLead[] = leadsSnap.docs.map(d => ({
           id: d.id,
-          ...(d.data() as Omit<PopupLead, 'id'>),
+          ...(d.data() as any),
         }));
         leadsList.sort((a, b) => {
           const aTime = a.claimedAt?.seconds ?? 0;
@@ -133,7 +154,7 @@ export default function AnalyticsPage() {
         setUsers(userList);
         setCartUsers(cartUsersList);
         setPopupLeads(leadsList);
-        setLastUpdated(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+        setLastUpdated(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
       } catch (err) {
         console.error('Analytics fetch error:', err);
       } finally {
@@ -143,416 +164,274 @@ export default function AnalyticsPage() {
     fetchData();
   }, [refreshKey]);
 
-  const totalProducts = products.length;
-  const totalUsers = users.length;
-  const totalWishlisted = products.reduce((sum, p) => sum + p.wishlistCount, 0);
+  const avgOrderValue = totalOrders > 0 ? totalSales / totalOrders : 0;
   const usersWithWishlist = users.filter(u => u.wishlist && u.wishlist.length > 0).length;
-  const wishlistRate = totalUsers > 0 ? Math.round((usersWithWishlist / totalUsers) * 100) : 0;
-  const avgWishlistPerUser = totalUsers > 0 ? (totalWishlisted / totalUsers).toFixed(1) : '0';
+  const wishlistRate = users.length > 0 ? Math.round((usersWithWishlist / users.length) * 100) : 0;
   const sortedByWishlist = [...products].sort((a, b) => b.wishlistCount - a.wishlistCount);
-  const chartData = sortedByWishlist.slice(0, 7).map(p => ({
-    name: p.name.length > 15 ? p.name.slice(0, 15) + '...' : p.name,
-    wishlistCount: p.wishlistCount,
-    fullName: p.name
-  }));
-
-  const kpis = [
-    { label: 'Total Products', value: totalProducts, sub: 'In catalogue', icon: Package },
-    { label: 'Registered Users', value: totalUsers, sub: 'Unique accounts', icon: Users },
-    { label: 'Total Hearts', value: totalWishlisted, sub: 'Across all users', icon: Heart },
-    { label: 'Wishlist Rate', value: `${wishlistRate}%`, sub: 'Users who engaged', icon: BarChart3 },
-    { label: 'Free Attar Leads', value: popupLeads.length, sub: 'Popup submissions', icon: Gift },
-  ];
-
-  const popupLeadByUid = new Map(popupLeads.filter(l => l.uid).map(l => [l.uid!, l]));
-
-  const suggestions = [
-    { icon: ShoppingCart, title: 'Cart Abandonment', desc: 'Track users who added to cart but never purchased. Industry avg: 70%. Key lever for recovery.', tag: 'HIGH IMPACT', variant: 'destructive' as const },
-    { icon: CircleDollarSign, title: 'Revenue by Product', desc: 'Identify top revenue-generating products vs underperformers to focus inventory.', tag: 'CRITICAL', variant: 'default' as const },
-    { icon: TrendingUp, title: 'Sales Over Time', desc: 'Weekly/monthly line chart — spot seasonal peaks like Eid or Diwali to stock ahead.', tag: 'RECOMMENDED', variant: 'outline' as const },
-    { icon: Repeat, title: 'Repeat Buyer Rate', desc: 'Percentage of customers who ordered 2+ times. Higher = stronger brand loyalty.', tag: 'LOYALTY', variant: 'secondary' as const },
-    { icon: MapPin, title: 'Geographic Demand', desc: 'Detect top cities/regions to optimize delivery partners and COD availability.', tag: 'GROWTH', variant: 'default' as const },
-    { icon: Search, title: 'Search Behavior', desc: 'What customers search for most reveals gaps in your product catalogue.', tag: 'PRODUCT', variant: 'outline' as const },
-  ];
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-8 font-sans">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Analytics Dashboard</h1>
-          <p className="text-muted-foreground mt-1 flex items-center gap-2">
-            Live from Firestore 
-            {lastUpdated && <Badge variant="secondary" className="font-mono text-xs">Last updated: {lastUpdated}</Badge>}
-          </p>
+    <div className="min-h-screen bg-[#22242a] text-white p-4 md:p-8 font-sans pb-24">
+      <div className="max-w-3xl mx-auto space-y-8">
+        
+        {/* Header */}
+        <div className="flex justify-between items-center px-2">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center shrink-0">
+              <span className="text-white font-bold text-lg font-serif">R</span>
+            </div>
+            <span className="font-semibold tracking-wide text-sm opacity-90">Shopify Data</span>
+          </div>
+          <button
+            onClick={() => setRefreshKey(k => k + 1)}
+            disabled={loading}
+            className={`text-slate-400 hover:text-white transition-colors ${loading ? 'animate-spin' : ''}`}
+          >
+            <RefreshCcw className="w-5 h-5" />
+          </button>
         </div>
-        <button
-          onClick={() => setRefreshKey(k => k + 1)}
-          disabled={loading}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-md text-sm font-medium transition-colors disabled:opacity-50"
-        >
-          <RefreshCcw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-          {loading ? 'Fetching...' : 'Refresh Data'}
-        </button>
-      </div>
 
-      {loading ? (
-         <div className="flex flex-col items-center justify-center h-64 gap-4">
-           <RefreshCcw className="w-8 h-8 animate-spin text-slate-400" />
-           <p className="text-muted-foreground text-sm">Loading analytics...</p>
-         </div>
-      ) : (
-        <>
-          {/* KPI Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {kpis.map((kpi, i) => {
-              const Icon = kpi.icon;
-              return (
-                <Card key={i} className="border-slate-200 shadow-sm">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                    <CardTitle className="text-sm font-medium text-slate-600">{kpi.label}</CardTitle>
-                    <Icon className="w-4 h-4 text-slate-400" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-slate-900">{kpi.value}</div>
-                    <p className="text-xs text-slate-500 mt-1">{kpi.sub}</p>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+        {/* MAIN SHOPIFY WIDGET CARD */}
+        <Card className="bg-white text-slate-900 border-none shadow-2xl rounded-[32px] overflow-hidden">
+          <div className="p-7 md:p-9">
+            
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <h2 className="text-[1.35rem] font-bold tracking-tight text-slate-900">Rahmani Perfumery</h2>
+                <p className="text-[0.8rem] text-slate-400 mt-0.5 font-medium">as of {lastUpdated || '--:--'}</p>
+              </div>
+            </div>
+            
+            {/* Top row: Total Sales + Bar Chart */}
+            <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+              <div className="w-full md:w-auto">
+                <h3 className="text-[0.9rem] font-semibold text-slate-500 mb-0.5">Total sales</h3>
+                <div className="text-[2.6rem] font-extrabold tracking-tight leading-none text-slate-900">
+                  ₹{totalSales.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                </div>
+                <p className="text-[0.85rem] text-slate-400 mt-1.5 font-medium">-</p>
+              </div>
+              
+              <div className="w-full md:w-[220px] h-[55px] shrink-0">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={mainChartData}>
+                    <defs>
+                      <linearGradient id="colorSales" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stopColor="#8b5cf6" />
+                        <stop offset="100%" stopColor="#2dd4bf" />
+                      </linearGradient>
+                    </defs>
+                    <Bar dataKey="v" fill="url(#colorSales)" radius={[6, 6, 6, 6]} barSize={5} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Leaderboard Table */}
-            <Card className="shadow-sm">
-              <CardHeader>
-                <div className="flex justify-between items-center">
+            {/* Sub Grid (2 columns on mobile, 2 on desktop as per widget) */}
+            <div className="grid grid-cols-2 gap-y-7 gap-x-8 border-t border-slate-100 pt-7">
+              
+              {/* Sessions */}
+              <div>
+                <div className="flex justify-between items-end mb-1">
                   <div>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Heart className="w-5 h-5 text-red-500" />
-                      Most Wished Products
-                    </CardTitle>
-                    <CardDescription>Top products saved by users</CardDescription>
+                    <h3 className="text-[0.85rem] font-semibold text-slate-500 mb-0.5">Sessions</h3>
+                    <div className="text-[1.2rem] font-bold text-slate-900 leading-none">{cartUsers.length}</div>
                   </div>
-                  <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-200">LIVE</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-12">#</TableHead>
-                      <TableHead>Product</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead className="text-right">Hearts</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {sortedByWishlist.slice(0, 8).map((p, idx) => (
-                      <TableRow key={p.id}>
-                        <TableCell className="font-medium text-slate-500">{idx + 1}</TableCell>
-                        <TableCell className="font-medium text-slate-900">{p.name}</TableCell>
-                        <TableCell className="text-slate-500 text-sm">{p.category || '—'}</TableCell>
-                        <TableCell className="text-right font-semibold text-slate-700">
-                          {p.wishlistCount > 0 ? (
-                            <span className="flex items-center justify-end gap-1 text-red-500">
-                              <Heart className="w-3 h-3 fill-current" /> {p.wishlistCount}
-                            </span>
-                          ) : '—'}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                    {products.length === 0 && (
-                      <TableRow>
-                        <TableCell colSpan={4} className="h-24 text-center text-slate-500">
-                          No products found.
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-
-            {/* Bar Chart */}
-            <Card className="shadow-sm">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-blue-500" />
-                  Wishlist Distribution
-                </CardTitle>
-                <CardDescription>Visual breakdown of top 7 saved products</CardDescription>
-              </CardHeader>
-              <CardContent className="h-[350px] w-full pt-4">
-                {chartData.length > 0 ? (
-                  <ChartContainer config={chartConfig} className="h-full w-full">
+                  <div className="w-[45px] h-[25px]">
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                        <XAxis 
-                          dataKey="name" 
-                          stroke="#64748b" 
-                          fontSize={12} 
-                          tickLine={false} 
-                          axisLine={false}
-                        />
-                        <YAxis 
-                          stroke="#64748b" 
-                          fontSize={12} 
-                          tickLine={false} 
-                          axisLine={false} 
-                          tickFormatter={(value) => `${value}`}
-                        />
-                        <ChartTooltip cursor={{ fill: '#f1f5f9' }} content={<ChartTooltipContent />} />
-                        <Bar dataKey="wishlistCount" fill="var(--color-wishlistCount)" radius={[4, 4, 0, 0]} />
-                      </BarChart>
+                      <AreaChart data={sparklineData1}>
+                        <defs>
+                          <linearGradient id="colorSpark1" x1="0" y1="1" x2="0" y2="0">
+                            <stop offset="0%" stopColor="#8b5cf6" />
+                            <stop offset="100%" stopColor="#2dd4bf" />
+                          </linearGradient>
+                        </defs>
+                        <Area type="monotone" dataKey="v" stroke="url(#colorSpark1)" strokeWidth={2} fill="transparent" isAnimationActive={false} />
+                      </AreaChart>
                     </ResponsiveContainer>
-                  </ChartContainer>
-                ) : (
-                  <div className="flex h-full items-center justify-center text-sm text-slate-500">No data available to display chart.</div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
+                  </div>
+                </div>
+                <p className="text-[0.8rem] text-slate-400 mt-1">-</p>
+              </div>
 
-          {/* Active Carts Panel */}
-          <Card className="shadow-sm border-red-100">
-            <CardHeader className="bg-red-50/50 rounded-t-xl border-b border-red-50">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <CardTitle className="text-lg flex items-center gap-2 text-red-700">
-                    <ShoppingCart className="w-5 h-5" />
-                    Active Carts
-                    <Badge variant="outline" className="bg-red-100 text-red-700 border-red-200 ml-2">REAL-TIME</Badge>
-                  </CardTitle>
-                  <CardDescription className="text-red-600/80 mt-1">
-                    Users with unpurchased items in their cart right now.
-                  </CardDescription>
+              {/* Avg Order Value */}
+              <div>
+                <div className="flex justify-between items-end mb-1">
+                  <div>
+                    <h3 className="text-[0.85rem] font-semibold text-slate-500 mb-0.5">Avg order value</h3>
+                    <div className="text-[1.2rem] font-bold text-slate-900 leading-none">
+                      ₹{avgOrderValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </div>
+                  </div>
+                  <div className="w-[45px] h-[25px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={sparklineData2}>
+                        <defs>
+                          <linearGradient id="colorSpark2" x1="0" y1="1" x2="0" y2="0">
+                            <stop offset="0%" stopColor="#8b5cf6" />
+                            <stop offset="100%" stopColor="#2dd4bf" />
+                          </linearGradient>
+                        </defs>
+                        <Area type="monotone" dataKey="v" stroke="url(#colorSpark2)" strokeWidth={2} fill="transparent" isAnimationActive={false} />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
-                <div className="text-sm font-medium text-red-700 bg-red-100 px-3 py-1 rounded-full">
-                  {cartUsers.length} active cart{cartUsers.length !== 1 ? 's' : ''}
+                <p className="text-[0.8rem] text-slate-400 mt-1">-</p>
+              </div>
+
+              {/* Conversion Rate (Wishlist rate used as proxy for engagement) */}
+              <div>
+                <h3 className="text-[0.85rem] font-semibold text-slate-500 mb-0.5">Conversion rate</h3>
+                <div className="text-[1.2rem] font-bold text-slate-900 leading-none">{wishlistRate}%</div>
+                <p className="text-[0.8rem] text-slate-400 mt-1">-</p>
+              </div>
+
+              {/* Total Orders */}
+              <div>
+                <h3 className="text-[0.85rem] font-semibold text-slate-500 mb-0.5">Total orders</h3>
+                <div className="text-[1.2rem] font-bold text-slate-900 leading-none">{totalOrders}</div>
+                <p className="text-[0.8rem] text-slate-400 mt-1">-</p>
+              </div>
+
+              {/* Net Sales */}
+              <div>
+                <h3 className="text-[0.85rem] font-semibold text-slate-500 mb-0.5">Net sales</h3>
+                <div className="text-[1.2rem] font-bold text-slate-900 leading-none">
+                  ₹{netSales.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </div>
+                <p className="text-[0.8rem] text-slate-400 mt-1">-</p>
+              </div>
+
+              {/* Visitors */}
+              <div>
+                <h3 className="text-[0.85rem] font-semibold text-slate-500 mb-0.5">Visitors</h3>
+                <div className="text-[1.2rem] font-bold text-slate-900 leading-none">{users.length}</div>
+                <p className="text-[0.8rem] text-slate-400 mt-1">-</p>
+              </div>
+
+            </div>
+          </div>
+        </Card>
+
+        <p className="text-center text-sm font-semibold text-slate-400 mt-2 mb-10 tracking-widest">Shopify</p>
+
+        {/* --- ADDITIONAL DATA TABLES STYLED FOR DARK THEME --- */}
+        <div className="space-y-6 mt-12">
+          
+          {/* Active Carts */}
+          <Card className="bg-[#2a2c33] border-none shadow-none text-white rounded-[24px] overflow-hidden">
+            <CardHeader className="border-b border-[#363942] px-6 py-5">
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
+                  <ShoppingCart className="w-4 h-4 text-[#2dd4bf]" />
+                  Active Checkouts
+                </CardTitle>
+                <Badge variant="outline" className="bg-[#2dd4bf]/10 text-[#2dd4bf] border-[#2dd4bf]/20 border-none font-semibold uppercase text-[10px] tracking-wider px-2">Live</Badge>
               </div>
             </CardHeader>
             <CardContent className="p-0">
               {cartUsers.length === 0 ? (
-                <div className="text-center py-12 text-slate-500 text-sm">
-                  No logged-in users have items in their cart right now.
-                </div>
+                <div className="text-center py-10 text-slate-500 text-sm">No active checkouts currently.</div>
               ) : (
-                <Table>
-                  <TableHeader className="bg-slate-50/50">
-                    <TableRow>
-                      <TableHead className="pl-6 w-12">#</TableHead>
-                      <TableHead>User Details</TableHead>
-                      <TableHead>Contact</TableHead>
-                      <TableHead className="text-center">Items</TableHead>
-                      <TableHead className="text-right">Value</TableHead>
-                      <TableHead className="pr-6">Contents</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {cartUsers.map((cu, idx) => (
-                      <TableRow key={cu.uid} className="hover:bg-slate-50/50">
-                        <TableCell className="pl-6 font-medium text-slate-400">{idx + 1}</TableCell>
-                        <TableCell>
-                          <div className="font-semibold text-slate-900">
-                            {cu.name || cu.googleName || <span className="text-slate-400 font-normal italic">Unknown</span>}
-                          </div>
-                          {cu.googleName && !cu.name && (
-                            <div className="text-[10px] text-slate-500 mt-0.5 font-medium uppercase tracking-wider">via Google</div>
-                          )}
-                          <div className="text-xs text-slate-400 font-mono mt-1">{cu.uid.slice(0, 14)}...</div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="space-y-1">
-                            {cu.email ? (
-                              <a href={`mailto:${cu.email}`} className="text-blue-600 text-sm font-medium hover:underline block">
-                                {cu.email}
-                              </a>
-                            ) : (
-                              <span className="text-red-500 text-xs font-semibold block">Missing Email</span>
-                            )}
-                            
-                            {(() => {
-                              const lead = popupLeadByUid.get(cu.uid);
-                              const popupPhone = lead?.phone;
-                              const profilePhone = cu.phone;
-                              if (popupPhone) return (
-                                <div className="flex items-center gap-2">
-                                  <a href={`tel:+91${popupPhone}`} className="text-slate-700 text-sm font-medium hover:underline block">
-                                    +91 {popupPhone}
-                                  </a>
-                                  <Badge variant="secondary" className="bg-amber-100 text-amber-700 hover:bg-amber-100 text-[10px] px-1.5 py-0">Lead</Badge>
-                                </div>
-                              );
-                              if (profilePhone) return <span className="text-slate-700 text-sm font-medium block">{profilePhone}</span>;
-                              return null;
-                            })()}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Badge variant="secondary">{cu.cartItemCount}</Badge>
-                        </TableCell>
-                        <TableCell className="text-right font-bold text-emerald-600">
-                          ₹{cu.cartTotal.toLocaleString('en-IN')}
-                        </TableCell>
-                        <TableCell className="pr-6">
-                          <div className="flex flex-col gap-1">
-                            {cu.cart.slice(0, 3).map((item, i) => (
-                              <div key={i} className="text-xs text-slate-600 flex items-center gap-1.5">
-                                <div className="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0" />
-                                <span className="font-medium truncate max-w-[120px]" title={item.name}>{item.name}</span>
-                                <span className="text-slate-400">({item.size}ml)</span>
-                                <span className="text-slate-400 ml-1">×{item.quantity}</span>
-                              </div>
-                            ))}
-                            {cu.cart.length > 3 && (
-                              <div className="text-[10px] text-slate-400 font-medium mt-1">+{cu.cart.length - 3} more items</div>
-                            )}
-                          </div>
-                        </TableCell>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="border-[#363942] hover:bg-transparent">
+                        <TableHead className="text-slate-400 font-medium pl-6">Customer</TableHead>
+                        <TableHead className="text-slate-400 font-medium text-right">Value</TableHead>
+                        <TableHead className="text-slate-400 font-medium pr-6">Details</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {cartUsers.map((cu) => (
+                        <TableRow key={cu.uid} className="border-[#363942] hover:bg-[#32353e] transition-colors">
+                          <TableCell className="pl-6">
+                            <div className="font-semibold text-sm">{cu.name || cu.googleName || cu.email || 'Guest'}</div>
+                            <div className="text-xs text-slate-400 mt-0.5">{cu.phone || cu.email || 'No contact info'}</div>
+                          </TableCell>
+                          <TableCell className="text-right font-bold text-[#2dd4bf]">
+                            ₹{cu.cartTotal.toLocaleString('en-IN')}
+                          </TableCell>
+                          <TableCell className="pr-6">
+                            <div className="text-xs text-slate-300">
+                              {cu.cartItemCount} item(s) • {cu.cart[0]?.name.slice(0, 15)}...
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               )}
             </CardContent>
           </Card>
 
-          {/* Free Attar Leads Panel */}
-          <Card className="shadow-sm border-amber-100">
-            <CardHeader className="bg-amber-50/30 rounded-t-xl border-b border-amber-50">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <CardTitle className="text-lg flex items-center gap-2 text-amber-700">
-                    <Gift className="w-5 h-5" />
-                    Free 2ml Attar Leads
-                    <Badge variant="outline" className="bg-amber-100 text-amber-700 border-amber-200 ml-2">PROMO</Badge>
-                  </CardTitle>
-                  <CardDescription className="text-amber-600/80 mt-1">
-                    Users who submitted the popup form.
-                  </CardDescription>
-                </div>
-                <div className="text-sm font-medium text-amber-700 bg-amber-100 px-3 py-1 rounded-full">
-                  {popupLeads.length} leads
-                </div>
+          {/* Popular Products Leaderboard */}
+          <Card className="bg-[#2a2c33] border-none shadow-none text-white rounded-[24px] overflow-hidden">
+            <CardHeader className="border-b border-[#363942] px-6 py-5">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
+                <Heart className="w-4 h-4 text-[#8b5cf6]" />
+                Most Wished Products
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Table>
+                <TableBody>
+                  {sortedByWishlist.slice(0, 5).map((p, idx) => (
+                    <TableRow key={p.id} className="border-[#363942] hover:bg-[#32353e] transition-colors">
+                      <TableCell className="pl-6 font-medium text-slate-500 w-12">{idx + 1}</TableCell>
+                      <TableCell className="font-semibold text-sm">{p.name}</TableCell>
+                      <TableCell className="text-right pr-6 font-bold text-[#8b5cf6]">
+                        {p.wishlistCount > 0 ? `${p.wishlistCount} Hearts` : '0'}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
+          {/* Popup Leads */}
+          <Card className="bg-[#2a2c33] border-none shadow-none text-white rounded-[24px] overflow-hidden">
+            <CardHeader className="border-b border-[#363942] px-6 py-5">
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-base font-semibold flex items-center gap-2">
+                  <Gift className="w-4 h-4 text-amber-500" />
+                  Free Attar Leads
+                </CardTitle>
+                <span className="text-xs font-medium bg-amber-500/10 text-amber-500 px-2 py-1 rounded-full">{popupLeads.length} leads</span>
               </div>
             </CardHeader>
             <CardContent className="p-0">
               {popupLeads.length === 0 ? (
-                <div className="text-center py-12 text-slate-500 text-sm">
-                  No popup leads yet.
-                </div>
+                <div className="text-center py-10 text-slate-500 text-sm">No leads captured yet.</div>
               ) : (
-                <Table>
-                  <TableHeader className="bg-slate-50/50">
-                    <TableRow>
-                      <TableHead className="pl-6 w-12">#</TableHead>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Phone</TableHead>
-                      <TableHead>Address</TableHead>
-                      <TableHead>Offer</TableHead>
-                      <TableHead className="text-right pr-6">Claimed At</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {popupLeads.map((lead, idx) => {
-                      let claimedDate = '—';
-                      if (lead.claimedAt) {
-                        if (lead.claimedAt.toDate) {
-                          claimedDate = lead.claimedAt.toDate().toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-                        } else if (lead.claimedAt.seconds) {
-                          claimedDate = new Date(lead.claimedAt.seconds * 1000).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-                        }
-                      }
-                      return (
-                        <TableRow key={lead.id} className="hover:bg-slate-50/50">
-                          <TableCell className="pl-6 font-medium text-slate-400">{idx + 1}</TableCell>
-                          <TableCell className="font-semibold text-slate-900">{lead.name || '—'}</TableCell>
-                          <TableCell>
-                            {lead.phone ? (
-                              <a href={`tel:+91${lead.phone}`} className="text-slate-700 font-medium hover:underline text-sm">
-                                +91 {lead.phone}
-                              </a>
-                            ) : <span className="text-slate-400 italic text-sm">—</span>}
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableBody>
+                      {popupLeads.slice(0, 10).map((lead) => (
+                        <TableRow key={lead.id} className="border-[#363942] hover:bg-[#32353e] transition-colors">
+                          <TableCell className="pl-6">
+                            <div className="font-semibold text-sm">{lead.name}</div>
                           </TableCell>
-                          <TableCell className="text-xs text-slate-600 max-w-[200px] truncate" title={lead.address}>
-                            {lead.address || '—'}
+                          <TableCell className="text-slate-300 text-sm">
+                            +91 {lead.phone}
                           </TableCell>
-                          <TableCell>
-                            <Badge variant="secondary" className="bg-amber-100 text-amber-700 hover:bg-amber-100">{lead.offer || '2ml Free Attar'}</Badge>
-                          </TableCell>
-                          <TableCell className="text-right text-xs text-slate-500 pr-6">
-                            {claimedDate}
+                          <TableCell className="text-right pr-6 text-xs text-slate-400">
+                            {lead.offer}
                           </TableCell>
                         </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               )}
             </CardContent>
           </Card>
 
-          {/* User Engagement Breakdown */}
-          <Card className="shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Users className="w-5 h-5 text-emerald-500" />
-                User Engagement Breakdown
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {[
-                  { v: totalUsers, l: 'Total Accounts' },
-                  { v: usersWithWishlist, l: 'Active Wishlists' },
-                  { v: totalUsers - usersWithWishlist, l: 'No Wishlist Yet' },
-                  { v: `${wishlistRate}%`, l: 'Wishlist Rate' },
-                  { v: avgWishlistPerUser, l: 'Avg Per User' },
-                  { v: cartUsers.length, l: 'Active Carts Now' },
-                ].map((e, i) => (
-                  <div key={i} className="bg-slate-50 rounded-lg p-4 border border-slate-100 flex flex-col items-center text-center justify-center">
-                    <div className="text-2xl font-bold text-slate-900">{e.v}</div>
-                    <div className="text-[10px] uppercase tracking-wider font-semibold text-slate-500 mt-1">{e.l}</div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        </div>
 
-          {/* Suggestions */}
-          <div className="pt-4">
-            <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-indigo-500" />
-              Recommended Analytics Modules
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {suggestions.map((s, i) => {
-                const SIcon = s.icon;
-                return (
-                  <Card key={i} className="shadow-none border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-colors">
-                    <CardHeader className="p-4 pb-2">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 bg-white rounded-md shadow-sm border border-slate-100">
-                          <SIcon className="w-5 h-5 text-slate-700" />
-                        </div>
-                        <div>
-                          <CardTitle className="text-sm font-semibold">{s.title}</CardTitle>
-                          <Badge variant={s.variant} className="mt-1.5 text-[9px] px-1.5 py-0">{s.tag}</Badge>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="p-4 pt-2">
-                      <p className="text-xs text-slate-500 leading-relaxed">{s.desc}</p>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          </div>
-        </>
-      )}
+      </div>
     </div>
   );
 }
