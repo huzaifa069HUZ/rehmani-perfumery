@@ -58,7 +58,7 @@ export default function CheckoutForm() {
     if (user?.displayName) setName(user.displayName);
   }, [user]);
 
-  const shippingFee  = totalPrice >= 999 ? 0 : 60;
+  const shippingFee  = totalPrice >= 999 ? 0 : 90;
   const finalTotal   = totalPrice + shippingFee;
 
   const handlePincodeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

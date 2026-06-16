@@ -33,7 +33,7 @@ const FAQ_DATA = [
   },
   {
     question: 'Is there free shipping?',
-    answer: 'Yes — all orders above ₹999 qualify for free shipping across India. Orders below ₹999 have a flat shipping fee of ₹60.',
+    answer: 'Yes — all orders above ₹999 qualify for free shipping across India. Orders below ₹999 have a flat shipping fee of ₹90.',
   },
 ];
 
