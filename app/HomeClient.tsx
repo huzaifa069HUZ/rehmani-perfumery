@@ -13,6 +13,7 @@ import BentoCategories from '@/components/BentoCategories';
 import BannerSlider from '@/components/BannerSlider';
 import ShopByOccasion from '@/components/ShopByOccasion';
 import Testimonials from '@/components/Testimonials';
+import FAQSection from '@/components/FAQSection';
 import Newsletter from '@/components/Newsletter';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
@@ -67,6 +68,7 @@ export default function HomeClient() {
         <CustomBlendDelivery />
         <BottleCarousel />
         <ContactSection />
+        <FAQSection />
         <Testimonials />
         <Newsletter />
         <Footer />

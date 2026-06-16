@@ -6,7 +6,7 @@ import { collection, query, orderBy, getDocs, doc, updateDoc, deleteDoc } from '
 import {
   Package, ChevronDown, ChevronUp, MapPin, Truck, Phone,
   Mail, Clock, CheckCircle, XCircle, AlertCircle, Search,
-  RefreshCw, MessageCircle, Filter, Trash2
+  RefreshCw, MessageCircle, Filter, Trash2, Download
 } from 'lucide-react';
 
 interface OrderItem {
@@ -46,6 +46,54 @@ export default function AdminOrdersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [showExportMenu, setShowExportMenu] = useState(false);
+
+  const exportOrders = (statusFilter: string) => {
+    setShowExportMenu(false);
+    const toExport = statusFilter === 'All'
+      ? orders
+      : orders.filter(o => o.status === statusFilter);
+
+    if (toExport.length === 0) {
+      alert(`No ${statusFilter === 'All' ? '' : statusFilter + ' '}orders to export.`);
+      return;
+    }
+
+    const escapeCSV = (val: string) => {
+      if (val.includes(',') || val.includes('"') || val.includes('\n')) {
+        return '"' + val.replace(/"/g, '""') + '"';
+      }
+      return val;
+    };
+
+    const headers = ['Order ID', 'Customer Name', 'Email', 'Phone', 'Items', 'Total Price', 'Shipping Fee', 'Final Total', 'Payment Method', 'Status', 'City', 'State', 'Pincode', 'Date'];
+    const rows = toExport.map(o => [
+      escapeCSV((o as any).orderId || o.id),
+      escapeCSV(o.customerInfo?.name || ''),
+      escapeCSV(o.customerInfo?.email || ''),
+      escapeCSV(o.customerInfo?.phone || ''),
+      escapeCSV((o.items || []).map(item => `${item.name} (${item.size}ml x${item.quantity})`).join('; ')),
+      String(o.totalPrice || 0),
+      String(o.shippingFee || 0),
+      String(o.finalTotal || 0),
+      escapeCSV(o.paymentMethod || ''),
+      escapeCSV(o.status || ''),
+      escapeCSV(o.shippingAddress?.city || ''),
+      escapeCSV(o.shippingAddress?.state || ''),
+      escapeCSV(o.shippingAddress?.pincode || ''),
+      o.createdAt?.toDate?.()?.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) || '',
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const dateStr = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `orders_${statusFilter.toLowerCase()}_${dateStr}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -175,6 +223,51 @@ export default function AdminOrdersPage() {
         <button className="ao-refresh" onClick={fetchOrders} title="Refresh">
           <RefreshCw size={15} />
         </button>
+        <div style={{ position: 'relative' }}>
+          <button
+            className="ao-refresh"
+            onClick={() => setShowExportMenu(!showExportMenu)}
+            title="Export Orders"
+            style={{ background: showExportMenu ? '#EEF2FF' : undefined, borderColor: showExportMenu ? '#6366F1' : undefined, color: showExportMenu ? '#6366F1' : undefined }}
+          >
+            <Download size={15} />
+          </button>
+          {showExportMenu && (
+            <div style={{
+              position: 'absolute', top: '100%', right: 0, marginTop: 6,
+              background: '#fff', border: '1.5px solid #E2E8F0', borderRadius: 10,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.12)', zIndex: 50,
+              minWidth: 200, overflow: 'hidden',
+              animation: 'ao-open 180ms ease-out both',
+            }}>
+              <div style={{ padding: '10px 14px 6px', fontSize: '0.62rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: '#94A3B8' }}>Export as CSV</div>
+              {['All', ...Object.keys(STATUS_CONFIG)].map(s => {
+                const count = s === 'All' ? orders.length : orders.filter(o => o.status === s).length;
+                const sc = s !== 'All' ? STATUS_CONFIG[s] : null;
+                return (
+                  <button
+                    key={s}
+                    onClick={() => exportOrders(s)}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      width: '100%', padding: '9px 14px', border: 'none', background: 'none',
+                      cursor: 'pointer', fontSize: '0.82rem', fontWeight: 600, color: '#374151',
+                      transition: 'background 0.15s', textAlign: 'left',
+                    }}
+                    onMouseOver={e => (e.currentTarget.style.background = '#F8FAFC')}
+                    onMouseOut={e => (e.currentTarget.style.background = 'none')}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      {sc && <span style={{ width: 7, height: 7, borderRadius: '50%', background: sc.dot, flexShrink: 0 }} />}
+                      {s === 'All' ? 'All Orders' : s}
+                    </span>
+                    <span style={{ fontSize: '0.72rem', color: '#94A3B8', fontWeight: 500 }}>{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ── Orders ── */}
