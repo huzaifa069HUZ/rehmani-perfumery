@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import { collection } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Bar, BarChart, ResponsiveContainer, Area, AreaChart } from "recharts"
 import { RefreshCcw, Heart, Gift, ShoppingCart, TrendingUp } from "lucide-react"
+import Image from 'next/image';
 
 interface PopupLead {
   id: string;
@@ -26,6 +26,7 @@ interface ProductStat {
   price: number;
   cartCount: number;
   wishlistCount: number;
+  images?: string[];
 }
 
 interface CartItem {
@@ -177,10 +178,10 @@ export default function AnalyticsPage() {
   const usersWithWishlist = users.filter(u => u.wishlist && u.wishlist.length > 0).length;
   const wishlistRate = users.length > 0 ? Math.round((usersWithWishlist / users.length) * 100) : 0;
   const sortedByWishlist = [...products].sort((a, b) => b.wishlistCount - a.wishlistCount);
+  const topWishlistCount = sortedByWishlist[0]?.wishlistCount || 1; // Used for progress bars
 
   return (
-    // Transparent background lets the admin layout's #f0f2f8 shine through perfectly.
-    <div className="w-full bg-transparent text-slate-900 font-sans animate-in fade-in duration-500">
+    <div className="w-full bg-transparent text-slate-900 font-sans animate-in fade-in duration-500 pb-12">
       
       <div className="w-full max-w-[1200px] mx-auto space-y-8">
         
@@ -206,7 +207,7 @@ export default function AnalyticsPage() {
           </button>
         </div>
 
-        {/* MAIN METRICS CARD (Shopify Style) */}
+        {/* MAIN METRICS CARD */}
         <Card className="bg-white border border-slate-200 shadow-sm rounded-2xl overflow-hidden w-full">
           <div className="p-6 md:p-8">
             
@@ -226,7 +227,6 @@ export default function AnalyticsPage() {
                 </div>
               </div>
               
-              {/* Strict w-full min-w-0 bounds for Recharts */}
               <div className="w-full h-[80px] min-w-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={mainChartData}>
@@ -242,10 +242,9 @@ export default function AnalyticsPage() {
               </div>
             </div>
 
-            {/* Sub Grid (3 columns on large, 2 on med, 1 on small) */}
+            {/* Sub Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-8 border-t border-slate-100 pt-8 w-full">
               
-              {/* Sessions */}
               <div className="w-full min-w-0">
                 <div className="flex justify-between items-end mb-2 gap-4">
                   <div className="shrink-0">
@@ -268,7 +267,6 @@ export default function AnalyticsPage() {
                 </div>
               </div>
 
-              {/* Avg Order Value */}
               <div className="w-full min-w-0">
                 <div className="flex justify-between items-end mb-2 gap-4">
                   <div className="shrink-0">
@@ -293,19 +291,16 @@ export default function AnalyticsPage() {
                 </div>
               </div>
 
-              {/* Conversion Rate */}
               <div className="w-full min-w-0">
                 <h3 className="text-sm font-medium text-slate-500 mb-1">Conversion rate</h3>
                 <div className="text-2xl font-bold text-slate-900 leading-none">{wishlistRate}%</div>
               </div>
 
-              {/* Total Orders */}
               <div className="w-full min-w-0">
                 <h3 className="text-sm font-medium text-slate-500 mb-1">Total orders</h3>
                 <div className="text-2xl font-bold text-slate-900 leading-none">{totalOrders}</div>
               </div>
 
-              {/* Net Sales */}
               <div className="w-full min-w-0">
                 <h3 className="text-sm font-medium text-slate-500 mb-1">Net sales</h3>
                 <div className="text-2xl font-bold text-slate-900 leading-none">
@@ -313,7 +308,6 @@ export default function AnalyticsPage() {
                 </div>
               </div>
 
-              {/* Visitors */}
               <div className="w-full min-w-0">
                 <h3 className="text-sm font-medium text-slate-500 mb-1">Visitors</h3>
                 <div className="text-2xl font-bold text-slate-900 leading-none">{users.length}</div>
@@ -323,10 +317,10 @@ export default function AnalyticsPage() {
           </div>
         </Card>
 
-        {/* --- SPACIOUS DATA TABLES (White Theme) --- */}
+        {/* --- SPACIOUS FLEX LISTS (Modern SaaS Style) --- */}
         <div className="grid grid-cols-1 gap-8 w-full">
           
-          {/* Active Carts */}
+          {/* Active Checkouts (Flex List) */}
           <Card className="bg-white border border-slate-200 shadow-sm rounded-2xl overflow-hidden w-full">
             <CardHeader className="border-b border-slate-100 px-6 py-5 bg-slate-50/50">
               <div className="flex justify-between items-center">
@@ -341,76 +335,122 @@ export default function AnalyticsPage() {
               {cartUsers.length === 0 ? (
                 <div className="text-center py-12 text-slate-500 text-sm">No active checkouts currently.</div>
               ) : (
-                <div className="w-full overflow-x-auto">
-                  <Table className="w-full min-w-[600px]">
-                    <TableHeader className="bg-white">
-                      <TableRow className="border-slate-100 hover:bg-transparent">
-                        <TableHead className="w-[40%] text-slate-500 font-semibold pl-8 py-4">Customer</TableHead>
-                        <TableHead className="w-[20%] text-slate-500 font-semibold text-right pr-8 py-4">Value</TableHead>
-                        <TableHead className="w-[40%] text-slate-500 font-semibold text-left pl-8 py-4">Details</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {cartUsers.map((cu) => (
-                        <TableRow key={cu.uid} className="border-slate-100 hover:bg-slate-50 transition-colors">
-                          <TableCell className="w-[40%] pl-8 py-4">
-                            <div className="font-bold text-sm text-slate-900">{cu.name || cu.googleName || cu.email || 'Guest User'}</div>
-                            <div className="text-xs text-slate-500 mt-1">{cu.phone || cu.email || 'No contact info'}</div>
-                          </TableCell>
-                          <TableCell className="w-[20%] text-right font-black text-emerald-600 pr-8 py-4 align-top pt-5">
-                            ₹{cu.cartTotal.toLocaleString('en-IN')}
-                          </TableCell>
-                          <TableCell className="w-[40%] text-left pl-8 py-4 align-top pt-5">
-                            <div className="text-xs text-slate-600">
-                              <span className="font-bold text-slate-900">{cu.cartItemCount} item(s)</span> • {cu.cart[0]?.name}
-                              {cu.cart.length > 1 && <span className="text-slate-400 ml-1">+{cu.cart.length - 1} more</span>}
+                <div className="flex flex-col w-full divide-y divide-slate-100">
+                  {cartUsers.map((cu) => {
+                    const displayName = cu.name || cu.googleName || cu.email || 'Guest User';
+                    const displayContact = cu.phone || cu.email || 'No contact info';
+                    const initial = displayName.charAt(0).toUpperCase();
+
+                    return (
+                      <div key={cu.uid} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4 px-6 hover:bg-slate-50 transition-colors w-full min-w-0">
+                        
+                        {/* Customer Info */}
+                        <div className="flex items-center gap-4 min-w-0 sm:w-[40%] shrink-0">
+                          <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm shrink-0 border border-emerald-200 shadow-sm">
+                            {initial}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="font-bold text-sm text-slate-900 truncate" title={displayName}>
+                              {displayName}
                             </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                            <div className="text-xs text-slate-500 truncate" title={displayContact}>
+                              {displayContact}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Cart Details */}
+                        <div className="min-w-0 sm:w-[40%] flex flex-col justify-center shrink-0">
+                          <div className="text-sm font-medium text-slate-700 truncate" title={cu.cart[0]?.name}>
+                            <span className="font-bold text-slate-900">{cu.cartItemCount} item(s)</span>
+                            <span className="text-slate-300 mx-2">•</span>
+                            {cu.cart[0]?.name}
+                          </div>
+                          {cu.cart.length > 1 && (
+                            <div className="text-xs text-slate-400 mt-0.5">+{cu.cart.length - 1} more items</div>
+                          )}
+                        </div>
+
+                        {/* Value */}
+                        <div className="shrink-0 text-left sm:text-right sm:w-[20%]">
+                          <div className="font-black text-[15px] text-emerald-600 bg-emerald-50 px-3 py-1 rounded-lg inline-block border border-emerald-100">
+                            ₹{cu.cartTotal.toLocaleString('en-IN')}
+                          </div>
+                        </div>
+
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </CardContent>
           </Card>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
-            {/* Popular Products Leaderboard */}
+            
+            {/* Popular Products Leaderboard (Flex List with Images) */}
             <Card className="bg-white border border-slate-200 shadow-sm rounded-2xl overflow-hidden w-full">
               <CardHeader className="border-b border-slate-100 px-6 py-5 bg-slate-50/50">
                 <CardTitle className="text-base font-bold flex items-center gap-2 text-slate-800">
-                  <Heart className="w-4 h-4 text-rose-500" />
+                  <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
                   Most Wished Products
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="w-full overflow-x-auto">
-                  <Table className="w-full min-w-[400px]">
-                    <TableHeader className="bg-white hidden">
-                      <TableRow>
-                        <TableHead className="w-[15%]"></TableHead>
-                        <TableHead className="w-[55%]"></TableHead>
-                        <TableHead className="w-[30%]"></TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {sortedByWishlist.slice(0, 5).map((p, idx) => (
-                        <TableRow key={p.id} className="border-slate-100 hover:bg-slate-50 transition-colors">
-                          <TableCell className="w-[15%] pl-6 font-bold text-slate-400 py-4 text-center">{idx + 1}</TableCell>
-                          <TableCell className="w-[55%] font-bold text-sm text-slate-900 py-4">{p.name}</TableCell>
-                          <TableCell className="w-[30%] text-right pr-6 font-bold text-rose-500 py-4">
-                            {p.wishlistCount > 0 ? `${p.wishlistCount} Hearts` : '0'}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
+                {sortedByWishlist.length === 0 ? (
+                  <div className="text-center py-12 text-slate-500 text-sm">No wishlist data.</div>
+                ) : (
+                  <div className="flex flex-col w-full divide-y divide-slate-100">
+                    {sortedByWishlist.slice(0, 5).map((p, idx) => {
+                      const fillPercent = Math.min(100, (p.wishlistCount / topWishlistCount) * 100);
+                      
+                      return (
+                        <div key={p.id} className="flex items-center gap-4 py-4 px-6 hover:bg-slate-50 transition-colors min-w-0">
+                          
+                          {/* Rank */}
+                          <div className="font-bold text-slate-300 text-sm w-4 shrink-0 text-center">
+                            {idx + 1}
+                          </div>
+
+                          {/* Thumbnail */}
+                          <div className="w-12 h-12 rounded-xl bg-slate-100 overflow-hidden relative shrink-0 border border-slate-200 shadow-sm flex items-center justify-center">
+                            {p.images && p.images[0] ? (
+                              <Image src={p.images[0]} alt={p.name} fill className="object-cover" sizes="48px" />
+                            ) : (
+                              <Heart className="w-4 h-4 text-slate-300" />
+                            )}
+                          </div>
+
+                          {/* Info */}
+                          <div className="min-w-0 flex-1">
+                            <div className="font-bold text-sm text-slate-900 truncate" title={p.name}>{p.name}</div>
+                            <div className="text-xs text-slate-500 truncate mt-0.5">{p.category || 'Uncategorized'}</div>
+                          </div>
+
+                          {/* Hearts & Progress */}
+                          <div className="shrink-0 flex flex-col items-end gap-1.5 w-[80px]">
+                            <div className="text-xs font-bold text-rose-500">
+                              {p.wishlistCount > 0 ? `${p.wishlistCount} Hearts` : '0'}
+                            </div>
+                            {p.wishlistCount > 0 && (
+                              <div className="w-full h-1.5 bg-rose-100 rounded-full overflow-hidden">
+                                <div 
+                                  className="h-full bg-rose-500 rounded-full transition-all duration-1000" 
+                                  style={{ width: `${fillPercent}%` }} 
+                                />
+                              </div>
+                            )}
+                          </div>
+
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </CardContent>
             </Card>
 
-            {/* Popup Leads */}
+            {/* Popup Leads (Flex List) */}
             <Card className="bg-white border border-slate-200 shadow-sm rounded-2xl overflow-hidden w-full">
               <CardHeader className="border-b border-slate-100 px-6 py-5 bg-slate-50/50">
                 <div className="flex justify-between items-center">
@@ -425,39 +465,42 @@ export default function AnalyticsPage() {
               </CardHeader>
               <CardContent className="p-0">
                 {popupLeads.length === 0 ? (
-                  <div className="text-center py-10 text-slate-500 text-sm">No leads captured yet.</div>
+                  <div className="text-center py-12 text-slate-500 text-sm">No leads captured yet.</div>
                 ) : (
-                  <div className="w-full overflow-x-auto">
-                    <Table className="w-full min-w-[400px]">
-                       <TableHeader className="bg-white hidden">
-                        <TableRow>
-                          <TableHead className="w-[40%]"></TableHead>
-                          <TableHead className="w-[35%]"></TableHead>
-                          <TableHead className="w-[25%]"></TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {popupLeads.slice(0, 5).map((lead) => (
-                          <TableRow key={lead.id} className="border-slate-100 hover:bg-slate-50 transition-colors">
-                            <TableCell className="w-[40%] pl-6 py-4">
-                              <div className="font-bold text-sm text-slate-900">{lead.name || 'Anonymous'}</div>
-                            </TableCell>
-                            <TableCell className="w-[35%] text-slate-600 text-sm font-medium py-4">
-                              +91 {lead.phone}
-                            </TableCell>
-                            <TableCell className="w-[25%] text-right pr-6 text-xs font-semibold text-slate-400 py-4">
-                              {lead.offer}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                  <div className="flex flex-col w-full divide-y divide-slate-100">
+                    {popupLeads.slice(0, 5).map((lead) => {
+                      const initial = (lead.name || 'A').charAt(0).toUpperCase();
+
+                      return (
+                        <div key={lead.id} className="flex items-center justify-between gap-4 py-4 px-6 hover:bg-slate-50 transition-colors min-w-0">
+                          
+                          {/* Name & Initial */}
+                          <div className="flex items-center gap-3 min-w-0 flex-1">
+                            <div className="w-9 h-9 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs shrink-0 border border-indigo-100">
+                              {initial}
+                            </div>
+                            <div className="min-w-0">
+                              <div className="font-bold text-sm text-slate-900 truncate">{lead.name || 'Anonymous'}</div>
+                              <div className="text-xs font-medium text-slate-500 mt-0.5">+91 {lead.phone}</div>
+                            </div>
+                          </div>
+
+                          {/* Offer Badge */}
+                          <div className="shrink-0">
+                            <div className="text-[10px] font-bold text-indigo-500 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-100 uppercase tracking-wide">
+                              {lead.offer || 'Free Trial'}
+                            </div>
+                          </div>
+
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </CardContent>
             </Card>
-          </div>
 
+          </div>
         </div>
       </div>
     </div>
