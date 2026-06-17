@@ -410,18 +410,56 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* ================= SECTION 5: ACTIVE CHECKOUTS ================= */}
+        {/* ================= SECTION 5: ABANDONED CARTS ================= */}
         <div style={{ backgroundColor: '#fff', border: '1px solid #E5E7EB', borderRadius: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
           <div style={{ padding: '24px 32px', borderBottom: '1px solid #E5E7EB', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#111827', margin: 0 }}>Active Checkouts</h3>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: '#047857', backgroundColor: '#ECFDF5', padding: '4px 12px', borderRadius: '999px', border: '1px solid #A7F3D0' }}>
-              {cartUsers.length} Carts
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#111827', margin: 0 }}>Abandoned Carts</h3>
+              <div style={{ fontSize: '13px', fontWeight: 700, color: '#047857', backgroundColor: '#ECFDF5', padding: '4px 12px', borderRadius: '999px', border: '1px solid #A7F3D0' }}>
+                {cartUsers.length} Carts
+              </div>
             </div>
+            <button 
+              onClick={async () => {
+                const emails = cartUsers.map(u => u.email).filter(e => e && e.includes('@'));
+                if (emails.length === 0) {
+                  alert("No valid email addresses found in these abandoned carts.");
+                  return;
+                }
+                const msg = window.prompt("Enter the message to send to all abandoned cart users:", "Hi, we noticed you left some amazing attars in your cart. Come back to Rahmani Perfumery to complete your purchase before they sell out!");
+                if (!msg) return;
+
+                const btn = document.getElementById('bulk-mail-btn');
+                if (btn) btn.innerHTML = 'Sending...';
+
+                try {
+                  const res = await fetch('/api/send-bulk-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      subject: 'You left something behind at Rahmani Perfumery!',
+                      message: msg,
+                      emails: emails
+                    })
+                  });
+                  if (res.ok) alert(`Successfully sent email to ${emails.length} users!`);
+                  else alert("Failed to send bulk email.");
+                } catch (e) {
+                  alert("Error sending email.");
+                } finally {
+                  if (btn) btn.innerHTML = 'Send Bulk Mail';
+                }
+              }}
+              id="bulk-mail-btn"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', backgroundColor: '#3B82F6', border: '1px solid #2563EB', fontSize: '14px', fontWeight: 700, color: '#fff', cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}
+            >
+              Send Bulk Mail
+            </button>
           </div>
           
           <div style={{ width: '100%' }}>
             {cartUsers.length === 0 ? (
-              <div style={{ padding: '48px', textAlign: 'center', color: '#6B7280', fontSize: '14px', fontWeight: 500 }}>No active checkouts.</div>
+              <div style={{ padding: '48px', textAlign: 'center', color: '#6B7280', fontSize: '14px', fontWeight: 500 }}>No abandoned carts found.</div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                 {cartUsers.map((cu, idx) => {
@@ -457,8 +495,8 @@ export default function AnalyticsPage() {
                       </div>
 
                       <div style={{ flexShrink: 0, minWidth: '100px', textAlign: 'right' }}>
-                        <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, backgroundColor: '#EFF6FF', color: '#2563EB', border: '1px solid #BFDBFE' }}>
-                          In Checkout
+                        <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, backgroundColor: '#FEF2F2', color: '#DC2626', border: '1px solid #FECACA' }}>
+                          Abandoned
                         </div>
                       </div>
 
