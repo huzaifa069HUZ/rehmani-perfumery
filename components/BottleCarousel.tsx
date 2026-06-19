@@ -8,7 +8,7 @@ const bottles = [
   { id: 2, name: 'CREED AVENTUS', notes: 'Pineapple · Birch · Ambergris', price: '₹250', desc: 'The ultimate scent of power and success. Bold, fresh, and captivating.', image: '/assets/creed aventus.png', accent: '#A88EC0', tag: 'New Arrival', link: '/product/creed-aventus-Q0ZATy9' },
   { id: 3, name: 'Green Ajam', notes: 'Bergamot · Lemon · Vetiver', price: '₹349', desc: 'A refreshing citrus burst from the sun-soaked groves of Sicily.', image: '/assets/green ajam.png', accent: '#7BAE7F', tag: 'Fresh Pick', link: '/product/green-ajam-xnp8BPW' },
   { id: 4, name: 'AL-ASMA', notes: 'Damask Rose · Patchouli · Jasmine', price: '₹600', desc: 'Pure Damask rose petals aged in precious patchouli—timeless femininity.', image: '/assets/al asma.png', accent: '#C0687A', tag: 'Limited', link: '/product/al-asma-DEI2FRm' },
-  { id: 5, name: 'Red Sea', notes: 'Aged Oud · Saffron · Leather', price: '₹199', desc: 'A royal tribute crafted from sixty-year aged oud and precious saffron.', image: '/assets/red sea 2 nobg.png', accent: '#db4d1e', tag: 'Premium', link: '/attars' },
+  { id: 5, name: 'Red Sea', notes: 'Aged Oud · Saffron · Leather', price: '₹250', desc: 'A royal tribute crafted from sixty-year aged oud and precious saffron.', image: '/assets/red sea 2 nobg.png', accent: '#db4d1e', tag: 'Premium', link: '/attars' },
 ];
 
 function mod(n: number, m: number) { return ((n % m) + m) % m; }
