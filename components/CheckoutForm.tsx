@@ -58,6 +58,17 @@ export default function CheckoutForm() {
     if (user?.displayName) setName(user.displayName);
   }, [user]);
 
+  useEffect(() => {
+    if (step === 'success') {
+      const msg = `Hello Rahmani Perfumery, I have placed an order!\n\nOrder ID: ${confirmedOrderId}\nName: ${confirmedName}\nAmount: ₹${confirmedTotal}\nItems: ${confirmedItems}\n\nPlease confirm my order.`;
+      const encodedMsg = encodeURIComponent(msg);
+      const timer = setTimeout(() => {
+        window.location.href = `https://wa.me/918540047972?text=${encodedMsg}`;
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [step, confirmedOrderId, confirmedName, confirmedTotal, confirmedItems]);
+
   const shippingFee  = totalPrice >= 999 ? 0 : 90;
   const finalTotal   = totalPrice + shippingFee;
 
@@ -157,7 +168,7 @@ export default function CheckoutForm() {
   };
 
   /* ── Shared Order Summary Panel ── */
-  const OrderSummary = () => (
+  const renderOrderSummary = () => (
     <aside className="ck-summary">
       <div className="ck-sum-sticky">
         <h3 className="ck-sum-heading">Order Summary</h3>
@@ -279,8 +290,8 @@ export default function CheckoutForm() {
             <div className="ck-cod-notice">
               <AlertCircle size={15} className="ck-notice-ico"/>
               <div>
-                <strong>Cash on Delivery — Important</strong>
-                <p>We are currently taking orders only via COD. Our team will contact you on WhatsApp for payment confirmation. Thank you for your patience!</p>
+                <strong>WhatsApp Order Confirmation</strong>
+                <p>You will be redirected to WhatsApp in a few seconds to confirm your order. If nothing happens, <a href={`https://wa.me/918540047972?text=Hello%20Rahmani%20Perfumery,%20I%20have%20placed%20an%20order!%0A%0AOrder%20ID:%20${confirmedOrderId}%0AAmount:%20%E2%82%B9${confirmedTotal}%0A%0APlease%20confirm%20my%20order.`} style={{ textDecoration: 'underline', color: '#B45309' }}>click here</a>.</p>
               </div>
             </div>
 
@@ -497,10 +508,10 @@ export default function CheckoutForm() {
                   </div>
                   <div className="ck-pay-body">
                     <div className="ck-pay-top">
-                      <span className="ck-pay-name">Cash on Delivery</span>
+                      <span className="ck-pay-name">WHATSAPP ORDER</span>
                       <Truck size={18} className={`ck-pay-ico-right ${payMethod === 'cod' ? 'ck-ico-active' : ''}`}/>
                     </div>
-                    <span className="ck-pay-sub">Pay when you receive your order</span>
+                    <span className="ck-pay-sub">confirm your order through our official whatsapp</span>
                   </div>
                 </div>
 
@@ -529,7 +540,7 @@ export default function CheckoutForm() {
             </div>
           )}
 
-          <OrderSummary />
+          {renderOrderSummary()}
         </div>
       </div>
     </>
@@ -943,6 +954,17 @@ const CSS = `
   box-shadow:var(--ck-shadow-md);
   animation:ck-up 500ms cubic-bezier(.16,1,.3,1) both;
 }
+@keyframes ck-bounce-in {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes ck-bounce-icon {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
 .ck-check-ring{
   width:72px;height:72px;border-radius:50%;
   background:var(--ck-green-lt);
@@ -950,6 +972,12 @@ const CSS = `
   display:flex;align-items:center;justify-content:center;
   color:var(--ck-green);margin:0 auto 1rem;
   box-shadow:0 0 0 6px rgba(6,95,70,.07);
+  animation: ck-bounce-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  animation-delay: 150ms;
+}
+.ck-check-ring svg {
+  animation: ck-bounce-icon 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  animation-delay: 300ms;
 }
 .ck-success-eyebrow{font-size:.62rem;letter-spacing:.22em;color:var(--ck-rose);font-weight:800;margin:0 0 .5rem;text-transform:uppercase;}
 .ck-success-heading{font-family:system-ui;font-size:1.7rem;font-weight:800;color:var(--ck-ink);margin:0 0 .35rem;letter-spacing:-.02em;}
