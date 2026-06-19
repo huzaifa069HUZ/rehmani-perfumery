@@ -51,9 +51,9 @@ function CountUpNumber({ end, suffix = '', prefix = '', duration = 2000 }: { end
 
 /* ── Mobile slides ──────────────────────────────────────────────────────── */
 const MOBILE_SLIDES: { type: 'image' | 'video'; src: string; alt?: string }[] = [
-  { type: 'video', src: '/assets/Video-16.mp4', alt: 'Rehmani Perfumery Hero' },
+  { type: 'video', src: '/assets/herosection bg vid mobile.mp4', alt: 'Rehmani Perfumery Hero' },
+  { type: 'video', src: '/assets/Video-16.mp4', alt: 'Hero Background 2' },
   { type: 'video', src: '/assets/hero mobile bg 2.mp4', alt: 'Hero Mobile Background 2' },
-  { type: 'video', src: '/assets/herosection bg vid mobile.mp4' },
   { type: 'image', src: '/assets/FRAGRANCE THAT YOU SOUL DESIRES (1).png', alt: 'Fragrance That Your Soul Desires' },
 ];
 
@@ -152,6 +152,8 @@ export default function HeroSection() {
                 muted
                 loop
                 playsInline
+                autoPlay={i === 0}
+                preload={i === 0 ? "auto" : "metadata"}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
               />
             )}
