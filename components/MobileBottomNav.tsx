@@ -18,7 +18,7 @@ export default function MobileBottomNav() {
   return (
     <>
       <GlassFilter />
-      <GlassEffect className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center justify-between p-2 w-[94%] max-w-[420px] md:hidden rounded-[100px]">
+      <GlassEffect className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9990] flex items-center justify-between p-2 w-[94%] max-w-[420px] md:hidden rounded-[100px]">
         {/* Home */}
         <Link href="/" className={`flex flex-col items-center justify-center gap-1 w-[72px] h-14 rounded-full transition-all duration-300 ${isHomeActive ? 'bg-red-500/15 text-red-600 dark:text-red-400' : 'text-black/80 hover:text-black'}`}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill={isHomeActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={isHomeActive ? '0' : '2'} strokeLinecap="round" strokeLinejoin="round">
