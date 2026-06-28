@@ -51,9 +51,9 @@ function CountUpNumber({ end, suffix = '', prefix = '', duration = 2000 }: { end
 
 /* ── Mobile slides ──────────────────────────────────────────────────────── */
 const MOBILE_SLIDES: { type: 'image' | 'video'; src: string; alt?: string }[] = [
-  { type: 'video', src: '/assets/herosection bg vid mobile.mp4', alt: 'Rehmani Perfumery Hero' },
-  { type: 'video', src: '/assets/Video-16.mp4', alt: 'Hero Background 2' },
-  { type: 'video', src: '/assets/hero mobile bg 2.mp4', alt: 'Hero Mobile Background 2' },
+  { type: 'video', src: 'https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782631980/rehmani_perfumery_assets/qagfw77tcgwpanxmyrzx.mp4', alt: 'Rehmani Perfumery Hero' },
+  { type: 'video', src: 'https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782632175/rehmani_perfumery_assets/esksgkigqmbxtksqzqg5.mp4', alt: 'Hero Background 2' },
+  { type: 'video', src: 'https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782632313/rehmani_perfumery_assets/uk7xeo7fomykgonexg7e.mp4', alt: 'Hero Mobile Background 2' },
   { type: 'image', src: '/assets/FRAGRANCE THAT YOU SOUL DESIRES (1).png', alt: 'Fragrance That Your Soul Desires' },
 ];
 
