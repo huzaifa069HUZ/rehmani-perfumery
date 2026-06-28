@@ -50,10 +50,10 @@ function CountUpNumber({ end, suffix = '', prefix = '', duration = 2000 }: { end
 }
 
 /* ── Mobile slides ──────────────────────────────────────────────────────── */
-const MOBILE_SLIDES: { type: 'image' | 'video'; src: string; alt?: string }[] = [
-  { type: 'video', src: 'https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782631980/rehmani_perfumery_assets/qagfw77tcgwpanxmyrzx.mp4', alt: 'Rehmani Perfumery Hero' },
-  { type: 'video', src: 'https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782632175/rehmani_perfumery_assets/esksgkigqmbxtksqzqg5.mp4', alt: 'Hero Background 2' },
-  { type: 'video', src: 'https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782632313/rehmani_perfumery_assets/uk7xeo7fomykgonexg7e.mp4', alt: 'Hero Mobile Background 2' },
+const MOBILE_SLIDES: { type: 'image' | 'video'; src: string; poster?: string; alt?: string }[] = [
+  { type: 'video', src: 'https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782631980/rehmani_perfumery_assets/qagfw77tcgwpanxmyrzx.mp4', poster: 'https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto,so_0/v1782631980/rehmani_perfumery_assets/qagfw77tcgwpanxmyrzx.jpg', alt: 'Rehmani Perfumery Hero' },
+  { type: 'video', src: 'https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782632175/rehmani_perfumery_assets/esksgkigqmbxtksqzqg5.mp4', poster: 'https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto,so_0/v1782632175/rehmani_perfumery_assets/esksgkigqmbxtksqzqg5.jpg', alt: 'Hero Background 2' },
+  { type: 'video', src: 'https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782632313/rehmani_perfumery_assets/uk7xeo7fomykgonexg7e.mp4', poster: 'https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto,so_0/v1782632313/rehmani_perfumery_assets/uk7xeo7fomykgonexg7e.jpg', alt: 'Hero Mobile Background 2' },
   { type: 'image', src: '/assets/FRAGRANCE THAT YOU SOUL DESIRES (1).png', alt: 'Fragrance That Your Soul Desires' },
 ];
 
@@ -149,6 +149,7 @@ export default function HeroSection() {
               <video
                 ref={i === current ? videoRef : undefined}
                 src={slide.src}
+                poster={slide.poster}
                 muted
                 loop
                 playsInline

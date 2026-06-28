@@ -175,6 +175,7 @@ export default function LuxuryVideoSection() {
         ref={videoRef}
         className="luxury-video-el"
         src="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782632462/rehmani_perfumery_assets/l6itwslls3bdhqvpoduz.mp4"
+        poster="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto,so_0/v1782632462/rehmani_perfumery_assets/l6itwslls3bdhqvpoduz.jpg"
         autoPlay
         loop
         muted

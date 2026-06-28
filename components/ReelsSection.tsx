@@ -58,6 +58,7 @@ function ShoppableVideoCard({
   productId,
   href,
   videoSrc,
+  poster,
   fallbackName,
   fallbackPrice,
   fallbackImage,
@@ -65,6 +66,7 @@ function ShoppableVideoCard({
   productId: string;
   href: string;
   videoSrc: string;
+  poster?: string;
   fallbackName: string;
   fallbackPrice: number;
   fallbackImage?: string;
@@ -156,6 +158,7 @@ function ShoppableVideoCard({
         <video
           ref={videoRef}
           src={videoSrc}
+          poster={poster}
           loop
           muted
           playsInline
@@ -377,7 +380,8 @@ export default function ReelsSection() {
           <ShoppableVideoCard
             productId="HT0gv7Hbem44if1vTttq"
             href="/product/HT0gv7Hbem44if1vTttq"
-            videoSrc="/videos/red-sea-video.mp4"
+            videoSrc="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782635807/rehmani_perfumery_assets/xkm76jklynemjhygzvvp.mp4"
+            poster="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto,so_0/v1782635807/rehmani_perfumery_assets/xkm76jklynemjhygzvvp.jpg"
             fallbackName="Red Sea"
             fallbackPrice={599}
             fallbackImage="/assets/red sea 2 nobg.png"
@@ -387,7 +391,8 @@ export default function ReelsSection() {
           <ShoppableVideoCard
             productId="jAQ4G57"
             href="/product/ar-rijaal-jAQ4G57"
-            videoSrc="/assets/Video-807.mp4"
+            videoSrc="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782636071/rehmani_perfumery_assets/scjc69ntouaztko7wkdy.mp4"
+            poster="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto,so_0/v1782636071/rehmani_perfumery_assets/scjc69ntouaztko7wkdy.jpg"
             fallbackName="AR-RIJAAL"
             fallbackPrice={350}
             fallbackImage="/assets/ar rijaal.avif"
@@ -397,7 +402,8 @@ export default function ReelsSection() {
           <ShoppableVideoCard
             productId="WgWGvlC"
             href="/product/oud-nadira-WgWGvlC"
-            videoSrc="/videos/oud nadira video.mp4"
+            videoSrc="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782636194/rehmani_perfumery_assets/q1t9fmy0w7h5k3cqrhqw.mp4"
+            poster="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto,so_0/v1782636194/rehmani_perfumery_assets/q1t9fmy0w7h5k3cqrhqw.jpg"
             fallbackName="Oud Nadira"
             fallbackPrice={400}
             fallbackImage="/assets/oud-nadira-no-bg.png"
@@ -407,7 +413,8 @@ export default function ReelsSection() {
           <ShoppableVideoCard
             productId="xnp8BPW"
             href="/product/green-ajam-xnp8BPW"
-            videoSrc="/videos/green ajam vid.mp4"
+            videoSrc="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782636210/rehmani_perfumery_assets/u4b2mvtd2z57fxjfumny.mp4"
+            poster="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto,so_0/v1782636210/rehmani_perfumery_assets/u4b2mvtd2z57fxjfumny.jpg"
             fallbackName="Green Ajam"
             fallbackPrice={350}
             fallbackImage="/assets/green ajam.png"
@@ -417,7 +424,8 @@ export default function ReelsSection() {
           <ShoppableVideoCard
             productId="um3aZGz"
             href="https://www.rahmaniperfumery.com/product/beauty-and-the-beast-um3aZGz"
-            videoSrc="https://res.cloudinary.com/dcsxa09da/video/upload/v1780960484/WhatsApp_Video_2026-06-07_at_8.18.36_PM_mprkd9.mp4"
+            videoSrc="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1780960484/WhatsApp_Video_2026-06-07_at_8.18.36_PM_mprkd9.mp4"
+            poster="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto,so_0/v1780960484/WhatsApp_Video_2026-06-07_at_8.18.36_PM_mprkd9.jpg"
             fallbackName="BEAUTY AND THE BEAST"
             fallbackPrice={350}
             fallbackImage="/assets/beautynbeast.png"

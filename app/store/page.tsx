@@ -257,6 +257,7 @@ export default function StorePage() {
               autoPlay muted loop playsInline
               className="absolute inset-0 w-full h-full object-cover z-0"
               src="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto/v1782632402/rehmani_perfumery_assets/qkgkfwwvnzt11e0zzgva.mp4"
+              poster="https://res.cloudinary.com/dcsxa09da/video/upload/f_auto,q_auto,so_0/v1782632402/rehmani_perfumery_assets/qkgkfwwvnzt11e0zzgva.jpg"
             />
             <div className="relative z-10 w-full h-full flex flex-col items-center justify-center pt-8 md:pt-20 pb-4 md:pb-10">
               <div className="w-full flex flex-col items-center text-center max-w-5xl px-4 sm:px-6">

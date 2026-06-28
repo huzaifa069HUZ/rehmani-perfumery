@@ -213,6 +213,10 @@ const localBusinessJsonLd = [
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={cn(playfair.variable, amiri.variable, poppins.variable, montserrat.variable, bebasNeue.variable, cormorant.variable, "font-sans", geist.variable)}>
+      <head>
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=satoshi@300,400,500,700,900&display=swap" />
+      </head>
       <body>
         <script
           type="application/ld+json"
