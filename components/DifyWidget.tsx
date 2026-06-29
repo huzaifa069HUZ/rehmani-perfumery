@@ -21,7 +21,7 @@ export default function DifyWidget() {
           <div className="dify-window">
             <iframe
              src="https://udify.app/chatbot/QZKQs1YGmJ7zSSOQ"
-             style={{ width: "100%", height: "100%", minHeight: "700px" }}
+             style={{ width: "100%", height: "100%" }}
              frameBorder="0"
              allow="microphone">
             </iframe>
@@ -58,9 +58,9 @@ export default function DifyWidget() {
         }
 
         .dify-window {
-          width: 384px; /* 24rem */
-          height: 640px; /* 40rem */
-          max-height: calc(100vh - 200px);
+          width: 380px;
+          height: 580px;
+          max-height: calc(100vh - 220px);
           background: #fff;
           border-radius: 12px;
           box-shadow: 0 8px 32px rgba(0,0,0,0.15);
