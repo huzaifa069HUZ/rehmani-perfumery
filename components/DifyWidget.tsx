@@ -1,66 +1,143 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { useState } from 'react';
+import Image from 'next/image';
 
 export default function DifyWidget() {
   const pathname = usePathname();
-  
+  const [isOpen, setIsOpen] = useState(false);
+
   // Hide on admin, login (auth), and profile pages
   const hiddenRoutes = ['/admin', '/auth', '/login', '/profile'];
   const isHidden = hiddenRoutes.some(route => pathname?.startsWith(route));
 
-  // Initialize the Dify script on mount
-  useEffect(() => {
-    // @ts-expect-error Dify global config
-    window.difyChatbotConfig = {
-      token: 'QZKQs1YGmJ7zSSOQ',
-      inputs: {},
-      systemVariables: {},
-      userVariables: {},
-    };
-
-    const existingScript = document.getElementById('QZKQs1YGmJ7zSSOQ');
-    if (!existingScript) {
-      const script = document.createElement('script');
-      script.src = "https://udify.app/embed.min.js";
-      script.id = "QZKQs1YGmJ7zSSOQ";
-      script.defer = true;
-      document.body.appendChild(script);
-    }
-  }, []);
-
-  // Handle hiding/showing on specific routes without destroying the iframe
-  useEffect(() => {
-    const bubbleBtn = document.getElementById('dify-chatbot-bubble-button');
-    const bubbleWin = document.getElementById('dify-chatbot-bubble-window');
-    
-    if (bubbleBtn) {
-      bubbleBtn.style.display = isHidden ? 'none' : 'flex'; 
-    }
-    if (bubbleWin && isHidden) {
-      bubbleWin.style.display = 'none';
-    }
-  }, [isHidden, pathname]);
+  if (isHidden) return null;
 
   return (
-    <style>{`
-      #dify-chatbot-bubble-button {
-        background-color: #1C64F2 !important;
-        ${isHidden ? 'display: none !important;' : ''}
-      }
-      #dify-chatbot-bubble-window {
-        width: 24rem !important;
-        height: 40rem !important;
-      }
-      
-      /* Ensure the button doesn't hide behind the mobile bottom nav */
-      @media (max-width: 768px) {
-        #dify-chatbot-bubble-button {
-          bottom: 140px !important;
-          right: 20px !important;
+    <>
+      <div className="dify-wrapper">
+        {isOpen && (
+          <div className="dify-window">
+            <iframe
+             src="https://udify.app/chatbot/QZKQs1YGmJ7zSSOQ"
+             style={{ width: "100%", height: "100%", minHeight: "700px" }}
+             frameBorder="0"
+             allow="microphone">
+            </iframe>
+          </div>
+        )}
+
+        <button 
+          className="dify-btn" 
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle AI Chatbot"
+        >
+          {isOpen ? (
+            <div className="dify-btn-close-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </div>
+          ) : (
+            <div className="dify-btn-open-icon">
+              <Image src="/assets/iconv2.png" alt="AI Chatbot" width={60} height={60} className="object-contain" />
+            </div>
+          )}
+        </button>
+      </div>
+
+      <style>{`
+        .dify-wrapper {
+          position: fixed;
+          bottom: 140px;
+          right: 24px;
+          z-index: 9999;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 16px;
         }
-      }
-    `}</style>
+
+        .dify-window {
+          width: 384px; /* 24rem */
+          height: 640px; /* 40rem */
+          max-height: calc(100vh - 200px);
+          background: #fff;
+          border-radius: 12px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+          overflow: hidden;
+          position: relative;
+          animation: cb-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          transform-origin: bottom right;
+          border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        @keyframes cb-pop {
+          from { opacity: 0; transform: scale(0.9) translateY(20px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+
+        .dify-btn {
+          width: 60px;
+          height: 60px;
+          background: transparent;
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          padding: 0;
+          transition: transform 0.2s;
+          outline: none;
+        }
+        .dify-btn:hover {
+          transform: scale(1.05);
+        }
+        .dify-btn-open-icon {
+          width: 60px;
+          height: 60px;
+          background: #1C64F2;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 16px rgba(28,100,242,0.3);
+          transition: background 0.2s;
+          overflow: hidden;
+        }
+        .dify-btn-close-icon {
+          width: 60px;
+          height: 60px;
+          background: #1C64F2;
+          color: #fff;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 16px rgba(28,100,242,0.3);
+          transition: background 0.2s;
+        }
+        .dify-btn:hover .dify-btn-close-icon, .dify-btn:hover .dify-btn-open-icon {
+          opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+          .dify-wrapper {
+            bottom: 140px;
+            right: 16px;
+            gap: 12px;
+          }
+          .dify-window {
+            width: calc(100vw - 32px);
+            height: 600px;
+            max-height: calc(100vh - 220px);
+          }
+          .dify-btn, .dify-btn-open-icon, .dify-btn-close-icon {
+            width: 56px;
+            height: 56px;
+          }
+        }
+      `}</style>
+    </>
   );
 }
