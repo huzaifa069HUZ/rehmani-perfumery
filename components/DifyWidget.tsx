@@ -27,20 +27,22 @@ export default function DifyWidget() {
 
   return (
     <>
-      <Script id="dify-config" strategy="afterInteractive">
-        {`
-          window.difyChatbotConfig = {
-            token: 'QZKQs1YGmJ7zSSOQ',
-            inputs: {},
-            systemVariables: {},
-            userVariables: {},
-          };
-        `}
-      </Script>
-      <Script
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.difyChatbotConfig = {
+              token: 'QZKQs1YGmJ7zSSOQ',
+              inputs: {},
+              systemVariables: {},
+              userVariables: {},
+            };
+          `,
+        }}
+      />
+      <script
         src="https://udify.app/embed.min.js"
         id="QZKQs1YGmJ7zSSOQ"
-        strategy="lazyOnload"
+        defer
       />
       <style>{`
         #dify-chatbot-bubble-button {
