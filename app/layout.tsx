@@ -9,7 +9,7 @@ import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import FreeAttarPopup from '@/components/FreeAttarPopup';
 import CartDrawer from '@/components/CartDrawer';
 import MobileBottomNav from '@/components/MobileBottomNav';
-import ChatbaseWidget from '@/components/ChatbaseWidget';
+import DifyWidget from '@/components/DifyWidget';
 import { cn } from "@/lib/utils";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
@@ -241,7 +241,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </CartProvider>
         </AuthProvider>
         <FloatingWhatsApp />
-        <ChatbaseWidget />
+        <DifyWidget />
       </body>
     </html>
   );
