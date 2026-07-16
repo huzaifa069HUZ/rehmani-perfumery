@@ -1,0 +1,15 @@
+id	title	description	link	image_link	price	availability	brand	condition
+1	REEH AL KAABAH	Premium • Rich • Authentic	https://rahmaniperfumery.com/product/1	https://rahmaniperfumery.com/assets/luxury_attar_bottle_1_1773444423078.png	899.00 INR	in_stock	Rahmani Perfumery	new
+2	AL ASMA	Musk • Amber • Woody	https://rahmaniperfumery.com/product/2	https://rahmaniperfumery.com/assets/luxury_attar_bottle_2_1773444458042.png	649.00 INR	in_stock	Rahmani Perfumery	new
+3	OUD NADIRA	Oud • Saffron • Warm	https://rahmaniperfumery.com/product/3	https://rahmaniperfumery.com/assets/luxury_attar_bottle_3_1773444475959.png	1299.00 INR	in_stock	Rahmani Perfumery	new
+4	AR RIJAL	Floral • Spicy • Masculine	https://rahmaniperfumery.com/product/4	https://rahmaniperfumery.com/assets/luxury_attar_bottle_1_1773444423078.png	799.00 INR	in_stock	Rahmani Perfumery	new
+5	EHSAS UL ABEER	Fresh • Lemon • Vetiver	https://rahmaniperfumery.com/product/5	https://rahmaniperfumery.com/assets/luxury_attar_bottle_2_1773444458042.png	549.00 INR	in_stock	Rahmani Perfumery	new
+6	RED SEA	Marine • Fresh • Cool	https://rahmaniperfumery.com/product/6	https://rahmaniperfumery.com/assets/luxury_attar_bottle_3_1773444475959.png	599.00 INR	in_stock	Rahmani Perfumery	new
+7	GREEN AJAM	Herbal • Fresh • Earthy	https://rahmaniperfumery.com/product/7	https://rahmaniperfumery.com/assets/luxury_attar_bottle_1_1773444423078.png	849.00 INR	in_stock	Rahmani Perfumery	new
+8	KHAMRAH	Sweet • Vanilla • Dates	https://rahmaniperfumery.com/product/8	https://rahmaniperfumery.com/assets/luxury_attar_bottle_2_1773444458042.png	1599.00 INR	in_stock	Rahmani Perfumery	new
+9	PHANTOM	Woody • Spicy • Vanilla	https://rahmaniperfumery.com/product/9	https://rahmaniperfumery.com/assets/luxury_attar_bottle_3_1773444475959.png	1099.00 INR	in_stock	Rahmani Perfumery	new
+10	BE MY SPARK	Rose • Jasmine • Amber	https://rahmaniperfumery.com/product/10	https://rahmaniperfumery.com/assets/luxury_attar_bottle_1_1773444423078.png	999.00 INR	in_stock	Rahmani Perfumery	new
+11	ONE MILLION LUCKY	Plum • Hazelnut • Cedar	https://rahmaniperfumery.com/product/11	https://rahmaniperfumery.com/assets/luxury_attar_bottle_2_1773444458042.png	1399.00 INR	in_stock	Rahmani Perfumery	new
+12	HAWAS SPECIAL	Citrus • Plum • Aquatic	https://rahmaniperfumery.com/product/12	https://rahmaniperfumery.com/assets/luxury_attar_bottle_3_1773444475959.png	1199.00 INR	in_stock	Rahmani Perfumery	new
+13	MUSK RIJALI	Pure White Musk • Smooth	https://rahmaniperfumery.com/product/13	https://rahmaniperfumery.com/assets/luxury_attar_bottle_1_1773444423078.png	799.00 INR	in_stock	Rahmani Perfumery	new
+14	SAVAUGE	Pepper • Bergamot • Ambroxan	https://rahmaniperfumery.com/product/14	https://rahmaniperfumery.com/assets/luxury_attar_bottle_2_1773444458042.png	1499.00 INR	in_stock	Rahmani Perfumery	new
