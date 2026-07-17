@@ -63,8 +63,8 @@ export default function CheckoutForm() {
       const msg = `Hello Rahmani Perfumery, I have placed an order!\n\nOrder ID: ${confirmedOrderId}\nName: ${confirmedName}\nAmount: ₹${confirmedTotal}\nItems: ${confirmedItems}\n\nPlease confirm my order.`;
       const encodedMsg = encodeURIComponent(msg);
       const timer = setTimeout(() => {
-        window.location.href = `https://wa.me/918540047972?text=${encodedMsg}`;
-      }, 2000);
+        window.location.assign(`https://wa.me/918540047972?text=${encodedMsg}`);
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [step, confirmedOrderId, confirmedName, confirmedTotal, confirmedItems]);
@@ -322,9 +322,9 @@ export default function CheckoutForm() {
               </div>
             </div>
 
-            <Link href="/store" className="ck-cta-btn" style={{ display: 'block', textAlign: 'center', marginTop: '1.5rem', textDecoration: 'none' }}>
-              Continue Shopping
-            </Link>
+            <a href={`https://wa.me/918540047972?text=${encodeURIComponent(`Hello Rahmani Perfumery, I have placed an order!\n\nOrder ID: ${confirmedOrderId}\nName: ${confirmedName}\nAmount: ₹${confirmedTotal}\nItems: ${confirmedItems}\n\nPlease confirm my order.`)}`} className="ck-cta-btn" style={{ display: 'block', textAlign: 'center', marginTop: '1.5rem', textDecoration: 'none', background: '#25D366', color: '#fff', border: 'none' }}>
+              Confirm on WhatsApp ➔
+            </a>
           </div>
         </div>
       </>
