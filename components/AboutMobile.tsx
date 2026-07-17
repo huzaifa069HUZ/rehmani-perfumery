@@ -543,14 +543,14 @@ export default function AboutMobile() {
                 color: '#fff', borderRadius: 14, padding: '13px 12px',
                 fontSize: 12, fontWeight: 700, textDecoration: 'none',
               }}>+91 92345 76090</a>
-            <a href="https://wa.me/918540047972" target="_blank" rel="noopener noreferrer"
+            <a href="https://wa.me/917484878228" target="_blank" rel="noopener noreferrer"
               style={{
                 flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
                 background: 'rgba(37,211,102,0.12)', color: '#25D366',
                 borderRadius: 14, padding: '13px 12px',
                 fontSize: 12, fontWeight: 700, border: '1px solid rgba(37,211,102,0.25)',
                 textDecoration: 'none',
-              }}>+91 85400 47972</a>
+              }}>+91 74848 78228</a>
           </div>
         </div>
       </motion.section>

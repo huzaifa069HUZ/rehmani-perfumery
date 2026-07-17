@@ -751,7 +751,7 @@ export default function AboutContentSection() {
                 transition: 'all 0.3s ease'
               }}
             >+91 92345 76090</a>
-            <a href="https://wa.me/918540047972" target="_blank" rel="noopener noreferrer"
+            <a href="https://wa.me/917484878228" target="_blank" rel="noopener noreferrer"
               className="hover:-translate-y-1 hover:bg-[#1a3a28]"
               style={{
                 flex: '1 1 200px', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -761,7 +761,7 @@ export default function AboutContentSection() {
                 textDecoration: 'none',
                 transition: 'all 0.3s ease'
               }}
-            >+91 85400 47972</a>
+            >+91 74848 78228</a>
           </div>
         </div>
       </section>

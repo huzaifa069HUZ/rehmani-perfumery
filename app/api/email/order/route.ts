@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
         <!-- Footer -->
         <div style="background-color: #f8fafc; padding: 30px; text-align: center; border-top: 1px solid #e2e8f0;">
           <p style="margin: 0 0 10px; font-size: 14px; color: #64748b;">Need help? Reply to this email or contact us.</p>
-          <p style="margin: 0 0 20px; font-size: 14px; font-weight: 600; color: #0F172A;">WhatsApp/Call: +91 93082 12104</p>
+          <p style="margin: 0 0 20px; font-size: 14px; font-weight: 600; color: #0F172A;">WhatsApp/Call: +91 74848 78228</p>
           <p style="margin: 0; font-size: 12px; color: #94a3b8;">&copy; ${new Date().getFullYear()} Rahmani Perfumery. All rights reserved.</p>
         </div>
       </div>

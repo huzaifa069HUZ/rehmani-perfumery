@@ -63,7 +63,7 @@ export default function CheckoutForm() {
       const msg = `Hello Rahmani Perfumery, I have placed an order!\n\nOrder ID: ${confirmedOrderId}\nName: ${confirmedName}\nAmount: ₹${confirmedTotal}\nItems: ${confirmedItems}\n\nPlease confirm my order.`;
       const encodedMsg = encodeURIComponent(msg);
       const timer = setTimeout(() => {
-        window.location.assign(`https://wa.me/918540047972?text=${encodedMsg}`);
+        window.location.assign(`https://wa.me/917484878228?text=${encodedMsg}`);
       }, 500);
       return () => clearTimeout(timer);
     }
@@ -291,7 +291,7 @@ export default function CheckoutForm() {
               <AlertCircle size={15} className="ck-notice-ico"/>
               <div>
                 <strong>WhatsApp Order Confirmation</strong>
-                <p>You will be redirected to WhatsApp in a few seconds to confirm your order. If nothing happens, <a href={`https://wa.me/918540047972?text=Hello%20Rahmani%20Perfumery,%20I%20have%20placed%20an%20order!%0A%0AOrder%20ID:%20${confirmedOrderId}%0AAmount:%20%E2%82%B9${confirmedTotal}%0A%0APlease%20confirm%20my%20order.`} style={{ textDecoration: 'underline', color: '#B45309' }}>click here</a>.</p>
+                <p>You will be redirected to WhatsApp in a few seconds to confirm your order. If nothing happens, <a href={`https://wa.me/917484878228?text=Hello%20Rahmani%20Perfumery,%20I%20have%20placed%20an%20order!%0A%0AOrder%20ID:%20${confirmedOrderId}%0AAmount:%20%E2%82%B9${confirmedTotal}%0A%0APlease%20confirm%20my%20order.`} style={{ textDecoration: 'underline', color: '#B45309' }}>click here</a>.</p>
               </div>
             </div>
 
@@ -322,7 +322,7 @@ export default function CheckoutForm() {
               </div>
             </div>
 
-            <a href={`https://wa.me/918540047972?text=${encodeURIComponent(`Hello Rahmani Perfumery, I have placed an order!\n\nOrder ID: ${confirmedOrderId}\nName: ${confirmedName}\nAmount: ₹${confirmedTotal}\nItems: ${confirmedItems}\n\nPlease confirm my order.`)}`} className="ck-cta-btn" style={{ display: 'block', textAlign: 'center', marginTop: '1.5rem', textDecoration: 'none', background: '#25D366', color: '#fff', border: 'none' }}>
+            <a href={`https://wa.me/917484878228?text=${encodeURIComponent(`Hello Rahmani Perfumery, I have placed an order!\n\nOrder ID: ${confirmedOrderId}\nName: ${confirmedName}\nAmount: ₹${confirmedTotal}\nItems: ${confirmedItems}\n\nPlease confirm my order.`)}`} className="ck-cta-btn" style={{ display: 'block', textAlign: 'center', marginTop: '1.5rem', textDecoration: 'none', background: '#25D366', color: '#fff', border: 'none' }}>
               Confirm on WhatsApp ➔
             </a>
           </div>
