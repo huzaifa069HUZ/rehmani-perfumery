@@ -27,10 +27,11 @@ export async function GET() {
       
       const link = `https://rahmaniperfumery.com/product/${id}`;
       
-      // Ensure image link is absolute URL
-      const image_link = p.images && p.images.length > 0 
-        ? (p.images[0].startsWith('http') ? p.images[0] : `https://rahmaniperfumery.com${p.images[0]}`)
-        : 'https://rahmaniperfumery.com/icon.png';
+      // Ensure image link is absolute URL and properly encoded for spaces (critical for Merchant Center)
+      const rawImage = p.images && p.images.length > 0 ? p.images[0] : '/icon.png';
+      const image_link = rawImage.startsWith('http') 
+        ? encodeURI(rawImage) 
+        : `https://rahmaniperfumery.com${encodeURI(rawImage)}`;
         
       const priceVal = p.price || 0;
       const price = `${priceVal.toFixed(2)} INR`;
