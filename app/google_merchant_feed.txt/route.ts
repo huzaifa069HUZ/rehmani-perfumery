@@ -12,6 +12,12 @@ export async function GET() {
     const rows = ['id\ttitle\tdescription\tlink\timage_link\tprice\tavailability\tbrand\tcondition\texcluded_destination\tgoogle_product_category\tadult'];
     
     for (const p of products) {
+      const searchStr = `${p.category || ''} ${p.type || ''} ${p.name || ''}`.toLowerCase();
+      // Skip anything related to Bakhoor/Incense/Burners to avoid Google's automated tobacco ban
+      if (searchStr.includes('bakhoor') || searchStr.includes('incense') || searchStr.includes('burner') || searchStr.includes('charcoal') || searchStr.includes('smoke')) {
+        continue;
+      }
+
       const id = p.id;
       const title = p.name || 'Unknown Product';
       // Provide a solid fallback description if notes are missing
