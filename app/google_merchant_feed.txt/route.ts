@@ -9,7 +9,7 @@ export async function GET() {
     const snapshot = await getDocs(collection(db, 'products'));
     const products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as any }));
 
-    const rows = ['id\ttitle\tdescription\tlink\timage_link\tprice\tavailability\tbrand\tcondition'];
+    const rows = ['id\ttitle\tdescription\tlink\timage_link\tprice\tavailability\tbrand\tcondition\texcluded_destination\tgoogle_product_category\tadult'];
     
     for (const p of products) {
       const id = p.id;
@@ -38,7 +38,13 @@ export async function GET() {
       const cleanTitle = title.replace(/[\t\n\r]/g, ' ');
       const cleanDesc = description.replace(/[\t\n\r]/g, ' ');
 
-      rows.push(`${id}\t${cleanTitle}\t${cleanDesc}\t${link}\t${image_link}\t${price}\t${availability}\t${brand}\t${condition}`);
+      // Explicitly tell Google to NOT show these as local inventory since we don't have store inventory set up
+      const excluded_destination = 'Local_inventory_ads,Free_Local_Listings';
+      // 473 = Health & Beauty > Personal Care > Cosmetics > Perfume & Cologne (Prevents false positive tobacco flags for bakhoor/incense)
+      const google_product_category = '473';
+      const adult = 'no';
+
+      rows.push(`${id}\t${cleanTitle}\t${cleanDesc}\t${link}\t${image_link}\t${price}\t${availability}\t${brand}\t${condition}\t${excluded_destination}\t${google_product_category}\t${adult}`);
     }
 
     const tsv = rows.join('\n');
